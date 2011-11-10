@@ -733,8 +733,9 @@ class Admin_TestController extends Zend_Controller_Action
         /* @var $arepo Newscoop\Entity\Repository\ArticleRepository */
         $timeSet = array
         (
+        	"2011-11-01" => array( "20:00" => "22:00", "recurring" => "weekly" ),
         	"2011-11-02" => array( "10:00" => "11:00", "12:00" => "18:00", "20:00" => "22:00" ),
-            "2011-11-03" => "11:00",
+            "2011-11-03" => "11:00 - recurring:daily",
         	"2011-11-03 14:00" => "18:00",
             "2011-11-04" => "2011-11-07",
             "2011-11-08" => "2011-11-09 12:00",

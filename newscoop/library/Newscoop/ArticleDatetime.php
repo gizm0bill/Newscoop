@@ -46,7 +46,7 @@ class ArticleDatetime
             }
         }
 
-        $this->recurring = $recurring;
+        $this->setRecurring($recurring);
 
         if (!( $startTimestamp = strtotime($start))) {
             return;
@@ -177,6 +177,9 @@ class ArticleDatetime
                 $spawn =& $this;
                 foreach ($end as $startTime => $endTime)
                 {
+                    if ($startTime == 'recurring' ) {
+                        continue;
+                    }
                     $spawn->setStartDate($startDate);
                     $spawn->setEndDate(null);
                     $spawn->setStartTime(strftime('%T', strtotime($startTime)));
@@ -195,6 +198,10 @@ class ArticleDatetime
         $this->spawns = array();
     }
 
+    /**
+     * sets the start date
+     * @param string $value date format
+     */
     public function setStartDate($value)
     {
         $this->startDate = is_null($value) ? null : new \DateTime($value);
@@ -248,6 +255,9 @@ class ArticleDatetime
         return $this->recurring;
     }
 
+    /**
+     * Get other spawned objects from a contruct
+     */
     public function getSpawns()
     {
         return $this->spawns;
