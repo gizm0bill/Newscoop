@@ -77,6 +77,7 @@ class ArticleList extends BaseList
             'Language' => getGS('Language'),
             'Order' => getGS('Order'),
             'Name' => getGS('Title'),
+            'Issue' => getGS('Issue'),
             'Section' => getGS('Section'),
             'Webcode' => getGS('Webcode'),
             'Type' => getGS('Type'),
@@ -310,6 +311,8 @@ class ArticleList extends BaseList
 		// get language code
 		$language = new Language($article->getLanguageId());
 
+        $issue = new Issue($article->getPublicationId(), $article->getLanguageId(), $article->getIssueNumber());
+
 		return array(
 		    $article->getArticleNumber(),
 		    $article->getLanguageId(),
@@ -319,6 +322,7 @@ class ArticleList extends BaseList
 		    $articleLink,
 		    getGS('Edit'), $article->getName() . " ({$article->getLanguageName()})",
 		    $article->getName() . (empty($_REQUEST['language']) ? " ({$language->getCode()})" : '')), // /sprintf
+            $issue->getName(),
 		    $article->getSection()->getName(),
             Manager::getWebcoder('')->encode($article->getArticleNumber()),
 		    $tmpArticleType->getDisplayName(),

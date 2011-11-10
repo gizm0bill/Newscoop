@@ -112,7 +112,7 @@ tables['<?php echo $this->id; ?>'] = table.dataTable({
         },
         { // status workflow
             'fnRender': function(obj) {
-                switch (obj.aData[9]) {
+                switch (obj.aData[10]) {
                     case 'Y':
                         return '<?php putGS('Published'); ?>';
                     case 'N':
@@ -122,17 +122,17 @@ tables['<?php echo $this->id; ?>'] = table.dataTable({
                     case 'M': return '<?php putGS('Publish with issue'); ?>';
                 }
             },
-            'aTargets': [9]
+            'aTargets': [10]
         },
         { // hide columns
             'bVisible': false,
-            'aTargets': [<?php if (!self::$renderActions) { ?>0, <?php } ?>1, 2, 7, 12, 13, 18, 20,
+            'aTargets': [<?php if (!self::$renderActions) { ?>0, <?php } ?>1, 2, 4, 8, 13, 14, 19, 21,
                 <?php echo implode(', ', $this->hidden); ?>
             ]
         },
         { // not sortable
             'bSortable': false,
-            'aTargets': [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17, 20, 21]
+            'aTargets': [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 21, 22]
         },
         { // id
             'sClass': 'id',
@@ -146,17 +146,17 @@ tables['<?php echo $this->id; ?>'] = table.dataTable({
         },
         { // type & author
             'sWidth': '8em',
-            'aTargets': [4, 5, 6, 8]
+            'aTargets': [4, 5, 6, 7, 9]
         },
         { // short
             'sClass': 'flag',
             'sWidth': '5em',
-            'aTargets': [9, 10, 11, 12, 13, 14, 15, 16, 17, 21]
+            'aTargets': [10, 11, 12, 13, 14, 15, 16, 17, 18, 22]
         },
         { // dates
             'sClass': 'date',
             'sWidth': '5em',
-            'aTargets': [18, 19, 20]
+            'aTargets': [19, 20, 21]
         }
     ],
     'fnDrawCallback': function() {
