@@ -60,6 +60,7 @@ class ArticleDatetime
 
         switch (true)
         {
+            // TODO fix midnight for passed relative formats
             case is_bool($end) && $end : // full day
                 $this->setStartDate($startDate);
                 $this->setStartTime($startHasTime ? strftime('%T', $startTimestamp) : null);
@@ -140,7 +141,6 @@ class ArticleDatetime
                 // starts at a certain time in a day, lasts till another day at a certain time
                 if ($endHasDate && $endHasTime && $startHasDate && $startHasTime)
                 {
-                    var_dump($start, strftime('%T', strtotime($start)));
                     $dayDiff = ($endDateTimestamp - $startDateTimestamp) / 86400;
 
                     $this->setStartDate($startDate);
@@ -194,13 +194,15 @@ class ArticleDatetime
         }
     }
 
+    /**
+     * clears spawns
+     */
     public function __clone()
     {
         $this->spawns = array();
     }
 
     /**
-     * sets the start date
      * @param string $value date format
      */
     public function setStartDate($value)
@@ -208,41 +210,66 @@ class ArticleDatetime
         $this->startDate = is_null($value) ? null : new \DateTime($value);
     }
 
+    /**
+     * @param string $value
+     */
     public function setStartTime($value)
     {
         $this->startTime = is_null($value) ? null : new \DateTime($value);
     }
 
+    /**
+     * @param string $value
+     */
     public function setEndDate($value)
     {
         $this->endDate = is_null($value) ? null : new \DateTime($value);
     }
 
+    /**
+     * @param string $value
+     */
     public function setEndTime($value)
     {
         $this->endTime = is_null($value) ? null : new \DateTime($value);
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getStartDate()
     {
         return $this->startDate;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getStartTime()
     {
         return $this->startTime;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getEndDate()
     {
         return $this->endDate;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getEndTime()
     {
         return $this->endTime;
     }
 
+    /**
+     * Set recurring flag
+     * @param string $value daily|weekly|monthly|yearly
+     */
     public function setRecurring($value)
     {
         if (!in_array( $value, array('daily', 'weekly', 'monthly', 'yearly'))) {
@@ -251,6 +278,9 @@ class ArticleDatetime
         $this->recurring = $value;
     }
 
+    /**
+     * Get if date object is recurring
+     */
     public function getRecurring()
     {
         return $this->recurring;
