@@ -126,7 +126,7 @@ tables['<?php echo $this->id; ?>'] = table.dataTable({
         },
         { // hide columns
             'bVisible': false,
-            'aTargets': [<?php if (!self::$renderActions) { ?>0, <?php } ?>1, 2, 4, 8, 13, 14, 19, 21,
+            'aTargets': [<?php if (!self::$renderActions) { ?>0, <?php } ?>1, 2, 4, 13, 14, 19, 21,
                 <?php echo implode(', ', $this->hidden); ?>
             ]
         },
@@ -264,6 +264,18 @@ $('input#filter_newswires_articles_<?php echo $this->id; ?>').change(function() 
     filters['<?php echo $this->id; ?>']['showtype'] = $(this).attr('checked') ? 'newswires' : '';
     tables['<?php echo $this->id; ?>'].fnDraw(true);
 });
+
+
+$('<input type="checkbox" name="issue_assigned" value="yes" id="filter_assigned_articles_<?php echo $this->id; ?>" /> <label for="filter_assigned_articles_<?php echo $this->id; ?>"><?php putGS("Display only articles assigned to issues"); ?></label>')
+.appendTo('#filter_type_<?php echo $this->id; ?>');
+
+$('#filter_assigned_<?php echo $this->id; ?>').css('margin-bottom', '5px');
+
+$('input#filter_assigned_articles_<?php echo $this->id; ?>').change(function() {
+    filters['<?php echo $this->id; ?>']['issue_assigned'] = $(this).attr('checked') ? 'yes' : '';
+    tables['<?php echo $this->id; ?>'].fnDraw(true);
+});
+
 
 var searchInput = $('#table-<?php echo $this->id; ?>_filter input:text')
     .unbind('keyup');

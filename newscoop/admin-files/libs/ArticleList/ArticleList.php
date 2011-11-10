@@ -181,6 +181,16 @@ class ArticleList extends BaseList
 	}
 
 	/**
+	 * Returns the order by column in format array('column'=>'direction')
+	 *
+	 * @return array
+	 */
+	public function getOrderBy()
+	{
+	    return $this->orderBy;
+	}
+
+	/**
 	 * Set column to order by.
 	 *
 	 * @param string $column

@@ -24,6 +24,8 @@ $articlelist->setIssue($f_issue_number);
 $articlelist->setSection($f_section_number);
 $articlelist->setLanguage($f_language_id);
 
+$articlelist->setHidden('Issue');
+
 $articlelist->setColVis(TRUE);
 $articlelist->setSearch(TRUE);
 

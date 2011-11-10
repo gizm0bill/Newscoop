@@ -208,20 +208,32 @@ class BaseList
      * @param int|string $key
      * @return ArticleList
      */
-    public function setHidden($key)
+    public function setHidden($key, $hidden = true)
     {
         if (is_int($key)) {
-            $this->hidden[] = (int) $key;
+            $this->_setHidden($key, $hidden);
         } else {
             foreach(array_keys($this->cols) as $id => $val) {
                 if ($key == $val) {
-                    $this->hidden[] = $id;
+                    $this->_setHidden($id, $hidden);
                     break;
                 }
             }
         }
 
         return $this;
+    }
+
+    private function _setHidden($key, $hidden = true)
+    {
+        if ($hidden) {
+            $this->hidden[] = (int)$key;
+        } else {
+            $index = array_search($key, $this->hidden);
+            if ($index !== false) {
+                unset($this->hidden[$index]);
+            }
+        }
     }
 
     /**
@@ -420,7 +432,7 @@ class BaseList
 
         return TRUE;
     }
-    
+
     /**
      * Handle approve
      * @param array $ids
@@ -437,7 +449,7 @@ class BaseList
 
         return TRUE;
     }
-    
+
     /**
      * Handle disapprove
      * @param array $ids

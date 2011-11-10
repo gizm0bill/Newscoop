@@ -83,6 +83,13 @@ if (empty($_REQUEST['showtype']) || $_REQUEST['showtype'] != 'newswires') { // l
     $articlesParams[] = new ComparisonOperation('type', new Operator('not', 'string'), 'screening');
 }
 
+if (!empty($_REQUEST['issue_assigned']) && $_REQUEST['issue_assigned'] == 'yes') {
+    $articlesParams[] = new ComparisonOperation('nrissue', new Operator('greater', 'integer'), '0');
+}
+
+// filter out PrintDesk articles
+//$articlesParams[] = new ComparisonOperation('type', new Operator('not', 'string'), 'printdesk');
+
 // search
 if (isset($_REQUEST['sSearch']) && strlen($_REQUEST['sSearch']) > 0) {
     $search_phrase = $_REQUEST['sSearch'];
@@ -101,8 +108,13 @@ $sortOptions = array(
     17 => 'bypublishdate',
 );
 
-$sortBy = 'bysectionorder';
-$sortDir = 'asc';
+if( isset($_REQUEST['section']) && $_REQUEST['section'] > 0 ) {
+    $sortBy = 'bysectionorder';
+    $sortDir = 'asc';
+} else {
+    $sortBy = 'bycreationdate';
+    $sortDir = 'desc';
+}
 $sortingCols = min(1, (int) $_REQUEST['iSortingCols']);
 for ($i = 0; $i < $sortingCols; $i++) {
     $sortOptionsKey = (int) $_REQUEST['iSortCol_' . $i];

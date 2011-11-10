@@ -140,6 +140,7 @@ camp_html_content_top(getGS('Article List') . ': ' . $sectionObj->getName(), $to
     }
     $articlelist->setSearch(TRUE);
 
+    $articlelist->setHidden('Issue');
     if ($f_section_number) {
         $articlelist->setHidden('Section');
     }

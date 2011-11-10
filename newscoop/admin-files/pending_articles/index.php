@@ -25,6 +25,7 @@ $articlelist->setLanguage($f_language_id);
 $articlelist->setColVis(TRUE);
 $articlelist->setSearch(TRUE);
 
+$articlelist->setHidden('Section');
 $articlelist->setHidden('Status');
 $articlelist->setHidden('OnFrontPage');
 $articlelist->setHidden('OnSectionPage');
@@ -33,6 +34,8 @@ $articlelist->setHidden('Reads');
 $articlelist->setHidden('UseMap');
 $articlelist->setHidden('Locations');
 $articlelist->setHidden('PublishDate');
+
+$articlelist->setOrderBy('CreateDate', 'desc');
 
 // render
 //$articlelist->renderFilters();
