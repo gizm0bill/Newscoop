@@ -81,19 +81,21 @@ class Article
      * @var int
      */
     private $comments_enabled;
-    
+
     /**
      * @Column(name="Type")
-     * @var string
+     * @var int
      */
     private $type;
-    
-    /**
-     * @Column(name="PublishDate")
-     * @var string
-     */
-    private $published;
 
+    /**
+     * Get article type
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
     /**
      * Set article id
@@ -263,25 +265,5 @@ class Article
     public function commentsEnabled()
     {
         return (int) $this->comments_enabled;
-    }
-    
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-    
-    /**
-     * Get publishDate
-     *
-     * @return string
-     */
-    public function getPublishDate()
-    {
-        return $this->published;
     }
 }

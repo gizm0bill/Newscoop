@@ -118,10 +118,16 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getDate();
     }
 
+    public function commentsEnabled()
+    {
+        $this->__load();
+        return parent::commentsEnabled();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'sectionId', 'issueId', 'number', 'name', 'date');
+        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled');
     }
 
     public function __clone()

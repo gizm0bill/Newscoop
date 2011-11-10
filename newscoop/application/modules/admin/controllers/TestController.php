@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Common\Util\Debug;
 use Newscoop\Service\IThemeManagementService;
 use Newscoop\Service\IOutputService;
 use Newscoop\Service\ILanguageService;
@@ -722,6 +723,33 @@ class Admin_TestController extends Zend_Controller_Action
         $res = new Res;
         $this->view->url = $url = base64_decode($this->_request->getParam('url'));
         $this->view->result = $res->understand( $url )->get();
+    }
+
+    public function testDatetimeAction()
+    {
+        $repo = $this->_helper->entity->getRepository('Newscoop\Entity\ArticleDatetime');
+        /* @var $repo Newscoop\Entity\Repository\ArticleDatetimeRepository */
+        $arepo = $this->_helper->entity->getRepository('Newscoop\Entity\Article');
+        /* @var $arepo Newscoop\Entity\Repository\ArticleRepository */
+        $timeSet = array
+        (
+        	"2011-11-02" => array( "10:00" => "11:00", "12:00" => "18:00", "20:00" => "22:00" ),
+            "2011-11-03" => "11:00",
+        	"2011-11-03 14:00" => "18:00",
+            "2011-11-04" => "2011-11-07",
+            "2011-11-08" => "2011-11-09 12:00",
+        	"2011-11-10 10:30" => "2011-11-11",
+        	"2011-11-12 12:30" => "2011-11-13 13:00",
+        	"2011-11-14 14:30" => "2011-11-16 15:00",
+        	"2011-11-16 15:30" => "2011-11-17",
+        	"2011-11-30" => true
+        );
+        foreach ($repo->findAll() as $adt) {
+            $art = $arepo->findOneBy(array('number' => $adt->getArticleId()));
+            $repo->add($timeSet, $art->getId(), 'schedule');
+            break;
+        }
+        die;
     }
 }
 
