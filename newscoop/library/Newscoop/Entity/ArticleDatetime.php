@@ -95,8 +95,8 @@ class ArticleDatetime extends Entity
         $this->articleType = is_null($articleType) ? $article->getType() : $articleType;
         $this->fieldName = $fieldName;
         $this->startDate = $dateData->getStartDate();
-        $this->endDate = $dateData->getStartTime();
-        $this->startTime = $dateData->getEndDate();
+        $this->endDate = $dateData->getEndDate();
+        $this->startTime = $dateData->getStartTime();
         $this->endTime = $dateData->getEndTime();
         $this->recurring = $dateData->getRecurring();
     }

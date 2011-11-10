@@ -91,5 +91,8 @@ class ArticleDatetimeRepository extends EntityRepository
         }
     }
 
-    public function findSmth(){}
+    public function findSmth()
+    {
+
+    }
 }

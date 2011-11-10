@@ -73,6 +73,8 @@ class ArticleDatetime
                 $endHasDate = $parsedEnd['month']!==false && $parsedEnd['day']!==false;
                 $endHasTime = $parsedEnd['hour']!==false && $parsedEnd['minute']!==false;
 
+                $end = preg_replace("/-\s*recurring:(\w+)/", "", $end);
+
                 // just a day, from 1 time to another, or just at one moment in the day - time specified in the right side
                 if (!$endHasDate)
                 {
@@ -80,7 +82,6 @@ class ArticleDatetime
                     $this->setStartTime($startHasTime ? strftime('%T', $startTimestamp) : strftime('%T', strtotime($end)));
                     $this->setEndDate(null);
                     $this->setEndTime($startHasTime ? strftime('%T', strtotime($end)) : null);
-
                     break;
                 }
 
@@ -91,7 +92,6 @@ class ArticleDatetime
                     $this->setStartTime(null);
                     $this->setEndDate(strftime('%F', strtotime($end)));
                     $this->setEndTime(null);
-
                     break;
                 }
 
@@ -140,11 +140,12 @@ class ArticleDatetime
                 // starts at a certain time in a day, lasts till another day at a certain time
                 if ($endHasDate && $endHasTime && $startHasDate && $startHasTime)
                 {
+                    var_dump($start, strftime('%T', strtotime($start)));
                     $dayDiff = ($endDateTimestamp - $startDateTimestamp) / 86400;
 
                     $this->setStartDate($startDate);
-                    $this->setEndDate(strftime('%T', strtotime($start)));
-                    $this->setStartTime(null);
+                    $this->setStartTime(strftime('%T', strtotime($start)));
+                    $this->setEndDate(null);
                     $this->setEndTime(null);
 
                     if ($dayDiff > 1) // one day diff don't need to have a full day stored

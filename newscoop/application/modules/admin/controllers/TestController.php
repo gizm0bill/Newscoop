@@ -743,7 +743,7 @@ class Admin_TestController extends Zend_Controller_Action
         	"2011-11-12 12:30" => "2011-11-13 13:00",
         	"2011-11-14 14:30" => "2011-11-16 15:00",
         	"2011-11-16 15:30" => "2011-11-17",
-        	"2011-11-30" => true
+        	"tomorrow" => true
         );
         foreach ($repo->findAll() as $adt) {
             $art = $arepo->findOneBy(array('number' => $adt->getArticleId()));
