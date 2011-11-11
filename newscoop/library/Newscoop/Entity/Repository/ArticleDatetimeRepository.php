@@ -91,8 +91,17 @@ class ArticleDatetimeRepository extends EntityRepository
         }
     }
 
-    public function findSmth()
+    public function findSmth($search)
     {
+        // $search->fromDate;
 
+        // $search->fromDate $search->toDate
+
+        // $search->weekly = 'monday' $search->fromTime
+        // $search->daily = '12:00'
+        // $search->monthly = '3rd'
+        // $search->yearly = 112
+
+        // $search->fromTime $search->toTime $search->dates = array(11, 12, 15)
     }
 }
