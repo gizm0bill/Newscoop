@@ -124,12 +124,15 @@ tables['<?php echo $this->id; ?>'] = table.dataTable({
             },
             'aTargets': [10]
         },
+        <?php if (!self::$renderActions) {
+            $this->hidden[] = 0;
+        } ?>
+        <?php if (!empty($this->hidden)) { ?>
         { // hide columns
             'bVisible': false,
-            'aTargets': [<?php if (!self::$renderActions) { ?>0, <?php } ?>1, 2, 4, 13, 14, 19, 21,
-                <?php echo implode(', ', $this->hidden); ?>
-            ]
+            'aTargets': [<?php echo implode(', ', array_unique($this->hidden)); ?>]
         },
+        <?php } ?>
         { // not sortable
             'bSortable': false,
             'aTargets': [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 21, 22]

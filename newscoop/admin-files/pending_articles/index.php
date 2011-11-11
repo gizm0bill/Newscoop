@@ -25,6 +25,7 @@ $articlelist->setLanguage($f_language_id);
 $articlelist->setColVis(TRUE);
 $articlelist->setSearch(TRUE);
 
+$articlelist->setHidden('Issue', false);
 $articlelist->setHidden('Section');
 $articlelist->setHidden('Status');
 $articlelist->setHidden('OnFrontPage');

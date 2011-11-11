@@ -97,6 +97,14 @@ class ArticleList extends BaseList
             'LastModified' => getGS('Last Modified'),
 		    'Preview' => getGS('Preview')
 		);
+
+        $this->setHidden('Language');
+        $this->setHidden('Order');
+        $this->setHidden('Issue');
+        $this->setHidden('Images');
+        $this->setHidden('Topics');
+        $this->setHidden('CreateDate');
+        $this->setHidden('LastModified');
 	}
 
 	/**
@@ -332,7 +340,7 @@ class ArticleList extends BaseList
 		    $articleLink,
 		    getGS('Edit'), $article->getName() . " ({$article->getLanguageName()})",
 		    $article->getName() . (empty($_REQUEST['language']) ? " ({$language->getCode()})" : '')), // /sprintf
-            $issue->getName(),
+            (string) $issue->getName(),
 		    $article->getSection()->getName(),
             Manager::getWebcoder('')->encode($article->getArticleNumber()),
 		    $tmpArticleType->getDisplayName(),
