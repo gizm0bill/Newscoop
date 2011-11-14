@@ -7,6 +7,18 @@
 
 namespace Newscoop\Entity\Repository;
 
+use Doctrine\ORM\Query;
+
+use Doctrine\ORM\Configuration;
+
+use Doctrine\ORM\Query\SqlWalker;
+
+use Doctrine\ORM\Query\Parser;
+
+use Doctrine\ORM\Query\AST\Functions\FunctionNode;
+
+use Doctrine\ORM\Query\ResultSetMapping;
+
 use Newscoop\Entity\ArticleDatetime,
     Doctrine\ORM\EntityRepository,
     Newscoop\ArticleDatetime as ArticleDatetimeHelper,
@@ -91,8 +103,120 @@ class ArticleDatetimeRepository extends EntityRepository
         }
     }
 
-    public function findSmth($search)
+    /**
+     * Find dates
+     * @param object $search
+     * 		{
+     * 			fromDate : dateFormat,
+     * 			toDate : dateFormat,
+     * 			fromTime : dateFormat,
+     * 			toTime : dateFormat,
+     * 			daily : bool|dateFormat,
+     * 			weekly : dateFormat,
+     *			monthly : dateFormat,
+     *			yearly : dateFormat
+     *		}
+     */
+    public function findDates($search)
     {
+        $qb = $this->createQueryBuilder('dt');
+
+        // date interval
+        if (isset($search->fromDate) && isset($search->toDate))
+        {
+            $qb->add('where',
+                $qb->expr()->andx
+                (
+					'dt.startDate <= ?1',
+                    $qb->expr()->orx('dt.endDate >= ?2', 'dt.endDate is null')
+                ));
+            $qb->setParameter(1, new \DateTime($search->fromDate));
+            $qb->setParameter(2, new \DateTime($search->toDate));
+        }
+        if (isset($search->fromTime))
+        {
+            $qb->andWhere('dt.startTime <= ?3');
+            $qb->setParameter(3, new \DateTime($search->fromTime));
+        }
+        if (isset($search->toTime))
+        {
+            $qb->andWhere('dt.endTime >= ?4');
+            $qb->setParameter(4, new \DateTime($search->toTime));
+        }
+        if (isset($search->daily))
+        {
+            $qb->andWhere('dt.recurring = ?5');
+            $qb->setParameter(5, 'daily');
+
+            if (is_string($search->daily)) // replace start time with daily string value
+            {
+                $qb->setParameter(3, new \DateTime(key($search->daily)));
+            }
+            if (is_array($search->daily)) // replace time with daily key values
+            {
+                $paraCount = 10;
+                $orSqlParts = array();
+                foreach ($search->daily as $startTime => $endTime)
+                {
+                    $orSqlParts[] = "( dt.startTime <= ?$paraCount and (dt.endTime >= ?".($paraCount+1)." or dt.endTime is null) )";
+                    $qb->setParameter($paraCount++, new \DateTime($startTime));
+                    $qb->setParameter($paraCount++, new \DateTime($endTime));
+                }
+                $qb->andWhere(implode(" or ", $orSqlParts));
+            }
+        }
+        if (isset($search->weekly))
+        {
+            $qb->andWhere($qb->expr()->andx
+            (
+        		'DAYOFWEEK(dt.startDate) = ?6',
+        		'dt.recurring = ?7'
+            ));
+            $qb->setParameter(7, 'weekly');
+            if (is_string($search->weekly))
+            {
+                $dayOfWeek = new \DateTime($search->weekly);
+                $dayOfWeek = $dayOfWeek->format('w')+1;
+                $qb->setParameter(6, $dayOfWeek);
+            }
+        }
+        if (isset($search->monthly))
+        {
+            $qb->andWhere($qb->expr()->andx
+            (
+                'DAYOFMONTH(dt.startDate) = ?8',
+                'dt.recurring = ?9'
+            ));
+            if (is_string($search->monthly))
+            {
+                $dayOfMonth = new \DateTime($search->monthly);
+                $dayOfMonth = $dayOfMonth->format('d');
+                $qb->setParameter(8, $dayOfMonth);
+                $qb->setParameter(9, 'monthly');
+            }
+        }
+
+        if (isset($search->yearly))
+        {
+            return false;
+            $qb->add('where', $qb->expr()->andx
+            (
+                'DAYOFYEAR(dt.startDate) = ?10',
+                'dt.recurring = ?10'
+            ));
+            if (is_string($search->yearly))
+            {
+                $dayOfYear = new \DateTime($search->yearly);
+                $dayOfYear = $dayOfYear->format('z');
+                $qb->setParameter(10, $dayOfYear);
+            }
+        }
+        /*var_dump($qb->getQuery()->getParameters());
+        var_dump($qb->getQuery()->getSQL());
+        var_dump($qb->getQuery()->getResult());
+        die;*/
+        return $qb->getQuery()->getResult();
+
         // $search->fromDate;
 
         // $search->fromDate $search->toDate

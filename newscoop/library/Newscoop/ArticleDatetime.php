@@ -20,6 +20,11 @@ class ArticleDatetime
 
     private $spawns = array();
 
+    /**
+     * @param mixed $format
+     * @param string $recurring
+     * @todo check start < end
+     */
     public function __construct($format, $recurring=null)
     {
         if (is_array($format))
@@ -60,7 +65,7 @@ class ArticleDatetime
 
         switch (true)
         {
-            // TODO fix midnight for passed relative formats
+            // TODO fix midnight for relative formats
             case is_bool($end) && $end : // full day
                 $this->setStartDate($startDate);
                 $this->setStartTime($startHasTime ? strftime('%T', $startTimestamp) : null);
@@ -76,99 +81,17 @@ class ArticleDatetime
 
                 $end = preg_replace("/-\s*recurring:(\w+)/", "", $end);
 
-                // just a day, from 1 time to another, or just at one moment in the day - time specified in the right side
-                if (!$endHasDate)
-                {
-                    $this->setStartDate($startDate);
-                    $this->setStartTime($startHasTime ? strftime('%T', $startTimestamp) : strftime('%T', strtotime($end)));
-                    $this->setEndDate(null);
-                    $this->setEndTime($startHasTime ? strftime('%T', strtotime($end)) : null);
-                    break;
-                }
+                $this->setStartDate($startDate);
 
-                // starts at the begining of a day and ends in another day at the end
-                if ($endHasDate && !$endHasTime && !$startHasTime)
-                {
-                    $this->setstartDate($startDate);
-                    $this->setStartTime(null);
+                if ($endHasDate) {
                     $this->setEndDate(strftime('%F', strtotime($end)));
-                    $this->setEndTime(null);
-                    break;
+                }
+                if ($endHasTime && ($parsedEnd['hour']!=0 || $parsedEnd['minute']!=0 || $parsedEnd['second']!=0)) {
+                    $this->setEndTime(strftime('%T', strtotime($end)));
                 }
 
-                $endDateTimestamp = strtotime(strftime('%F', strtotime($end)));
-                $startDateTimestamp = strtotime($startDate);
-
-                // starts at a later time in a day, ends at the end of another day
-                if ($endHasDate && !$endHasTime && $startHasTime)
-                {
-                    $dayDiff = ($endDateTimestamp - $startDateTimestamp) / 86400;
-
-                    $this->setStartDate($startDate);
-                    $this->setStartTime(strftime('%T', $startTimestamp));
-                    $this->setEndDate(null);
-                    $this->setEndTime(null);
-
-                    $this->spawns[] = clone $this;
-                    $spawn =& $this->spawns[count($this->spawns)-1];
-                    $spawn->setStartDate( strftime('%F', $startDateTimestamp + 86400) );
-                    $spawn->setEndDate($dayDiff <= 2 ? null : strftime('%F', $startDateTimestamp + (86400 * ($dayDiff-1))));
-                    $spawn->setStartTime(null);
-                    $spawn->setEndTime(null);
-
-                    break;
-                }
-
-                // starts in a day and lasts till another day at a certain time later in it
-                if ($endHasDate && $endHasTime && !$startHasTime)
-                {
-                    $this->setStartDate($startDate);
-                    $this->setEndDate($endDateTimestamp - 86400 > $startDateTimestamp ? strftime('%F', $endDateTimestamp - 86400) : null);
-                    $this->setStartTime(null);
-                    $this->setEndTime(null);
-
-                    $this->spawns[] = clone $this;
-                    $spawn =& $this->spawns[count($this->spawns)-1];
-
-                    $spawn->setStartDate( strftime('%F', $endDateTimestamp) );
-                    $spawn->setEndDate(null);
-                    $spawn->setStartTime(null);
-                    $spawn->setEndTime(strftime('%T', strtotime($end)));
-
-                    break;
-                }
-
-                // starts at a certain time in a day, lasts till another day at a certain time
-                if ($endHasDate && $endHasTime && $startHasDate && $startHasTime)
-                {
-                    $dayDiff = ($endDateTimestamp - $startDateTimestamp) / 86400;
-
-                    $this->setStartDate($startDate);
+                if ($startHasTime && ($parsedStart['hour']!=0 || $parsedStart['minute']!=0 || $parsedStart['second']!=0)) {
                     $this->setStartTime(strftime('%T', strtotime($start)));
-                    $this->setEndDate(null);
-                    $this->setEndTime(null);
-
-                    if ($dayDiff > 1) // one day diff don't need to have a full day stored
-                    {
-                        $this->spawns[] = clone $this;
-                        $spawn =& $this->spawns[count($this->spawns)-1];
-
-                        $spawn->setStartDate( strftime('%F', $startDateTimestamp + 86400) );
-                        $spawn->setEndDate($dayDiff<=2 ? null : strftime('%F', $startDateTimestamp + (86400 * ($dayDiff-1))));
-                        $spawn->setStartTime(null);
-                        $spawn->setEndTime(null);
-                    }
-
-                    $this->spawns[] = clone $this;
-                    $spawn =& $this->spawns[count($this->spawns)-1];
-
-
-                    $spawn->setStartDate(strftime('%F', $endDateTimestamp));
-                    $spawn->setEndDate(null);
-                    $spawn->setStartTime(null);
-                    $spawn->setEndTime(strftime('%T', strtotime($end)));
-
-                    break;
                 }
 
                 break;
@@ -178,7 +101,7 @@ class ArticleDatetime
                 $spawn =& $this;
                 foreach ($end as $startTime => $endTime)
                 {
-                    if ($startTime == 'recurring' ) {
+                    if ($startTime == 'recurring' ) { // TODO dirty fix for reccuring flag take out
                         continue;
                     }
                     $spawn->setStartDate($startDate);

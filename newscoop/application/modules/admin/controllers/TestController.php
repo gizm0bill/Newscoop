@@ -741,7 +741,7 @@ class Admin_TestController extends Zend_Controller_Action
             "2011-11-08" => "2011-11-09 12:00",
         	"2011-11-10 10:30" => "2011-11-11",
         	"2011-11-12 12:30" => "2011-11-13 13:00",
-        	"2011-11-14 14:30" => "2011-11-16 15:00",
+        	"2011-11-14 14:30" => "2011-11-16 17:00 - recurring:daily",
         	"2011-11-16 15:30" => "2011-11-17",
         	"tomorrow" => true
         );
@@ -750,6 +750,10 @@ class Admin_TestController extends Zend_Controller_Action
             $repo->add($timeSet, $art->getId(), 'schedule');
             break;
         }
+
+        //$repo->findSmth((object) array('fromDate' => '2011-11-11', 'toDate' => '2011-11-12'));
+        //$repo->findSmth((object) array('daily' => true, 'fromDate' => '2011-11-14', 'toDate' => '2011-11-16', 'fromTime' => '15:00', 'toTime' => '15:01'));
+        $repo->findDates((object) array('daily' => array( '15:00' => '15:01')));
         die;
     }
 }
