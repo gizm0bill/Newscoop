@@ -83,6 +83,22 @@ class ArticleDatetime extends Entity
     }
 
     /**
+     * @return string
+     */
+    public function getFieldName()
+    {
+        return $this->fieldName;
+    }
+
+	/**
+     * @return string
+     */
+    public function getArticleType()
+    {
+        return $this->articleType;
+    }
+
+    /**
      * @param array $articleData
      * @param ArticleDatetime $dateData
      */
