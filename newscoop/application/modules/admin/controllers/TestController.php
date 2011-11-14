@@ -1,5 +1,6 @@
 <?php
 
+use Newscoop\ArticleDatetime;
 use Doctrine\Common\Util\Debug;
 use Newscoop\Service\IThemeManagementService;
 use Newscoop\Service\IOutputService;
@@ -745,12 +746,22 @@ class Admin_TestController extends Zend_Controller_Action
         	"2011-11-16 15:30" => "2011-11-17",
         	"tomorrow" => true
         );
-        foreach ($repo->findAll() as $adt)
-        {
-            $art = $arepo->findOneBy(array('number' => $adt->getArticleId()));
-            $repo->add($timeSet, $art->getId(), 'schedule');
-            break;
-        }
+        $article = $arepo->findOneBy(array('type'=>'news'));
+
+        // test insert
+
+        //$repo->add($timeSet, $article->getId(), 'schedule');
+
+        // with a helper object
+        $dateobj = new ArticleDatetime(array('2008-11-24 18:11:31' => '2008-11-29 10:00:00'), 'daily');
+        $repo->add($dateobj, $article->getId(), 'schedule', null, true);
+        $dateobj = new ArticleDatetime('2008-11-24 18:11:31 - 2008-11-29 10:00:00');
+        $repo->add($dateobj, $article->getId(), 'schedule', null, false);
+
+        die;
+
+        return;
+
 
         $one = $repo->findAll();
         $one = current($one);

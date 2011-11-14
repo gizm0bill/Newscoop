@@ -22,6 +22,10 @@ class ArticleDatetime
 
     /**
      * @param mixed $format
+     * 		array of start_date, end_date, etc. keys
+     * 		array with 1 element: start_date => end_date strings - Date and Time formats: http://php.net/manual/en/datetime.formats.php
+     * 		string formatted like above and start separated by end with a - (dash) padded with spaces
+     * 		also in case of array you can add recurring => [daily|weekly|etc.]
      * @param string $recurring
      * @todo check start < end
      */
@@ -45,7 +49,7 @@ class ArticleDatetime
         }
         elseif (is_string($format))
         {
-            list($start, $end) = explode("-", $format);
+            list($start, $end) = explode(" - ", $format);
             if (in_array( ($end = trim($end)), array( '1', '0', 'true', 'false'))) {
                 $end = (bool) $end;
             }

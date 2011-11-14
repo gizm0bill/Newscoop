@@ -77,8 +77,9 @@ class ArticleDatetimeRepository extends EntityRepository
      * @param int|Article $articleId
      * @param string $fieldName
      * @param string $recurring
+     * @param bool $overwrite
      */
-    public function add( $timeSet, $articleId, $fieldName = null, $recurring = null )
+    public function add( $timeSet, $articleId, $fieldName = null, $recurring = null, $overwrite=true )
     {
         $insertValues = $this->buildInsertValues($timeSet, $recurring);
 
@@ -98,8 +99,11 @@ class ArticleDatetimeRepository extends EntityRepository
         try // delete all entries and add new ones
         {
             $em->getConnection()->beginTransaction();
-            foreach ($this->findBy(array('articleId' => $articleId)) as $entry) {
-                $em->remove($entry);
+            if ($overwrite)
+            {
+                foreach ($this->findBy(array('articleId' => $articleId)) as $entry) {
+                    $em->remove($entry);
+                }
             }
             foreach ($insertValues as $dateValue) {
                 foreach (array_merge(array($dateValue), $dateValue->getSpawns()) as $dateValue)
