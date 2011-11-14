@@ -745,11 +745,16 @@ class Admin_TestController extends Zend_Controller_Action
         	"2011-11-16 15:30" => "2011-11-17",
         	"tomorrow" => true
         );
-        foreach ($repo->findAll() as $adt) {
+        foreach ($repo->findAll() as $adt)
+        {
             $art = $arepo->findOneBy(array('number' => $adt->getArticleId()));
             $repo->add($timeSet, $art->getId(), 'schedule');
             break;
         }
+
+        $one = $repo->findAll();
+        $one = current($one);
+        var_dump( $one->getId(), $repo->update( $one->getId(), array( "2011-11-27 10:30" => "2011-11-28" ) ) );
 
         //$repo->findSmth((object) array('fromDate' => '2011-11-11', 'toDate' => '2011-11-12'));
         //$repo->findSmth((object) array('daily' => true, 'fromDate' => '2011-11-14', 'toDate' => '2011-11-16', 'fromTime' => '15:00', 'toTime' => '15:01'));

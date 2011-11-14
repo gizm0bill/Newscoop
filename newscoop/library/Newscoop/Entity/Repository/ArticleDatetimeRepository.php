@@ -26,6 +26,38 @@ use Newscoop\Entity\ArticleDatetime,
 
 class ArticleDatetimeRepository extends EntityRepository
 {
+
+    const RECURRING_NONE = 'NULL';
+    const RECURRING_DAILY = 'daily';
+    const RECURRING_WEEKLY = 'weekly';
+    const RECURRING_MONTHLY = 'monthly';
+    const RECURRING_YEARLY = 'yearly';
+
+    /**
+     * @return array
+     */
+    private function buildInsertValues($timeSet, $recurring)
+    {
+        $insertValues = array();
+        if (is_array($timeSet)) {
+            foreach ($timeSet as $start => $end )
+            {
+                $insertValues[] = new ArticleDatetimeHelper // some logic to capture the recurring also included
+                (
+                    array( $start => $end ),
+                    is_array($end) && isset($end['recurring'])
+                        ? $end['recurring']
+                        : (!is_array($end) && ($x = preg_grep('/recurring:\w+/i', explode('-', $end))) && count($x) ?
+                            next(preg_split('/\s*:\s*/', current($x))) : $recurring)
+                );
+            }
+        }
+        if ($timeSet instanceof ArticleDatetimeHelper) {
+            $insertValues[] = $timeSet;
+        }
+        return $insertValues;
+    }
+
     /**
      * Adds time intervals
      * @param array|ArticleDatetime $timeSet
@@ -48,23 +80,8 @@ class ArticleDatetimeRepository extends EntityRepository
      */
     public function add( $timeSet, $articleId, $fieldName = null, $recurring = null )
     {
-        $insertValues = array();
-        if (is_array($timeSet)) {
-            foreach ($timeSet as $start => $end )
-            {
-                $insertValues[] = new ArticleDatetimeHelper // some logic to capture the recurring also included
-                (
-                    array( $start => $end ),
-                    is_array($end) && isset($end['recurring'])
-                        ? $end['recurring']
-                        : (!is_array($end) && ($x = preg_grep('/recurring:\w+/i', explode('-', $end))) && count($x) ?
-                            next(preg_split('/\s*:\s*/', current($x))) : $recurring)
-                );
-            }
-        }
-        if ($timeSet instanceof ArticleDatetimeHelper) {
-            $insertValues[] = $timeSet;
-        }
+        $insertValues = $this->buildInsertValues($timeSet, $recurring);
+
         $em = $this->getEntityManager();
         // check article
         if (is_numeric($articleId)) {
@@ -104,6 +121,54 @@ class ArticleDatetimeRepository extends EntityRepository
     }
 
     /**
+     * Update entry by id
+     * @param int $id
+     * @param array $timeSet
+     * @param int $articleId
+     * @param string $fieldName
+     * @param string $recurring
+     */
+    public function update($id, $timeSet, $articleId=null, $fieldName=null, $recurring=null)
+    {
+        $em = $this->getEntityManager();
+
+        $entry = $this->find($id);
+        if (!$entry) {
+            return false;
+        }
+        if (is_null($articleId)) {
+            $articleId = $entry->getArticleId();
+        }
+        if (is_null($fieldName)) {
+            $fieldName = $entry->getFieldName();
+        }
+
+        $insertValues = $this->buildInsertValues($timeSet, $recurring);
+
+        try
+        {
+            $em->getConnection()->beginTransaction();
+            $em->remove($entry);
+            foreach ($insertValues as $dateValue) {
+                foreach (array_merge(array($dateValue), $dateValue->getSpawns()) as $dateValue)
+                {
+                    $articleDatetime = new ArticleDatetime();
+                    $articleDatetime->setValues($dateValue, $articleId, $fieldName, $entry->getArticleType());
+                    $em->persist($articleDatetime);
+                }
+            }
+            $em->flush();
+            $em->getConnection()->commit();
+        }
+        catch(\Exception $e)
+        {
+            $em->getConnection()->rollback();
+            $em->close();
+            return $e;
+        }
+    }
+
+    /**
      * Find dates
      * @param object $search
      * 		{
@@ -127,40 +192,40 @@ class ArticleDatetimeRepository extends EntityRepository
             $qb->add('where',
                 $qb->expr()->andx
                 (
-					'dt.startDate <= ?1',
-                    $qb->expr()->orx('dt.endDate >= ?2', 'dt.endDate is null')
+					'dt.startDate <= :startDate',
+                    $qb->expr()->orx('dt.endDate >= :endDate', 'dt.endDate is null')
                 ));
-            $qb->setParameter(1, new \DateTime($search->fromDate));
-            $qb->setParameter(2, new \DateTime($search->toDate));
+            $qb->setParameter('startDate', new \DateTime($search->fromDate));
+            $qb->setParameter('endDate', new \DateTime($search->toDate));
         }
         if (isset($search->fromTime))
         {
-            $qb->andWhere('dt.startTime <= ?3');
-            $qb->setParameter(3, new \DateTime($search->fromTime));
+            $qb->andWhere('dt.startTime <= :startTime');
+            $qb->setParameter('startTime', new \DateTime($search->fromTime));
         }
         if (isset($search->toTime))
         {
-            $qb->andWhere('dt.endTime >= ?4');
-            $qb->setParameter(4, new \DateTime($search->toTime));
+            $qb->andWhere('dt.endTime >= :endTime');
+            $qb->setParameter('endTime', new \DateTime($search->toTime));
         }
         if (isset($search->daily))
         {
-            $qb->andWhere('dt.recurring = ?5');
-            $qb->setParameter(5, 'daily');
+            $qb->andWhere('dt.recurring = :recurringDaily');
+            $qb->setParameter('recurringDaily', self::RECURRING_DAILY);
 
             if (is_string($search->daily)) // replace start time with daily string value
             {
-                $qb->setParameter(3, new \DateTime(key($search->daily)));
+                $qb->setParameter('startTime', new \DateTime(key($search->daily)));
             }
             if (is_array($search->daily)) // replace time with daily key values
             {
-                $paraCount = 10;
+                $paraCount = 11;
                 $orSqlParts = array();
                 foreach ($search->daily as $startTime => $endTime)
                 {
-                    $orSqlParts[] = "( dt.startTime <= ?$paraCount and (dt.endTime >= ?".($paraCount+1)." or dt.endTime is null) )";
-                    $qb->setParameter($paraCount++, new \DateTime($startTime));
-                    $qb->setParameter($paraCount++, new \DateTime($endTime));
+                    $orSqlParts[] = "( dt.startTime <= ?".($paraCount+1)." and (dt.endTime >= ?".($paraCount+2)." or dt.endTime is null) )";
+                    $qb->setParameter(++$paraCount, new \DateTime($startTime));
+                    $qb->setParameter(++$paraCount, new \DateTime($endTime));
                 }
                 $qb->andWhere(implode(" or ", $orSqlParts));
             }
@@ -169,30 +234,30 @@ class ArticleDatetimeRepository extends EntityRepository
         {
             $qb->andWhere($qb->expr()->andx
             (
-        		'DAYOFWEEK(dt.startDate) = ?6',
-        		'dt.recurring = ?7'
+        		'DAYOFWEEK(dt.startDate) = :dayOfWeek',
+        		'dt.recurring = :recurringWeekly'
             ));
-            $qb->setParameter(7, 'weekly');
+            $qb->setParameter('recurringWeekly', self::RECURRING_WEEKLY);
             if (is_string($search->weekly))
             {
                 $dayOfWeek = new \DateTime($search->weekly);
                 $dayOfWeek = $dayOfWeek->format('w')+1;
-                $qb->setParameter(6, $dayOfWeek);
+                $qb->setParameter('dayOfWeek', $dayOfWeek);
             }
         }
         if (isset($search->monthly))
         {
             $qb->andWhere($qb->expr()->andx
             (
-                'DAYOFMONTH(dt.startDate) = ?8',
-                'dt.recurring = ?9'
+                'DAYOFMONTH(dt.startDate) = :dayOfMonth',
+                'dt.recurring = :recurringMonthly'
             ));
             if (is_string($search->monthly))
             {
                 $dayOfMonth = new \DateTime($search->monthly);
                 $dayOfMonth = $dayOfMonth->format('d');
-                $qb->setParameter(8, $dayOfMonth);
-                $qb->setParameter(9, 'monthly');
+                $qb->setParameter('dayOfMonth', $dayOfMonth);
+                $qb->setParameter('recurringMonthly', self::RECURRING_MONTHLY);
             }
         }
 
@@ -201,20 +266,21 @@ class ArticleDatetimeRepository extends EntityRepository
             return false;
             $qb->add('where', $qb->expr()->andx
             (
-                'DAYOFYEAR(dt.startDate) = ?10',
-                'dt.recurring = ?10'
+                'DAYOFYEAR(dt.startDate) = :dayOfYear',
+                'dt.recurring = :recurringYearly'
             ));
+            $qb->setParameter('recurringYearly', self::RECURRING_YEARLY);
             if (is_string($search->yearly))
             {
                 $dayOfYear = new \DateTime($search->yearly);
                 $dayOfYear = $dayOfYear->format('z');
-                $qb->setParameter(10, $dayOfYear);
+                $qb->setParameter('dayOfYear', $dayOfYear);
             }
         }
-        /*var_dump($qb->getQuery()->getParameters());
-        var_dump($qb->getQuery()->getSQL());
-        var_dump($qb->getQuery()->getResult());
-        die;*/
+        //var_dump($qb->getQuery()->getParameters());
+        //var_dump($qb->getQuery()->getSQL());
+        //var_dump($qb->getQuery()->getResult());
+        //die;
         return $qb->getQuery()->getResult();
 
         // $search->fromDate;
