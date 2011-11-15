@@ -739,37 +739,47 @@ class Admin_TestController extends Zend_Controller_Action
             "2011-11-03" => "11:00 - recurring:daily",
         	"2011-11-03 14:00" => "18:00",
             "2011-11-04" => "2011-11-07",
-            "2011-11-08" => "2011-11-09 12:00",
+            "2011-11-08" => "2011-11-09 12:00 - recurring:weekly",
         	"2011-11-10 10:30" => "2011-11-11",
         	"2011-11-12 12:30" => "2011-11-13 13:00",
         	"2011-11-14 14:30" => "2011-11-16 17:00 - recurring:daily",
         	"2011-11-16 15:30" => "2011-11-17",
+        	"August 5" => "recurring:monthly", // 'fifth of august' doesn't work
+            "first day of April" => "recurring:yearly",
         	"tomorrow" => true
         );
         $article = $arepo->findOneBy(array('type'=>'news'));
-
-        // test insert
-
-        //$repo->add($timeSet, $article->getId(), 'schedule');
+        // test insert by an array of dates
+        $repo->add($timeSet, $article->getId(), 'schedule');
 
         // with a helper object
-        $dateobj = new ArticleDatetime(array('2008-11-24 18:11:31' => '2008-11-29 10:00:00'), 'daily');
-        $repo->add($dateobj, $article->getId(), 'schedule', null, true);
-        $dateobj = new ArticleDatetime('2008-11-24 18:11:31 - 2008-11-29 10:00:00');
+        // daily from 18:11:31 to 22:00:00 between 24th of November and the 29th
+        $dateobj = new ArticleDatetime(array('2011-11-24 18:11:31' => '2011-11-29 22:00:00'), 'daily');
+        $repo->add($dateobj, $article->getId(), 'schedule', null, false);
+        // same as above in 1 string param
+        $dateobj = new ArticleDatetime('2011-11-24 18:11:31 - 2011-11-29 22:00:00');
         $repo->add($dateobj, $article->getId(), 'schedule', null, false);
 
-        die;
-
-        return;
-
-
+        // test update
         $one = $repo->findAll();
         $one = current($one);
-        var_dump( $one->getId(), $repo->update( $one->getId(), array( "2011-11-27 10:30" => "2011-11-28" ) ) );
+        echo 'updating: ', $one->getId(), " (it'll get another id after this)";
+        $repo->update( $one->getId(), array( "2011-11-27 10:30" => "2011-11-28" ));
 
-        //$repo->findSmth((object) array('fromDate' => '2011-11-11', 'toDate' => '2011-11-12'));
-        //$repo->findSmth((object) array('daily' => true, 'fromDate' => '2011-11-14', 'toDate' => '2011-11-16', 'fromTime' => '15:00', 'toTime' => '15:01'));
-        $repo->findDates((object) array('daily' => array( '15:00' => '15:01')));
+        // test find
+        // daily from 14:30
+        echo 'daily from 14:30';
+        var_dump($repo->findDates((object) array('daily' => '14:30')));
+        // weekly to 12:00
+        echo 'weekly to 12:00';
+        var_dump($repo->findDates((object) array('weekly' => 'tuesday', 'toTime' => '12:00')));
+        // daily from 15:00 to 15:01
+        //var_dump($repo->findDates((object) array('daily' => array( '15:00' => '15:01'))));
+        // yearly in april
+        echo 'monthly on the 5th';
+        var_dump($repo->findDates((object) array('monthly' => '2011-11-05')));
+        echo 'yearly in april';
+        var_dump($repo->findDates((object) array('yearly' => 'april')));
         die;
     }
 }

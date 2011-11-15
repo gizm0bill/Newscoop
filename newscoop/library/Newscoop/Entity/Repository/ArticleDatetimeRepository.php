@@ -7,6 +7,10 @@
 
 namespace Newscoop\Entity\Repository;
 
+use Nette\InvalidArgumentException;
+
+use Newscoop\Utils\Exception;
+
 use Doctrine\ORM\Query;
 
 use Doctrine\ORM\Configuration;
@@ -202,10 +206,12 @@ class ArticleDatetimeRepository extends EntityRepository
             $qb->setParameter('startDate', new \DateTime($search->fromDate));
             $qb->setParameter('endDate', new \DateTime($search->toDate));
         }
+        $hasStartTimeQuery = false;
         if (isset($search->fromTime))
         {
             $qb->andWhere('dt.startTime <= :startTime');
             $qb->setParameter('startTime', new \DateTime($search->fromTime));
+            $hasStartTimeQuery = true;
         }
         if (isset($search->toTime))
         {
@@ -219,7 +225,10 @@ class ArticleDatetimeRepository extends EntityRepository
 
             if (is_string($search->daily)) // replace start time with daily string value
             {
-                $qb->setParameter('startTime', new \DateTime(key($search->daily)));
+                if (!$hasStartTimeQuery) {
+                    $qb->andWhere('dt.startTime <= :startTime');
+                }
+                $qb->setParameter('startTime', new \DateTime($search->daily));
             }
             if (is_array($search->daily)) // replace time with daily key values
             {
@@ -236,11 +245,8 @@ class ArticleDatetimeRepository extends EntityRepository
         }
         if (isset($search->weekly))
         {
-            $qb->andWhere($qb->expr()->andx
-            (
-        		'DAYOFWEEK(dt.startDate) = :dayOfWeek',
-        		'dt.recurring = :recurringWeekly'
-            ));
+            $qb->andWhere('DAYOFWEEK(dt.startDate) = :dayOfWeek');
+        	$qb->andWhere('dt.recurring = :recurringWeekly');
             $qb->setParameter('recurringWeekly', self::RECURRING_WEEKLY);
             if (is_string($search->weekly))
             {
@@ -248,14 +254,14 @@ class ArticleDatetimeRepository extends EntityRepository
                 $dayOfWeek = $dayOfWeek->format('w')+1;
                 $qb->setParameter('dayOfWeek', $dayOfWeek);
             }
+            else {
+                throw new \InvalidArgumentException('Parameter "weekly" must have a date-like formated value');
+            }
         }
         if (isset($search->monthly))
         {
-            $qb->andWhere($qb->expr()->andx
-            (
-                'DAYOFMONTH(dt.startDate) = :dayOfMonth',
-                'dt.recurring = :recurringMonthly'
-            ));
+            $qb->andWhere('DAYOFMONTH(dt.startDate) = :dayOfMonth');
+            $qb->andWhere('dt.recurring = :recurringMonthly');
             if (is_string($search->monthly))
             {
                 $dayOfMonth = new \DateTime($search->monthly);
@@ -263,22 +269,25 @@ class ArticleDatetimeRepository extends EntityRepository
                 $qb->setParameter('dayOfMonth', $dayOfMonth);
                 $qb->setParameter('recurringMonthly', self::RECURRING_MONTHLY);
             }
+            else {
+                throw new \InvalidArgumentException('Parameter "monthly" must have a date-like formated value');
+            }
         }
 
         if (isset($search->yearly))
         {
-            return false;
-            $qb->add('where', $qb->expr()->andx
-            (
-                'DAYOFYEAR(dt.startDate) = :dayOfYear',
-                'dt.recurring = :recurringYearly'
-            ));
+            $qb->andWhere('DAYOFYEAR(dt.startDate) <= :dayOfYear');
+            $qb->andWhere('dt.recurring = :recurringYearly');
             $qb->setParameter('recurringYearly', self::RECURRING_YEARLY);
             if (is_string($search->yearly))
             {
                 $dayOfYear = new \DateTime($search->yearly);
                 $dayOfYear = $dayOfYear->format('z');
+                var_dump(strftime('%F %T', strtotime($search->yearly)));
                 $qb->setParameter('dayOfYear', $dayOfYear);
+            }
+            else {
+                throw new \InvalidArgumentException('Parameter "yearly" must have a date-like formated value');
             }
         }
         //var_dump($qb->getQuery()->getParameters());

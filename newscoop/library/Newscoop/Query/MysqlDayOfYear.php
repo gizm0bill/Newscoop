@@ -15,7 +15,7 @@ use \Doctrine\ORM\Query\AST\Functions\FunctionNode,
 /**
  * DayOfMonth ::= "DAYOFYEAR" "(" ArithmeticPrimary ")"
  */
-class MysqlDayOfMonth extends FunctionNode
+class MysqlDayOfYear extends FunctionNode
 {
     public $dateExpression = null;
 
