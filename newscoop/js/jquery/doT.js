@@ -1,7 +1,7 @@
 /**
- * originally designed by Laura Doktorova in 2011, undet the name of doT.js - https://github.com/olado/doT
+ * originally designed by Laura Doktorova in 2011, under the name of doT.js - https://github.com/olado/doT
  */
-(function()
+(function ()
 {
     var doT =
     {
@@ -19,7 +19,7 @@
         defines     : /\{\{#([\s\S]+?)\}\}/g,
         evaluate    : /\{\%([\s\S]+?)\%\}/g,
         interpolate : /\{\{([\s\S]+?)\}\}/g,
-        ends        : /(endfor|endif|enblock)/g,
+        ends        : /(endfor|endif|enblock)/,
         varname     : 'it',
         strip       : true
     };
@@ -69,21 +69,21 @@
                                 c.evaluate,
                                 function(match, code)
                                 {
-                                    var x = "';"
+                                    c.ends.lastIndex = 0;
+                                	var x = "';"
                                             + code.replace(c.ends, '}')
                                                     .replace(/\\'/g, "'")
                                                     .replace(/\\\\/g, "\\")
                                                     .replace(/[\r\t\n]/g,
                                                             ' ') +(c.ends.test(code)?"":"{") +"out+='";
-                                    c.ends.test(code); // Chrome weird true vs. false fix
+                                	//c.ends.indetest(code); // Chrome weird true vs. false fix
                                     return x; 
                                 }) + "';return out;}").replace(/\n/g, '\\n')
                 .replace(/\t/g, '\\t').replace(/\r/g, '\\r').split("out+='';")
                 .join('').split('var out="";out+=').join('var out=');
         try
-        {
-            return new Function( c.varname, str );
-            //return [ c.varname, str ];
+        {       	
+        	return new Function( c.varname, str );
         }
         catch (e)
         {
