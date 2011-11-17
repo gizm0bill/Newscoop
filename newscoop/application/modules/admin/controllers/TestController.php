@@ -739,7 +739,7 @@ class Admin_TestController extends Zend_Controller_Action
             "2011-11-03" => "11:00 - recurring:daily",
         	"2011-11-03 14:00" => "18:00",
             "2011-11-04" => "2011-11-07",
-            "2011-11-08" => "2011-11-09 12:00 - recurring:weekly",
+            "2011-11-08 - 2011-11-09 12:00 - recurring:weekly",
         	"2011-11-10 10:30" => "2011-11-11",
         	"2011-11-12 12:30" => "2011-11-13 13:00",
         	"2011-11-14 14:30" => "2011-11-16 17:00 - recurring:daily",
@@ -750,15 +750,15 @@ class Admin_TestController extends Zend_Controller_Action
         );
         $article = $arepo->findOneBy(array('type'=>'news'));
         // test insert by an array of dates
-        $repo->add($timeSet, $article->getId(), 'schedule');
+        var_dump( $repo->add($timeSet, $article->getId(), 'schedule') );
 
         // with a helper object
         // daily from 18:11:31 to 22:00:00 between 24th of November and the 29th
         $dateobj = new ArticleDatetime(array('2011-11-24 18:11:31' => '2011-11-29 22:00:00'), 'daily');
-        $repo->add($dateobj, $article->getId(), 'schedule', null, false);
+        var_dump( $repo->add($dateobj, $article->getId(), 'schedule', null, false) );
         // same as above in 1 string param
         $dateobj = new ArticleDatetime('2011-11-24 18:11:31 - 2011-11-29 22:00:00');
-        $repo->add($dateobj, $article->getId(), 'schedule', null, false);
+        var_dump( $repo->add($dateobj, $article->getId(), 'schedule', null, false) );
 
         // test update
         $one = $repo->findAll();

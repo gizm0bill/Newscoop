@@ -28,6 +28,12 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
     }
     
     
+    public function getType()
+    {
+        $this->__load();
+        return parent::getType();
+    }
+
     public function setId($p_id)
     {
         $this->__load();
@@ -127,7 +133,7 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled');
+        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type');
     }
 
     public function __clone()
