@@ -47,7 +47,7 @@ final class MetaComment extends MetaDbObject
         $this->m_customProperties['defined'] = 'defined';
         $this->m_customProperties['user'] = 'getUser';
 
-        $this->m_skipFilter = array('content_real');
+        $this->m_skipFilter = array('content_real','content');
     } // fn __construct
 
     protected function getThreadDepth()
@@ -97,7 +97,7 @@ final class MetaComment extends MetaDbObject
 
     protected function getMessage()
     {
-        return $this->m_dbObject->getMessage();
+        return nl2br($this->m_dbObject->getMessage());
     }
 
     protected function getArticle()

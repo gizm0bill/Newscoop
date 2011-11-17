@@ -114,6 +114,18 @@ class Admin_CommentController extends Zend_Controller_Action
                                                 array('date' => $comment->getTimeCreated()->format('Y.m.d'),
                                                       'time' => $comment->getTimeCreated()->format('H:i:s')),
                                                 'subject' => $comment->getSubject(),
+                                                'message' => nl2br($comment->getMessage()), 'likes' => '', 'dislikes' => '',
+                                                'status' => $comment->getStatus(),
+                                                'recommended' => $comment->getRecommended(),
+                                                'action' => array('update' => $view->url(
+                                                    array('action' => 'update', 'format' => 'json')),
+                                                                  'reply' => $view->url(
+                                                                      array('action' => 'reply', 'format' => 'json')))),
+                             'editComment' => array('id' => $comment->getId(),
+                                                'created' =>
+                                                array('date' => $comment->getTimeCreated()->format('Y.m.d'),
+                                                      'time' => $comment->getTimeCreated()->format('H:i:s')),
+                                                'subject' => $comment->getSubject(),
                                                 'message' => $comment->getMessage(), 'likes' => '', 'dislikes' => '',
                                                 'status' => $comment->getStatus(),
                                                 'recommended' => $comment->getRecommended(),
