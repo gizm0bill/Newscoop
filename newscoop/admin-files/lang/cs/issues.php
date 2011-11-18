@@ -1,11 +1,11 @@
 <?php 
-regGS("in order to be able to assigned to the issue.", "");
-regGS("default", "");
-regGS("The publishing/unpublishing can not be set the same time", "");
-regGS("The publishing schedule can not be set in the past", "");
-regGS("Please assign at least one theme to the publication", "");
-regGS("Only than the issue can be published", "");
-regGS("Issue Theme", "");
+regGS("in order to be able to assigned to the issue.", "aby bylo možné ");
+regGS("default", "default");
+regGS("The publishing/unpublishing can not be set the same time", "Publikování a konec publikování nemůže být nastaveno najednou");
+regGS("The publishing schedule can not be set in the past", "Harmonogram publikování nemůže být nastaven v minulosti.");
+regGS("Please assign at least one theme to the publication", "Prosím zadejte alespoň jedno téma do publikace ");
+regGS("Only than the issue can be published", "Až poté může být vydání publikováno");
+regGS("Issue Theme", "Uveřejnit téma");
 regGS("Scheduled action deleted from issue #$1: \"$2\" (Publication: $3)", "Plánovaná činnost odstraněna z vydání #$1: \"$2\" (Publikace: $3)");
 regGS("Scheduled action $1 for issue #$2: \"$3\" (Publication: $4)", "Plánovaná činnost $1 pro vydání #$2: \"$3\" (Publikace: $4)");
 regGS("Issue \"$1\" ($2) updated in publication \"$3\"", "Vydání \"$1\" ($2) aktualizováno v publikaci \"$3\"");

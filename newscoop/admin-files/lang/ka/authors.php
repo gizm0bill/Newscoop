@@ -8,7 +8,7 @@ regGS("Please enter the last name", "");
 regGS("Please enter the first name", "");
 regGS("No records found", "");
 regGS("Last name", "");
-regGS("Jabber", "");
+regGS("Jabber", "Jabber");
 regGS("General", "");
 regGS("First name", "");
 regGS("Email", "");
@@ -16,5 +16,5 @@ regGS("Delete author", "");
 regGS("Contacts", "");
 regGS("Biography", "");
 regGS("Aliases", "");
-regGS("AIM", "");
+regGS("AIM", "AIM");
 ?>

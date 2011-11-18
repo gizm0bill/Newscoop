@@ -1,6 +1,6 @@
 <?php 
-regGS("Image files", "");
-regGS("Fix all thumbnails", "");
+regGS("Image files", "Obrázkové soubory");
+regGS("Fix all thumbnails", "Opravit všechny náhledy k obrázkům");
 regGS("You do not have the right to add files.", "Nemáte oprávění přidávat články.");
 regGS("Should this file only be available for this translation of the article, or for all translations?", "Měla by být tato složka zpřístupněna pro tento překlad nebo pro všechny překlady?");
 regGS("Please enter a description for the file: '$1'.", "Prosím zadejte popis složky: '$1'.");

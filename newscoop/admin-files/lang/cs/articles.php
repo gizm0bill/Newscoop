@@ -1,14 +1,14 @@
 <?php 
-regGS("This article cannot be previewed. Please make sure it has the publication has a theme assigned.", "");
-regGS("On", "");
-regGS("Off", "");
-regGS("You do not have the right to moderate comments.", "");
-regGS("You can not schedule opposing events at the same time", "");
-regGS("Unable to reach Newscoop. Please check your internet connection.", "");
-regGS("Title", "");
-regGS("There already is an article with the same name. Please change the name and try again.", "");
+regGS("This article cannot be previewed. Please make sure it has the publication has a theme assigned.", "Tento článek nemůže být zobrazen. Prosíme ujistěte se, že publikace má přiřazené téma.");
+regGS("On", "Zapnuto");
+regGS("Off", "Vypnuto");
+regGS("You do not have the right to moderate comments.", "Nemáte právo upravovat komentáře.");
+regGS("You can not schedule opposing events at the same time", "Nemůžete naplánovat protichůdné události najednou.");
+regGS("Unable to reach Newscoop. Please check your internet connection.", "Nelze zobrazit Newscoop. Prosíme zkontrolujte své internetové spojení.");
+regGS("Title", "Název");
+regGS("There already is an article with the same name. Please change the name and try again.", "Článek se stejný názvem již existuje. Prosíme změňte název a zkuste to znovu.");
 regGS("Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.", "");
-regGS("Geolocation", "");
+regGS("Geolocation", "Geolokace");
 regGS("Newscoop", "Newscoop");
 regGS("Pending Article", "Nevyřízený článek");
 regGS("Overwrite articles with matching names", "Přepsat články odpovídajícími názvy");
@@ -148,4 +148,7 @@ regGS("This article cannot be previewed. Please make sure it has the article tem
 regGS("No such article.", "Článek neexistuje");
 regGS("No such section.", "Rubrika neexistuje.");
 regGS("Are you sure you want to delete this scheduled action?", "");
+regGS("Are you sure you want to remove the topic \\'$1\\' from the article?", "Jste si jistí, že chcete odstranit téma \\'$1\\' z článku?");
+regGS("Are you sure you want to remove the file \\'$1\\' from the article?", "Jste si jistí, že chcete odstranit soubor \\'$1\\' z článku?");
+regGS("Are you sure you want to remove the image \\'$1\\' from the article?", "Opravdu chcete obrázek \\'$1\\' z článku odstranit?");
 ?>

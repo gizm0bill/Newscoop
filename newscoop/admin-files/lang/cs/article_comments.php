@@ -1,5 +1,5 @@
 <?php 
-regGS("Comment saved.", "");
+regGS("Comment saved.", "Komentář uložen.");
 regGS("Comments updated.", "Komentáře jsou aktualizovány.");
 regGS("Post a Comment", "Vložte komentář");
 regGS("From", "Od");
