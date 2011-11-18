@@ -2537,6 +2537,7 @@ class Article extends DatabaseObject {
 
         // parses the given parameters in order to build the WHERE part of
         // the SQL SELECT sentence
+
         foreach ($p_parameters as $param) {
             $comparisonOperation = self::ProcessListParameters($param, $otherTables);
             $leftOperand = strtolower($comparisonOperation['left']);
@@ -2624,6 +2625,17 @@ class Article extends DatabaseObject {
                 }
             } elseif ($leftOperand == 'insection') {
                 $selectClauseObj->addWhere("Articles.NrSection IN " . $comparisonOperation['right']);
+            } elseif ($leftOperand == 'complex_date') {
+                /* @var $param ComparisonOperation */
+                $fieldName = key(($roper = $param->getRightOperand()));
+                $searchValues = array();
+                foreach ( explode(",", current($roper)) as $values) {
+                    list($key, $value) = explode(":", $values);
+                    $searchValues[trim($key)] = trim($value);
+                }
+                $repo = Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\ArticleDatetime');
+                var_dump($fieldName);
+                var_dump($repo->findDates((object) $searchValues));
             } else {
                 // custom article field; has a correspondence in the X[type]
                 // table fields

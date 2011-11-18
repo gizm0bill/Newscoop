@@ -195,7 +195,7 @@ class ArticleDatetimeRepository extends EntityRepository
      *			yearly : dateFormat
      *		}
      */
-    public function findDates($search)
+    public function findDates($search, $fieldName=null)
     {
         $qb = $this->createQueryBuilder('dt');
 

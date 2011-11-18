@@ -92,23 +92,17 @@ class Article
      * @var int
      */
     private $comments_enabled;
-
+    
     /**
      * @Column(name="Type")
-     * @var int
+     * @var string
      */
     private $type;
-
+    
     /**
-     * Get article type
-     * @return string
+     * @Column(name="PublishDate")
+     * @var string
      */
-<<<<<<< HEAD
-    public function getType()
-    {
-        return $this->type;
-    }
-=======
     private $published;
     
     /**
@@ -117,7 +111,6 @@ class Article
      */
     private $workflowStatus;
 
->>>>>>> wobs
 
     /**
      * Set article id
@@ -288,8 +281,6 @@ class Article
     {
         return (int) $this->comments_enabled;
     }
-<<<<<<< HEAD
-=======
     
     /**
      * Get type
@@ -333,5 +324,4 @@ class Article
     {
         return $this->creator;
     }
->>>>>>> wobs
 }
