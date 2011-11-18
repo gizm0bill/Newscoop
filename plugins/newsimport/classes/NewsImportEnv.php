@@ -295,6 +295,9 @@ class NewsImportEnv
                     if (!is_string($response)) {
                         break;
                     }
+                    if (false !== stristr($response, $one_feed.':none')) {
+                        break;
+                    }
                     if (false !== stristr($response, 'newsimport_locked')) {
                         break;
                     }
@@ -331,7 +334,6 @@ class NewsImportEnv
     public static function Start($p_lockDir)
     {
         $max_diff_new = 12; // max hours for taking the lock as a real one
-        $max_wait_lock = 10; // max admissible waiting; to not make two imports at once
 
         // stop, if some worker running; return false
         $working_path = $p_lockDir . self::$s_working;

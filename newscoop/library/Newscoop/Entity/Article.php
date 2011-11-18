@@ -16,6 +16,10 @@ namespace Newscoop\Entity;
 class Article
 {
 
+    const STATUS_PUBLISHED = 'Y';
+    const STATUS_NOT_PUBLISHED = 'N';
+    const STATUS_SUBMITTED = 'S';
+    
     /**
      * @Id
      * @ManyToOne(targetEntity="Newscoop\Entity\Language")
@@ -44,6 +48,13 @@ class Article
      * @var Newscoop\Entity\Section
      */
     private $section;
+    
+    /**
+     * @OneToOne(targetEntity="Newscoop\Entity\User")
+     * @JoinColumn(name="IdUser", referencedColumnName="Id")
+     * @var Newscoop\Entity\User
+     */
+    private $creator;
 
     /**
      * @column(name="NrSection")
@@ -92,10 +103,21 @@ class Article
      * Get article type
      * @return string
      */
+<<<<<<< HEAD
     public function getType()
     {
         return $this->type;
     }
+=======
+    private $published;
+    
+    /**
+     * @Column(name="Published")
+     * @var string
+     */
+    private $workflowStatus;
+
+>>>>>>> wobs
 
     /**
      * Set article id
@@ -266,4 +288,50 @@ class Article
     {
         return (int) $this->comments_enabled;
     }
+<<<<<<< HEAD
+=======
+    
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    /**
+     * Get publishDate
+     *
+     * @return string
+     */
+    public function getPublishDate()
+    {
+        return $this->published;
+    }
+    
+    /**
+     * Set creator
+     *
+     * @param  User $p_user
+     * @return Article
+     */
+    public function setCreator(User $p_user)
+    {
+        $this->creator = $p_user;
+        // return this for chaining mechanism
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return Newscoop\Entity\User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+>>>>>>> wobs
 }
