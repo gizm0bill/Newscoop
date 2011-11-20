@@ -28,7 +28,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }, 'ADO');
 
         // init session before loading plugins to prevent session start errors
-        $this->bootstrap('session');
+        //$this->bootstrap('session');
 
         return $autoloader;
     }
@@ -39,13 +39,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initSession()
     {
         $options = $this->getOptions();
-        $name = isset($options['session']['name']) ? $options['session']['name'] : session_name();
-
-        Zend_Session::setOptions(array(
-            'name' => $name,
-        ));
-
+        if (!empty($options['session'])) {
+            Zend_Session::setOptions($options['session']);
+        }
         Zend_Session::start();
+
+        foreach ($_COOKIE as $name => $value) { // remove unused cookies
+            if ($name[0] == 'w' && strrpos('_height', $name) !== FALSE) {
+                setcookie($name, '', time() - 3600);
+            }
+        }
     }
 
     protected function _initPlugins()

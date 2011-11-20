@@ -14,17 +14,6 @@ class Application_Plugin_Auth extends Zend_Controller_Plugin_Abstract
 {
     public function __construct($namespace)
     {
-        $auth = Zend_Auth::getInstance();
-        $storage = new Zend_Auth_Storage_Session('Zend_Auth_'.ucfirst($namespace));
-        $auth->setStorage($storage);
-
-        $seconds = (int) SystemPref::Get('SiteSessionLifeTime');
-        if ($seconds <= 0) { // must be positive number
-            return;
-        }
-
-        $session = new Zend_Session_Namespace($storage->getNamespace());
-        $session->setExpirationSeconds($seconds);
     }
 
     /** @var array */
@@ -40,6 +29,8 @@ class Application_Plugin_Auth extends Zend_Controller_Plugin_Abstract
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
         global $ADMIN, $g_user;
+
+        $this->setSessionLifeTime();
 
         // filter logged
         $auth = Zend_Auth::getInstance();
@@ -106,4 +97,20 @@ class Application_Plugin_Auth extends Zend_Controller_Plugin_Abstract
         return Zend_Registry::get($name);
     }
 
+    /**
+     * Set session lifetime
+     *
+     * @return void
+     */
+    private function setSessionLifetime()
+    {
+        $storage = new Zend_Auth_Storage_Session('Zend_Auth_Storage');
+        Zend_Auth::getInstance()->setStorage($storage);
+
+        $session = new Zend_Session_Namespace($storage->getNamespace());
+        $seconds = SystemPref::Get('SiteSessionLifeTime');
+        if ($seconds > 0) {
+            $session->setExpirationSeconds($seconds);
+        }
+    }
 }
