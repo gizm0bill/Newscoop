@@ -2625,18 +2625,26 @@ class Article extends DatabaseObject {
                 }
             } elseif ($leftOperand == 'insection') {
                 $selectClauseObj->addWhere("Articles.NrSection IN " . $comparisonOperation['right']);
-            } elseif ($leftOperand == 'complex_date') {
+            }
+            elseif ($leftOperand == 'complex_date')
+            {
                 /* @var $param ComparisonOperation */
                 $fieldName = key(($roper = $param->getRightOperand()));
                 $searchValues = array();
                 foreach ( explode(",", current($roper)) as $values) {
-                    list($key, $value) = explode(":", $values);
-                    $searchValues[trim($key)] = trim($value);
+                    list($key, $value) = explode(":", $values, 2);
+                    $searchValues[preg_replace("`(?<=[a-z])(_([a-z]))`e","strtoupper('\\2')",trim($key))] = trim($value);
                 }
                 $repo = Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\ArticleDatetime');
-                var_dump($fieldName);
-                var_dump($repo->findDates((object) $searchValues));
-            } else {
+                /* @var $repo \Newscoop\Entity\Repository\ArticleRepository */
+                $searchValues['fieldName'] = $fieldName;
+                $sqlQuery = $repo->findDates((object) $searchValues, true)->getFindDatesSQL('dt.articleId');
+                if (!is_null($sqlQuery)) {
+                    $whereCondition = "Articles.Number IN (\n$sqlQuery)";
+                    $selectClauseObj->addWhere($whereCondition);
+                }
+            }
+            else {
                 // custom article field; has a correspondence in the X[type]
                 // table fields
                 $sqlQuery = self::ProcessCustomField($comparisonOperation, $languageId);

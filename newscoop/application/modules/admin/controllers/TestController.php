@@ -772,7 +772,7 @@ class Admin_TestController extends Zend_Controller_Action
         var_dump($repo->findDates((object) array('daily' => '14:30')));
         // weekly to 12:00
         echo 'weekly to 12:00';
-        var_dump($repo->findDates((object) array('weekly' => 'tuesday', 'toTime' => '12:00')));
+        var_dump($repo->findDates((object) array('weekly' => 'tuesday', 'endTime' => '12:00'), true)->getFindDatesSQL("dt.id"));
         // daily from 15:00 to 15:01
         //var_dump($repo->findDates((object) array('daily' => array( '15:00' => '15:01'))));
         // yearly in april

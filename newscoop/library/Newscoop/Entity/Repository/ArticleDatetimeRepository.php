@@ -7,6 +7,8 @@
 
 namespace Newscoop\Entity\Repository;
 
+use Doctrine\DBAL\SQLParserUtils;
+
 use Nette\InvalidArgumentException;
 
 use Newscoop\Utils\Exception;
@@ -36,6 +38,9 @@ class ArticleDatetimeRepository extends EntityRepository
     const RECURRING_WEEKLY = 'weekly';
     const RECURRING_MONTHLY = 'monthly';
     const RECURRING_YEARLY = 'yearly';
+
+    private $lastQb;
+    private $lastParams;
 
     /**
      * @return array
@@ -185,22 +190,22 @@ class ArticleDatetimeRepository extends EntityRepository
      * Find dates
      * @param object $search
      * 		{
-     * 			fromDate : dateFormat,
-     * 			toDate : dateFormat,
-     * 			fromTime : dateFormat,
-     * 			toTime : dateFormat,
+     * 			startDate : dateFormat,
+     * 			endDate : dateFormat,
+     * 			startTime : dateFormat,
+     * 			endTime : dateFormat,
      * 			daily : bool|dateFormat,
      * 			weekly : dateFormat,
      *			monthly : dateFormat,
      *			yearly : dateFormat
      *		}
      */
-    public function findDates($search, $fieldName=null)
+    public function findDates($search, $dontExecute=false)
     {
         $qb = $this->createQueryBuilder('dt');
 
         // date interval
-        if (isset($search->fromDate) && isset($search->toDate))
+        if (isset($search->startDate) && isset($search->endDate))
         {
             $qb->add('where',
                 $qb->expr()->andx
@@ -208,20 +213,20 @@ class ArticleDatetimeRepository extends EntityRepository
 					'dt.startDate <= :startDate',
                     $qb->expr()->orx('dt.endDate >= :endDate', 'dt.endDate is null')
                 ));
-            $qb->setParameter('startDate', new \DateTime($search->fromDate));
-            $qb->setParameter('endDate', new \DateTime($search->toDate));
+            $qb->setParameter('startDate', new \DateTime($search->startDate));
+            $qb->setParameter('endDate', new \DateTime($search->endDate));
         }
         $hasStartTimeQuery = false;
-        if (isset($search->fromTime))
+        if (isset($search->startTime))
         {
             $qb->andWhere('dt.startTime <= :startTime');
-            $qb->setParameter('startTime', new \DateTime($search->fromTime));
+            $qb->setParameter('startTime', new \DateTime($search->startTime));
             $hasStartTimeQuery = true;
         }
-        if (isset($search->toTime))
+        if (isset($search->endTime))
         {
             $qb->andWhere('dt.endTime >= :endTime');
-            $qb->setParameter('endTime', new \DateTime($search->toTime));
+            $qb->setParameter('endTime', new \DateTime($search->endTime));
         }
         if (isset($search->daily))
         {
@@ -267,12 +272,12 @@ class ArticleDatetimeRepository extends EntityRepository
         {
             $qb->andWhere('DAYOFMONTH(dt.startDate) = :dayOfMonth');
             $qb->andWhere('dt.recurring = :recurringMonthly');
+            $qb->setParameter('recurringMonthly', self::RECURRING_MONTHLY);
             if (is_string($search->monthly))
             {
                 $dayOfMonth = new \DateTime($search->monthly);
                 $dayOfMonth = $dayOfMonth->format('d');
                 $qb->setParameter('dayOfMonth', $dayOfMonth);
-                $qb->setParameter('recurringMonthly', self::RECURRING_MONTHLY);
             }
             else {
                 throw new \InvalidArgumentException('Parameter "monthly" must have a date-like formated value');
@@ -288,28 +293,49 @@ class ArticleDatetimeRepository extends EntityRepository
             {
                 $dayOfYear = new \DateTime($search->yearly);
                 $dayOfYear = $dayOfYear->format('z');
-                var_dump(strftime('%F %T', strtotime($search->yearly)));
                 $qb->setParameter('dayOfYear', $dayOfYear);
             }
             else {
                 throw new \InvalidArgumentException('Parameter "yearly" must have a date-like formated value');
             }
         }
-        //var_dump($qb->getQuery()->getParameters());
-        //var_dump($qb->getQuery()->getSQL());
-        //var_dump($qb->getQuery()->getResult());
-        //die;
+
+        if (isset($search->fieldName))
+        {
+            $qb->andWhere('dt.fieldName = :fieldName');
+            $qb->setParameter('fieldName', $search->fieldName);
+        }
+        if ($dontExecute)
+        {
+            $this->lastQb = $qb;
+            $this->lastParams = $qb->getParameters();
+            return $this;
+        }
         return $qb->getQuery()->getResult();
+    }
 
-        // $search->fromDate;
-
-        // $search->fromDate $search->toDate
-
-        // $search->weekly = 'monday' $search->fromTime
-        // $search->daily = '12:00'
-        // $search->monthly = '3rd'
-        // $search->yearly = 112
-
-        // $search->fromTime $search->toTime $search->dates = array(11, 12, 15)
+    /**
+     * Get the sql used for find method
+     * @param array|string $cols columns to select
+     */
+    public function getFindDatesSQL($cols=null)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        if (!is_null($cols)) {
+            $this->lastQb->add('select', implode(",", (array) $cols));
+        }
+        $lastDQL = $this->lastQb->getDQL();
+        foreach ($this->lastParams as $paramName => $paramValue)
+        {
+            if (in_array($paramName, array('startTime', 'endTime'))) {
+                $paramValue = $conn->convertToDatabaseValue($paramValue, 'time');
+            }
+            if (in_array($paramName, array('startDate', 'endDate'))) {
+                $paramValue = $conn->convertToDatabaseValue($paramValue, 'date');
+            }
+            $lastDQL = preg_replace("/:{$paramName}/", "'".addslashes($paramValue)."'", $lastDQL);
+        }
+        $qb = $this->getEntityManager()->createQuery($lastDQL);
+        return $qb->getSQL();
     }
 }
