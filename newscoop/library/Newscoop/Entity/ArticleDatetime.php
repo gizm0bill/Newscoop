@@ -98,6 +98,31 @@ class ArticleDatetime extends Entity
         return $this->articleType;
     }
 
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    public function getEndtime()
+    {
+        return $this->endTime;
+    }
+
+    public function getRecurring()
+    {
+        return $this->recurring;
+    }
+
     /**
      * @param array $articleData
      * @param ArticleDatetime $dateData

@@ -672,9 +672,12 @@ class Article extends DatabaseObject {
 
         // Delete Article Comments
         // @todo change this with DOCTRINE2 CASCADE DELETE
-        $repository = Zend_Registry::get('container')->getService('em')->getRepository('Newscoop\Entity\Comment');
+        $em = Zend_Registry::get('container')->getService('em');
+        $repository = $em->getRepository('Newscoop\Entity\Comment');
         $repository->deleteArticle($this->m_data['Number'], $this->m_data['IdLanguage']);
-        $repository->flush();
+        $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+        $repository->deleteByArticle($this->m_data['Number']);
+        $em->flush();
 
         // is this the last translation?
         if (count($this->getLanguages()) <= 1) {

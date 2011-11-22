@@ -7,25 +7,12 @@
 
 namespace Newscoop\Entity\Repository;
 
-use Doctrine\DBAL\SQLParserUtils;
-
-use Nette\InvalidArgumentException;
-
-use Newscoop\Utils\Exception;
-
-use Doctrine\ORM\Query;
-
-use Doctrine\ORM\Configuration;
-
-use Doctrine\ORM\Query\SqlWalker;
-
-use Doctrine\ORM\Query\Parser;
-
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-
-use Doctrine\ORM\Query\ResultSetMapping;
-
-use Newscoop\Entity\ArticleDatetime,
+use Doctrine\DBAL\SQLParserUtils,
+    Nette\InvalidArgumentException,
+    Newscoop\Utils\Exception,
+    Doctrine\ORM\Query,
+    Doctrine\ORM\Configuration,
+    Newscoop\Entity\ArticleDatetime,
     Doctrine\ORM\EntityRepository,
     Newscoop\ArticleDatetime as ArticleDatetimeHelper,
     Newscoop\Entity\Article;
@@ -40,7 +27,7 @@ class ArticleDatetimeRepository extends EntityRepository
     const RECURRING_YEARLY = 'yearly';
 
     private $lastQb;
-    private $lastParams;
+    private $lastQParams;
 
     /**
      * @return array
@@ -70,6 +57,19 @@ class ArticleDatetimeRepository extends EntityRepository
             $insertValues[] = $timeSet;
         }
         return $insertValues;
+    }
+
+    public function deleteByArticle($article)
+    {
+        $em = $this->getEntityManager();
+        if(is_numeric($article)) {
+            foreach ($this->findBy(array('articleId' => $article)) as $entry) {
+                $em->remove($entry);
+            }
+        }
+        elseif ($article instanceof Article) {
+            $em->remove($article);
+        }
     }
 
     /**
@@ -115,9 +115,7 @@ class ArticleDatetimeRepository extends EntityRepository
             $em->getConnection()->beginTransaction();
             if ($overwrite)
             {
-                foreach ($this->findBy(array('articleId' => $articleId)) as $entry) {
-                    $em->remove($entry);
-                }
+                $this->deleteByArticle($articleId);
             }
             foreach ($insertValues as $dateValue) {
                 foreach (array_merge(array($dateValue), $dateValue->getSpawns()) as $dateValue)
@@ -190,7 +188,7 @@ class ArticleDatetimeRepository extends EntityRepository
      * Find dates
      * @param object $search
      * 		{
-     * 			startDate : dateFormat,
+     * 			startDate : dateFormat, - passing only startDate will compare to entries with exactly (=) this value
      * 			endDate : dateFormat,
      * 			startTime : dateFormat,
      * 			endTime : dateFormat,
@@ -199,11 +197,18 @@ class ArticleDatetimeRepository extends EntityRepository
      *			monthly : dateFormat,
      *			yearly : dateFormat
      *		}
+     * @param $dontExecute if true, store query builder object and params in $this->lastQb and $this->lastQParams for later use
      */
     public function findDates($search, $dontExecute=false)
     {
         $qb = $this->createQueryBuilder('dt');
 
+        // just one day
+        if (isset($search->startDate) && isset($search->endDate))
+        {
+            $qb->add('where',  $qb->expr()->andx('dt.startDate = :startDate', 'dt.endDate is null'));
+            $qb->setParameter('startDate', new \DateTime($search->startDate));
+        }
         // date interval
         if (isset($search->startDate) && isset($search->endDate))
         {
@@ -283,7 +288,6 @@ class ArticleDatetimeRepository extends EntityRepository
                 throw new \InvalidArgumentException('Parameter "monthly" must have a date-like formated value');
             }
         }
-
         if (isset($search->yearly))
         {
             $qb->andWhere('DAYOFYEAR(dt.startDate) <= :dayOfYear');
@@ -299,16 +303,17 @@ class ArticleDatetimeRepository extends EntityRepository
                 throw new \InvalidArgumentException('Parameter "yearly" must have a date-like formated value');
             }
         }
-
+        // article field name query
         if (isset($search->fieldName))
         {
             $qb->andWhere('dt.fieldName = :fieldName');
             $qb->setParameter('fieldName', $search->fieldName);
         }
+        // store query and return $this
         if ($dontExecute)
         {
             $this->lastQb = $qb;
-            $this->lastParams = $qb->getParameters();
+            $this->lastQParams = $qb->getParameters();
             return $this;
         }
         return $qb->getQuery()->getResult();
@@ -325,7 +330,7 @@ class ArticleDatetimeRepository extends EntityRepository
             $this->lastQb->add('select', implode(",", (array) $cols));
         }
         $lastDQL = $this->lastQb->getDQL();
-        foreach ($this->lastParams as $paramName => $paramValue)
+        foreach ($this->lastQParams as $paramName => $paramValue)
         {
             if (in_array($paramName, array('startTime', 'endTime'))) {
                 $paramValue = $conn->convertToDatabaseValue($paramValue, 'time');
