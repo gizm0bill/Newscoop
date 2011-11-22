@@ -18,7 +18,45 @@
              <span class="name">{{ $gimme->comment->nickname }}</span> {{ $gimme->comment->submit_date|camp_date_format:"%e.%m.%Y at %H:%i" }}
           </div>
       </div>
-      <div class="comment-entry">{{ $gimme->comment->content }}</div>
+        
+        <script>
+            function rateComment(commentId, rating) {
+                if (rating != 'like' && rating != 'dislike') {
+                    var rating = 'dislike';
+                }
+                var url = 'http://{{$gimme->publication->site}}/comment/rate?format=json';
+                
+                $('#rating_message_' + commentId).html('please wait...');
+                
+                $.ajax({
+                  type: 'POST',
+                  url: url,
+                  data: {comment: commentId, rating: rating},
+                  success: function(data) {
+                    if (data.result == '1') {
+                        console.log(data);
+                        $('#rating_message_' + commentId).html('rating saved.');
+                        $('#rating_likes_' + commentId).html(data.likes)
+                        $('#rating_dislikes_' + commentId).html(data.dislikes)
+                    }
+                    else {
+                        $('#rating_message_' + commentId).html('you are not logged in.');
+                    }
+                  },
+                  dataType: 'json'
+                });
+            }
+        </script>
+        
+        <span class="rating">
+            <a href="javascript:rateComment({{$gimme->comment->id}}, 'like')"><img src="http://{{$gimme->publication->site}}/admin-style/images/thumbs_up.png"> <span id="rating_likes_{{$gimme->comment->id}}">{{ $gimme->comment->likes }}</span></a>
+            <a href="javascript:rateComment({{$gimme->comment->id}}, 'dislike')"><img src="http://{{$gimme->publication->site}}/admin-style/images/thumbs_down.png"> <span id="rating_dislikes_{{$gimme->comment->id}}">{{ $gimme->comment->dislikes }}</span></a>
+            <span id="rating_message_{{$gimme->comment->id}}"></span>
+        </span>
+
+      <div class="comment-entry">
+        {{ $gimme->comment->content }}
+      </div>
    </li>
  
 {{ if $gimme->current_list->at_end }}                 

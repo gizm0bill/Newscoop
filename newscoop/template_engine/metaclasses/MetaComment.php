@@ -46,6 +46,8 @@ final class MetaComment extends MetaDbObject
         $this->m_customProperties['article'] = 'getArticle';
         $this->m_customProperties['defined'] = 'defined';
         $this->m_customProperties['user'] = 'getUser';
+        $this->m_customProperties['likes'] = 'getLikes';
+        $this->m_customProperties['dislikes'] = 'getDislikes';
 
         $this->m_skipFilter = array('content_real');
     } // fn __construct
@@ -113,6 +115,16 @@ final class MetaComment extends MetaDbObject
         $errorMessage = INVALID_PROPERTY_STRING . " $p_property "
                         . OF_OBJECT_STRING . ' comment';
         CampTemplate::singleton()->trigger_error($errorMessage, $p_smarty);
+    }
+    
+    protected function getLikes()
+    {
+        return(count(\Zend_Registry::get('container')->getService('comment')->getLikes($this->getId())));
+    }
+    
+    protected function getDislikes()
+    {
+        return(count(\Zend_Registry::get('container')->getService('comment')->getDislikes($this->getId())));
     }
 
     /**

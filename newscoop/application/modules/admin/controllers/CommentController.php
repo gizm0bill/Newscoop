@@ -9,6 +9,7 @@
  *
  */
 use Newscoop\Entity\Comment;
+use Newscoop\Entity\CommentRating;
 
 /**
  * @Acl(resource="comment", action="moderate")
@@ -80,7 +81,10 @@ class Admin_CommentController extends Zend_Controller_Action
         $acl['enable'] = $this->_helper->acl->isAllowed('comment', 'enable');
         $acceptanceRepository = $this->_helper->entity->getRepository('Newscoop\Entity\Comment\Acceptance');
         $articleRepository = $this->_helper->entity->getRepository('Newscoop\Entity\Article');
-        $table->setHandle(function($comment) use ($view, $acl, $acceptanceRepository, &$index)
+        
+        $commentService = $this->_helper->service('comment');
+        
+        $table->setHandle(function($comment) use ($view, $acl, $acceptanceRepository, $commentService, &$index)
             {
                 /* var Newscoop\Entity\Comment\Commenter */
                 $commenter = $comment->getCommenter();
@@ -89,44 +93,67 @@ class Admin_CommentController extends Zend_Controller_Action
                 $articleNo = $comment->getArticleNumber();
                 $commentLang = $comment->getLanguage()->getId();
                 $article = new Article($commentLang, $articleNo);
+                
+                $likes = count($commentService->getLikes($comment->getId()));
+                $dislikes = count($commentService->getDislikes($comment->getId()));
 
                 $forum = $comment->getForum();
                 $section = $thread->getSection();
-                return array('index' => $index++, 'can' => array('enable' => $acl['enable'], 'edit' => $acl['edit']),
-                             'commenter' =>
-                             array('username' => $commenter->getUsername(), 'name' => $commenter->getName(),
-                                   'email' => $commenter->getEmail(),
-                                   'avatar' => (string)$view->getAvatar($commenter->getEmail(), array('img_size' => 50,
-                                                                                                     'default_img' => 'wavatar')),
-                                   /**
-                                    * @todo have this in the commenter entity as a flag isBanned witch is checked when a ban is done
-                                    *       for a faster result not having sql checks insides for statements
-                                    *       this needs entity changes can't be done in the bug release stage
-                                    */
-                                   'is' => array('banned' => $acceptanceRepository->isBanned($commenter, null)),
-                                   'trace' => array('ip' => 'http://www.ip-adress.com/ip_tracer/'.$commenter->getIp()),
-                                   'ip' => $commenter->getIp(), 'url' => $commenter->getUrl(),
-                                   'banurl' => $view->url(
-                                       array('controller' => 'comment-commenter', 'action' => 'toggle-ban',
-                                            'commenter' => $commenter->getId(), 'thread' => $comment->getArticleNumber()))),
-                             'comment' => array('id' => $comment->getId(),
-                                                'created' =>
-                                                array('date' => $comment->getTimeCreated()->format('Y.m.d'),
-                                                      'time' => $comment->getTimeCreated()->format('H:i:s')),
-                                                'subject' => $comment->getSubject(),
-                                                'message' => $comment->getMessage(), 'likes' => '', 'dislikes' => '',
-                                                'status' => $comment->getStatus(),
-                                                'recommended' => $comment->getRecommended(),
-                                                'action' => array('update' => $view->url(
-                                                    array('action' => 'update', 'format' => 'json')),
-                                                                  'reply' => $view->url(
-                                                                      array('action' => 'reply', 'format' => 'json')))),
-                             'thread' => array('name' => $article->getName(),
-                                               'link' => array
-                                               ('edit' => $view->baseUrl("admin/articles/edit.php?") . $view->linkArticleObj($article),
-                                                'get' => $view->baseUrl("admin/articles/get.php?") . $view->linkArticleObj($article)),
-                                               'forum' => array('name' => $forum->getName()),
-                                               'section' => array('name' => ($section) ? $section->getName() : null)),);
+                
+                $result = array(
+                    'index' => $index++,
+                    'can' => array(
+                        'enable' => $acl['enable'],
+                        'edit' => $acl['edit']
+                    ),
+                    'commenter' => array(
+                        'username' => $commenter->getUsername(),
+                        'name' => $commenter->getName(),
+                        'email' => $commenter->getEmail(),
+                        'avatar' => (string)$view->getAvatar($commenter->getEmail(), array('img_size' => 50, 'default_img' => 'wavatar')),
+                        /**
+                         * @todo have this in the commenter entity as a flag isBanned witch is checked when a ban is done
+                         *       for a faster result not having sql checks insides for statements
+                         *       this needs entity changes can't be done in the bug release stage
+                         */
+                        'is' => array(
+                            'banned' => $acceptanceRepository->isBanned($commenter, null)
+                        ),
+                        'trace' => array(
+                            'ip' => 'http://www.ip-adress.com/ip_tracer/'.$commenter->getIp()
+                        ),
+                        'ip' => $commenter->getIp(),
+                        'url' => $commenter->getUrl(),
+                        'banurl' => $view->url(array('controller' => 'comment-commenter', 'action' => 'toggle-ban','commenter' => $commenter->getId(), 'thread' => $comment->getArticleNumber()))
+                    ),
+                    'comment' => array(
+                        'id' => $comment->getId(),
+                        'created' => array(
+                            'date' => $comment->getTimeCreated()->format('Y.m.d'),
+                            'time' => $comment->getTimeCreated()->format('H:i:s')),
+                            'subject' => $comment->getSubject(),
+                            'message' => $comment->getMessage(),
+                            'status' => $comment->getStatus(),
+                            'rating' => array(
+                                'likes' => $likes,
+                                'dislikes' => $dislikes
+                            ),
+                            'recommended' => $comment->getRecommended(),
+                            'action' => array(
+                                'update' => $view->url(array('action' => 'update', 'format' => 'json')),
+                                'reply' => $view->url(array('action' => 'reply', 'format' => 'json'))
+                            )
+                    ),
+                    'thread' => array(
+                        'name' => $article->getName(),
+                        'link' => array(
+                            'edit' => $view->baseUrl("admin/articles/edit.php?") . $view->linkArticleObj($article),
+                            'get' => $view->baseUrl("admin/articles/get.php?") . $view->linkArticleObj($article)),
+                            'forum' => array('name' => $forum->getName()),
+                            'section' => array('name' => ($section) ? $section->getName() : null)
+                    ),
+                );                
+                return($result);
             });
 
         $table->setOption('fnDrawCallback', 'datatableCallback.draw')
@@ -204,12 +231,10 @@ class Admin_CommentController extends Zend_Controller_Action
                     $msg = getGS('Comment delete by $1 from the article $2 ($3)', Zend_Registry::get('user')->getName(),
                                  $comment->getThread()->getName(), $comment->getLanguage()->getCode());
 
-                    $this->_helper->log($msg);
                     $this->_helper->flashMessenger($msg);
                 } else {
                     $msg = getGS('Comment $4 by $1 in the article $2 ($3)', Zend_Registry::get('user')->getName(),
                                  $comment->getThread()->getName(), $comment->getLanguage()->getCode(), $status);
-                    $this->_helper->log($msg);
                     $this->_helper->flashMessenger($msg);
                 }
             }
@@ -290,7 +315,6 @@ class Admin_CommentController extends Zend_Controller_Action
         $values['time_created'] = new DateTime;
 
         if (!SecurityToken::isValid()) {
-            $this->_helper->log(getGS('Invalid security token!'));
             $this->view->status = 401;
             $this->view->message = getGS('Invalid security token!');
             return;
@@ -304,11 +328,6 @@ class Admin_CommentController extends Zend_Controller_Action
             $this->view->message = $e->getMessage();
             return;
         }
-        $this->_helper->log(getGS('Comment added by $1 to the article $2 ($3)',
-                                  Zend_Registry::get('user')->getName(),
-                                  $comment->getThread()->getName(),
-                                  $comment->getLanguage()->getCode())
-        );
         $this->view->status = 200;
         $this->view->message = "succcesful";
         $this->view->comment = $comment->getId();
@@ -417,8 +436,6 @@ class Admin_CommentController extends Zend_Controller_Action
             $return = array('status' => $e->getCode(), 'message' => $e->getMessage(), 'data' => array());
             $this->_helper->json($return);
         }
-        $this->_helper->log(getGS('Comment updated by $1 to the article $2 ($3)', Zend_Registry::get('user')->getName(),
-                                  $comment->getThread()->getName(), $comment->getLanguage()->getCode()));
         $return = array('status' => 100, 'message' => 'succesful', 'data' => array('comment' => $comment->getId()));
         $this->_helper->json($return);
     }
@@ -447,9 +464,6 @@ class Admin_CommentController extends Zend_Controller_Action
                 $this->view->message = $e->getMessage();
                 return;
             }
-            $this->_helper->log(getGS('Comment added by $1 to the article $2 ($3)',
-                                      Zend_Registry::get('user')->getName(), $comment->getThread()->getName(),
-                                      $comment->getLanguage()->getCode()));
             $this->view->status = 200;
             $this->view->message = "succcesful";
             $this->view->comment = $comment->getId();

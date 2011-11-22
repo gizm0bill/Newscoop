@@ -95,11 +95,10 @@
                             <h4>
                                 <span>{{comment.created.date}} <?php putGS('at'); ?> {{comment.created.time}}</span>
                                 <span class="commentSubject">{{comment.subject}}</span>
-                            </h4><!--
+                            </h4>
                             <div class="ratingHolder">
-                                <span class="thumbs up">{{comment.likes}}</span>
-                                <span class="thumbs down">{{comment.dislikes}}</span> </div>
-                                -->
+                                <span class="thumbs up">{{comment.rating.likes}}</span>
+                                <span class="thumbs down">{{comment.rating.dislikes}}</span> </div>
                             <p class="commentBody">{{comment.message}}</p>
                         </div>
 

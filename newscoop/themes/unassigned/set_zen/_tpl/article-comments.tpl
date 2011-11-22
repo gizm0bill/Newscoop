@@ -13,15 +13,50 @@
       <div class="comment-head">
          <div class="user-meta">
 {{* get gravatar image *}}
-{{ assign var="profile_email" value=`$gimme->comment->reader_email` }}
-{{ php }}
-$profile_email = $this->get_template_vars('profile_email');
-print "<img src=\"http://www.gravatar.com/avatar/".md5( strtolower( trim( $profile_email ) ) )."?s=60\" / class=\"commentimage\" width=60 height=60 />";
-{{ /php }}
+{{ assign var="profile_email" value=$gimme->comment->reader_email }}
+<img src="http://www.gravatar.com/avatar/{{ md5(strtolower(trim($profile_email))) }}?s=60" class="commentimage" width="60" height="60" />
              <span class="name">{{ $gimme->comment->nickname }}</span> {{ $gimme->comment->submit_date|camp_date_format:"%e.%m.%Y at %H:%i" }}
           </div>
       </div>
-      <div class="comment-entry">{{ $gimme->comment->content }}</div>
+        
+        <script>
+            function rateComment(commentId, rating) {
+                if (rating != 'like' && rating != 'dislike') {
+                    var rating = 'dislike';
+                }
+                var url = 'http://{{$gimme->publication->site}}/comment/rate?format=json';
+                
+                $('#rating_message_' + commentId).html('please wait...');
+                
+                $.ajax({
+                  type: 'POST',
+                  url: url,
+                  data: {comment: commentId, rating: rating},
+                  success: function(data) {
+                    if (data.result == '1') {
+                        console.log(data);
+                        $('#rating_message_' + commentId).html('rating saved.');
+                        $('#rating_likes_' + commentId).html(data.likes)
+                        $('#rating_dislikes_' + commentId).html(data.dislikes)
+                    }
+                    else {
+                        $('#rating_message_' + commentId).html('you are not logged in.');
+                    }
+                  },
+                  dataType: 'json'
+                });
+            }
+        </script>
+        
+        <span class="rating">
+            <a href="javascript:rateComment({{$gimme->comment->id}}, 'like')"><img src="http://{{$gimme->publication->site}}/admin-style/images/thumbs_up.png"> <span id="rating_likes_{{$gimme->comment->id}}">{{ $gimme->comment->likes }}</span></a>
+            <a href="javascript:rateComment({{$gimme->comment->id}}, 'dislike')"><img src="http://{{$gimme->publication->site}}/admin-style/images/thumbs_down.png"> <span id="rating_dislikes_{{$gimme->comment->id}}">{{ $gimme->comment->dislikes }}</span></a>
+            <span id="rating_message_{{$gimme->comment->id}}"></span>
+        </span>
+
+      <div class="comment-entry">
+        {{ $gimme->comment->content }}
+      </div>
    </li>
  
 {{ if $gimme->current_list->at_end }}                 
@@ -43,7 +78,7 @@ print "<img src=\"http://www.gravatar.com/avatar/".md5( strtolower( trim( $profi
     <p>{{ $gimme->comment->content }}</p>
 {{ /if *}}
 
-{{ if $gimme->user->blocked_from_comments }}
+{{ if $gimme->user->is_blocked_from_comments }}
     <div class="message messagecomment messageerror">This user has been banned from writing comments.</div>
 {{ else }}
 
@@ -85,6 +120,7 @@ function switchName() {
 {{ camp_edit object="comment" attribute="content" html_code="id=\"comment\" rows=\"5\" tabindex=\"4\"" }}
 </p>
 
+{{ if $gimme->publication->captcha_enabled }}
 <p>
 <label for="f_captcha_image">&nbsp;</label>
 <img src="{{ captcha_image_link }}">
@@ -94,6 +130,7 @@ function switchName() {
 <label for="f_captcha_code">Enter the code:</label>
 {{ camp_edit object="captcha" attribute="code" html_code="class=\"textfield\" id=\"comment-code\" tabindex=\"5\"" }}
 </p>
+{{ /if }}
 
 <p>{{ /comment_form }}</p>
 {{ /if }}

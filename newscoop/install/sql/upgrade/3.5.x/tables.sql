@@ -269,6 +269,22 @@ ALTER TABLE `Attachments`
 -- Update Article Authors
 ALTER TABLE `ArticleAuthors`
  ADD COLUMN `order` int(2) unsigned;
+
+--
+-- Table structure for table `comment_rating`
+--
+
+DROP TABLE IF EXISTS `comment_rating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comment_rating` (
+   `id` int(10) unsigned not null auto_increment,
+   `comment_id` int(10) unsigned,
+   `user_id` int(10) unsigned,
+   `rating` int(2),
+   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
  
 -- Upgrade templates to themes
 system php ./create_themes.php

@@ -10,6 +10,7 @@
  */
 
 use Newscoop\Entity\Comment;
+use Newscoop\Entity\CommentRating;
 
 require_once($GLOBALS['g_campsiteDir'].'/include/captcha/php-captcha.inc.php');
 require_once($GLOBALS['g_campsiteDir'].'/include/get_ip.php');
@@ -19,6 +20,7 @@ class CommentController extends Zend_Controller_Action
     public function init()
     {
 		$this->getHelper('contextSwitch')->addActionContext('save', 'json')->initContext();
+		$this->getHelper('contextSwitch')->addActionContext('rate', 'json')->initContext();
     }
 
     public function saveAction()
@@ -86,6 +88,49 @@ class CommentController extends Zend_Controller_Action
         
         $this->getHelper('contextSwitch')->addActionContext('save', 'json')->initContext();
     }
+    
+    public function rateAction()
+    {
+		$auth = Zend_Auth::getInstance();
+        $this->getHelper('viewRenderer')->setNoRender();
+        
+        if ($auth->getIdentity()) {
+            $commentRatingRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\CommentRating');
+            
+            $comment = $this->_getParam('comment');
+            $rating = $this->_getParam('rating');
+            
+            if ($rating == 'like') {
+                $rating = 1;
+            } else {
+                $rating = -1;
+            }
+            
+            $commentRating = new CommentRating();
+            
+            $values = array(
+                'comment' => $comment,
+                'user' => $auth->getIdentity(),
+                'rating' => $rating
+            );
+            
+            $commentRatingRepository->save($commentRating, $values);
+            
+            $likes = count($this->_helper->service('comment')->getLikes($comment));
+            $dislikes = count($this->_helper->service('comment')->getDislikes($comment));
+            
+            $this->view->status = 200;
+            $this->view->result = "1";
+            $this->view->likes = $likes;
+            $this->view->dislikes = $dislikes;
+        }
+        else {
+            $this->view->status = 401;
+            $this->view->result = "0";
+        }
+                
+        $this->getHelper('contextSwitch')->addActionContext('rate', 'json')->initContext();
+	}
 
     public function indexAction()
     {

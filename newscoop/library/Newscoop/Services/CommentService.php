@@ -183,6 +183,20 @@ class CommentService
 
         return $qb->getQuery()->getResult();
     }
+    
+    public function getLikes($id)
+    {
+        $likes = $this->em->getRepository('Newscoop\Entity\CommentRating')->findBy(array('comment' => $id, 'rating' => 1));
+        
+        return($likes);
+    }
+    
+    public function getDislikes($id)
+    {
+        $dislikes = $this->em->getRepository('Newscoop\Entity\CommentRating')->findBy(array('comment' => $id, 'rating' => -1));
+        
+        return($dislikes);
+    }
 
     /**
      * Get repository for comment entity
