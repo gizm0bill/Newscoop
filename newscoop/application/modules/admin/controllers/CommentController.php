@@ -328,10 +328,6 @@ class Admin_CommentController extends Zend_Controller_Action
             $this->view->message = $e->getMessage();
             return;
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> wobs
         $this->view->status = 200;
         $this->view->message = "succcesful";
         $this->view->comment = $comment->getId();
@@ -440,10 +436,6 @@ class Admin_CommentController extends Zend_Controller_Action
             $return = array('status' => $e->getCode(), 'message' => $e->getMessage(), 'data' => array());
             $this->_helper->json($return);
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> wobs
         $return = array('status' => 100, 'message' => 'succesful', 'data' => array('comment' => $comment->getId()));
         $this->_helper->json($return);
     }
@@ -472,10 +464,6 @@ class Admin_CommentController extends Zend_Controller_Action
                 $this->view->message = $e->getMessage();
                 return;
             }
-<<<<<<< HEAD
-=======
-
->>>>>>> wobs
             $this->view->status = 200;
             $this->view->message = "succcesful";
             $this->view->comment = $comment->getId();
