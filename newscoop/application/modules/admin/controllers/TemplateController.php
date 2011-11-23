@@ -165,7 +165,6 @@ class Admin_TemplateController extends Zend_Controller_Action
                 $this->service->storeItem("$path/$basename", file_get_contents($tmp));
             }
             $this->_helper->flashMessenger($this->formatMessage(array_keys($files), getGS('uploaded')));
-            $this->_helper->log($this->formatMessage(array_keys($files), getGS('uploaded')));
 
             // redirect by next parameter
             if(!is_null($nextRedirect->next)) {
@@ -180,6 +179,7 @@ class Admin_TemplateController extends Zend_Controller_Action
         $nextRedirect->setExpirationHops(7, 'next', true);
 
         $this->view->form = $form;
+        $this->view->path = $this->view->basePath . $path;
         $this->view->isWritable = $this->service->isWritable($path);
     }
 
@@ -220,7 +220,6 @@ class Admin_TemplateController extends Zend_Controller_Action
                 $form->getValues(); // upload
                 $this->service->replaceItem($key, $form->file);
 	            $this->_helper->flashMessenger(getGS("File '$1' was replaced.", basename($key)));
-	            $this->_helper->log(getGS("File '$1' was replaced.", basename($key)));
             } catch (\InvalidArgumentException $e) {
                 $this->_helper->flashMessenger(array('error', $e->getMessage()));
             }
@@ -259,7 +258,6 @@ class Admin_TemplateController extends Zend_Controller_Action
             }
 
             $this->_helper->flashMessenger(getGS("Template '$1' $2.", basename($key), getGS('updated')));
-            $this->_helper->log(getGS("Template '$1' $2.", basename($key), getGS('updated')));
             $this->_redirect(urldecode($this->_getParam('next')), array(
                 'prependBase' => false,
             ));
@@ -288,7 +286,6 @@ class Admin_TemplateController extends Zend_Controller_Action
             foreach ($files as $file) {
                 $s = $this->service->moveItem("$path/$file", $dest);
                 $this->_helper->flashMessenger->addMessage(getGS("Template '$1' $2.", $file, getGS('moved')));
-                $this->_helper->log(getGS("Template '$1' $2.", $file, getGS('moved')));
             }
         } catch (\InvalidArgumentException $e) {
             $this->_helper->flashMessenger->addMessage(array('error', $e->getMessage()));
@@ -312,7 +309,6 @@ class Admin_TemplateController extends Zend_Controller_Action
             $name = $this->formatName($this->_getParam('name'), ($nameExt==''?pathinfo($file, PATHINFO_EXTENSION):null) );
             $this->service->copyItem("$path/$file", $name);
 		    $this->_helper->flashMessenger(getGS("Template '$1' was duplicated into '$2'.", $file, $name));
-		    $this->_helper->log(getGS("Template '$1' was duplicated into '$2'.", $file, $name));
         } catch (\InvalidArgumentException $e) {
             $this->_helper->flashMessenger(array('error', $e->getMessage()));
         }
@@ -335,7 +331,6 @@ class Admin_TemplateController extends Zend_Controller_Action
             $this->service->renameItem("$path/$file", $name);
             $this->clearCompiledTemplate("$path/$file");
 		    $this->_helper->flashMessenger(getGS("Template object '$1' was renamed to '$2'.", $file, $name));
-		    $this->_helper->log(getGS("Template object '$1' was renamed to '$2'.", $file, $name));
         } catch (\InvalidArgumentException $e) {
             $this->_helper->flashMessenger(array('error', $e->getMessage()));
         }
@@ -359,7 +354,6 @@ class Admin_TemplateController extends Zend_Controller_Action
                 $this->_helper->entity->flushManager();
                 $this->clearCompiledTemplate($key);
 			    $this->_helper->flashMessenger(getGS("Template object '$1' was deleted.", $file));
-			    $this->_helper->log(getGS("Template object '$1' was deleted.", $file));
             }
         } catch (\InvalidArgumentException $e) {
             $this->_helper->flashMessenger(array('error', $e->getMessage()));
@@ -378,7 +372,6 @@ class Admin_TemplateController extends Zend_Controller_Action
         try {
             $this->service->createFolder(ltrim("$path/$name", ' /'));
 		    $this->_helper->flashMessenger(getGS("Directory '$1' created.", $name));
-		    $this->_helper->log(getGS("Directory '$1' created.", $name));
         } catch (\InvalidArgumentException $e) {
 	        $this->_helper->flashMessenger(array('error', $e->getMessage()));
         }
@@ -396,7 +389,6 @@ class Admin_TemplateController extends Zend_Controller_Action
         try {
             $this->service->createFile(ltrim("$path/$name", ' /'));
 	        $this->_helper->flashMessenger(getGS("New template '$1' created.", $name));
-	        $this->_helper->log(getGS("New template '$1' created.", $name));
         } catch (\InvalidArgumentException $e) {
             $this->_helper->flashMessenger(array('error', $e->getMessage()));
         }
@@ -603,7 +595,7 @@ class Admin_TemplateController extends Zend_Controller_Action
         require_once APPLICATION_PATH . '/../template_engine/classes/CampTemplate.php';
 
         try {
-		    CampTemplate::singleton()->clear_compiled_tpl($filename);
+		    CampTemplate::singleton()->clearCompiledTemplate($filename);
         } catch (Exception $e) { // ignore file not found
         }
     }

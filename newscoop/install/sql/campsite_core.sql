@@ -3012,7 +3012,7 @@ CREATE TABLE IF NOT EXISTS `audit_event` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned DEFAULT NULL,
   `resource_type` varchar(80) NOT NULL,
-  `resource_id` varchar(80) DEFAULT NULL,
+  `resource_id` varchar(255) DEFAULT NULL,
   `resource_title` varchar(255) DEFAULT NULL,
   `resource_diff` longtext,
   `action` varchar(80) NOT NULL,
@@ -3101,6 +3101,23 @@ CREATE TABLE IF NOT EXISTS `user_identity` (
   PRIMARY KEY (`provider`, `provider_user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+-- Article popularity table
+DROP TABLE IF EXISTS `article_popularity`;
+CREATE TABLE `article_popularity` (
+  `fk_article_id` int(10) unsigned NOT NULL,
+  `fk_language_id` int(10) unsigned NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `unique_views` int(10) unsigned NOT NULL DEFAULT '0',
+  `avg_time_on_page` float NOT NULL DEFAULT '0',
+  `tweets` int(10) unsigned DEFAULT NULL,
+  `likes` int(10) unsigned DEFAULT NULL,
+  `comments` int(10) unsigned DEFAULT NULL,
+  `popularity` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`fk_article_id`,`fk_language_id`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -3110,5 +3127,3 @@ CREATE TABLE IF NOT EXISTS `user_identity` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2011-06-13 12:28:31
-
-
