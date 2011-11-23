@@ -141,4 +141,13 @@ class ArticleDatetime extends Entity
         $this->endTime = $dateData->getEndTime();
         $this->recurring = $dateData->getRecurring();
     }
+
+    public function __get($name)
+    {
+        $getMethod = 'get'.preg_replace("`(?<=[a-z])(_([a-z]))`e","ucfirst(strtoupper('\\2'))",trim($name));
+        if (!is_callable(array($this, $getMethod))) {
+            return null;
+        }
+        return $this->$getMethod();
+    }
 }

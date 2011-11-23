@@ -26,7 +26,7 @@ class MetaArticleDatetime implements IteratorAggregate
         if (!(($currentItem = $this->iterator->current()) instanceof ArticleDatetime)) {
             return null;
         }
-        $getMethod = 'get'.ucfirst($name);
+        $getMethod = 'get'.preg_replace("`(?<=[a-z])(_([a-z]))`e","ucfirst(strtoupper('\\2'))",trim($name));
         if (!is_callable(array($currentItem, $getMethod))) {
             return null;
         }
