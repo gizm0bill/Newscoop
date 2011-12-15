@@ -142,12 +142,9 @@ regGS("Could not save the article. It has been locked by $1 $2 hours and $3 minu
 regGS("You do not have the right to change this article status. Once submitted an article can only be changed by authorized users.", "თქვენ არ გაქვთ სტატიის სტატუსის შეცვლის უფლება. გადაცემის შემდეგ, მხოლოდ ავტორიზებულ მომხმარებლებს აქვთ ცვლილელების უფლება.");
 regGS("You do not have the right to delete articles.", "თქვენ არ გაქვთ ამ სტატიების წაშლის უფლება");
 regGS("You must select an article type.", "თქვენ უნდა აირჩიოთ სტატიის ტიპი");
-regGS("Are you sure you want to remove the image \'$1\' from the article?", "");
+regGS("Are you sure you want to remove the image \'$1\' from the article?", "დარწმუნებული ხართ რომ გსურთ ამ სურათის \'$1\' სტატიიდან წაშლა?");
 regGS("There was an error reading request parameters.", "მოთხოვნილი პარამეტრების წაკითხვისას დაფიქსირდა შეცდომა.");
 regGS("This article cannot be previewed. Please make sure it has the article template selected.", "ამ სტატიის დათვალიერება შეუძლებელია. გთხოვთ გადაამოწმოთ, რომ ამ სტატიის მოდელი მითითებულია.");
 regGS("No such article.", "ასეთი სტატია არ არსებობს.");
 regGS("No such section.", "ასეთი სექცია არ არსებობს");
-regGS("Are you sure you want to remove the topic \\'$1\\' from the article?", "დარწმუნებული ხართ რომ გსურთ სტატიიდან \\'$1\\' სათაურის წაშლა?");
-regGS("Are you sure you want to remove the file \\'$1\\' from the article?", "დარწმუნებული ხართ რომ გსურთ სტატიიდან \\'$1\\' ფაილის წაშლა?");
-regGS("Are you sure you want to remove the image \\'$1\\' from the article?", "დარწმუნებული ხართ რომ გსურთ ამ სურათის \\'$1\\' სტატიიდან წაშლა?");
 ?>

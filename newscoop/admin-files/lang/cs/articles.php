@@ -7,7 +7,7 @@ regGS("You can not schedule opposing events at the same time", "Nemůžete napl�
 regGS("Unable to reach Newscoop. Please check your internet connection.", "Nelze zobrazit Newscoop. Prosíme zkontrolujte své internetové spojení.");
 regGS("Title", "Název");
 regGS("There already is an article with the same name. Please change the name and try again.", "Článek se stejný názvem již existuje. Prosíme změňte název a zkuste to znovu.");
-regGS("Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.", "");
+regGS("Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.", "Upozorňujeme, že všechny naplánované události tohoto článku budou odstraněny pokud jej přenastavíte do stavu \"Nový\". Prosíme potvrďte změnu.");
 regGS("Geolocation", "Geolokace");
 regGS("Newscoop", "Newscoop");
 regGS("Pending Article", "Nevyřízený článek");

@@ -1,13 +1,15 @@
 <?php 
-regGS("Warning", "");
+regGS("Warning", "გაფრთხილება");
 regGS("Severity:", "");
 regGS("Severity", "");
-regGS("Notice", "");
-regGS("No logs.", "");
-regGS("Info", "");
-regGS("Filter", "");
+regGS("Notice", "შეტყობინება");
+regGS("No logs.", "აღრიცხვა არ არსებობს");
+regGS("Info", "ინფო");
+regGS("Filter", "ფილტრი");
 regGS("Emergency", "");
-regGS("Debug", "");
-regGS("Critical", "");
-regGS("Alert", "");
+regGS("Debug", "გამართვა");
+regGS("Critical", "კრიტიკული");
+regGS("Alert", "შეტყობინება");
+regGS("User IP Address", "მომხმარებლის IP მისამართი");
+regGS("User", "მომხმარებელი");
 ?>

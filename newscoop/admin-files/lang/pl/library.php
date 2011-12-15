@@ -1,5 +1,5 @@
 <?php 
-regGS("Title", "");
+regGS("Title", "Tytuł");
 regGS("No video playback capabilities, please download the video below", "");
 regGS("Article status set to '$1' for $2 articles", "");
 regGS("Article status not set to '$1' for $2 articles", "");

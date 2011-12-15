@@ -1,6 +1,6 @@
 <?php 
-regGS("Hide human-readable field names", "");
-regGS("Edit and translate human-readable field names", "");
+regGS("Hide human-readable field names", "Skrýt názvy polí, které se dají přečíst člověkem");
+regGS("Edit and translate human-readable field names", "Upravit a přeložit názvy polí, které se dají přečíst člověkem");
 regGS("The template name may only contain letters and the underscore (_) character.", "Jméno šablony může obsahovat písmena a podtržítko (_).");
 regGS("Rename article type '$1'", "Přejmenovat typ článku '$1'");
 regGS("Invalid article type '$1'.", "Neplatný typ článku '$1'.");

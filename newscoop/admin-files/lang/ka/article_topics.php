@@ -1,6 +1,6 @@
 <?php 
-regGS("No topics have been created yet.", "");
-regGS("Topics updated.", "");
+regGS("No topics have been created yet.", "თემები ჯერ არ შექმნილა.");
+regGS("Topics updated.", "თემები განახლდა");
 regGS("Topic does not exist.", "თემა არ არსებობს");
 regGS("The topic '$1' has been removed from article.", "თემა $1 მოხსნილია სტატიიდან");
 regGS("You do not have the right to detach topics from articles.", "თქვენ არა გაქვთ უფლება მოხსნათ თემები  სტატიებიდან.");

@@ -1,8 +1,8 @@
 <?php 
-regGS("vertices", "");
+regGS("vertices", "vrchol");
 regGS("There was a problem trying to execute the XML RPC function.", "Vyskytl se problém při pokusu o provedení XML RPC funkce.");
 regGS("The Campcaster server configuration is invalid.", "Konfigurace serveru Campcaster je neplatná. ");
-regGS("Pan Map", "");
+regGS("Pan Map", "Posunout mapu");
 regGS("Open large map", "Otevřít velkou mapu");
 regGS("No news available.", "Žádné nové zprávy nedostupné.");
 regGS("Edit Polygon", "Upravit Polygon");
