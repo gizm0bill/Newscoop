@@ -41,14 +41,14 @@ class TemplateCacheHandler_DB extends TemplateCacheHandler
         $queryStr = 'DELETE FROM Cache WHERE ' . self::vectorToWhereString($campsiteVector);
         $this->_ado_db->Execute($queryStr);
 
-        if ($campsiteVector['language'] && $campsiteVector['publication']) {
+        if (!empty($campsiteVector['language']) && !empty($campsiteVector['publication'])) {
             $whereStr = "language = {$campsiteVector['language']} AND ";
             $whereStr .= "publication = {$campsiteVector['publication']} AND ";
             $whereStr .= $campsiteVector['issue'] ? "issue >= {$campsiteVector['issue']} AND "
             :'issue IS NULL AND ';
 
             // clear language, publication, issue, section, null vector
-            if ($campsiteVector['section']) {
+            if (isset($campsiteVector['section'])) {
                 $queryStr = 'DELETE FROM Cache WHERE ' . $whereStr . "section = {$campsiteVector['section']} AND ";
                 $queryStr .= "article IS NULL";
                 $this->_ado_db->Execute($queryStr);
@@ -59,7 +59,7 @@ class TemplateCacheHandler_DB extends TemplateCacheHandler
             $this->_ado_db->Execute($queryStr);
 
             // clear language, publication, null, null, null vector
-            if ($campsiteVector['issue']) {
+            if (isset($campsiteVector['issue'])) {
                 $queryStr = 'DELETE FROM Cache WHERE language = '. "{$campsiteVector['language']} AND "
                 . "publication = {$campsiteVector['publication']} AND issue IS NULL AND section IS NULL AND article IS NULL";
                 $this->_ado_db->Execute($queryStr);
@@ -95,7 +95,7 @@ class TemplateCacheHandler_DB extends TemplateCacheHandler
 
         switch ($action) {
             case 'read':
-                if ($campsiteVector['language'] && $campsiteVector['publication']) {
+                if (!empty($campsiteVector['language']) && !empty($campsiteVector['publication'])) {
                     $whereStr = self::vectorToWhereString($campsiteVector);
                     $whereStr .= " AND template = '$tpl_file'";
 
@@ -122,7 +122,7 @@ class TemplateCacheHandler_DB extends TemplateCacheHandler
                     $queryStr = 'DELETE FROM Cache WHERE template = ' . "'$tpl_file'";
                     $g_ado_db->Execute($queryStr);
                 }
-                if ($exp_time > time() && $campsiteVector['language'] && $campsiteVector['publication']) {
+                if ($exp_time > time() && !empty($campsiteVector['language']) && !empty($campsiteVector['publication'])) {
 
                     // insert new cached template
                     $queryStr = 'INSERT IGNORE INTO Cache ';
@@ -167,5 +167,3 @@ class TemplateCacheHandler_DB extends TemplateCacheHandler
         return $output;
     }
 }
-
-?>
