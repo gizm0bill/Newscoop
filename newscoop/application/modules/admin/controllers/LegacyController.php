@@ -12,7 +12,7 @@ class Admin_LegacyController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        global $controller, $Campsite, $ADMIN_DIR, $ADMIN, $g_user, $g_ado_db, $prefix;
+    	global $controller, $Campsite, $ADMIN_DIR, $ADMIN, $g_user, $g_ado_db, $prefix;
         $controller = $this;
 
         $no_menu_scripts = array(

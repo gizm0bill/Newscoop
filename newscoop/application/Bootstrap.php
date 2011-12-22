@@ -60,6 +60,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             }
         }
     }
+    
+    protected function _initCli()
+    {
+    	if( PHP_SAPI == 'cli' )
+        {
+            $front = Zend_Controller_Front::getInstance();
+            // set cli router and auth with 'worker' role
+            $front->setRouter(new Newscoop\Controller\Router\Cli(array( 'auth' => array('id' => 1))));
+            $front->setParam( 'noViewRenderer', true );
+            $front->returnResponse( true );
+        }
+    }
 
     /**
      * TODO the name of this method is named confusing, container for what? a zend navigation container? obviously not..
@@ -140,12 +152,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->addArgument(new sfServiceReference('view'))
             ->addArgument(new sfServiceReference('user.token'));
 
-        $container->register('ingest.settings', 'Newscoop\News\SettingsService')
-            ->addArgument(new sfServiceReference('odm'));
-
         $container->register('ingest.item', 'Newscoop\News\ItemService')
-            ->addArgument(new sfServiceReference('odm'))
-            ->addArgument(new sfServiceReference('ingest.settings'));
+            ->addArgument(new sfServiceReference('odm'));
 
         $container->register('ingest.feed', 'Newscoop\News\FeedService')
             ->addArgument(new sfServiceReference('odm'))

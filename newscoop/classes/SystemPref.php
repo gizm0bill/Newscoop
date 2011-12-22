@@ -127,7 +127,9 @@ class SystemPref {
     		return true;
     	}
 
-    	if (file_exists($GLOBALS['g_campsiteDir'].'/'.self::CACHE_FILE_NAME)) {
+    	if (file_exists($GLOBALS['g_campsiteDir'].'/'.self::CACHE_FILE_NAME)
+    	   && is_readable($GLOBALS['g_campsiteDir'].'/'.self::CACHE_FILE_NAME)
+    	) {
     		require_once($GLOBALS['g_campsiteDir'].'/'.self::CACHE_FILE_NAME);
     		return isset($GLOBALS['Campsite']) && is_array($GLOBALS['Campsite'])
     		&& isset($GLOBALS['Campsite']['system_preferences'])
@@ -148,6 +150,7 @@ class SystemPref {
         CampSession::singleton()->setData('system_preferences', $Campsite['system_preferences'], 'default', true);
 
         $cacheFileName = $GLOBALS['g_campsiteDir'].'/'.self::CACHE_FILE_NAME;
+        if(!is_readable($GLOBALS['g_campsiteDir'].'/'.self::CACHE_FILE_NAME)) return false;
         $cacheFile = fopen($cacheFileName, 'w+');
         if (!$cacheFile) {
         	return false;
