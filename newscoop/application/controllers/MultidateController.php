@@ -116,6 +116,7 @@ class MultidateController extends Zend_Controller_Action
     public function removeduplicatesAction() {
     	if (PHP_SAPI != 'cli') die('no access');
         echo "\n\n\nremove action\n";
+        
         $s_mt = explode(" ",microtime());
         $count = 0;
         
@@ -129,14 +130,13 @@ class MultidateController extends Zend_Controller_Action
             mysql_query("DELETE FROM event_delete WHERE articleNo='".$row['articleNo']."' AND languageId='".$row['languageId']."'");
         }
         
-        $rq = "DROP TABLE event_delete";
+        mysql_query("DROP TABLE event_delete");
         
         echo "removed $count duplicates \n";
         
         $e_mt = explode(" ",microtime());
         $s = (($e_mt[1] + $e_mt[0]) - ($s_mt[1] + $s_mt[0]));
         echo "script executed in ".$s." seconds\n\n\n\n";
-        
         die();
     }
     
