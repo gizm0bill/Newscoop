@@ -433,10 +433,17 @@ class NewsImport
                 }
             }
 
+            $uses_multidates = false;
+            if (isset($one_event['uses_multidates']) && $one_event['uses_multidates']) {
+                $uses_multidates = true;
+            }
+
             // no date part for movie screenings (all together), and may be the same way for events too lately
             $art_name_date_part = '';
             if ($scr_type != $art_type) {
-                $art_name_date_part = ' - ' . $one_event['date'];
+                if (!$uses_multidates) {
+                    $art_name_date_part = ' - ' . $one_event['date'];
+                }
             }
             $art_name = $one_event['headline'] . $art_name_date_part . ' (' . $one_event['event_id'] . ')';
 
@@ -533,8 +540,23 @@ class NewsImport
             $article_data->setProperty('Ftown', $one_event['town']);
             $article_data->setProperty('Fstreet', $one_event['street']);
 
-            $article_data->setProperty('Fdate', $one_event['date']);
-            $article_data->setProperty('Ftime', $one_event['time']);
+            if (!$uses_multidates) {
+                $article_data->setProperty('Fdate', $one_event['date']);
+                $article_data->setProperty('Ftime', $one_event['time']);
+            }
+            if ($uses_multidates) {
+                // remove old multidates
+
+
+                // set new multidates
+                $event_dates = array();
+                if (isset($one_event['multidates']) && $one_event['multidates']) {
+                    $event_dates = $one_event['multidates'];
+                }
+                foreach ($event_dates as $one_date) {
+                    ;
+                }
+            }
 
             $article_data->setProperty('Fdate_time_text', $one_event['date_time_text']);
 
@@ -551,7 +573,9 @@ class NewsImport
             $article_data->setProperty('Fprices', $one_event['prices']);
             $article_data->setProperty('Fminimal_age', $one_event['minimal_age']);
 
-            $article_data->setProperty('Fcanceled', ($one_event['canceled'] ? 'on' : 'off'));
+            if (!$uses_multidates) {
+                $article_data->setProperty('Fcanceled', ($one_event['canceled'] ? 'on' : 'off'));
+            }
             $article_data->setProperty('Frated', ($one_event['rated'] ? 'on' : 'off'));
             $article_data->setProperty('Fedited', 'off');
 
@@ -793,7 +817,13 @@ class NewsImport
 
             if ($status_publish_by_event_date) {
                 if ($article->isPublished()) {
-                    $article->setPublishDate($one_event['date']); // necessary to reset after changing the workflow status
+                    if (!$uses_multidates) {
+                        $article->setPublishDate($one_event['date']); // necessary to reset after changing the workflow status
+                    }
+                    else {
+                        $today_date = date('Y-m-d');
+                        $article->setPublishDate($today_date); // necessary to reset after changing the workflow status
+                    }
                 }
             }
         }
