@@ -1,5 +1,15 @@
 <?php
 
+//use Newscoop\ArticleDatetime as ArticleDatetimeHelper;
+
+/*
+use Newscoop,
+    Doctrine\ORM\EntityRepository,
+    Newscoop\ArticleDatetime as ArticleDatetimeHelper,
+    Newscoop\Entity\Article,
+    Newscoop\Entity\ArticleDatetime;
+*/
+
 /**
  * NewsImport manages the event importing.
  */
@@ -119,6 +129,8 @@ class NewsImport
         require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'Issue.php');
         require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'Log.php');
 
+        require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Newscoop'.DIRECTORY_SEPARATOR.'ArticleDatetime.php');
+
         $conf_dir = $GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'newsimport'.DIRECTORY_SEPARATOR.'include';
         $class_dir = $GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'newsimport'.DIRECTORY_SEPARATOR.'classes';
         require_once($conf_dir.DIR_SEP.'default_topics.php');
@@ -191,6 +203,8 @@ class NewsImport
         require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'Article.php');
         require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'Issue.php');
         require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.'Log.php');
+
+        require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'Newscoop'.DIRECTORY_SEPARATOR.'ArticleDatetime.php');
 
         $conf_dir = $GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'newsimport'.DIRECTORY_SEPARATOR.'include';
         $class_dir = $GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.'newsimport'.DIRECTORY_SEPARATOR.'classes';
@@ -545,17 +559,41 @@ class NewsImport
                 $article_data->setProperty('Ftime', $one_event['time']);
             }
             if ($uses_multidates) {
-                // remove old multidates
 
+                // remove old multidates
+                $em = Zend_Registry::get('container')->getService('em');
+                $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+                //$repository = Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\ArticleDatetime');
+                $repository->deleteByArticle($article->m_data['Number']);
+                $em->flush();
 
                 // set new multidates
                 $event_dates = array();
                 if (isset($one_event['multidates']) && $one_event['multidates']) {
                     $event_dates = $one_event['multidates'];
                 }
+                $newest_date = '0000-00-00';
                 foreach ($event_dates as $one_date) {
-                    ;
+                    if ($one_date['canceled']) {
+                        continue;
+                    }
+
+                    if ($newest_date < $one_date['date']) {
+                        $newest_date = $one_date['date'];
+                    }
+
+                    //$use_datetime = new ArticleDatetimeHelper(
+                    $use_datetime = new ArticleDatetime(
+                        'start_date' => $one_date['date'],
+                        'end_date' => $one_date['date'],
+                        'start_time' => $one_date['time'],
+                        'recurring' = false,
+                    );
+                    $repository->add($use_datetime, $article, 'Fmultidate', false, false);
                 }
+
+                $article_data->setProperty('Fdate', $newest_date);
+
             }
 
             $article_data->setProperty('Fdate_time_text', $one_event['date_time_text']);
