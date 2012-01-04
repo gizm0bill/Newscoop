@@ -59,14 +59,50 @@ class SwissinfoParser implements Parser
         $content = array();
 
         $lead_section = $this->story->xpath('./property[4]');
-        $content[]= (string) array_shift($lead_section[0]->xpath('.//content[@type="TextBlock"]/property[2]/value/string'));
+        $content[]= '<p>';
+        $content[]= (string) array_shift($lead_section[0]->xpath('.//content[@type="TextBlock"]/property[1]/value/string'));
+        $content[]= '</p>';
 
         $main_section = $this->story->xpath('./property[3]');
-        $main_section_content = $main_section[0]->xpath('.//content[@type="TextBlock"]/property/value/string');
+        $main_section_content = $main_section[0]->xpath('.//content[@type="TextBlock"]/property[1]/value/string');
+        $main_section_titles = $main_section[0]->xpath('.//content[@type="TextBlock"]/property[2]');
 
-        foreach($main_section_content as $section) {
-            $content[]= (string) $section;
+        $main_titles = array();
+        foreach ($main_section_titles as $title) {
+            $key = (string) array_shift($title->xpath('.//key'));
+            if ($key == "title") {
+                $value = (string) array_shift($title->xpath('.//value/string'));
+                $main_titles[] = $value;
+            }
+            else {
+                //maybe they have something weird there...
+                $main_titles[] = null;
+            }
         }
+
+        $i = 0;
+        foreach($main_section_content as $section) {
+            $title = (string) $main_titles[$i];
+            if (!empty($title)) {
+                if (preg_match('/^<h[2|3|4]>.*<\/h[2|3|4]>/', $title)) {
+                    $content[] = $title;
+                } else {
+                    $content[]= '<p><strong>';
+                    $content[]= $title;
+                    $content[]= '</strong></p>';
+                }
+            }
+            $content[]= '<p>';
+            $content[]= (string) $section;
+            $content[]= '</p>';
+
+            $i = $i + 1;
+        }
+
+        $content[]= '<p class="swiss-info-free">';
+        $free_section = $this->story->xpath('./property[5]');
+        $content[]= (string) array_shift($free_section[0]->xpath('.//content[@type="TextBlock"]/property[1]/value/string'));
+        $content[]= '</p>';
 
         $content = implode("", $content);
 
@@ -120,8 +156,8 @@ class SwissinfoParser implements Parser
 
     public function getSummary()
     {
-        $free_section = $this->story->xpath('./property[5]');
-        return (string) array_shift($free_section[0]->xpath('.//content[@type="TextBlock"]/property[1]/value/string'));
+        $lead_section = $this->story->xpath('./property[4]');
+        return (string) array_shift($lead_section[0]->xpath('.//content[@type="TextBlock"]/property[2]/value/string'));
     }
 
     public function getStatus()

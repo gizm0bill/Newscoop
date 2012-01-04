@@ -3,7 +3,7 @@
 require_once $GLOBALS['g_campsiteDir'] . '/classes/BugReporter.php';
 
 /**
- * Called for all Campsite errors.
+ * Called for all Newscoop errors.
  *
  * If the flag $Campsite['DEBUG'] is set to false, this function will
  * return minor errors (ie notices and warnings) without having
@@ -124,9 +124,7 @@ function camp_bug_handler_main($p_number, $p_string, $p_file, $p_line)
     ob_end_clean();
 
     if (is_object($g_user)) {
-	    echo "<html><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n<tr><td>\n";
-    	require_once($Campsite['HTML_DIR'] . "/$ADMIN_DIR/menu.php");
-    	echo "</td></tr>\n<tr><td>\n";
+	    require_once($Campsite['HTML_DIR'] . "/$ADMIN_DIR/menu.php");
     }
 
     // --- If reporter doesn't exist, make one ($reporter might exist

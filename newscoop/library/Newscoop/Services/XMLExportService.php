@@ -108,7 +108,7 @@ class XMLExportService
                 }
             }
 
-            $attachments = \ArticleAttachment::GetAttachmentsByArticleNumber($article->getNumber());
+            $attachments = \ArticleAttachment::GetAttachmentsByArticleNumber($article->getNumber(), $article->getLanguageId());
             foreach ($attachments as $attachment) {
                 $temp = explode('.', $attachment->getFileName());
                 if (substr($attachment->getFileName(), 0, strlen($prefix)) == $prefix && $temp[count($temp) - 1] == 'pdf') {
@@ -147,7 +147,7 @@ class XMLExportService
     
     public function getData($type, $number, $language)
     {
-        $query = "select * from X".$type." where NrArticle = '".$number."' and IdLanguage = '".$language."'";
+        $query = $query = 'SELECT * FROM X' . $type . " WHERE NrArticle = '" . $number . "' AND IdLanguage = '" . $language . "'";
         $sql1 = mysql_query($query);
         $sql2 = mysql_fetch_assoc($sql1);
         return($sql2);
@@ -157,7 +157,7 @@ class XMLExportService
     {
         $attachments = array();
         foreach ($articles as $article) {
-            $temp_attachments = \ArticleAttachment::GetAttachmentsByArticleNumber($article->getNumber());
+            $temp_attachments = \ArticleAttachment::GetAttachmentsByArticleNumber($article->getNumber(), $article->getLanguageId());
             foreach ($temp_attachments as $attachment) {
                 $temp = explode('.', $attachment->getFileName());
                 if (substr($attachment->getFileName(), 0, strlen($prefix)) == $prefix && $temp[count($temp) - 1] == 'pdf') {
@@ -178,10 +178,14 @@ class XMLExportService
             mkdir($directoryName);
         }
 
-        $packageName = $fileName . $this->mode . '_' . $this->startTime->format('Ymd-hi') . '_' . $this->endTime->format('Ymd-hi');
+        $packageName = $fileName . $this->mode . '_' . $this->startTime->format('Ymd-Hi') . '_' . $this->endTime->format('Ymd-Hi');
         $xmlFile = $packageName . '.xml';
 
         $file = fopen($directoryName . '/' . $xmlFile, 'w');
+        if ($file == false) {
+            print $directoryName . '/' . $xmlFile . "\n";
+            throw new \Exception('Failure opening the file resource.');
+        }
         fwrite($file, $contents);
         fclose($file);
         
@@ -198,7 +202,7 @@ class XMLExportService
         }
 
         $this->package = $packageName;
-        $zip->close(); 
+        $zip->close();
     }
     
     public function upload($directoryName, $host, $user, $password)
@@ -215,15 +219,14 @@ class XMLExportService
         ftp_close($connection);
     }
     
-    public function clean($directoryName)
+    public function clean($directoryName, $fileName)
     {
         $directory = opendir($directoryName);
         while (($file = readdir($directory)) !== false) {
-            if ($file != '.' && $file != '..') {
-                unlink($directoryName.'/'.$file);
+            if (preg_match("/$fileName/", $file)) {
+                unlink($directoryName . '/' . $file);
             }
         }
         closedir($directory);
-        rmdir($directoryName);
     }
 }

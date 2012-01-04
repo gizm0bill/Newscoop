@@ -433,7 +433,12 @@ class NewsImport
                 }
             }
 
-            $art_name = $one_event['headline'] . ' - ' . $one_event['date'] . ' (' . $one_event['event_id'] . ')';
+            // no date part for movie screenings (all together), and may be the same way for events too lately
+            $art_name_date_part = '';
+            if ($scr_type != $art_type) {
+                $art_name_date_part = ' - ' . $one_event['date'];
+            }
+            $art_name = $one_event['headline'] . $art_name_date_part . ' (' . $one_event['event_id'] . ')';
 
             if (!$article) {
                 $article = new Article($art_lang);
@@ -467,6 +472,33 @@ class NewsImport
 
                 $f_movie_trailer = (isset($one_event['movie_trailer']) && (!empty($one_event['movie_trailer']))) ? $one_event['movie_trailer'] : '';
                 $article_data->setProperty('Fmovie_trailer', $f_movie_trailer);
+
+                $f_movie_trailer_vimeo = (isset($one_event['movie_trailer_vimeo']) && (!empty($one_event['movie_trailer_vimeo']))) ? $one_event['movie_trailer_vimeo'] : '';
+                $article_data->setProperty('Fmovie_trailer_vimeo', $f_movie_trailer_vimeo);
+
+                $f_movie_trailer_width = 0;
+                $f_movie_trailer_height = 0;
+                $f_movie_trailer_codec = '';
+                if (isset($one_event['movie_trailer_info']) && (!empty($one_event['movie_trailer_info']))) {
+                    $one_trailer_info = $one_event['movie_trailer_info'];
+                    if (isset($one_trailer_info['width']) && (!empty($one_trailer_info['width']))) {
+                        $f_movie_trailer_width = 0 + $one_trailer_info['width'];
+                    }
+                    if (isset($one_trailer_info['height']) && (!empty($one_trailer_info['height']))) {
+                        $f_movie_trailer_height = 0 + $one_trailer_info['height'];
+                    }
+                    if (isset($one_trailer_info['codec']) && (!empty($one_trailer_info['codec']))) {
+                        $f_movie_trailer_codec = $one_trailer_info['codec'];
+                    }
+                    if (empty($f_movie_trailer_codec)) {
+                        if (isset($one_trailer_info['format']) && (!empty($one_trailer_info['format']))) {
+                            $f_movie_trailer_codec = $one_trailer_info['format'];
+                        }
+                    }
+                }
+                $article_data->setProperty('Fmovie_trailer_width', $f_movie_trailer_width);
+                $article_data->setProperty('Fmovie_trailer_height', $f_movie_trailer_height);
+                $article_data->setProperty('Fmovie_trailer_codec', $f_movie_trailer_codec);
 
                 $f_movie_info = (isset($one_event['movie_info']) && (!empty($one_event['movie_info']))) ? $one_event['movie_info'] : '';
                 if (empty($f_movie_info)) {
@@ -804,11 +836,12 @@ class NewsImport
         $p_count = 0;
         $event_art_list = Article::GetList(array(
             new ComparisonOperation('idlanguage', new Operator('is', 'sql'), $art_lang),
-            new ComparisonOperation('IdPublication', new Operator('is', 'sql'), $art_publication),
+            //new ComparisonOperation('IdPublication', new Operator('is', 'sql'), $art_publication),
             //new ComparisonOperation('NrIssue', new Operator('is', 'sql'), $art_issue),
-            new ComparisonOperation('NrSection', new Operator('is', 'sql'), $art_section),
+            //new ComparisonOperation('NrSection', new Operator('is', 'sql'), $art_section),
             new ComparisonOperation('Type', new Operator('is', 'sql'), $art_type),
-            new ComparisonOperation('' . $art_type . '.date', new Operator('smaller_equal', 'sql'), $passed_date),
+            //new ComparisonOperation('' . $art_type . '.date', new Operator('smaller_equal', 'sql'), $passed_date), // for newer (but not used) way
+            new ComparisonOperation('' . $art_type . '.date', new Operator('smaller', 'sql'), $passed_date), // for older (but probably safer) way
             new ComparisonOperation('' . $art_type . '.provider_id', new Operator('is', 'sql'), $art_provider),
         ), null, null, 0, $p_count, true);
 
@@ -827,7 +860,8 @@ class NewsImport
 
             $event_data_rem = $event_art_rem->getArticleData();
             try {
-                if (($event_data_rem->getFieldValue('date')) > $passed_date) {
+                //if (($event_data_rem->getFieldValue('date')) > $passed_date) { // for newer (but not used) way
+                if (($event_data_rem->getFieldValue('date')) >= $passed_date) { // for older (but probably safer) way
                     continue;
                 }
             }
@@ -852,7 +886,12 @@ class NewsImport
             $ev_map_id = Geo_Map::ReadMapId($art_number);
 
             // delete article (with map unlinking)
-            $event_art_rem->delete();
+            try {
+                $event_art_rem->delete();
+            }
+            catch (Exception $exc) {
+                //continue;
+            }
 
             // remove map
             if (!empty($ev_map_id)) {

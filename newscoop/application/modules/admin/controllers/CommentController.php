@@ -84,6 +84,9 @@ class Admin_CommentController extends Zend_Controller_Action
             {
                 /* var Newscoop\Entity\Comment\Commenter */
                 $commenter = $comment->getCommenter();
+                $user = new MetaUser($commenter->getUser());
+                $image = $user->image(50, 50);
+                
                 $thread = $comment->getThread();
 
                 $articleNo = $comment->getArticleNumber();
@@ -92,12 +95,13 @@ class Admin_CommentController extends Zend_Controller_Action
 
                 $forum = $comment->getForum();
                 $section = $thread->getSection();
+                $profile = $view->url(array('username' => $commenter->getLoginName()), 'user');
                 return array('index' => $index++, 'can' => array('enable' => $acl['enable'], 'edit' => $acl['edit']),
                              'commenter' =>
-                             array('username' => $commenter->getUsername(), 'name' => $commenter->getName(),
+                             array('username' => $commenter->getLoginName(), 'name' => $commenter->getName(),
+                                   'profile' => $profile,
                                    'email' => $commenter->getEmail(),
-                                   'avatar' => (string)$view->getAvatar($commenter->getEmail(), array('img_size' => 50,
-                                                                                                     'default_img' => 'wavatar')),
+                                   'avatar' => $image,
                                    /**
                                     * @todo have this in the commenter entity as a flag isBanned witch is checked when a ban is done
                                     *       for a faster result not having sql checks insides for statements
@@ -108,7 +112,7 @@ class Admin_CommentController extends Zend_Controller_Action
                                    'ip' => $commenter->getIp(), 'url' => $commenter->getUrl(),
                                    'banurl' => $view->url(
                                        array('controller' => 'comment-commenter', 'action' => 'toggle-ban',
-                                            'commenter' => $commenter->getId(), 'thread' => $comment->getArticleNumber()))),
+                                            'commenter' => $commenter->getId(), 'thread' => $comment->getArticleNumber(), 'language' => $comment->getLanguage()->getId()))),
                              'comment' => array('id' => $comment->getId(),
                                                 'created' =>
                                                 array('date' => $comment->getTimeCreated()->format('Y.m.d'),
@@ -124,7 +128,7 @@ class Admin_CommentController extends Zend_Controller_Action
                              'thread' => array('name' => $article->getName(),
                                                'link' => array
                                                ('edit' => $view->baseUrl("admin/articles/edit.php?") . $view->linkArticleObj($article),
-                                                'get' => $view->baseUrl("admin/articles/get.php?") . $view->linkArticleObj($article)),
+                                                'get' => $view->baseUrl("admin/articles/preview.php?") . $view->linkArticleObj($article)),
                                                'forum' => array('name' => $forum->getName()),
                                                'section' => array('name' => ($section) ? $section->getName() : null)),);
             });
@@ -156,20 +160,20 @@ class Admin_CommentController extends Zend_Controller_Action
     public function getAllReplies($p_comment_id)
     {
          if(!is_array($p_comment_id)) {
-         	$directReplies = $this->commentRepository->getDirectReplies($p_comment_id);
-         	if(count($directReplies)) {
-         		return array_merge( array($p_comment_id), $this->getAllReplies($directReplies) );
-         	} else {
-         		return array($p_comment_id);
-         	}
+            $directReplies = $this->commentRepository->getDirectReplies($p_comment_id);
+            if(count($directReplies)) {
+                return array_merge( array($p_comment_id), $this->getAllReplies($directReplies) );
+            } else {
+                return array($p_comment_id);
+            }
          } else {
             if(count($p_comment_id) > 1) {
                 return array_merge(
                     $this->getAllReplies(array_pop($p_comment_id)),
-	                $this->getAllReplies($p_comment_id)
-	                );
+                    $this->getAllReplies($p_comment_id)
+                    );
             } else {
-            	return $this->getAllReplies(array_pop($p_comment_id));
+                return $this->getAllReplies(array_pop($p_comment_id));
             }
          }
     }
@@ -198,18 +202,16 @@ class Admin_CommentController extends Zend_Controller_Action
 
         try {
             foreach ($comments as $id) {
-            	$comment = $this->commentRepository->find($id);
+                $comment = $this->commentRepository->find($id);
 
                 if ($status == "deleted") {
                     $msg = getGS('Comment delete by $1 from the article $2 ($3)', Zend_Registry::get('user')->getName(),
                                  $comment->getThread()->getName(), $comment->getLanguage()->getCode());
 
-                    $this->_helper->log($msg);
                     $this->_helper->flashMessenger($msg);
                 } else {
                     $msg = getGS('Comment $4 by $1 in the article $2 ($3)', Zend_Registry::get('user')->getName(),
                                  $comment->getThread()->getName(), $comment->getLanguage()->getCode(), $status);
-                    $this->_helper->log($msg);
                     $this->_helper->flashMessenger($msg);
                 }
             }
@@ -290,7 +292,6 @@ class Admin_CommentController extends Zend_Controller_Action
         $values['time_created'] = new DateTime;
 
         if (!SecurityToken::isValid()) {
-            $this->_helper->log(getGS('Invalid security token!'));
             $this->view->status = 401;
             $this->view->message = getGS('Invalid security token!');
             return;
@@ -304,11 +305,7 @@ class Admin_CommentController extends Zend_Controller_Action
             $this->view->message = $e->getMessage();
             return;
         }
-        $this->_helper->log(getGS('Comment added by $1 to the article $2 ($3)',
-                                  Zend_Registry::get('user')->getName(),
-                                  $comment->getThread()->getName(),
-                                  $comment->getLanguage()->getCode())
-        );
+
         $this->view->status = 200;
         $this->view->message = "succcesful";
         $this->view->comment = $comment->getId();
@@ -417,8 +414,7 @@ class Admin_CommentController extends Zend_Controller_Action
             $return = array('status' => $e->getCode(), 'message' => $e->getMessage(), 'data' => array());
             $this->_helper->json($return);
         }
-        $this->_helper->log(getGS('Comment updated by $1 to the article $2 ($3)', Zend_Registry::get('user')->getName(),
-                                  $comment->getThread()->getName(), $comment->getLanguage()->getCode()));
+
         $return = array('status' => 100, 'message' => 'succesful', 'data' => array('comment' => $comment->getId()));
         $this->_helper->json($return);
     }
@@ -447,9 +443,7 @@ class Admin_CommentController extends Zend_Controller_Action
                 $this->view->message = $e->getMessage();
                 return;
             }
-            $this->_helper->log(getGS('Comment added by $1 to the article $2 ($3)',
-                                      Zend_Registry::get('user')->getName(), $comment->getThread()->getName(),
-                                      $comment->getLanguage()->getCode()));
+
             $this->view->status = 200;
             $this->view->message = "succcesful";
             $this->view->comment = $comment->getId();

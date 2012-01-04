@@ -5,6 +5,9 @@ ALTER TABLE `Log` CHANGE `user_ip` `user_ip` VARCHAR(39) NOT NULL DEFAULT '';
 ALTER TABLE `Log` DROP KEY `IdEvent`;
 ALTER TABLE `Log` ADD KEY `priority` (`priority`);
 
+-- Audit event table
+ALTER TABLE `audit_event` MODIFY `resource_id` VARCHAR(255);
+
 -- Add Acl Role table
 CREATE TABLE IF NOT EXISTS `acl_role` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -286,6 +289,10 @@ ALTER TABLE `Attachments`
  DROP PRIMARY KEY,
  ADD PRIMARY KEY (`id`);
 
+-- Update Article Authors
+ALTER TABLE `ArticleAuthors`
+ ADD COLUMN `order` int(2) unsigned;
+ 
 -- Upgrade templates to themes
 system php ./create_themes.php
 

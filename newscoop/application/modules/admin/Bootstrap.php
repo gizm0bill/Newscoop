@@ -1,7 +1,5 @@
 <?php
 
-use Newscoop\Log\Writer;
-
 class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
 {
 
@@ -129,22 +127,6 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
         }
 
         //$view->getHelper( 'FlashMsg' )->setAdapter( Zend_Controller_Action_HelperBroker::getStaticHelper( 'FlashMessenger' ) );
-    }
-
-    /**
-     * Init Log
-     */
-    protected function _initLog()
-    {
-        // get entity manager
-        $em = Zend_Registry::get('doctrine')
-            ->getEntityManager();
-
-        // create logger
-        $writer = new Writer($em);
-        $log = new Zend_Log($writer);
-        \Zend_Registry::set('log', $log);
-        return $log;
     }
 
     /**

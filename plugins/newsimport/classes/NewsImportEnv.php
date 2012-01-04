@@ -62,11 +62,16 @@ class NewsImportEnv
         }
         require_once 'Zend/Application.php';
 
+/*
         // Create application, bootstrap, and run
         $application = new Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
         );
+*/
+
+        $boot_path = $GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'application.php';
+        require_once($boot_path);
 
         $application->bootstrap();
 
@@ -259,25 +264,41 @@ class NewsImportEnv
         $request_url_bare_prune = $request_url_bare . '&newsprune=1';
 
         $request_url = $request_url_bare . '&newslimit=' . $one_limit;
-        $request_count = 500;
-        //$request_count = 1;
-        $request_offsets = array(0);
-        for ($ind = 1; $ind <= $request_count; $ind++) {
-            $request_offsets[] = $ind * $one_limit;
-        }
 
-        foreach (array('events_1', 'movies_1') as $one_feed) {
+        $request_count_events_1 = 500;
+        $request_count_movies_1 = 50;
+        //$request_count_events_1 = 1;
+        //$request_count_movies_1 = 1;
+        $request_offsets_events_1 = array(0);
+        for ($ind = 1; $ind <= $request_count_events_1; $ind++) {
+            $request_offsets_events_1[] = $ind * $one_limit;
+        }
+        $request_offsets_movies_1 = array(0);
+        for ($ind = 1; $ind <= $request_count_movies_1; $ind++) {
+            $request_offsets_movies_1[] = $ind * $one_limit;
+        }
+        $request_offsets = array(
+            'events_1' => array('count' => $request_count_events_1, 'values' => $request_offsets_events_1),
+            'movies_1' => array('count' => $request_count_movies_1, 'values' => $request_offsets_movies_1),
+        );
+
+        foreach ($request_offsets as $one_feed => $one_feed_offsets_info) {
+            $one_feed_offsets = $one_feed_offsets_info['values'];
+            $one_feed_request_count = $one_feed_offsets_info['count'];
+
+            $some_in = true;
+
             $request_feed = $request_url . '&newsfeed=' . $one_feed;
             $request_feed_bare = $request_url_bare . '&newsfeed=' . $one_feed;
             $request_feed_prune = $request_url_bare_prune . '&newsfeed=' . $one_feed;
 
             $req_rank = -1;
-            foreach ($request_offsets as $one_offset) {
+            foreach ($one_feed_offsets as $one_offset) {
                 $one_limit_use = $one_limit;
                 //sleep(1);
                 $req_rank += 1;
                 $request_feed_use = $request_feed;
-                if ($req_rank == $request_count) {
+                if ($req_rank == $one_feed_request_count) {
                     $request_feed_use = $request_feed_bare;
                     $one_limit_use = 0;
                 }
@@ -296,13 +317,16 @@ class NewsImportEnv
                         break;
                     }
                     if (false !== stristr($response, $one_feed.':none')) {
+                        $some_in = false;
                         break;
                     }
                     if (false !== stristr($response, 'newsimport_locked')) {
+                        $some_in = false;
                         break;
                     }
                 }
                 catch (Exception $exc) {
+                    $some_in = false;
                     //var_dump($exc);
                     break;
                 }
@@ -310,14 +334,16 @@ class NewsImportEnv
 
             //sleep(1);
             try {
-                $one_request = $request_feed_prune;
-                //echo $one_request . "\n";
-                    $req_spec = array(
-                        'newsfeed' => $one_feed,
-                        'newsprune' => 1,
-                    );
-                $response = self::ImportRequest($one_request, $http_auth, $req_spec);
-                //var_dump($response);
+                if ($some_in) {
+                    $one_request = $request_feed_prune;
+                    //echo $one_request . "\n";
+                        $req_spec = array(
+                            'newsfeed' => $one_feed,
+                            'newsprune' => 1,
+                        );
+                    $response = self::ImportRequest($one_request, $http_auth, $req_spec);
+                    //var_dump($response);
+                }
             }
             catch (Exception $exc) {}
         }
@@ -331,13 +357,18 @@ class NewsImportEnv
      * @param string $p_lockDir
 	 * @return bool
 	 */
-    public static function Start($p_lockDir)
+    public static function Start($p_lockDir, $p_jobType = '')
     {
         $max_diff_new = 12; // max hours for taking the lock as a real one
 
+        $job_suffix = '';
+        if (!empty($p_jobType)) {
+            $job_suffix = '_' . $p_jobType;
+        }
+
         // stop, if some worker running; return false
-        $working_path = $p_lockDir . self::$s_working;
-        $working_path_date = $p_lockDir . self::$s_working_date;
+        $working_path = $p_lockDir . self::$s_working . $job_suffix;
+        $working_path_date = $p_lockDir . self::$s_working_date . $job_suffix;
 
         $lock_file = null;
 
@@ -402,11 +433,16 @@ class NewsImportEnv
      * @param string $p_lockDir
 	 * @return bool
 	 */
-    public static function Stop($p_lockDir)
+    public static function Stop($p_lockDir, $p_jobType = '')
     {
 
-        $working_path = $p_lockDir . self::$s_working;
-        $working_path_date = $p_lockDir . self::$s_working_date;
+        $job_suffix = '';
+        if (!empty($p_jobType)) {
+            $job_suffix = '_' . $p_jobType;
+        }
+
+        $working_path = $p_lockDir . self::$s_working . $job_suffix;
+        $working_path_date = $p_lockDir . self::$s_working_date . $job_suffix;
 
         $lock_file = fopen($working_path, 'a');
         $locked = flock($lock_file, LOCK_EX); // the LOCK_NB does not work, see https://bugs.php.net/bug.php?id=54453

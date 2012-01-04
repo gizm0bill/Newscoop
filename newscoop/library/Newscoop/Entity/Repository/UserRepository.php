@@ -152,77 +152,65 @@ class UserRepository extends EntityRepository
         return !$qb->getQuery()->getSingleScalarResult();
     }
 
-    public function findActiveUsers($countOnly, $offset, $limit)
+    /**
+     * Find active members of community
+     *
+     * @param bool $countOnly
+     * @param int $offset
+     * @param int $limit
+     * @param array $editorRoles
+     * @return array|int
+     */
+    public function findActiveUsers($countOnly, $offset, $limit, array $editorRoles)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $qb = $this->createPublicUserQueryBuilder();
+        $qb->andWhere($qb->expr()->notIn('u.id', $this->getEditorIds($editorRoles)));
 
         if ($countOnly) {
             $qb->select('COUNT(u.id)');
-        }
-        else {
-            $qb->select('u');
+            return $qb->getQuery()->getSingleScalarResult();
         }
 
-        $qb->from('Newscoop\Entity\User', 'u');
-
-        $qb->where($qb->expr()->eq("u.status", User::STATUS_ACTIVE));
-        $qb->andWhere($qb->expr()->eq("u.is_public", true));
-
-        if ($countOnly === false) {
-            $qb->orderBy('u.points', 'DESC');
-            $qb->addOrderBy('u.id', 'ASC');
-
-            $qb->setFirstResult($offset);
-            $qb->setMaxResults($limit);
-
-            return $qb->getQuery()->getResult();
-        }
-        else {
-            return $qb->getQuery()->getOneOrNullResult();
-        }
+        $qb->orderBy('u.points', 'DESC');
+        $qb->addOrderBy('u.id', 'ASC');
+        $qb->setFirstResult($offset);
+        $qb->setMaxResults($limit);
+        return $qb->getQuery()->getResult();
     }
 
     /**
-     * Return Users if their last name begins with one of the letter passed in.
+     * Create query builder for public users
      *
-     * @param array $letters = ['a', 'b']
-     *
-     * @return array Newscoop\Entity\User
+     * @return Doctrine\ORM\QueryBuilder
      */
-    public function findUsersLastNameInRange($letters, $countOnly, $offset, $limit)
+    private function createPublicUserQueryBuilder()
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.status = :status')
+            ->andWhere('u.is_public = :public')
+            ->setParameter('status', User::STATUS_ACTIVE)
+            ->setParameter('public', true);
+    }
 
-        if ($countOnly) {
-            $qb->select('COUNT(u.id)');
-        }
-        else {
-            $qb->select('u');
-        }
+    /**
+     * Get editor ids
+     *
+     * @param array $editorRoles
+     * @return array
+     */
+    private function getEditorIds(array $editorRoles)
+    {
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $query = $this->createQueryBuilder('u')
+            ->select('DISTINCT(u.id)')
+            ->innerJoin('u.groups', 'g', Expr\Join::WITH, $expr->in('g.id', $editorRoles))
+            ->getQuery();
 
-        $qb->from('Newscoop\Entity\User', 'u');
-
-        $qb->where($qb->expr()->eq("u.status", User::STATUS_ACTIVE));
-        $qb->andWhere($qb->expr()->eq("u.is_public", true));
-
-        $letterIndex = $qb->expr()->orx();
-        for ($i=0; $i < count($letters); $i++) {
-            $letterIndex->add($qb->expr()->like("LOWER(u.username)", "'$letters[$i]%'"));
-        }
-        $qb->andWhere($letterIndex);
-
-        if ($countOnly === false) {
-            $qb->orderBy('u.username', 'ASC');
-            $qb->addOrderBy('u.id', 'ASC');
-
-            $qb->setFirstResult($offset);
-            $qb->setMaxResults($limit);
-
-            return $qb->getQuery()->getResult();
-        }
-        else {
-            return $qb->getQuery()->getOneOrNullResult();
-        }
+        $ids = array_map(function($row) {
+            return (int) $row['id'];
+        }, $query->getResult());
+        return $ids;
     }
 
     /**
@@ -293,28 +281,20 @@ class UserRepository extends EntityRepository
     /**
      * Get editors
      *
-     * @param int $blogRole
+     * @param array $editorRoles
      * @param int $limit
      * @param int $offset
      * @return array
      */
-    public function findEditors($blogRole, $limit, $offset)
+    public function findEditors(array $editorRoles, $limit, $offset)
     {
-        $query = $this->createQueryBuilder('u')
-            ->leftJoin('u.groups', 'g', Expr\Join::WITH, 'g.id = ' . $blogRole)
-            ->where('u.is_admin = :admin')
-            ->andWhere('u.status = :status')
-            ->andWhere('u.author IS NOT NULL')
-            ->andWhere('g.id IS NULL')
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $query = $this->createPublicUserQueryBuilder()
+            ->andWhere($expr->in('u.id', $this->getEditorIds($editorRoles)))
             ->orderBy('u.username', 'asc')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
-
-        $query->setParameters(array(
-            'admin' => 1,
-            'status' => User::STATUS_ACTIVE,
-        ));
 
         return $query->getResult();
     }
@@ -322,26 +302,16 @@ class UserRepository extends EntityRepository
     /**
      * Get editors count
      *
-     * @param int $blogRole
+     * @param array $editorRoles
      * @return int
      */
-    public function getEditorsCount($blogRole)
+    public function getEditorsCount(array $editorRoles)
     {
-        $query = $this->getEntityManager()
-            ->createQueryBuilder()
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $query = $this->createPublicUserQueryBuilder()
             ->select('COUNT(u)')
-            ->from($this->getEntityName(), 'u')
-            ->leftJoin('u.groups', 'g', Expr\Join::WITH, 'g.id = ' . $blogRole)
-            ->where('u.is_admin = :admin')
-            ->andWhere('u.status = :status')
-            ->andWhere('u.author IS NOT NULL')
-            ->andWhere('g.id IS NULL')
+            ->andWhere($expr->in('u.id', $this->getEditorIds($editorRoles)))
             ->getQuery();
-
-        $query->setParameters(array(
-            'admin' => 1,
-            'status' => User::STATUS_ACTIVE,
-        ));
 
         return $query->getSingleScalarResult();
     }
@@ -408,6 +378,72 @@ class UserRepository extends EntityRepository
         }
 
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Find by first character of username
+     *
+     * @param array $characters
+     * @param int $limit
+     * @param int $offset
+     * @return array
+     */
+    public function findByUsernameFirstCharacterIn(array $characters, $limit = 25, $offset = 0)
+    {
+        if (empty($characters)) {
+            throw new \InvalidArgumentException("Characters can't be empty");
+        }
+
+        $query = $this->createQueryBuilder('u')
+            ->where($this->getUsernameFirstCharacterWhere($characters))
+            ->orderBy('u.username', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
+     * Count by first character of username
+     *
+     * @param array $characters
+     * @return int
+     */
+    public function countByUsernameFirstCharacterIn(array $characters)
+    {
+        if (empty($characters)) {
+            throw new \InvalidArgumentException("Characters can't be empty");
+        }
+
+        $query = $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(u)')
+            ->from($this->getEntityName(), 'u')
+            ->where($this->getUsernameFirstCharacterWhere($characters))
+            ->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Get first characters constraint
+     *
+     * @param array $characters
+     * @return Doctrine\ORM\Query\Expr\Orx
+     */
+    private function getUsernameFirstCharacterWhere(array $characters)
+    {
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $characterWhere = $expr->orx();
+        foreach ($characters as $i => $character) {
+            $characterWhere->add($expr->like('LOWER(u.username)', $expr->literal($character . '%')));
+        }
+
+        $where = $expr->andX();
+        $where->add($expr->eq('u.status', User::STATUS_ACTIVE));
+        $where->add($expr->eq('u.is_public', true));
+        $where->add($characterWhere);
+        return $where;
     }
 
     /**

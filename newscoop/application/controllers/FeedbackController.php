@@ -82,7 +82,9 @@ class FeedbackController extends Zend_Controller_Action
 				$current_user = $this->_helper->service('user')->getCurrentUser();
                 $this->_helper->service->notifyDispatcher("image.delivered", array('user' => $current_user));
 
-				$this->view->response = $this->view->translate('File is uploaded and your message is sent.');
+				$this->sendMail($values);
+                
+                $this->view->response = $this->view->translate('File is uploaded and your message is sent.');
 			}
 			else if (isset($parameters['document_id'])) {
 				$values['attachment_type'] = 'document';
@@ -93,12 +95,16 @@ class FeedbackController extends Zend_Controller_Action
 
 				$current_user = $this->_helper->service('user')->getCurrentUser();
                 $this->_helper->service->notifyDispatcher("document.delivered", array('user' => $current_user));
+                
+                $this->sendMail($values);
 
 				$this->view->response = $this->view->translate('File is uploaded and your message is sent.');
 			}
 			else {
 				$feedbackRepository->save($feedback, $values);
 				$feedbackRepository->flush();
+                
+                $this->sendMail($values);
 
 				$this->view->response = $this->view->translate('Your message is sent.');
 			}
@@ -136,6 +142,67 @@ class FeedbackController extends Zend_Controller_Action
 			$this->view->response = $document->getAttachmentId();
 		}
 	}
+    
+    public function sendMail($values)
+    {
+        $toEmail = 'dienstpult@tageswoche.ch';
+        
+        $user = new User($values['user']);
+        $fromEmail = $user->getEmail();
+        
+        $message = $values['message'];
+        $message = $message.'<br>Von <a href="http://www.tageswoche.ch/user/profile/'.$user->getUsername().'">'.$user->getUsername().'</a> ('.$user->getRealName().')';
+        $message = $message.'<br>Gesendet von: <a href="'.$values['url'].'">'.$values['url'].'</a>';
+        
+        $mail = new Zend_Mail('utf-8');
+        
+        $mail->setSubject('Leserfeedback: '.$values['subject']);
+        $mail->setBodyHtml($message);
+        $mail->setFrom($fromEmail);
+        $mail->addTo($toEmail);
+        
+        if ($values['attachment_type'] == 'image') {
+            $item = new Image($values['attachment_id']);
+            $location = $item->getImageStorageLocation();
+            $contents = file_get_contents($location);
+            
+            $filename = $item->getImageFileName();
+            $tempFilename = explode('.', $filename);
+            $extension = $tempFilename[count($tempFilename) - 1];
+            
+            $at = new Zend_Mime_Part($contents);
+            if ($extension == 'gif') $at->type = 'image/gif';
+            if ($extension == 'jpg' || $extension == 'jpeg') $at->type = 'image/jpeg';
+            if ($extension == 'png') $at->type = 'image/png';
+            $at->disposition = Zend_Mime::DISPOSITION_INLINE;
+            $at->encoding    = Zend_Mime::ENCODING_BASE64;
+            $at->filename    = $filename;
+             
+            $mail->addAttachment($at);
+        }
+        else if ($values['attachment_type'] == 'document') {
+            $item = new Attachment($values['attachment_id']);
+            $location = $item->getStorageLocation();
+            $contents = file_get_contents($location);
+            
+            $filename = $item->getFileName();
+            
+            $at = new Zend_Mime_Part($contents);
+            $at->type = 'application/pdf';
+            $at->disposition = Zend_Mime::DISPOSITION_INLINE;
+            $at->encoding    = Zend_Mime::ENCODING_BASE64;
+            $at->filename    = $filename;
+             
+            $mail->addAttachment($at);
+        }
+        
+        try {
+			$mail->send();
+		}
+		catch (Exception $e) {
+		}
+        echo(' ');
+    }
 
     public function indexAction()
     {
