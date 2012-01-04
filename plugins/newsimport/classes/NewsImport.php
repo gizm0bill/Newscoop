@@ -557,6 +557,7 @@ class NewsImport
             if (!$uses_multidates) {
                 $article_data->setProperty('Fdate', $one_event['date']);
                 $article_data->setProperty('Ftime', $one_event['time']);
+                $article_data->setProperty('Fprices', $one_event['prices']);
             }
             if ($uses_multidates) {
 
@@ -572,6 +573,9 @@ class NewsImport
                 if (isset($one_event['multidates']) && $one_event['multidates']) {
                     $event_dates = $one_event['multidates'];
                 }
+                $prices_info = array();
+                $prices_line_sep = "\n<br />\n";
+
                 $newest_date = '0000-00-00';
                 foreach ($event_dates as $one_date) {
                     if ($one_date['canceled']) {
@@ -590,10 +594,15 @@ class NewsImport
                         'recurring' = false,
                     );
                     $repository->add($use_datetime, $article, 'Fmultidate', false, false);
+
+                    $prices_info[] = $one_date['date'];
+                    $prices_info[] = $one_date['prices'];
                 }
 
                 $article_data->setProperty('Fdate', $newest_date);
 
+                $prices_info_str = implode($prices_line_sep, $prices_info);
+                $article_data->setProperty('Fprices', $prices_info_str);
             }
 
             $article_data->setProperty('Fdate_time_text', $one_event['date_time_text']);
@@ -608,7 +617,7 @@ class NewsImport
 
             $article_data->setProperty('Fgenre', $one_event['genre']);
             $article_data->setProperty('Flanguages', $one_event['languages']);
-            $article_data->setProperty('Fprices', $one_event['prices']);
+
             $article_data->setProperty('Fminimal_age', $one_event['minimal_age']);
 
             if (!$uses_multidates) {

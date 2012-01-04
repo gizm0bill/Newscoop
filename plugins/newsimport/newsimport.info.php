@@ -329,6 +329,10 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             // geolocation as map POIs
         );
 
+        $evt_fields = array(
+            'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => true),
+        );
+
         $scr_fields = array(
             'movie_key' => array('type' => 'text', 'params' => array(), 'hidden' => true), // outer movie identifier, but can be empty
             // date/time - json
@@ -378,6 +382,11 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             $art_fields_use = $art_fields;
             if ($scr_type_name == $art_type_name) {
                 foreach ($scr_fields as $one_field_name => $one_field_params) {
+                    $art_fields_use[$one_field_name] = $one_field_params;
+                }
+            }
+            if ($evt_type_name == $art_type_name) {
+                foreach ($evt_fields as $one_field_name => $one_field_params) {
                     $art_fields_use[$one_field_name] = $one_field_params;
                 }
             }
