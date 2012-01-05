@@ -1,3 +1,4 @@
+{{ dynamic }}
 <link rel="stylesheet" href="{{ $view->baseUrl('/public/css/omnibox.css') }}" type="text/css" media="screen" />
 <div id="ob_wrapper">
 <script type="text/javascript" src="{{ $view->baseUrl('/js/plupload/js/plupload.full.js') }}"></script>
@@ -140,3 +141,4 @@ omnibox.setPublication('{{ $gimme->publication->identifier }}');
 omnibox.setSection('{{ $gimme->section->id }}');
 omnibox.setArticle('{{ $gimme->article->number }}');
 </script>
+{{ /dynamic }}
