@@ -163,6 +163,8 @@ var omnibox = {
             data = $.parseJSON(data);
             
             if (data.response == 'OK') {
+                $('.text_container').remove();
+                $('.top_title').remove();
                 omnibox.setMessage(omnibox.translations['login_successful']);
                 omnibox.showMessage();
                 document.location.hash = '#omnibox';
@@ -176,6 +178,9 @@ var omnibox = {
     },
     logout: function() {
         $.post(this.baseUrl + '/omnibox/logout/?format=json', {}, function(data) {
+            $('.text_container').remove();
+            $('.top_title').remove();
+            $('.top_user').remove();
             omnibox.setMessage(omnibox.translations['logout_successful']);
             omnibox.showMessage();
             document.location.reload();
