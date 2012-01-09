@@ -605,7 +605,19 @@ a.view-article:hover {
 }
 
 .canvas ul.users .created {
+    display: inline-block;
     color: #666;
+}
+
+.canvas .agent {
+    display: inline-block;
+    color: #666;
+    width: 15%;
+    min-width: 100px;
+}
+
+.canvas .users.pending .edit {
+    width: 15%;
 }
 
 .canvas .paginationControl {

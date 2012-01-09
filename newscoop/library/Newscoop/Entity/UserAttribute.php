@@ -13,6 +13,8 @@ namespace Newscoop\Entity;
  */
 class UserAttribute
 {
+    const HTTP_USER_AGENT = 'http_user_agent';
+
     /**
      * @Id @ManyToOne(targetEntity="User", inversedBy="attributes")
      * @JoinColumn(referencedColumnName="Id")
