@@ -95,6 +95,7 @@ class ArticleDatetimeRepository extends EntityRepository
      */
     public function add( $timeSet, $articleId, $fieldName = null, $recurring = null, $overwrite=true )
     {
+        $article = null;
         $insertValues = $this->buildInsertValues($timeSet, $recurring);
 
         $em = $this->getEntityManager();
@@ -103,7 +104,7 @@ class ArticleDatetimeRepository extends EntityRepository
             $article = $em->getRepository('Newscoop\Entity\Article')->findOneBy(array('number' => $articleId));
             /* @var $article Newscoop\Entity\Article */
         }
-        elseif ($articleId instanceof Article) {
+        elseif ($articleId instanceof \Article) {
             $article = $articleId;
         }
         if (is_null($article)) {

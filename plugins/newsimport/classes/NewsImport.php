@@ -1,6 +1,7 @@
 <?php
 
 //use Newscoop\ArticleDatetime as ArticleDatetimeHelper;
+use Newscoop\ArticleDatetime as ArticleDatetime;
 
 /*
 use Newscoop,
@@ -566,8 +567,11 @@ class NewsImport
                 $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
                 //$repository = Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\ArticleDatetime');
                 $repository->deleteByArticle($article->m_data['Number']);
-                $em->flush();
-
+                try {
+                    $em->flush();
+                }
+                catch (Exception $exc) {
+                }
                 // set new multidates
                 $event_dates = array();
                 if (isset($one_event['multidates']) && $one_event['multidates']) {
@@ -588,12 +592,14 @@ class NewsImport
 
                     //$use_datetime = new ArticleDatetimeHelper(
                     $use_datetime = new ArticleDatetime(
-                        'start_date' => $one_date['date'],
-                        'end_date' => $one_date['date'],
-                        'start_time' => $one_date['time'],
-                        'recurring' = false,
+                        array(
+                            'start_date' => $one_date['date'],
+                            'end_date' => $one_date['date'],
+                            'start_time' => $one_date['time'],
+                            'recurring' => false,
+                        )
                     );
-                    $repository->add($use_datetime, $article, 'Fmultidate', false, false);
+                    $repository->add($use_datetime, $article->m_data['Number'], 'schedule', false, false);
 
                     $prices_info[] = $one_date['date'];
                     $prices_info[] = $one_date['prices'];
@@ -900,8 +906,8 @@ class NewsImport
         if (!isset($p_limits['dates']['past'])) {
             return;
         }
-
-        $passed_span = max(0, $p_limits['dates']['past']);
+        //$passed_span = max(0, $p_limits['dates']['past']);
+        $passed_span = 0 + $p_limits['dates']['past'];
         if (!$passed_span) {
             return;
         }
@@ -954,7 +960,9 @@ class NewsImport
                 $one_rem_img = $one_rem_img_link->getImage();
                 $one_rem_img_link->delete();
                 if (0 == count(ArticleImage::GetArticlesThatUseImage($one_rem_img->getImageId()))) {
-                    self::$s_img_cache->removeImageFromCache($one_rem_img->getImageId());
+                    if (self::$s_img_cache) {
+                        self::$s_img_cache->removeImageFromCache($one_rem_img->getImageId());
+                    }
                     $one_rem_img->delete();
                 }
             }

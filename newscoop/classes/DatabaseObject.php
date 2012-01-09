@@ -1123,7 +1123,11 @@ class DatabaseObject
             return;
         }
 
-        self::$eventDispatcher->notify(new sfEvent($subject, $event, $params));
+        try {
+            self::$eventDispatcher->notify(new sfEvent($subject, $event, $params));
+        }
+        catch (Exception $exc) {
+        }
     }
 
     /**
