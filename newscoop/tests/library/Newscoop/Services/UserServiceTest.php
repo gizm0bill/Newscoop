@@ -9,10 +9,13 @@ namespace Newscoop\Services;
 
 use Newscoop\Entity\User,
     Newscoop\Entity\User\Group,
+    Newscoop\Entity\UserAttribute,
     Newscoop\Entity\Author;
 
 class UserServiceTest extends \RepositoryTestCase
 {
+    const HTTP_USER_AGENT = 'agent';
+
     /** @var Newscoop\Services\UserService */
     protected $service;
 
@@ -47,6 +50,8 @@ class UserServiceTest extends \RepositoryTestCase
         $this->user->setUsername('test');
         $this->user->setFirstName('Foo');
         $this->user->setLastName('Bar');
+
+        $_SERVER['HTTP_USER_AGENT'] = self::HTTP_USER_AGENT;
     }
 
     public function testUser()
@@ -205,6 +210,7 @@ class UserServiceTest extends \RepositoryTestCase
 
         $next = $this->service->createPending('email@example.com');
         $this->assertEquals($user->getId(), $next->getId());
+        $this->assertEquals(self::HTTP_USER_AGENT, $user->getAttribute(UserAttribute::HTTP_USER_AGENT));
     }
 
     public function testSavePending()
