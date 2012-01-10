@@ -111,6 +111,7 @@ class Admin_AclController extends Zend_Controller_Action
             'publish' => getGS('publish'),
             'translate' => getGS('translate'),
             'view' => getGS('view'),
+            'unlock' => getGS('unlock'),
 
             // editor related
             'bold' => getGS('bold'),
@@ -172,7 +173,7 @@ class Admin_AclController extends Zend_Controller_Action
 
             return;
         }
-
+        
         $this->view->role = $role;
         $this->view->groups = $this->groups;
         $this->view->resources = $this->resources;
