@@ -1,0 +1,1 @@
+INSERT INTO `liveuser_rights` (`right_id`, `area_id`, `right_define_name`, `has_implied`) VALUES (104,0,'UnlockArticle',1);

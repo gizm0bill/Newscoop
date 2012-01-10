@@ -54,6 +54,7 @@ class PermissionToAcl
         'Publish',
         'Enable',
         'Sync',
+        'Unlock'
     );
 
     /** @var array */
