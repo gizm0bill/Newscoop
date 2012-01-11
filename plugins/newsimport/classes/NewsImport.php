@@ -356,6 +356,17 @@ class NewsImport
 	 * @return void
 	 */
     public static function StoreEventData($p_events, $p_source) {
+/*
+    for multi-date based events:
+    a) multi-dates ... for frontend usage
+        * add/update dates from the given data, set them as active
+        * set events which are marked as canceled, to be passive
+        * set possible left old dates as passive
+        * remove those dates that are too old
+    b) check dates ... for the pruning phase
+        * set the (checked) date as the current date
+        * if already no dates left, set (checked) date as an old (enough) one
+*/
         if (empty($p_events)) {
             return;
         }
@@ -891,6 +902,15 @@ class NewsImport
 	 * @return void
 	 */
     public static function PruneEventData($p_source, $p_limits) {
+/*
+    for multi-date based events:
+    * take events with (moderately) old checked dates
+        ... were not updated last (say, two) imports,
+            thus the whole tour is either withdrawn or passed
+    * set all its dates as passive (if not already set)
+    * remove too old (according to limits) dates
+    * remove events without dates
+*/
 
         $art_provider = $p_source['provider_id'];
 

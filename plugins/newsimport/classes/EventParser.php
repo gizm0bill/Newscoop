@@ -503,7 +503,7 @@ class EventData_Parser_SimpleXML {
                         $one_cancel_field = $one_cancel_spec['field'];
                         $one_cancel_value = $one_cancel_spec['value'];
 
-                        if ($event->$one_cancel_field == $one_cancel_value) {
+                        if (strtolower('' . $event->$one_cancel_field) == strtolower($one_cancel_value)) {
                             $e_canceled = true;
                         }
                     }
