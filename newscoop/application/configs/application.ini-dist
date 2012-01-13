@@ -248,6 +248,9 @@ characterGroup.y = "y ÿ"
 image.cache_url = "images/cache"
 image.cache_path = APPLICATION_PATH "/../images/cache"
 
+image.cache_url = "images/cache"
+image.cache_path = APPLICATION_PATH "/../images/cache"
+
 [staging : production]
 
 [testing : production]
