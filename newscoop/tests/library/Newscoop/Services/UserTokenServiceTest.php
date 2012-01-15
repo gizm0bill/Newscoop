@@ -47,6 +47,7 @@ class UserTokenServiceTest extends \RepositoryTestCase
     public function testCheckTokenNotExisting()
     {
         $this->assertFalse($this->service->checkToken($this->user, 'qwerty', 'test'));
+        $this->assertFalse($this->service->hasToken($this->user, 'qwerty', 'test'));
     }
 
     public function testCheckTokenValid()
@@ -58,17 +59,17 @@ class UserTokenServiceTest extends \RepositoryTestCase
         $this->assertTrue($this->service->checkToken($this->user, 'qwerty', 'test'));
     }
 
+    public function testCheckMaxDate()
+    {
+        $this->generateToken('test', 'qwerty', '-5 days 1 min');
+        $this->assertTrue($this->service->checkToken($this->user, 'qwerty', 'test'));
+    }
+
     public function testCheckInvalidDate()
     {
-        $token = new UserToken($this->user, 'test', 'qwerty');
-        $this->em->persist($token);
-        $this->em->flush();
-
-        $property = new \ReflectionProperty($token, 'created');
-        $property->setAccessible(true);
-        $property->setValue($token, new \DateTime('-3 days'));
-
+        $this->generateToken('test', 'qwerty', '-5days');
         $this->assertFalse($this->service->checkToken($this->user, 'qwerty', 'test'));
+        $this->assertTrue($this->service->hasToken($this->user, 'qwerty', 'test'));
     }
 
     public function testInvalidateTokens()
@@ -76,5 +77,24 @@ class UserTokenServiceTest extends \RepositoryTestCase
         $token = $this->service->generateToken($this->user, 'action');
         $this->service->invalidateTokens($this->user, 'action');
         $this->assertFalse($this->service->checkToken($this->user, $token, 'action'));
+    }
+
+    /**
+     * Generates token with given date
+     *
+     * @param string $action
+     * @param string $token
+     * @param string $created
+     * @return Newscoop\Entity\Token
+     */
+    private function generateToken($action, $token, $created)
+    {
+        $token = new UserToken($this->user, $action, $token);
+        $property = new \ReflectionProperty($token, 'created');
+        $property->setAccessible(true);
+        $property->setValue($token, new \DateTime($created));
+        $this->em->persist($token);
+        $this->em->flush();
+        return $token;
     }
 }
