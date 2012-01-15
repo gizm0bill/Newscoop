@@ -86,26 +86,12 @@ class RegisterController extends Zend_Controller_Action
 
     public function confirmAction()
     {
-        $user = $this->_helper->service('user')->find($this->_getParam('user'));
-        if (empty($user)) {
-            $this->_helper->flashMessenger(array('error', "User not found"));
-            $this->_helper->redirector('index', 'index', 'default');
-        }
-
-        if (!$user->isPending()) {
-            $this->_helper->flashMessenger(array('error', "User has been activated"));
-            $this->_helper->redirector('index', 'index', 'default');
-        }
-
-        $token = $this->_getParam('token', false);
-        if (!$token) {
-            $this->_helper->flashMessenger(array('error', "No token provided"));
-            $this->_helper->redirector('index', 'index', 'default');
-        }
-
-        if (!$this->_helper->service('user.token')->checkToken($user, $token, 'email.confirm')) {
-            $this->_helper->flashMessenger(array('error', "Invalid token"));
-            $this->_helper->redirector('index', 'index', 'default');
+        $user = $this->findPendingUser();
+        $token = $this->findUserToken($user);
+        if (!$this->_helper->service('user.token')->checkToken($user, $token, 'email.confirm')) { // expired
+            $this->_helper->service('email')->sendConfirmationToken($user);
+            $this->render('expired');
+            return;
         }
 
         $form = new Application_Form_Confirm();
@@ -258,6 +244,10 @@ class RegisterController extends Zend_Controller_Action
         $this->view->result = '0';
     }
 
+    public function expiredAction()
+    {
+    }
+
     /**
      * Notify event dispatcher about new user
      *
@@ -270,5 +260,43 @@ class RegisterController extends Zend_Controller_Action
             ->notify(new sfEvent($this, 'user.register', array(
             'user' => $user,
         )));
+    }
+
+    /**
+     * Find pending user
+     *
+     * @return Newscoop\Entity\User $user
+     */
+    private function findPendingUser()
+    {
+        $user = $this->_helper->service('user')->find($this->_getParam('user'));
+        if (empty($user)) {
+            $this->_helper->flashMessenger(array('error', "User not found"));
+            $this->_helper->redirector('index', 'index', 'default');
+        }
+
+        if (!$user->isPending()) {
+            $this->_helper->flashMessenger(array('error', "User has been activated"));
+            $this->_helper->redirector('index', 'index', 'default');
+        }
+
+        return $user;
+    }
+
+    /**
+     * Find token
+     *
+     * @param Newscoop\Entity\User $user
+     * @return string $token
+     */
+    private function findUserToken(User $user)
+    {
+        $token = $this->_getParam('token', false);
+        if (!$token || !$this->_helper->service('user.token')->hasToken($user, $token, 'email.confirm')) {
+            $this->_helper->flashMessenger(array('error', "Invalid token"));
+            $this->_helper->redirector('index', 'index', 'default');
+        }
+
+        return $token;
     }
 }
