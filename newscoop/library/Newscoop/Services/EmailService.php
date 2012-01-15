@@ -53,7 +53,7 @@ class EmailService
             'format' => null,
         ));
 
-        $this->send($this->view->placeholder(self::PLACEHOLDER_SUBJECT), $message, $user->getEmail());
+        $this->send($this->view->placeholder(self::PLACEHOLDER_SUBJECT), $message, $user->getEmail(), !empty($this->config['from_confirmation']) ? $this->config['from_confirmation'] : null);
     }
 
     /**
