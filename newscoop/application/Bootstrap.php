@@ -165,6 +165,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('tree', 'Newscoop\Tree\TreeService')
             ->addArgument(new sfServiceReference('em'));
 
+        $container->register('view.helper.thumbnail', 'Newscoop\Image\ThumbnailViewHelper')
+            ->addArgument(new sfServiceReference('image'));
+
         Zend_Registry::set('container', $container);
         return $container;
     }
