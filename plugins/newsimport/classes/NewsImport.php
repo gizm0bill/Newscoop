@@ -362,10 +362,10 @@ class NewsImport
         * add/update dates from the given data, set them as active
         * set events which are marked as canceled, to be passive
         * set possible left old dates as passive
-        * remove those dates that are too old
+        //* remove those dates that are too old
     b) check dates ... for the pruning phase
         * set the (checked) date as the current date
-        * if already no dates left, set (checked) date as an old (enough) one
+        //* if already no dates left, set (checked) date as an old (enough) one
 */
         if (empty($p_events)) {
             return;
@@ -572,30 +572,97 @@ class NewsImport
                 $article_data->setProperty('Fprices', $one_event['prices']);
             }
             if ($uses_multidates) {
+                $current_date = date('Y-m-d');
+                //$limit_date = date('Y-m-d', (time() - ($_lim_days * 86400)));
 
                 // remove old multidates
                 $em = Zend_Registry::get('container')->getService('em');
                 $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
                 //$repository = Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\ArticleDatetime');
-                $repository->deleteByArticle($article->m_data['Number']);
+                //$repository->deleteByArticle($article->m_data['Number']);
+
+                $cur_voided_dates = array();
+                //$cur_voided_dates = $article_data->getFieldValue('voided');
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'field_name' => 'voided')) as $one_void_entry) {
+                    //file_put_contents('/tmp/md_entity_001', json_encode($one_date_entry), FILE_APPEND);
+                    $cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                    $em->remove($one_void_entry);
+                }
+
+                // take all previously set dates
+                $all_event_dates = array();
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'field_name' => 'schedule')) as $one_date_entry) {
+                    //file_put_contents('/tmp/md_entity_001', json_encode($one_date_entry), FILE_APPEND);
+                    $old_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
+
+/*
+                    $old_voided = true;
+                    if ($old_date_str < $current_date) {
+                        //$old_voided = false; // should we set passed events as non-voided?
+                    }
+*/
+
+                    $old_voided = false;
+                    //if (false !== stristr($cur_voided_dates, $old_date_str)) {
+                    if (in_array($old_date_str, $cur_voided_dates) {
+                        $old_voided = true;
+                    }
+
+                    $old_info = array(
+                        'row_id' => $one_date_entry->getId(),
+                        'voided' => $old_voided,
+                        'prices' => '',
+                        'date' => $old_date_str,
+                        'time' => $one_date_entry->getStartTime(),
+                    );
+                    $all_event_dates[$old_date_str] = $old_info;
+                }
+/*
                 try {
                     $em->flush();
                 }
                 catch (Exception $exc) {
                 }
+*/
                 // set new multidates
-                $event_dates = array();
+                $new_event_dates = array();
                 if (isset($one_event['multidates']) && $one_event['multidates']) {
-                    $event_dates = $one_event['multidates'];
+                    $new_event_dates = $one_event['multidates'];
                 }
                 $prices_info = array();
                 $prices_line_sep = "\n<br />\n";
+                $voided_info = array();
+                //$voided_line_sep = "\n<br />\n";
+
+                foreach ($new_event_dates as $one_date) {
+                    $new_voided = false;
+                    if ($one_date['canceled']) {
+                        $new_voided = true;
+                    }
+
+                    $new_info = array(
+                        'row_id' => 0,
+                        'voided' => $new_voided,
+                        'prices' => $one_date['prices'],
+                        'date' => $one_date['date'],
+                        'time' => $one_date['time'],
+                    );
+                    if (array_key_exists($one_date['date'], $all_dates)) {
+                        $new_info['row_id'] = $all_dates[$one_date['date']]['row_id'];
+                    }
+
+                    $all_event_dates[$one_date['date']] = $new_info;
+                }
 
                 $newest_date = '0000-00-00';
-                foreach ($event_dates as $one_date) {
-                    if ($one_date['canceled']) {
-                        continue;
-                    }
+                //foreach ($event_dates as $one_date) {
+                foreach ($all_event_dates as $one_date) {
+                    //if ($one_date['canceled']) {
+                    //    continue;
+                    //}
+                    //if ($limit_date > $one_date['date']) {
+                    //    continue;
+                    //}
 
                     if ($newest_date < $one_date['date']) {
                         $newest_date = $one_date['date'];
@@ -610,16 +677,40 @@ class NewsImport
                             'recurring' => false,
                         )
                     );
-                    $repository->add($use_datetime, $article->m_data['Number'], 'schedule', false, false);
+                    if (empty($one_date['row_id'])) {
+                        $repository->add($use_datetime, $article->getArticleNumber(), 'schedule', false, false);
+                    }
+                    else {
+                        $repository->update($one_date['row_id'], $use_datetime, $article->getArticleNumber(), 'schedule', false);
+                    }
 
-                    $prices_info[] = $one_date['date'];
-                    $prices_info[] = $one_date['prices'];
+                    if (!empty($one_date['prices'])) {
+                        $prices_info[] = $one_date['date'];
+                        $prices_info[] = $one_date['prices'];
+                    }
+
+                    if ($one_date['voided']) {
+                        $voided_info[] = $one_date['voided'];
+                    }
+
                 }
 
-                $article_data->setProperty('Fdate', $newest_date);
+                //$article_data->setProperty('Fdate', $newest_date);
+                $article_data->setProperty('Fdate', $current_date);
 
                 $prices_info_str = implode($prices_line_sep, $prices_info);
                 $article_data->setProperty('Fprices', $prices_info_str);
+
+                //$voided_info_str = implode($voided_line_sep, $voided_info);
+                //$article_data->setProperty('Fvoided', $voided_info_str);
+                foreach ($voided_info as $one_voided_date) {
+                    $void_datetime = array(
+                        'start_date' => $one_voided_date,
+                        'end_date' => $one_voided_date,
+                        'recurring' => false,
+                    );
+                    $repository->add($void_datetime, $article->getArticleNumber(), 'voided', false, false);
+                }
             }
 
             $article_data->setProperty('Fdate_time_text', $one_event['date_time_text']);
@@ -904,13 +995,19 @@ class NewsImport
     public static function PruneEventData($p_source, $p_limits) {
 /*
     for multi-date based events:
-    * take events with (moderately) old checked dates
+    * take all events
+        * those with (moderately) old checked dates
         ... were not updated last (say, two) imports,
             thus the whole tour is either withdrawn or passed
-    * set all its dates as passive (if not already set)
+        ... set all its dates as passive (if not already set)
     * remove too old (according to limits) dates
     * remove events without dates
 */
+
+        $art_multidates = false;
+        if (isset($p_source['multi_dates']) && (!empty($p_source['multi_dates']))) {
+            $art_multidates = true;
+        }
 
         $art_provider = $p_source['provider_id'];
 
@@ -937,16 +1034,28 @@ class NewsImport
 
         // Load all already passed event articles of that feed.
         $p_count = 0;
-        $event_art_list = Article::GetList(array(
-            new ComparisonOperation('idlanguage', new Operator('is', 'sql'), $art_lang),
-            //new ComparisonOperation('IdPublication', new Operator('is', 'sql'), $art_publication),
-            //new ComparisonOperation('NrIssue', new Operator('is', 'sql'), $art_issue),
-            //new ComparisonOperation('NrSection', new Operator('is', 'sql'), $art_section),
-            new ComparisonOperation('Type', new Operator('is', 'sql'), $art_type),
-            //new ComparisonOperation('' . $art_type . '.date', new Operator('smaller_equal', 'sql'), $passed_date), // for newer (but not used) way
-            new ComparisonOperation('' . $art_type . '.date', new Operator('smaller', 'sql'), $passed_date), // for older (but probably safer) way
-            new ComparisonOperation('' . $art_type . '.provider_id', new Operator('is', 'sql'), $art_provider),
-        ), null, null, 0, $p_count, true);
+
+        $event_art_list = array();
+
+        if ($art_multidates) {
+            $event_art_list = Article::GetList(array(
+                new ComparisonOperation('idlanguage', new Operator('is', 'sql'), $art_lang),
+                new ComparisonOperation('Type', new Operator('is', 'sql'), $art_type),
+                new ComparisonOperation('' . $art_type . '.provider_id', new Operator('is', 'sql'), $art_provider),
+            ), null, null, 0, $p_count, true);
+        }
+        else {
+            $event_art_list = Article::GetList(array(
+                new ComparisonOperation('idlanguage', new Operator('is', 'sql'), $art_lang),
+                //new ComparisonOperation('IdPublication', new Operator('is', 'sql'), $art_publication),
+                //new ComparisonOperation('NrIssue', new Operator('is', 'sql'), $art_issue),
+                //new ComparisonOperation('NrSection', new Operator('is', 'sql'), $art_section),
+                new ComparisonOperation('Type', new Operator('is', 'sql'), $art_type),
+                //new ComparisonOperation('' . $art_type . '.date', new Operator('smaller_equal', 'sql'), $passed_date), // for newer (but not used) way
+                new ComparisonOperation('' . $art_type . '.date', new Operator('smaller', 'sql'), $passed_date), // for older (but probably safer) way
+                new ComparisonOperation('' . $art_type . '.provider_id', new Operator('is', 'sql'), $art_provider),
+            ), null, null, 0, $p_count, true);
+        }
 
         $event_data_test = null;
         if (!is_array($event_art_list) || (0 == count($event_art_list))) {
@@ -959,16 +1068,97 @@ class NewsImport
         }
         $Campsite['OMIT_LOGGING'] = true;
 
+        $current_date = date('Y-m-d');
+        $voided_limit_date = date('Y-m-d', (time() - 86400)); // those not checked two days at all are voided
         foreach ($event_art_list as $event_art_rem) {
-
+            $remove_art = false;
             $event_data_rem = $event_art_rem->getArticleData();
-            try {
-                //if (($event_data_rem->getFieldValue('date')) > $passed_date) { // for newer (but not used) way
-                if (($event_data_rem->getFieldValue('date')) >= $passed_date) { // for older (but probably safer) way
+
+            if ($art_multidates) {
+
+                $em = Zend_Registry::get('container')->getService('em');
+                $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+
+                $all_event_dates = array();
+                $rem_event_dates = array();
+
+                $cur_voided_dates = array();
+                //$cur_voided_dates = $event_data_rem->getFieldValue('voided');
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'field_name' => 'voided')) as $one_void_entry) {
+                    //file_put_contents('/tmp/md_entity_001', json_encode($one_date_entry), FILE_APPEND);
+                    $cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                    $em->remove($one_void_entry);
+                }
+
+                $new_voided_dates = array();
+
+                foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'field_name' => 'schedule')) as $one_date_entry) {
+                    //file_put_contents('/tmp/md_entity_002', json_encode($one_date_entry), FILE_APPEND);
+                    $one_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
+
+                    if ($passed_date && ($one_date_str < $passed_date)) {
+                        $em->remove($one_date_entry);
+                        continue;
+                    }
+
+                    //if (false !== stristr($cur_voided_dates, $one_date_str)) {
+                    if (in_array($one_date_str, $cur_voided_dates) {
+                        $new_voided_dates[] = $one_date_str;
+                    }
+
+                    $all_event_dates[] = $one_date_str;
+                }
+
+                if (($event_data_rem->getFieldValue('date')) < $voided_limit_date) {
+                    foreach ($all_event_dates as $one_date_str) {
+                        if ($current_date <= $one_date_str) {
+                            if (!in_array($one_date_str, $new_voided_dates)) {
+                                $new_voided_dates[] = $one_date_str;
+                            }
+                        }
+                    }
+                    //sort($new_voided_dates);
+                }
+
+                //if (0 < count($all_event_dates)) {
+                //    $voided_line_sep = "\n<br />\n";
+                //    $voided_info_str = implode($voided_line_sep, $new_voided_dates);
+                //    $event_data_rem->setProperty('Fvoided', $voided_info_str);
+                //}
+                foreach ($new_voided_dates as $one_voided_date) {
+                    $void_datetime = array(
+                        'start_date' => $one_voided_date,
+                        'end_date' => $one_voided_date,
+                        'recurring' => false,
+                    );
+                    $repository->add($void_datetime, $article->getArticleNumber(), 'voided', false, false);
+                }
+
+                if (0 == count($all_event_dates)) {
+                    $remove_art = true;
+                }
+
+                $dates_left_count = 0;
+
+            }
+            else {
+
+                $remove_art = true;
+                try {
+                    //if (($event_data_rem->getFieldValue('date')) > $passed_date) { // for newer (but not used) way
+                    if (($event_data_rem->getFieldValue('date')) >= $passed_date) { // for older (but probably safer) way
+                        $remove_art = false;
+                        //continue;
+                    }
+                }
+                catch (Exception $exc) {
+                    //$remove_art = false;
                     continue;
                 }
+
             }
-            catch (Exception $exc) {
+
+            if (!$remove_art) {
                 continue;
             }
 

@@ -330,7 +330,8 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
         );
 
         $evt_fields = array(
-            'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => true),
+            'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
+            'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone
         );
 
         $scr_fields = array(
