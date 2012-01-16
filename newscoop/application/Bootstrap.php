@@ -72,7 +72,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->setService('view', $this->getResource('view'));
 
         $container->register('image', 'Newscoop\Image\ImageService')
-            ->addArgument('%image%');
+            ->addArgument('%image%')
+            ->addArgument(new sfServiceReference('em'));
 
         $container->register('user', 'Newscoop\Services\UserService')
             ->addArgument('%config%')
@@ -167,6 +168,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $container->register('view.helper.thumbnail', 'Newscoop\Image\ThumbnailViewHelper')
             ->addArgument(new sfServiceReference('image'));
+
+        $container->register('image.rendition', 'Newscoop\Image\RenditionService')
+            ->addArgument(new sfServiceReference('em'));
 
         Zend_Registry::set('container', $container);
         return $container;
