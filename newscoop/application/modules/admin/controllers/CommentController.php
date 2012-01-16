@@ -92,6 +92,12 @@ class Admin_CommentController extends Zend_Controller_Action
                 $articleNo = $comment->getArticleNumber();
                 $commentLang = $comment->getLanguage()->getId();
                 $article = new Article($commentLang, $articleNo);
+                
+                $goodComment = 0;
+                $goodCommentArticles = \Article::GetByName('good_comment_'.$comment->getId());
+                if (count($goodCommentArticles) > 0) {
+                    $goodComment = 1;
+                }
 
                 $forum = $comment->getForum();
                 $section = $thread->getSection();
@@ -121,6 +127,7 @@ class Admin_CommentController extends Zend_Controller_Action
                                                 'message' => $comment->getMessage(), 'likes' => '', 'dislikes' => '',
                                                 'status' => $comment->getStatus(),
                                                 'recommended' => $comment->getRecommended(),
+                                                'good_comment' => $goodComment,
                                                 'action' => array('update' => $view->url(
                                                     array('action' => 'update', 'format' => 'json')),
                                                                   'reply' => $view->url(
@@ -265,6 +272,33 @@ class Admin_CommentController extends Zend_Controller_Action
         $this->view->status = 200;
         $this->view->message = "succcesful";
     }
+    
+    /**
+     * Action for setting a status
+     */
+    public function unsetGoodAction()
+    {
+        $this->getHelper('contextSwitch')->addActionContext('unset-good', 'json')->initContext();
+        if (!SecurityToken::isValid()) {
+            $this->view->status = 401;
+            $this->view->message = getGS('Invalid security token!');
+            return;
+        }
+
+        $articleName = 'good_comment_'.$this->getRequest()->getParam('comment');
+        
+        $goodCommentArticles = \Article::GetByName($articleName);
+        foreach ($goodCommentArticles as $goodCommentArticle) {
+            $articleLanguages = $goodCommentArticle->getLanguages();
+            foreach ($articleLanguages as $articleLanguage) {
+                $article = new Article($articleLanguage->getLanguageId(), $goodCommentArticle->getArticleNumber());
+                $article->delete();
+            }
+        }
+
+        $this->view->status = 200;
+        $this->view->message = "succcesful";
+    }
 
     /**
      *
@@ -335,6 +369,13 @@ class Admin_CommentController extends Zend_Controller_Action
         foreach ($comments as $comment) {
             /* @var $comment Newscoop\Entity\Comment */
             $commenter = $comment->getCommenter();
+            
+            $goodComment = 0;
+            $goodCommentArticles = \Article::GetByName('good_comment_'.$comment->getId());
+            if (count($goodCommentArticles) > 0) {
+                $goodComment = 1;
+            }
+            
             $result[] = array(
                 'name' => $commenter->getName(),
                 'email' => $commenter->getEmail(),
@@ -345,6 +386,7 @@ class Admin_CommentController extends Zend_Controller_Action
                 'message' => $comment->getMessage(),
                 'time_created' => $comment->getTimeCreated()->format('Y-m-d H:i:s'),
                 'recommended_toggle' => (int) !$comment->getRecommended(),
+                'good_comment' => $goodComment
             );
         }
 

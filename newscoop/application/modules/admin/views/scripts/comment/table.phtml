@@ -178,6 +178,15 @@
                 <li><a href="javascript:;" id="unrecommend_{{comment.id}}" class="actionButton action-unrecommend"><?php putGS('Unrecommend'); ?></a></li>
                 {% endif %}
                 
+                {% if(comment.good_comment == 0) %}
+                <!--<li><a href="javascript:document.location='../admin/articles/add_from_comment.php?f_comment_id={{comment.id}}&f_publication_id=2&f_issue_number=13&f_section_number=30&f_article_language=1&f_article_type=good_comment';" id="make_good_comment_{{comment.id}}" class="actionButton"><?php putGS('Good comment'); ?></a></li>-->
+                <li><a href="javascript:document.location='../admin/articles/add_from_comment.php?f_comment_id={{comment.id}}&f_publication_id=1&f_issue_number=1&f_section_number=85&f_article_language=5&f_article_type=good_comment';" id="make_good_comment_{{comment.id}}" class="actionButton"><?php putGS('Good comment'); ?></a></li>
+                {% endif %}
+                
+                {% if(comment.good_comment == 1) %}
+                <li><a href="javascript:;" id="unset_good_{{comment.id}}" class="actionButton action-unset-good"><?php putGS('Unset good comment'); ?></a></li>
+                {% endif %}
+                
                 {% endif %}
                 <!--
                 <li><a href="javascript:;" class="action-rating link icon-link"><span class="icon ui-icon-star"></span><?php putGS('Add rating'); ?></a></li>
