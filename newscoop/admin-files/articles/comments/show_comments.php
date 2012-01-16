@@ -6,6 +6,7 @@ if (!$g_user->hasPermission('CommentModerate')) {
 ?>
 
 <?php
+
 // add token
 echo SecurityToken::FormParameter();
 
@@ -89,11 +90,22 @@ foreach ($hiddens as $name) {
             )); ?>/comment/${id}/recommended/${recommended_toggle}" class="ui-state-default text-button comment-recommend status-${recommended_toggle}"><?php putGS('Recommend'); ?></a>
 
             <a href="<?php echo camp_html_article_url($articleObj, $f_language_selected, 'comments/reply.php', '', '&f_comment_id=${id}'); ?>" class="ui-state-default text-button"><?php putGS('Reply to comment'); ?></a>
+            
+            [good_comment_button_placeholder]
+            
         </dd>
         <?php endif; //inEditMode?>
       </dl>
     </div>
 </fieldset>
+
+<fieldset id="set-good-comment-button-prototype" class="plain comments-block" style="display:none">
+    <a href="../admin/articles/add_from_comment.php?f_comment_id={id}&f_publication_id=1&f_issue_number=1&f_section_number=85&f_article_language=5&f_article_type=good_comment" class="ui-state-default text-button"><?php putGS('Good comment'); ?></a>
+</fieldset>
+<fieldset id="unset-good-comment-button-prototype" class="plain comments-block" style="display:none">
+    <a href="javascript:;" class="unset-good-comment ui-state-default text-button"><?php putGS('Unset good comment'); ?></a>
+</fieldset>
+
 <p style="display:none"><?php putGS('No comments posted.'); ?></p>
 <form id="comment-moderate" action="../comment/set-status/format/json" method="POST"></form>
 <script type="text/javascript">
@@ -140,6 +152,14 @@ function loadComments() {
 			}
 
 			var template = $('#comment-prototype').html();
+            
+            if (comment.good_comment == 0) {
+                template = template.replace('[good_comment_button_placeholder]', $('#set-good-comment-button-prototype').html());
+            }
+            else {
+                template = template.replace('[good_comment_button_placeholder]', $('#unset-good-comment-button-prototype').html());
+            }
+            
 			for(var key in comment) {
 				if(key == 'status') {
                     template = template.replace(new RegExp("\\$({|%7B)"+comment[key]+"_checked(}|%7D)","g"),'checked="true"');
@@ -226,6 +246,25 @@ $('.comment-update').live('click',function(){
 
     var res_handle = function(data) {
         flashMessage('<?php putGS('Comment updated.'); ?>');
+    };
+
+    callServer(call_url, call_data, res_handle, true);
+});
+
+$('.unset-good-comment').live('click',function(){
+	var comment;
+
+    comment = $(this).parents('dl');
+
+    var call_data = {
+       "comment": comment.attr('id').match(/\d+/)[0]
+    };
+
+    var call_url = '../comment/unset-good/format/json';
+
+    var res_handle = function(data) {
+        flashMessage('<?php putGS('Comment updated.'); ?>');
+        loadComments();
     };
 
     callServer(call_url, call_data, res_handle, true);
