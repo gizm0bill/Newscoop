@@ -384,6 +384,24 @@ class ArticlesList extends ListObject
                     }
                     break;
     		    default:
+                        $foundField = false;
+                        foreach (self::$s_articleTypes as $atype) {
+                        if (count($dynaBlaster = self::GetDynamicFields($atype, $parameter))) {
+                            $foundField = current($dynaBlaster)->getType();
+                            break;
+                        }
+                        }
+                        if (!$foundField) {
+                            CampTemplate::singleton()->trigger_error("invalid parameter $parameter in list_articles", $p_smarty);
+                            break;
+                        }
+                        switch ($foundField)
+                        {
+                            case 'complex_date' :
+                            $this->m_constraints[] = new ComparisonOperation('complex_date', new Operator('is', 'string'), array($parameter=>$value));
+                            break;
+                            default: break;
+                        }
     				CampTemplate::singleton()->trigger_error("invalid parameter $parameter in list_articles", $p_smarty);
     		}
     	}

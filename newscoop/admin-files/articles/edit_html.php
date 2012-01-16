@@ -77,7 +77,6 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
             . "&f_article_number=$f_article_number&f_language_id=$f_language_id&f_language_selected=$f_language_selected";
     }
 }
-
 ?>
   <!-- BEGIN Article Title and Saving buttons bar //-->
   <div class="toolbar clearfix">
@@ -312,6 +311,8 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
               <?php if ($inViewMode) { ?>disabled<?php } ?> />
           </li>
         <?php
+            } elseif ( $dbColumn->getType() == ArticleTypeField::TYPE_COMPLEX_DATE ) {
+                $hasMultiDates = true;
             }
         }
         ?>
@@ -387,6 +388,14 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
       <!-- BEGIN Article Playlist table -->
       <?php require('edit_playlist.php'); ?>
       <!-- END Article Playlist table -->
+
+      <!-- BEGIN Multi date table -->
+      <?php 
+      if ($hasMultiDates) {
+          require('edit_multidate_box.php');
+      }       
+      ?>
+      <!-- END Multi date table -->
 
       <?php CampPlugin::adminHook(__FILE__, array( 'articleObj' => $articleObj, 'f_edit_mode' => $f_edit_mode ) ); ?>
 

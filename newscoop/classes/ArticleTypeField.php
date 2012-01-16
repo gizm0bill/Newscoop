@@ -18,6 +18,7 @@ class ArticleTypeField extends DatabaseObject {
     const TYPE_TEXT = 'text';
     const TYPE_BODY = 'body';
     const TYPE_DATE = 'date';
+    const TYPE_COMPLEX_DATE = 'complex_date';
     const TYPE_TOPIC = 'topic';
     const TYPE_SWITCH = 'switch';
     const TYPE_NUMERIC = 'numeric';
@@ -461,6 +462,8 @@ class ArticleTypeField extends DatabaseObject {
 	    	return getGS('Switch');
 	    case self::TYPE_NUMERIC:
 	    	return getGS('Numeric');
+	    case self::TYPE_COMPLEX_DATE:
+	    	return getGS('Complex Date');
 	    default:
 	    	return getGS("unknown");
 		}
@@ -860,20 +863,22 @@ class ArticleTypeField extends DatabaseObject {
 	 */
 	public static function DatabaseTypes($p_numericDigits = null, $p_numericPrecision = null)
 	{
+        global $g_ado_db;
+
 		$p_numericDigits = is_null($p_numericDigits) ? self::NUMERIC_DEFAULT_DIGITS : $p_numericDigits;
 		$p_numericPrecision = is_null($p_numericPrecision) ? self::NUMERIC_DEFAULT_PRECISION : $p_numericPrecision;
 		settype($p_numericDigits, 'integer');
 		settype($p_numericPrecision, 'integer');
-		$numericDef = "NUMERIC($p_numericDigits, $p_numericPrecision) NOT NULL";
+		$numericDef = "NUMERIC($p_numericDigits, $p_numericPrecision) DEFAULT NULL";
 
-		$types = array(self::TYPE_TEXT=>'VARCHAR(255) NOT NULL',
-			 self::TYPE_BODY=>'MEDIUMBLOB NOT NULL',
-			 self::TYPE_DATE=>'DATE NOT NULL',
-			 self::TYPE_TOPIC=>'INTEGER UNSIGNED NOT NULL',
-			 self::TYPE_SWITCH=>'BOOLEAN NOT NULL',
-			 self::TYPE_NUMERIC=>$numericDef);
-        return $types;
+        return array(
+            self::TYPE_TEXT => 'VARCHAR(255) DEFAULT NULL',
+            self::TYPE_BODY => $g_ado_db->databaseType === 'sqlite' ? 'TEXT DEFAULT NULL' : 'MEDIUMBLOB DEFAULT NULL',
+            self::TYPE_DATE => 'DATE DEFAULT NULL',
+            self::TYPE_TOPIC => 'INTEGER DEFAULT NULL',
+            self::TYPE_SWITCH => "BOOLEAN NOT NULL DEFAULT FALSE",
+            self::TYPE_NUMERIC => $numericDef,
+            self::TYPE_COMPLEX_DATE => 'VARCHAR(255) DEFAULT NULL',
+        );
 	}
-} // class ArticleTypeField
-
-?>
+}

@@ -315,6 +315,17 @@ $("#context_box a.iframe").fancybox({
     }
 });
 
+$("#multidate_box a.iframe").fancybox({
+    'showCloseButton' : false,
+    'width': 1000,
+    'height'     : 710,
+    'scrolling' : 'auto',
+    'onClosed'      : function() {
+       //loadContextBoxActileList();
+       loadMultiDateEvents();
+    }
+});
+
 $("#playlist a.iframe").fancybox
 ({
     'showCloseButton' : false,
@@ -437,6 +448,7 @@ $(document).ready(function() {
         }
     }
     loadContextBoxActileList();
+    loadMultiDateEvents();
 });
 
 function fnLoadContextBoxArticleList(data) {
@@ -464,6 +476,52 @@ function loadContextBoxActileList() {
         'articleId': '<?php echo Input::Get('f_article_number', 'int', 1)?>',
     });
     callServer(['ArticleList', 'doAction'], aoData, fnLoadContextBoxArticleList);
+}
+
+function loadMultiDateEvents() {
+	var url = '<?php echo $Campsite['WEBSITE_URL']; ?>/admin/multidate/getdates';
+    $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        data: {
+            articleId : "<?php echo Input::Get('f_article_number', 'int', 1)?>"
+        },
+        success: function(data) {
+
+        	var eventList = '';
+        	eventList += '<ul class="block-list">';
+            
+            for(var i=0; i<data.length; i++) {
+                if (i >= 20 ) {
+                    break;
+                }
+                var item = data[i];
+                
+                var start = new Date(item.start * 1000);                
+                var minutes = start.getMinutes();
+                if (minutes < 10) {
+                    minutes = '0' + minutes;
+                }
+                var month = ( start.getMonth() + 1 );
+                var startString = (month + '/' + start.getDate() + '/' + start.getFullYear() + ' ' + start.getHours() + ':' + minutes );
+
+                var end = new Date(item.end * 1000);
+                var minutes = end.getMinutes();
+                if (minutes < 10) {
+                    minutes = '0' + minutes;;
+                }
+                var month = ( end.getMonth() + 1 );
+                var endString = (month + '/' + end.getDate() + '/' + end.getFullYear() + ' ' + end.getHours() + ':' + minutes );
+
+                var eventString = startString + ' - ' + endString;
+                eventList += '<li>' + eventString + '</li>';
+            }
+            $('#multiDateEventList').html('');
+            $('#multiDateEventList').append(eventList + '</ul>');              
+        }
+        
+    });    
 }
 
 </script>
