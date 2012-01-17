@@ -32,7 +32,7 @@ $comment = $comments[0];
 //var_dump($comment->getMessage());die;
 $commenter = $comment->getCommenter();
 $article = new Article($f_article_language, $comment->getArticleNumber());
-$commentNote = "<a href='".$Campsite['WEBSITE_URL']."/profile/".$commenter->getName()."'>zxczxc</a>".", zu <a href='".$Campsite['WEBSITE_URL']."/".Newscoop\Webcode\Manager::getWebcoder('')->encode($comment->getArticleNumber())."'>".$article->getName()."</a>";
+$commentNote = "<a href='".$Campsite['WEBSITE_URL']."/user/profile/".$commenter->getName()."'>zxczxc</a>"." zu <a href='".$Campsite['WEBSITE_URL']."/".Newscoop\Webcode\Manager::getWebcoder('')->encode($comment->getArticleNumber())."'>".$article->getName()."</a>";
 
 // create article
 $articleObj = new Article($f_article_language);
