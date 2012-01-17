@@ -100,7 +100,7 @@ foreach ($hiddens as $name) {
 </fieldset>
 
 <fieldset id="set-good-comment-button-prototype" class="plain comments-block" style="display:none">
-    <a href="../admin/articles/add_from_comment.php?f_comment_id={id}&f_publication_id=1&f_issue_number=1&f_section_number=85&f_article_language=5&f_article_type=good_comment" class="ui-state-default text-button"><?php putGS('Good comment'); ?></a>
+    <a href="../admin/articles/add_from_comment.php?f_comment_id=${id}&f_publication_id=1&f_issue_number=1&f_section_number=85&f_article_language=5&f_article_type=good_comment" class="ui-state-default text-button"><?php putGS('Good comment'); ?></a>
 </fieldset>
 <fieldset id="unset-good-comment-button-prototype" class="plain comments-block" style="display:none">
     <a href="javascript:;" class="unset-good-comment ui-state-default text-button"><?php putGS('Unset good comment'); ?></a>
