@@ -151,7 +151,7 @@ function loadComments() {
 				continue;
 			}
 
-			var template = $('#comment-prototype').html();
+			var template = $('#comment-prototype').html(); 
             
             if (comment.good_comment == 0) {
                 template = template.replace('[good_comment_button_placeholder]', $('#set-good-comment-button-prototype').html());
