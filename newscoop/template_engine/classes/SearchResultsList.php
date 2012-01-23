@@ -195,7 +195,10 @@ class SearchResultsList extends ListObject
         }
 
         if (!empty($p_parameters['type_not'])) {
-            $this->m_constraints[] = new ComparisonOperation('Articles.Type', new Operator('not', 'string'), $p_parameters['type_not']);
+            $types = explode(',', $p_parameters['type_not']);
+            foreach ($types as $type) {
+                $this->m_constraints[] = new ComparisonOperation('Articles.Type', new Operator('not', 'string'), $type);
+            }
         }
 
     	return $parameters;
