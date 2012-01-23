@@ -10,7 +10,9 @@ namespace Newscoop\Services;
 use Newscoop\Entity\User,
     Newscoop\Entity\User\Group,
     Newscoop\Entity\UserAttribute,
-    Newscoop\Entity\Author;
+    Newscoop\Entity\Author,
+    Newscoop\Entity\Language,
+    Newscoop\Entity\Article;
 
 class UserServiceTest extends \RepositoryTestCase
 {
@@ -33,7 +35,15 @@ class UserServiceTest extends \RepositoryTestCase
 
     public function setUp()
     {
-        parent::setUp('Newscoop\Entity\User', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\UserAttribute', 'Newscoop\Entity\User\Group', 'Newscoop\Entity\Author');
+        parent::setUp(array(
+            'Newscoop\Entity\User',
+            'Newscoop\Entity\Acl\Role',
+            'Newscoop\Entity\UserAttribute',
+            'Newscoop\Entity\User\Group',
+            'Newscoop\Entity\Author',
+            'Newscoop\Entity\Language',
+            'Newscoop\Entity\Article',
+        ));
 
         $this->auth = $this->getMockBuilder('Zend_Auth')
             ->disableOriginalConstructor()
@@ -380,6 +390,54 @@ class UserServiceTest extends \RepositoryTestCase
     public function testFindUsersBySearch()
     {
         $users = $this->service->findUsersBySearch('test');
+    }
+
+    public function testCountArticlesByUser()
+    {
+        $user = $this->addUser('testUser');
+        $author = new Author('test', 'author');
+        $language = new Language('test');
+
+        $this->em->persist($author);
+        $this->em->persist($language);
+        $this->em->flush();
+
+        $this->assertEquals(0, $this->service->getUserPostsCount($user));
+
+        $user->setAuthor($author);
+        $this->em->flush();
+
+        $blog = new Article(1, $language);
+        $blog->setType('blog');
+        $blog->addAuthor($author);
+        $blog->setStatus(Article::STATUS_PUBLISHED);
+        $this->em->persist($blog);
+
+        $news = new Article(2, $language);
+        $news->setType('news');
+        $news->addAuthor($author);
+        $news->setStatus(Article::STATUS_PUBLISHED);
+        $this->em->persist($news);
+
+        $other = new Article(3, $language);
+        $other->setType('other');
+        $other->addAuthor($author);
+        $other->setStatus(Article::STATUS_PUBLISHED);
+        $this->em->persist($other);
+
+        $notpublished = new Article(4, $language);
+        $notpublished->setType('news');
+        $notpublished->addAuthor($author);
+        $this->em->persist($notpublished);
+
+        $noauthor = new Article(5, $language);
+        $noauthor->setType('news');
+        $noauthor->setStatus(Article::STATUS_PUBLISHED);
+        $this->em->persist($noauthor);
+
+        $this->em->flush();
+
+        $this->assertEquals(2, $this->service->getUserPostsCount($user));
     }
 
     /**

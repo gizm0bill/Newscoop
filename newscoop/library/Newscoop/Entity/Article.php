@@ -111,6 +111,16 @@ class Article
     private $workflowStatus;
 
     /**
+     * @ManyToMany(targetEntity="Newscoop\Entity\Author")
+     * @JoinTable(name="ArticleAuthors",
+     *      joinColumns={@JoinColumn(name="fk_article_number", referencedColumnName="Number"), @JoinColumn(name="fk_language_id", referencedColumnName="IdLanguage")},
+     *      inverseJoinColumns={@JoinColumn(name="fk_author_id", referencedColumnName="id")}
+     *      )
+     * @var Doctrine\Common\Collections\Collection
+     */
+    private $authors;
+
+    /**
      * @param int $number
      * @param Newscoop\Entity\Language $language
      */
@@ -118,6 +128,7 @@ class Article
     {
         $this->number = (int) $number;
         $this->language = $language;
+        $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -289,6 +300,17 @@ class Article
     {
         return (int) $this->comments_enabled;
     }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType($type)
+    {
+        $this->type = (string) $type;
+    }
     
     /**
      * Get type
@@ -331,5 +353,27 @@ class Article
     public function getCreator()
     {
         return $this->creator;
+    }
+
+    /**
+     * Add author
+     *
+     * @param Newscoop\Entity\Author $author
+     * @return void
+     */
+    public function addAuthor(Author $author)
+    {
+        $this->authors->add($author);
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return void
+     */
+    public function setStatus($status)
+    {
+        $this->workflowStatus = (string) $status;
     }
 }

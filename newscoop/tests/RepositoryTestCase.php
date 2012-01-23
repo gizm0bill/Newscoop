@@ -34,6 +34,10 @@ abstract class RepositoryTestCase extends \PHPUnit_Framework_TestCase
         $tool->dropDatabase();
 
         $classes = func_get_args();
+        if (!empty($classes) && is_array($classes[0])) {
+            $classes = $classes[0];
+        }
+
         if (!empty($classes)) {
             $metadataFactory = new ClassMetadataFactory();
             $metadataFactory->setEntityManager($this->em);

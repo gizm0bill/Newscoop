@@ -261,8 +261,8 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
         $sum += $GLOBALS['controller']->getHelper('entity')->getRepository('Newscoop\Entity\Comment')
             ->countByUser($this->m_dbObject);
 
-        $sum += $GLOBALS['controller']->getHelper('entity')->getRepository('Newscoop\Entity\Feedback')
-            ->countByUser($this->m_dbObject);
+        $sum += $GLOBALS['controller']->getHelper('service')->getService('user')
+            ->getUserPostsCount($this->m_dbObject);
 
         return $sum;
     }

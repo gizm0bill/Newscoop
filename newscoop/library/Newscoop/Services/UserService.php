@@ -403,6 +403,17 @@ class UserService implements ObjectRepository
     }
 
     /**
+     * Get user posts count
+     *
+     * @param Newscoop\Entity\User $user
+     * @return int
+     */
+    public function getUserPostsCount(User $user)
+    {
+        return $this->repository->getUserPostsCount($user);
+    }
+
+    /**
      * Get characters for given character group
      *
      * @param string $character
