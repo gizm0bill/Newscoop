@@ -758,6 +758,16 @@ class User implements \Zend_Acl_Role_Interface
     }
 
     /**
+     * Get author
+     *
+     * @return Newscoop\Entity\Author
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
      * Get author id
      *
      * @return int
