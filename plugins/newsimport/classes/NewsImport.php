@@ -631,6 +631,8 @@ class NewsImport
                 }
                 $prices_info = array();
                 $prices_line_sep = "\n<br />\n";
+                $multi_time_info = array();
+                $multi_time_line_sep = "\n<br />\n";
                 $voided_info = array();
                 //$voided_line_sep = "\n<br />\n";
 
@@ -689,6 +691,11 @@ class NewsImport
                         $prices_info[] = $one_date['prices'];
                     }
 
+                    if (!empty($one_date['time'])) {
+                        $multi_time_info[] = $one_date['date'];
+                        $multi_time_info[] = $one_date['time'];
+                    }
+
                     if ($one_date['voided']) {
                         $voided_info[] = $one_date['voided'];
                     }
@@ -700,6 +707,9 @@ class NewsImport
 
                 $prices_info_str = implode($prices_line_sep, $prices_info);
                 $article_data->setProperty('Fprices', $prices_info_str);
+
+                $multi_time_info_str = implode($multi_time_line_sep, $multi_time_info);
+                $article_data->setProperty('Fmulti_time', $multi_time_info_str);
 
                 //$voided_info_str = implode($voided_line_sep, $voided_info);
                 //$article_data->setProperty('Fvoided', $voided_info_str);

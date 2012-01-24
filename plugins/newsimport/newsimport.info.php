@@ -331,6 +331,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
 
         $evt_fields = array(
             'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
+            'multi_time' => array('type' => 'text', 'params' => array(), 'hidden' => false), // event_times per day
             'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone
         );
 
