@@ -36,6 +36,7 @@ $commenter = $comment->getCommenter();
 $article = new Article($comment->getLanguage()->getId(), $comment->getArticleNumber());
 
 $articleUrl = Admin_CommentController::getFrontendLink($article);
+$articleUrl = str_replace('https://', 'http://', $articleUrl);
 
 $commentNote = "<a href='".$websiteUrl."/user/profile/".urlencode($commenter->getName())."'>" . $commenter->getLoginName() . "</a> zu <a href='".$articleUrl."'>".$article->getName()."</a>";
 
