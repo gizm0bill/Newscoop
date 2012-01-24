@@ -40,7 +40,7 @@ class ArticleDatetimeRepository extends EntityRepository
             $timeSet = (array) $timeSet;
             foreach ($timeSet as $start => $end )
             {
-                if (!is_string($start) && !is_array($end)) {
+            	if (!is_string($start) && !is_array($end)) {
                     list($start, $end) = explode(' - ', $end, 2);
                 }
                 $insertValues[] = new ArticleDatetimeHelper // some logic to capture the recurring also included
@@ -71,6 +71,18 @@ class ArticleDatetimeRepository extends EntityRepository
             $em->remove($article);
         }
     }
+    
+    public function deleteById($id)
+    {
+        $em = $this->getEntityManager();
+        if(is_numeric($id)) {
+            //$entry = $this->findBy(array('id' => $id));
+            $entry = $this->find($id);
+            $em->remove($entry); 
+            $em->flush();
+        }
+        
+    }
 
     /**
      * Adds time intervals
@@ -93,7 +105,7 @@ class ArticleDatetimeRepository extends EntityRepository
      * @param string $recurring
      * @param bool $overwrite
      */
-    public function add( $timeSet, $articleId, $fieldName = null, $recurring = null, $overwrite=true )
+    public function add( $timeSet, $articleId, $fieldName = null, $recurring = null, $overwrite=false )
     {
         $article = null;
         $insertValues = $this->buildInsertValues($timeSet, $recurring);
@@ -309,6 +321,18 @@ class ArticleDatetimeRepository extends EntityRepository
         {
             $qb->andWhere('dt.fieldName = :fieldName');
             $qb->setParameter('fieldName', $search->fieldName);
+        }
+        // search for article id
+        if (isset($search->articleId))
+        {
+            $qb->andWhere('dt.articleId= :articleId');
+            $qb->setParameter('articleId', $search->articleId);
+        }
+        // search for article datetime id
+        if (isset($search->id))
+        {
+            $qb->andWhere('dt.id= :id');
+            $qb->setParameter('id', $search->id);
         }
         // store query and return $this
         if ($dontExecute)

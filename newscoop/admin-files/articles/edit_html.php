@@ -29,7 +29,7 @@ if ($articleObj->userCanModify($g_user) && $locked && !$inViewMode) {
           ?>
           </li>
           <li>
-            <input type="button" name="Yes" value="<?php putGS('Unlock'); ?>" class="button" onclick="location.href='<?php echo camp_html_article_url($articleObj, $f_language_id, "do_unlock.php", '', null, true); ?>'" />
+            <input type="button" name="Yes" value="<?php putGS('Unlock'); ?>" class="button" onclick="location.href='<?php echo camp_html_article_url($articleObj, $f_language_id, "do_unlock.php", '', null, true); ?>'" <?php if (!$GLOBALS['controller']->getHelper('acl')->isAllowed('article', 'unlock')) { ?>disabled="disabled"<?php } ?>/>
             <input type="button" name="Yes" value="<?php putGS('View'); ?>" class="button" onclick="location.href='<?php echo camp_html_article_url($articleObj, $f_language_id, "edit.php", "", "&f_edit_mode=view"); ?>'" />
             <input type="button" name="No" value="<?php putGS('Cancel'); ?>" class="button" onclick="location.href='/<?php echo $ADMIN; ?>/articles/?f_publication_id=<?php p($f_publication_id); ?>&f_issue_number=<?php p($f_issue_number); ?>&f_language_id=<?php p($f_language_id); ?>&f_section_number=<?php p($f_section_number); ?>'" />
           </li>
@@ -77,7 +77,6 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
             . "&f_article_number=$f_article_number&f_language_id=$f_language_id&f_language_selected=$f_language_selected";
     }
 }
-
 ?>
   <!-- BEGIN Article Title and Saving buttons bar //-->
   <div class="toolbar clearfix">
@@ -94,16 +93,19 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
     <span class="comments"><?php p(count(isset($comments) ? $comments : array())); ?></span>
     <div class="save-button-bar">
       <input type="submit" class="save-button" value="<?php putGS('Save All'); ?>" id="save" name="save" <?php if (!$inEditMode) { ?> disabled style="opacity: 0.3"<?php } ?> />
+      <?php if ($inEditMode) { ?>
+        <input type="submit" class="save-button" value="<?php putGS('Close'); ?>" id="close" name="close" />
+      <?php } ?>
       <input type="submit" class="save-button" value="<?php $inEditMode ? putGS('Save and Close') : putGS('Close'); ?>" id="save_and_close" name="save_and_close" />
     </div>
     <div class="top-button-bar">
       <input type="button" name="edit" value="<?php putGS('Edit'); ?>" <?php if ($inEditMode || ! $articleObj->userCanModify($g_user)) {?> disabled="disabled" class="default-button disabled"<?php } else { ?> onclick="location.href='<?php p($switchModeUrl); ?>';" class="default-button"<?php } ?> />
       <input type="button" name="edit" value="<?php putGS('View'); ?>" <?php if ($inViewMode) {?> disabled="disabled" class="default-button disabled"<?php } else { ?> onclick="location.href='<?php p($switchModeUrl); ?>';" class="default-button"<?php } ?> />
       <?php if ($doPreviewLink == 'live') { ?>
-	  <a class="ui-state-default icon-button" target="_blank" href="<?php echo $previewLinkURL; ?>"><span class="ui-icon ui-icon-extlink"></span><?php putGS('Go to live article'); ?></a>
-	  <?php } elseif ($doPreviewLink == 'preview') { ?>
-	  <a class="ui-state-default icon-button" href="#" onclick="window.open('<?php echo $previewLinkURL; ?>', 'fpreview', 'resizable=yes, menubar=no, toolbar=no, width=780, height=660'); return false;"><span class="ui-icon ui-icon-extlink"></span><?php putGS('Preview'); ?></a>
-	  <?php } ?>
+      <a class="ui-state-default icon-button" target="_blank" href="<?php echo $previewLinkURL; ?>"><span class="ui-icon ui-icon-extlink"></span><?php putGS('Go to live article'); ?></a>
+      <?php } elseif ($doPreviewLink == 'preview') { ?>
+      <a class="ui-state-default icon-button" href="#" onclick="window.open('<?php echo $previewLinkURL; ?>', 'fpreview', 'resizable=yes, menubar=no, toolbar=no, width=780, height=660'); return false;"><span class="ui-icon ui-icon-extlink"></span><?php putGS('Preview'); ?></a>
+      <?php } ?>
     </div>
     <div id="f_article_count" class="j-countable rt">&nbsp;</div>
   </div>
@@ -112,7 +114,7 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
 <div class="wrapper">
   <!-- BEGIN Info/Messaging bar //-->
   <div class="info-bar">
-	<span class="info-text" id="info-text"></span>
+    <span class="info-text" id="info-text"></span>
   </div>
   <!-- END Infor/Messaging bar //-->
 
@@ -176,6 +178,7 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
       <fieldset class="plain">
         <ul>
         <?php
+        
         foreach ($dbColumns as $dbColumn) {
             // Single line text fields
             if ($dbColumn->getType() == ArticleTypeField::TYPE_TEXT) {
@@ -194,8 +197,8 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
               autocomplete="off"
               style="width:70%;"
               <?php if($dbColumn->getMaxSize()!=0 && $dbColumn->getMaxSize()!=''): ?>
-              	maxlength="<?php echo $dbColumn->getMaxSize(); ?>"
-              	class="input_text countableft"
+                maxlength="<?php echo $dbColumn->getMaxSize(); ?>"
+                class="input_text countableft"
              <?php else: ?>
               class="input_text"
              <?php endif; ?>
@@ -240,9 +243,9 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
                 $text = parseTextBody($unparsedText, $f_article_number);
                 $editorSize = str_replace('editor_size=', '', $dbColumn->m_data['field_type_param']);
                 if (!is_numeric($editorSize)) {
-					require_once($GLOBALS['g_campsiteDir'].'/classes/ArticleTypeField.php');
-					$editorSize = ArticleTypeField::BODY_ROWS_MEDIUM;
-				}
+                    require_once($GLOBALS['g_campsiteDir'].'/classes/ArticleTypeField.php');
+                    $editorSize = ArticleTypeField::BODY_ROWS_MEDIUM;
+                }
         ?>
           <li>
             <label><?php echo htmlspecialchars($dbColumn->getDisplayName($articleObj->getLanguageId())); ?></label>
@@ -309,6 +312,11 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
               <?php if ($inViewMode) { ?>disabled<?php } ?> />
           </li>
         <?php
+            } elseif ( $dbColumn->getType() == ArticleTypeField::TYPE_COMPLEX_DATE ) {
+                $hasMultiDates = true;
+                if ( is_null($multiDatesField) ) {
+                    $multiDatesField = $dbColumn->getName();	
+                }
             }
         }
         ?>
@@ -384,6 +392,14 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
       <!-- BEGIN Article Playlist table -->
       <?php require('edit_playlist.php'); ?>
       <!-- END Article Playlist table -->
+
+      <!-- BEGIN Multi date table -->
+      <?php 
+      if ($hasMultiDates) {
+          require('edit_multidate_box.php');
+      }       
+      ?>
+      <!-- END Multi date table -->
 
       <?php CampPlugin::adminHook(__FILE__, array( 'articleObj' => $articleObj, 'f_edit_mode' => $f_edit_mode ) ); ?>
 

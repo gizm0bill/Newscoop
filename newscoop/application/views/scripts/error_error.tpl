@@ -6,7 +6,9 @@
 <h2>Error: {{ $message }}</h2>
 
 {{ foreach $errors as $error }}
-<code>{{ var_dump($error) }}</code>
+{{ if !is_string($error) && is_a($error, 'Exception') }}
+<code>{{ $error->getMessage()|truncate }}</code>
+{{ /if }}
 {{ /foreach }}
 
 {{/block}}

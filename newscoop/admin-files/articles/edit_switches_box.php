@@ -3,15 +3,15 @@
 <form id="article-switches" action="/<?php echo $ADMIN; ?>/articles/post.php" method="POST">
 
     <ul class="check-list padded">
-      <li><input type="checkbox" name="f_on_front_page" id="f_on_front_page"
+      <li style="display:none;"><input type="checkbox" name="f_on_front_page" id="f_on_front_page"
         class="input_checkbox" <?php if ($articleObj->onFrontPage()) { ?> checked<?php } ?> <?php if ($inViewMode || !$publishRights ) { ?>disabled<?php } ?> />
         <label for="f_on_front_page"><?php putGS('Show article on front page'); ?></label>
       </li>
-      <li><input type="checkbox" name="f_on_section_page" id="f_on_section_page"
+      <li style="display:none;"><input type="checkbox" name="f_on_section_page" id="f_on_section_page"
         class="input_checkbox" <?php if ($articleObj->onSectionPage()) { ?> checked<?php } ?> <?php if ($inViewMode || !$publishRights) { ?>disabled<?php } ?> />
         <label for="f_on_section_page"><?php putGS('Show article on section page'); ?></label>
       </li>
-      <li><input type="checkbox" name="f_is_public" id="f_is_public"
+      <li style="display:none;"><input type="checkbox" name="f_is_public" id="f_is_public"
         class="input_checkbox" <?php if ($articleObj->isPublic()) { ?> checked<?php } ?> <?php if ($inViewMode || !$publishRights) { ?>disabled<?php } ?> /> <label for="f_is_public"><?php putGS('Visible to non-subscribers'); ?></label> </li>
     <?php
     foreach ($dbColumns as $dbColumn) {

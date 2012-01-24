@@ -191,6 +191,8 @@ if ($f_publication_id > 0 && $f_issue_number && $f_section_number) {
     echo camp_html_breadcrumbs($crumbs);
 }
 
+?><script>document.title += " - <?php echo(getGS('Article').': '.$articleObj->getName()); ?>";</script><?php
+
 function parseTextBody($text, $articleNumber)
 {
     // Subheads
@@ -249,7 +251,7 @@ function parseTextBody($text, $articleNumber)
             if (!isset($fakeTemplateId)) {
                 $fakeTemplateId = $templateId;
             }
-            $text = preg_replace("/<!\*\*\s*Image\s*".$templateId."\s*/i", '<img src="'.$imageUrl.'" id="'.$fakeTemplateId.'" ', $text);
+            $text = preg_replace("/<!\*\*\s*Image\s*".$templateId."\s+/i", '<img src="'.$imageUrl.'" id="'.$fakeTemplateId.'" ', $text);
         }
         if ($formattingErrors) {
             print ('<script type="text/javascript">window.location.reload();</script>');
@@ -258,6 +260,8 @@ function parseTextBody($text, $articleNumber)
     return $text;
 }
 
+$hasMultiDates = false;
+$multiDatesField = NULL;
 include_once('edit_html.php');
 
 // Display tinymce loading code if required

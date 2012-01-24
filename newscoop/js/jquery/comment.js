@@ -327,6 +327,28 @@ $(function () {
             }
         });
     });
+    
+    $('.datatable .action-unset-good').live('click', function () {
+        var el = $(this);
+        var id = el.attr('id').replace('unset_good_', '');
+        
+        $.ajax({
+            type: 'POST',
+            url: 'comment/unset-good/format/json',
+            data: $.extend({
+                'comment': id
+            }, serverObj.security),
+            success: function (data) {
+                flashMessage(putGS('Comment updated.'));
+                datatable.fnDraw();
+            },
+            error: function (rq, status, error) {
+                if (status == 0 || status == -1) {
+                    flashMessage(putGS('Unable to reach Newscoop. Please check your internet connection.'), "error");
+                }
+            }
+        });
+    });
 
     // Dialog
     $('.dialogPopup').dialog({

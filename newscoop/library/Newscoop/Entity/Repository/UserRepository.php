@@ -9,7 +9,8 @@ namespace Newscoop\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository,
     Doctrine\ORM\Query\Expr,
-    Newscoop\Entity\User;
+    Newscoop\Entity\User,
+    Newscoop\Entity\Article;
 
 /**
  * User repository
@@ -263,7 +264,7 @@ class UserRepository extends EntityRepository
      */
     public function getRandomList($limit)
     {
-        $query = $this->getEntityManager()->createQuery("SELECT u, RAND() as random FROM {$this->getEntityName()} u WHERE u.status = :status AND u.is_public = :public ORDER BY random");
+        $query = $this->getEntityManager()->createQuery("SELECT u, RAND() as random FROM {$this->getEntityName()} u WHERE u.status = :status AND u.is_public = :public AND u.image IS NOT NULL ORDER BY random");
         $query->setMaxResults($limit);
         $query->setParameters(array(
             'status' => User::STATUS_ACTIVE,
@@ -421,6 +422,37 @@ class UserRepository extends EntityRepository
             ->from($this->getEntityName(), 'u')
             ->where($this->getUsernameFirstCharacterWhere($characters))
             ->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Get posts count for user
+     *
+     * $param Newscoop\Entity\User $user
+     * @return int
+     */
+    public function getUserPostsCount(User $user)
+    {
+        $author = $user->getAuthor();
+        if ($author === null) {
+            return 0;
+        }
+
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $query = $this->getEntityManager()->getRepository('Newscoop\Entity\Article')
+            ->createQueryBuilder('article')
+            ->select('COUNT(article)')
+            ->innerJoin('article.authors', 'author', 'WITH', 'author = :author')
+            ->where('article.workflowStatus = :status')
+            ->andWhere($expr->in('article.type', array('news', 'blog')))
+
+            ->getQuery();
+
+        $query->setParameters(array(
+            'status' => Article::STATUS_PUBLISHED,
+            'author' => $author,
+        ));
 
         return $query->getSingleScalarResult();
     }

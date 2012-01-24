@@ -37,6 +37,7 @@ ALTER TABLE `liveuser_groups` CHANGE `group_id` `group_id` int(11) NOT NULL AUTO
 DROP TABLE IF EXISTS `ArticleAudioclips`;
 DROP TABLE IF EXISTS `AudioclipMetadata`;
 
+-- Add multi dates table
 DROP TABLE IF EXISTS `article_datetimes`;
 CREATE TABLE `article_datetimes` (
   `id_article_datetime` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -211,8 +212,10 @@ ALTER TABLE `SubsSections` MODIFY COLUMN `IdLanguage` INTEGER UNSIGNED DEFAULT N
 
 -- Tables for context box
 CREATE TABLE IF NOT EXISTS `context_articles` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `fk_context_id` int(10) NOT NULL,
-  `fk_article_no` int(10) NOT NULL
+  `fk_article_no` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 

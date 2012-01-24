@@ -345,7 +345,6 @@ class ArticlesList extends ListObject
 	 */
 	protected function ProcessParameters(array $p_parameters)
 	{
-
 		$parameters = array();
 		$parameters['ignore_publication'] = false;
         $parameters['ignore_issue'] = false;

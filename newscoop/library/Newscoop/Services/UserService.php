@@ -9,6 +9,7 @@ namespace Newscoop\Services;
 
 use Doctrine\Common\Persistence\ObjectManager,
     Newscoop\Entity\User,
+    Newscoop\Entity\UserAttribute,
     Newscoop\Persistence\ObjectRepository;
 
 /**
@@ -217,6 +218,10 @@ class UserService implements ObjectRepository
 
         $this->em->persist($user);
         $this->em->flush();
+
+        $user->addAttribute(UserAttribute::HTTP_USER_AGENT, $_SERVER['HTTP_USER_AGENT']);
+        $this->em->flush();
+
         return $user;
     }
 
@@ -395,6 +400,17 @@ class UserService implements ObjectRepository
     public function countByUsernameFirstCharacter($character)
     {
         return $this->repository->countByUsernameFirstCharacterIn($this->getCharacters($character));
+    }
+
+    /**
+     * Get user posts count
+     *
+     * @param Newscoop\Entity\User $user
+     * @return int
+     */
+    public function getUserPostsCount(User $user)
+    {
+        return $this->repository->getUserPostsCount($user);
     }
 
     /**

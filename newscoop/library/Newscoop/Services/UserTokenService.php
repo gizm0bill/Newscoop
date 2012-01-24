@@ -7,27 +7,30 @@
 
 namespace Newscoop\Services;
 
-use Doctrine\ORM\EntityManager,
-    Newscoop\Entity\User,
+use Newscoop\Entity\User,
     Newscoop\Entity\UserToken;
 
 /**
- * User service
+ * User token service
  */
 class UserTokenService
 {
     const TOKEN_LENGTH = 40;
-    const TOKEN_LIFETIME = 'P2D'; // DateInterval syntax
+    const TOKEN_LIFETIME = 'P5D';
 
     /** @var Doctrine\ORM\EntityManager */
     protected $em;
 
+    /** @var Doctrine\ORM\EntityRepository */
+    protected $repository;
+
     /**
      * @param Doctrine\ORM\EntityManager $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(\Doctrine\ORM\EntityManager $em)
     {
         $this->em = $em;
+        $this->repository = $this->em->getRepository('Newscoop\Entity\UserToken');
     }
 
     /**
@@ -40,8 +43,9 @@ class UserTokenService
     public function generateToken(User $user, $action = 'any')
     {
         $token = $user->generateRandomString(self::TOKEN_LENGTH);
-        $this->em->persist(new UserToken($user, $action, $token));
-        $this->em->flush();
+        $userToken = new UserToken($user, $action, $token);
+        $this->em->persist($userToken);
+        $this->em->flush($userToken);
         return $token;
     }
 
@@ -55,18 +59,26 @@ class UserTokenService
      */
     public function checkToken(User $user, $token, $action = 'any')
     {
-        $userToken = $this->em->find('Newscoop\Entity\UserToken', array(
-            'user' => $user->getId(),
-            'action' => $action,
-            'token' => $token,
-        ));
-
-        if (empty($userToken)) {
+        $userToken = $this->findToken($user, $token, $action);
+        if ($userToken === null) {
             return false;
         }
 
         $now = new \DateTime();
         return $now->sub(new \DateInterval(self::TOKEN_LIFETIME))->getTimestamp() < $userToken->getCreated()->getTimestamp();
+    }
+
+    /**
+     * Test if given token exists
+     *
+     * @param Newscoop\Entity\User $user
+     * @param string $token
+     * @param string $action
+     * @return bool
+     */
+    public function hasToken(User $user, $token, $action = 'any')
+    {
+        return $this->findToken($user, $token, $action) !== null;
     }
 
     /**
@@ -88,5 +100,22 @@ class UserTokenService
         }
 
         $this->em->flush();
+    }
+
+    /**
+     * Find token
+     *
+     * @param Newscoop\Entity\User $user
+     * @param string $token
+     * @param string $action
+     * @return Newscoop\Entity\UserToken
+     */
+    private function findToken(User $user, $token, $action)
+    {
+        return $this->repository->find(array(
+            'user' => $user->getId(),
+            'token' => $token,
+            'action' => $action,
+        ));
     }
 }
