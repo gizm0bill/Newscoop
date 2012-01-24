@@ -67,13 +67,13 @@ class ContextBoxArticle extends DatabaseObject
      * @return array $issuesList
      *    An array of Issue objects
      */
-    public static function GetList($p_context_id, $p_order = null,
+    public static function GetList(array $params, $p_order = null,
     $p_start = 0, $p_limit = 0, &$p_count, $p_skipCache = false)
     {
         global $g_ado_db;
 
         if (!$p_skipCache && CampCache::IsEnabled()) {
-            $paramsArray['parameters'] = serialize($p_parameters);
+            $paramsArray['parameters'] = serialize($params);
             $paramsArray['order'] = (is_null($p_order)) ? 'id desc' : $p_order;
             $paramsArray['start'] = $p_start;
             $paramsArray['limit'] = $p_limit;
@@ -84,10 +84,19 @@ class ContextBoxArticle extends DatabaseObject
             }
         }
 
+        if (isset($params['role']) && $params['role'] == 'child') {
+            $sql = 'SELECT b.fk_article_no FROM context_boxes b'
+                . ' WHERE b.id IN (SELECT c.fk_context_id '
+                . '     FROM Articles a, context_articles c '
+                . '     WHERE c.fk_article_no = ' . $params['article']
+                . '     AND a.Number = c.fk_article_no) ORDER BY id desc';
+        } else {
+            $sql = 'SELECT fk_article_no FROM context_articles'
+                . ' WHERE fk_context_id = ' . $params['context_box']
+                . ' ORDER BY id desc';
+        }
+
         $returnArray = array();
-        $sql = 'SELECT fk_article_no FROM context_articles
-                WHERE fk_context_id = ' . $p_context_id . '
-                ORDER BY id desc';
         $rows = $g_ado_db->GetAll($sql);
         if (is_array($rows)) {
             foreach($rows as $row) {
