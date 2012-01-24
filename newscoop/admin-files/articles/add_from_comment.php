@@ -33,8 +33,11 @@ $comments = $commentRepository->getData(array('sFilter' => $filter = array('id' 
 $comment = $comments[0];
 //var_dump($comment->getMessage());die;
 $commenter = $comment->getCommenter();
-$article = new Article($f_article_language, $comment->getArticleNumber());
-$commentNote = "<a href='".$websiteUrl."/user/profile/".urlencode($commenter->getName())."'>" . $commenter->getLoginName() . "</a> zu <a href='".$websiteUrl."/".Newscoop\Webcode\Manager::getWebcoder('')->encode($comment->getArticleNumber())."'>".$article->getName()."</a>";
+$article = new Article($comment->getLanguage()->getId(), $comment->getArticleNumber());
+
+$articleUrl = Admin_CommentController::getFrontendLink($article);
+
+$commentNote = "<a href='".$websiteUrl."/user/profile/".urlencode($commenter->getName())."'>" . $commenter->getLoginName() . "</a> zu <a href='".$articleUrl."'>".$article->getName()."</a>";
 
 // create article
 $articleObj = new Article($f_article_language);
