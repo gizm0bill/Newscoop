@@ -6,6 +6,8 @@ require_once($GLOBALS['g_campsiteDir']. "/classes/ArticleType.php");
 
 global $Campsite;
 
+$websiteUrl = str_replace('https://', 'http://', $Campsite['WEBSITE_URL']);
+
 if (!$g_user->hasPermission('AddArticle')) {
 	camp_html_display_error(getGS("You do not have the right to add articles."));
 	exit;
@@ -32,7 +34,7 @@ $comment = $comments[0];
 //var_dump($comment->getMessage());die;
 $commenter = $comment->getCommenter();
 $article = new Article($f_article_language, $comment->getArticleNumber());
-$commentNote = "<a href='".$Campsite['WEBSITE_URL']."/user/profile/".$commenter->getName()."'>" . $commenter->getLoginName() . "</a> zu <a href='".$Campsite['WEBSITE_URL']."/".Newscoop\Webcode\Manager::getWebcoder('')->encode($comment->getArticleNumber())."'>".$article->getName()."</a>";
+$commentNote = "<a href='".$websiteUrl."/user/profile/".urlencode($commenter->getName())."'>" . $commenter->getLoginName() . "</a> zu <a href='".$websiteUrl."/".Newscoop\Webcode\Manager::getWebcoder('')->encode($comment->getArticleNumber())."'>".$article->getName()."</a>";
 
 // create article
 $articleObj = new Article($f_article_language);
