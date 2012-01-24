@@ -174,7 +174,7 @@ class BoxArticlesList extends ListObject
                     case 'columns':
                     case 'name':
                     case 'order':
-                    case 'role'
+                    case 'role':
                         if ($parameter == 'length' || $parameter == 'columns') {
                             $intValue = (int)$value;
                             if ("$intValue" != $value || $intValue < 0) {
