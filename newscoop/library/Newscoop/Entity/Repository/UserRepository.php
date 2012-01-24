@@ -264,7 +264,7 @@ class UserRepository extends EntityRepository
      */
     public function getRandomList($limit)
     {
-        $query = $this->getEntityManager()->createQuery("SELECT u, RAND() as random FROM {$this->getEntityName()} u WHERE u.status = :status AND u.is_public = :public ORDER BY random");
+        $query = $this->getEntityManager()->createQuery("SELECT u, RAND() as random FROM {$this->getEntityName()} u WHERE u.status = :status AND u.is_public = :public AND u.image IS NOT NULL ORDER BY random");
         $query->setMaxResults($limit);
         $query->setParameters(array(
             'status' => User::STATUS_ACTIVE,
