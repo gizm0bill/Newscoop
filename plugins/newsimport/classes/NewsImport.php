@@ -583,17 +583,17 @@ class NewsImport
 
                 $cur_voided_dates = array();
                 //$cur_voided_dates = $article_data->getFieldValue('voided');
-                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'field_name' => 'voided')) as $one_void_entry) {
-                    //file_put_contents('/tmp/md_entity_001', json_encode($one_date_entry), FILE_APPEND);
-                    $cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
+                    //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                    $cur_voided_dates[] = date_format($one_void_entry->getStartDate(), 'Y-m-d');
                     $em->remove($one_void_entry);
                 }
 
                 // take all previously set dates
                 $all_event_dates = array();
-                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'field_name' => 'schedule')) as $one_date_entry) {
-                    //file_put_contents('/tmp/md_entity_001', json_encode($one_date_entry), FILE_APPEND);
-                    $old_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'schedule')) as $one_date_entry) {
+                    //$old_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
+                    $old_date_str = date_format($one_date_entry->getStartDate(), 'Y-m-d');
 
 /*
                     $old_voided = true;
@@ -604,7 +604,7 @@ class NewsImport
 
                     $old_voided = false;
                     //if (false !== stristr($cur_voided_dates, $old_date_str)) {
-                    if (in_array($old_date_str, $cur_voided_dates) {
+                    if (in_array($old_date_str, $cur_voided_dates)) {
                         $old_voided = true;
                     }
 
@@ -649,8 +649,8 @@ class NewsImport
                         'date' => $one_date['date'],
                         'time' => $one_date['time'],
                     );
-                    if (array_key_exists($one_date['date'], $all_dates)) {
-                        $new_info['row_id'] = $all_dates[$one_date['date']]['row_id'];
+                    if (array_key_exists($one_date['date'], $all_event_dates)) {
+                        $new_info['row_id'] = $all_event_dates[$one_date['date']]['row_id'];
                     }
 
                     $all_event_dates[$one_date['date']] = $new_info;
@@ -697,7 +697,7 @@ class NewsImport
                     }
 
                     if ($one_date['voided']) {
-                        $voided_info[] = $one_date['voided'];
+                        $voided_info[] = $one_date['date'];
                     }
 
                 }
@@ -1094,17 +1094,17 @@ class NewsImport
 
                 $cur_voided_dates = array();
                 //$cur_voided_dates = $event_data_rem->getFieldValue('voided');
-                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'field_name' => 'voided')) as $one_void_entry) {
-                    //file_put_contents('/tmp/md_entity_001', json_encode($one_date_entry), FILE_APPEND);
-                    $cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
+                    //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                    $cur_voided_dates[] = date_format($one_void_entry->getStartDate(), 'Y-m-d');
                     $em->remove($one_void_entry);
                 }
 
                 $new_voided_dates = array();
 
-                foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'field_name' => 'schedule')) as $one_date_entry) {
-                    //file_put_contents('/tmp/md_entity_002', json_encode($one_date_entry), FILE_APPEND);
-                    $one_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
+                foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'schedule')) as $one_date_entry) {
+                    //$one_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
+                    $one_date_str = date_format($one_date_entry->getStartDate(), 'Y-m-d');
 
                     if ($passed_date && ($one_date_str < $passed_date)) {
                         $em->remove($one_date_entry);
@@ -1112,7 +1112,7 @@ class NewsImport
                     }
 
                     //if (false !== stristr($cur_voided_dates, $one_date_str)) {
-                    if (in_array($one_date_str, $cur_voided_dates) {
+                    if (in_array($one_date_str, $cur_voided_dates)) {
                         $new_voided_dates[] = $one_date_str;
                     }
 
@@ -1141,7 +1141,7 @@ class NewsImport
                         'end_date' => $one_voided_date,
                         'recurring' => false,
                     );
-                    $repository->add($void_datetime, $article->getArticleNumber(), 'voided', false, false);
+                    $repository->add($void_datetime, $event_art_rem->getArticleNumber(), 'voided', false, false);
                 }
 
                 if (0 == count($all_event_dates)) {
@@ -1192,6 +1192,7 @@ class NewsImport
 
             // delete article (with map unlinking)
             try {
+                $event_art_rem->setWorkflowStatus('N');
                 $event_art_rem->delete();
             }
             catch (Exception $exc) {
