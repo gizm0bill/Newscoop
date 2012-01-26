@@ -28,6 +28,7 @@ class Admin_PlaylistController extends Zend_Controller_Action
      */
     private $playlistArticleRepository = NULL;
 
+
     /**
      * @var Newscoop\Services\Resource\ResourceId
      */
@@ -60,6 +61,7 @@ class Admin_PlaylistController extends Zend_Controller_Action
         {
             $this->view->playlistName = $playlist->getName();
             $this->view->playlistId = $playlist->getId();
+            $this->view->userCanRemove = $this->_helper->acl->isAllowed('playlist', 'delete');
         }
     }
 
