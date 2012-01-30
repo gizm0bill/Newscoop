@@ -1088,7 +1088,7 @@ class EventData_Parser_SimpleXML {
                 if (!empty($this->m_last_events)) {
                     if (array_key_exists($event_specifier, $this->m_last_events)) {
                         if (json_encode($event_info) == $this->m_last_events[$event_specifier]) {
-                            continue;
+                            //continue;
                         }
                     }
                 }

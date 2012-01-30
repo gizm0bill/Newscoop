@@ -1663,7 +1663,7 @@ hh.mm:langs:flags
                 if (!empty($this->m_last_events)) {
                     if (isset($this->m_last_events[$one_event['event_id']])) {
                         if ($this->m_last_events[$one_event['event_id']] == json_encode($one_event)) {
-                            continue;
+                            //continue;
                         }
                     }
                 }
