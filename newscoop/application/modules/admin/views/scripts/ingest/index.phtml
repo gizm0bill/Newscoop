@@ -20,7 +20,7 @@
         <a href="<?php echo $this->url(array(
             'action' => 'switch-mode',
             'feed' => $feed->getId(),
-        )); ?>" title="Switch mode"><?php echo $feed->getMode() === "auto" ? getGS('Automatic') : getGS('Manual'); ?></a>
+        )); ?>" title="Switch mode"><?php echo $feed->getMode() === "auto" ? getGS('Automatic: Der Newsticker läuft im Automatikmodus') : getGS('Manual: Der Newsticker läuft im manuellen Modus'); ?></a>
     </li>
     <?php } ?>
 </ul>
