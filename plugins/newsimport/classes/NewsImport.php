@@ -714,10 +714,12 @@ class NewsImport
                 //$voided_info_str = implode($voided_line_sep, $voided_info);
                 //$article_data->setProperty('Fvoided', $voided_info_str);
                 foreach ($voided_info as $one_voided_date) {
-                    $void_datetime = array(
-                        'start_date' => $one_voided_date,
-                        'end_date' => $one_voided_date,
-                        'recurring' => false,
+                    $void_datetime = new ArticleDatetime(
+                        array(
+                            'start_date' => $one_voided_date,
+                            'end_date' => $one_voided_date,
+                            'recurring' => false,
+                        )
                     );
                     $repository->add($void_datetime, $article->getArticleNumber(), 'voided', false, false);
                 }
@@ -1136,10 +1138,12 @@ class NewsImport
                 //    $event_data_rem->setProperty('Fvoided', $voided_info_str);
                 //}
                 foreach ($new_voided_dates as $one_voided_date) {
-                    $void_datetime = array(
-                        'start_date' => $one_voided_date,
-                        'end_date' => $one_voided_date,
-                        'recurring' => false,
+                    $void_datetime = new ArticleDatetime(
+                        array(
+                            'start_date' => $one_voided_date,
+                            'end_date' => $one_voided_date,
+                            'recurring' => false,
+                        )
                     );
                     $repository->add($void_datetime, $event_art_rem->getArticleNumber(), 'voided', false, false);
                 }
