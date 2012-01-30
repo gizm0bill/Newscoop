@@ -28,6 +28,7 @@ class Admin_PlaylistController extends Zend_Controller_Action
      */
     private $playlistArticleRepository = NULL;
 
+
     /**
      * @var Newscoop\Services\Resource\ResourceId
      */
@@ -60,6 +61,7 @@ class Admin_PlaylistController extends Zend_Controller_Action
         {
             $this->view->playlistName = $playlist->getName();
             $this->view->playlistId = $playlist->getId();
+            $this->view->userCanRemove = $this->_helper->acl->isAllowed('playlist', 'delete');
         }
     }
 
@@ -74,6 +76,9 @@ class Admin_PlaylistController extends Zend_Controller_Action
         $this->_helper->layout->setLayout('iframe');
     }
 
+    /**
+     * @Acl(resource="playlist", action="delete")
+     */
     public function deleteAction()
     {
         $id = $this->_request->getParam('id');
@@ -97,6 +102,9 @@ class Admin_PlaylistController extends Zend_Controller_Action
         $this->view->code = 200;
     }
 
+    /**
+     * @Acl(resource="playlist", action="manage")
+     */
     public function saveDataAction()
     {
         $playlistId = $this->_request->getParam('id', null);

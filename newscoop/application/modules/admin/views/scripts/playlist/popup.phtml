@@ -246,7 +246,7 @@ $this->headScript()->appendScript( $js, "text/javascript" );
 	<div id="context-box" class="block-shadow">
 		<div class="toolbar">
 			<div class="save-button-bar">
-				<?php if (isset($this->playlistId)) : ?>
+				<?php if (isset($this->playlistId) && $this->userCanRemove) : ?>
 				<input type="button" class="default-button" id="remove-ctrl" value="<?php echo getGS('Remove'); ?>" />
 				<?php endif; ?>
 				<input type="submit" name="cancel"

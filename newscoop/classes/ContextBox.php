@@ -59,15 +59,14 @@ Class ContextBox extends DatabaseObject
 
     public function getArticlesList()
     {
-        return ContextBoxArticle::GetList($this->getId(), null, 0, 0, $p_count, FALSE);
+        return ContextBoxArticle::GetList(array('context_box' => $this->getId()), null, 0, 0, $p_count, FALSE);
     }
 
-
-	/**
-	 * Remove the context box for the given article.
-	 * @param int $articleNumber
-	 * @return void
-	 */
+    /**
+     * Remove the context box for the given article.
+     * @param int $articleNumber
+     * @return void
+     */
     public static function OnArticleDelete($articleNumber)
     {
 		global $g_ado_db;
