@@ -16,8 +16,8 @@ regGS("Article \"<i>$1</i>\" already exists, and was not overwritten.<br />", ""
 regGS("Files", "Dateien");
 regGS("Select section:", "Rubrik wählen");
 regGS("Add another author", "Autor/in hinzufügen");
-regGS("The article has been locked by $1 ($2) $3 minute(s) ago.", "Der Artikel wurde vor $3 Minute(n) von $1 ($2) gesperrt.");
-regGS("The article has been locked by $1 ($2) $3 hour(s) and $4 minute(s) ago.", "Der Artikel wurde vor $3 Stunde(n) und $4 Minute(n) von $1 ($2) gesperrt.");
+regGS("The article has been locked by $1 ($2) $3 minute(s) ago.", "Achtung: Der Artikel ist durch $1 ($2) seit $3 Minute(n) gesperrt.<br/>Du kannst die Sperrung aufheben, dabei gehen aber alle nicht gespeicherten Änderungen verloren. Bitte stelle sicher, dass $1 ($2) den Artikel nicht mehr am Bearbeiten ist.");
+regGS("The article has been locked by $1 ($2) $3 hour(s) and $4 minute(s) ago.", "Achtung: Der Artikel ist durch $1 ($2) seit $3 Stunde(n) und $4 Minute(n) gesperrt.<br/>Du kannst die Sperrung aufheben, dabei gehen aber alle nicht gespeicherten Änderungen verloren. Bitte stelle sicher, dass $1 ($2) den Artikel nicht mehr am Bearbeiten ist.");
 regGS("Switches saved.", "Wechsel gespeichert.");
 regGS("Keywords saved.", "Schlagwörter gespeichert.");
 regGS("Comment settings", "Einstellungen kommentieren");

@@ -107,6 +107,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('article.popularity', 'Newscoop\Services\ArticlePopularityService')
             ->addArgument(new sfServiceReference('em'));
 
+        $container->register('audit.maintenance', 'Newscoop\Services\AuditMaintenanceService')
+            ->addArgument(new sfServiceReference('em'));
+
         $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
             ->setConfigurator(function($service) use ($container) {
                 foreach ($container->getParameter('listener') as $listener) {
