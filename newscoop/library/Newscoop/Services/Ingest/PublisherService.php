@@ -65,6 +65,10 @@ class PublisherService
         }
 
         $article = $this->getArticle($entry);
+        if (!$article->exists()) {
+            return;
+        }
+
         $article->setTitle($entry->getTitle());
         $article->setProperty('time_updated', $entry->getUpdated()->format(self::DATETIME_FORMAT));
         $article->setKeywords($entry->getCatchWord());

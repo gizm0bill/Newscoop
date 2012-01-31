@@ -80,6 +80,11 @@ class IngestService
         }
     }
 
+    /**
+     * Update all swissinfo feeds
+     *
+     * @return void
+     */
     public function updateSwissinfo()
     {
         $feed = $this->em->getRepository('Newscoop\Entity\Ingest\Feed')
@@ -92,8 +97,12 @@ class IngestService
         }
     }
 
-    //private function
-
+    /**
+     * Update feed
+     *
+     * @param Newscoop\Entity\Ingest\Feed $feed
+     * @return void
+     */
     private function updateSwissinfoFeed(Feed $feed)
     {
         try {
@@ -102,46 +111,41 @@ class IngestService
             if ($response->isSuccessful()) {
                 $available_sections = $response->getBody();
                 $available_sections = json_decode($available_sections, true);
-            }
-            else {
+            } else {
                 return;
             }
-        }
-        catch (\Zend_Http_Client_Exception $e) {
+        } catch (\Zend_Http_Client_Exception $e) {
             return;
             //throw new \Exception("Swiss info http error {$e->getMessage()}");
-        }
-        catch(\Exception $e) {
+        } catch(\Exception $e) {
             return;
         }
 
-        //get articles for each available section
+        // get articles for each available section
         $url = $this->config['swissinfo_latest'];
 
         foreach ($available_sections as $section) {
-
             try {
                 $request_url = str_replace('{{section_id}}', $section['id'], $url);
-
                 $http = new \Zend_Http_Client($request_url);
                 $response = $http->request();
-                if ($response->isSuccessful()) {
 
+                if ($response->isSuccessful()) {
                     $section_xml = $response->getBody();
                     $stories = Parser\SwissinfoParser::getStories($section_xml);
 
                     foreach ($stories as $story) {
-
                         $parser = new SwissinfoParser($story);
                         $entry = $this->getPrevious($parser, $feed);
 
-                        if ($feed->isAutoMode()) {
+                        if ($entry->isPublished()) {
+                            $this->updatePublished($entry);
+                        } elseif ($feed->isAutoMode()) {
                             $this->publish($entry);
                         }
                     }
                 }
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 //throw new \Exception("Swiss info feed error {$e->getMessage()}");
                 return;
             }
