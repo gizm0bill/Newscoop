@@ -21,6 +21,7 @@ class SwissinfoParser implements Parser
     /** @var DateTime */
     private $date;
 
+
     /**
      * @param string $content
      */
@@ -30,12 +31,9 @@ class SwissinfoParser implements Parser
 
         try {
             $date_string = (string) array_shift($this->story->xpath('./property[8]/value/date'));
-            //echo $date_string ."\n";
             $this->date = new \DateTime($date_string);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->date = new \DateTime();
-            //echo $e->getMessage();
         }
     }
 
@@ -70,11 +68,10 @@ class SwissinfoParser implements Parser
         $main_titles = array();
         foreach ($main_section_titles as $title) {
             $key = (string) array_shift($title->xpath('.//key'));
-            if ($key == "title") {
+            if ($key == 'title') {
                 $value = (string) array_shift($title->xpath('.//value/string'));
                 $main_titles[] = $value;
-            }
-            else {
+            } else {
                 //maybe they have something weird there...
                 $main_titles[] = null;
             }
@@ -104,7 +101,7 @@ class SwissinfoParser implements Parser
         $content[]= (string) array_shift($free_section[0]->xpath('.//content[@type="TextBlock"]/property[1]/value/string'));
         $content[]= '</p>';
 
-        $content = implode("", $content);
+        $content = implode('', $content);
 
         return $content;
     }
@@ -162,15 +159,13 @@ class SwissinfoParser implements Parser
 
     public function getStatus()
     {
-        return "Usable";
+        return 'Usable';
     }
 
     public function getLiftEmbargo()
     {
         return null;
     }
-
-    //Attributes of articles
 
     public function getService()
     {
@@ -179,42 +174,42 @@ class SwissinfoParser implements Parser
 
     public function getLanguage()
     {
-        return "de";
+        return 'de';
     }
 
     public function getSubject()
     {
-        return "";
+        return '';
     }
 
     public function getCountry()
     {
-        return "";
+        return '';
     }
 
     public function getProduct()
     {
-        return "swissinfo";
+        return 'swissinfo';
     }
 
     public function getSubtitle()
     {
-        return "";
+        return '';
     }
 
     public function getProviderId()
     {
-        return "";
+        return '';
     }
 
     public function getRevisionId()
     {
-        return "";
+        return '';
     }
 
     public function getLocation()
     {
-        return "";
+        return '';
     }
 
     public function getProvider()
