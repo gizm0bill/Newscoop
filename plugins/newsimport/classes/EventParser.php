@@ -506,7 +506,7 @@ class EventData_Parser_SimpleXML {
                         $one_cancel_type = strtolower($one_cancel_spec['type']);
 
                         //if (strtolower('' . $event->$one_cancel_field) == strtolower($one_cancel_value)) {}
-                        if (null !== stripos('' . $event->$one_cancel_field, $one_cancel_value))
+                        if (false !== stripos('' . $event->$one_cancel_field, $one_cancel_value)) {
                             if ('cancel' == $one_cancel_type) {
                                 $e_canceled = true;
                             }

@@ -373,6 +373,8 @@ class NewsImport
 
         global $g_user;
 
+        $images_to_check = array();
+
         $today_date_str = date('Y-m-d');
 
         $scr_type = 'screening';
@@ -865,7 +867,67 @@ class NewsImport
 
             }
 
+            // preparing for setting the images
+            $images_to_check[] = array(
+                'article_number' => $art_number,
+                'images' => $one_event['images'],
+                'provider_id' => $one_event['provider_id'],
+            );
+
+            // setting the authors
+
+            ArticleAuthor::OnArticleLanguageDelete($art_number, $art_lang);
+
+            $article->setAuthor($art_author);
+
+            $article->setIsPublic($status_public);
+            $article->setCommentsEnabled($status_comments);
+            //$article->setIsIndexed(true);
+
+            // unless edited (and thus already skipped) we force to publish it; oterwise problems come along issue moving!
+            //if ($article_new) {
+                if ($status_publish) {
+                    $article->setWorkflowStatus('Y');
+                }
+            //}
+
+            if ($status_publish_by_event_date) {
+                if ($article->isPublished()) {
+                    if (!$uses_multidates) {
+                        $article->setPublishDate($one_event['date']); // necessary to reset after changing the workflow status
+                    }
+                    else {
+                        $today_date = date('Y-m-d');
+                        $article->setPublishDate($today_date); // necessary to reset after changing the workflow status
+                    }
+                }
+            }
+        }
+
+        // calling to set the images
+        self::AddEventImages($images_to_check, $p_source);
+
+    } // fn StoreEventData
+
+
+	/**
+     * Manages images of provided events
+     *
+     * @param array $p_events
+     * @param array $p_source
+	 * @return void
+	 */
+    private static function AddEventImages($p_events, $p_source) {
+        if (empty($p_events)) {
+            return;
+        }
+
+        $images_local = $p_source['images_local'];
+
+        foreach ($p_events as $one_event) {
             // setting images
+
+            $art_number = $one_event['article_number'];
 
             $images_to_delete = array();
             $one_old_images = ArticleImage::GetImagesByArticleNumber($art_number);
@@ -1001,36 +1063,8 @@ class NewsImport
                 }
             }
 
-            // setting the authors
-
-            ArticleAuthor::OnArticleLanguageDelete($art_number, $art_lang);
-
-            $article->setAuthor($art_author);
-
-            $article->setIsPublic($status_public);
-            $article->setCommentsEnabled($status_comments);
-            //$article->setIsIndexed(true);
-
-            // unless edited (and thus already skipped) we force to publish it; oterwise problems come along issue moving!
-            //if ($article_new) {
-                if ($status_publish) {
-                    $article->setWorkflowStatus('Y');
-                }
-            //}
-
-            if ($status_publish_by_event_date) {
-                if ($article->isPublished()) {
-                    if (!$uses_multidates) {
-                        $article->setPublishDate($one_event['date']); // necessary to reset after changing the workflow status
-                    }
-                    else {
-                        $today_date = date('Y-m-d');
-                        $article->setPublishDate($today_date); // necessary to reset after changing the workflow status
-                    }
-                }
-            }
         }
-    } // fn StoreEventData
+    } // fn AddEventImages
 
 
 	/**
