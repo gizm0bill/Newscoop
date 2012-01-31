@@ -333,6 +333,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
             'multi_time' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), // event_times per day
             'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone
+            'postponed' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are postponed
         );
 
         $scr_fields = array(

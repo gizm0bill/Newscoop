@@ -498,17 +498,26 @@ class EventData_Parser_SimpleXML {
                 $event_other = array();
 
                 $e_canceled = false;
+                $e_postponed = false;
                 if (!empty($p_cancels)) {
                     foreach ($p_cancels as $one_cancel_spec) {
                         $one_cancel_field = $one_cancel_spec['field'];
                         $one_cancel_value = $one_cancel_spec['value'];
+                        $one_cancel_type = strtolower($one_cancel_spec['type']);
 
-                        if (strtolower('' . $event->$one_cancel_field) == strtolower($one_cancel_value)) {
-                            $e_canceled = true;
+                        //if (strtolower('' . $event->$one_cancel_field) == strtolower($one_cancel_value)) {}
+                        if (null !== stripos('' . $event->$one_cancel_field, $one_cancel_value))
+                            if ('cancel' == $one_cancel_type) {
+                                $e_canceled = true;
+                            }
+                            if ('postpone' == $one_cancel_type) {
+                                $e_postponed = true;
+                            }
                         }
                     }
                 }
                 $event_info['canceled'] = $e_canceled;
+                $event_info['postponed'] = $e_postponed;
 
                 $e_important = false;
                 $x_evehig = trim('' . $event->evehig);
@@ -1049,6 +1058,7 @@ class EventData_Parser_SimpleXML {
                     'time' => $event_info['time'],
                     'prices' => $event_info['prices'],
                     'canceled' => $event_info['canceled'],
+                    'postponed' => $event_info['postponed'],
                 );
 
 /*
@@ -1079,6 +1089,7 @@ class EventData_Parser_SimpleXML {
                 unset($event_info['time']);
                 //unset($event_info['prices']);
                 unset($event_info['canceled']);
+                unset($event_info['postponed']);
                 $event_info['event_id'] = $event_specifier;
                 $event_info['uses_multidates'] = true;
                 $event_info['multidates'] = $event_dates;

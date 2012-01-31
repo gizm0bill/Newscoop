@@ -373,6 +373,8 @@ class NewsImport
 
         global $g_user;
 
+        $today_date_str = date('Y-m-d');
+
         $scr_type = 'screening';
 
         if ((!isset($g_user)) || (empty($g_user))) {
@@ -582,11 +584,16 @@ class NewsImport
                 //$repository->deleteByArticle($article->m_data['Number']);
 
                 $cur_voided_dates = array();
+                $cur_postponed_dates = array();
                 //$cur_voided_dates = $article_data->getFieldValue('voided');
                 foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
                     $cur_voided_dates[] = date_format($one_void_entry->getStartDate(), 'Y-m-d');
                     $em->remove($one_void_entry);
+                }
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'postponed')) as $one_postpone_entry) {
+                    $cur_postponed_dates[] = date_format($one_postpone_entry->getStartDate(), 'Y-m-d');
+                    $em->remove($one_postpone_entry);
                 }
 
                 // take all previously set dates
@@ -603,14 +610,24 @@ class NewsImport
 */
 
                     $old_voided = false;
+                    $old_postponed = false;
                     //if (false !== stristr($cur_voided_dates, $old_date_str)) {
                     if (in_array($old_date_str, $cur_voided_dates)) {
                         $old_voided = true;
+                    }
+                    // old info on future is set as canceled here; if we've just got that info at new data, it is overwritten then
+                    if ($old_date_str >= $today_date_str) {
+                        $old_voided = true;
+                    }
+
+                    if (in_array($old_date_str, $cur_postponed_dates)) {
+                        $old_postponed = true;
                     }
 
                     $old_info = array(
                         'row_id' => $one_date_entry->getId(),
                         'voided' => $old_voided,
+                        'postponed' => $old_postponed,
                         'prices' => '',
                         'date' => $old_date_str,
                         'time' => $one_date_entry->getStartTime(),
@@ -634,6 +651,7 @@ class NewsImport
                 $multi_time_info = array();
                 $multi_time_line_sep = "\n<br />\n";
                 $voided_info = array();
+                $postponed_info = array();
                 //$voided_line_sep = "\n<br />\n";
 
                 foreach ($new_event_dates as $one_date) {
@@ -641,10 +659,15 @@ class NewsImport
                     if ($one_date['canceled']) {
                         $new_voided = true;
                     }
+                    $new_postponed = false;
+                    if ($one_date['postponed']) {
+                        $new_postponed = true;
+                    }
 
                     $new_info = array(
                         'row_id' => 0,
                         'voided' => $new_voided,
+                        'postponed' => $new_postponed,
                         'prices' => $one_date['prices'],
                         'date' => $one_date['date'],
                         'time' => $one_date['time'],
@@ -699,6 +722,9 @@ class NewsImport
                     if ($one_date['voided']) {
                         $voided_info[] = $one_date['date'];
                     }
+                    if ($one_date['postponed']) {
+                        $postponed_info[] = $one_date['date'];
+                    }
 
                 }
 
@@ -722,6 +748,16 @@ class NewsImport
                         )
                     );
                     $repository->add($void_datetime, $article->getArticleNumber(), 'voided', false, false);
+                }
+                foreach ($postponed_info as $one_postponed_date) {
+                    $postpone_datetime = new ArticleDatetime(
+                        array(
+                            'start_date' => $one_postponed_date,
+                            'end_date' => $one_postponed_date,
+                            'recurring' => false,
+                        )
+                    );
+                    $repository->add($postpone_datetime, $article->getArticleNumber(), 'postponed', false, false);
                 }
             }
 
@@ -1095,14 +1131,21 @@ class NewsImport
                 $rem_event_dates = array();
 
                 $cur_voided_dates = array();
+                $cur_postponed_dates = array();
                 //$cur_voided_dates = $event_data_rem->getFieldValue('voided');
                 foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
                     $cur_voided_dates[] = date_format($one_void_entry->getStartDate(), 'Y-m-d');
                     $em->remove($one_void_entry);
                 }
+                foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'postponed')) as $one_postpone_entry) {
+                    //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                    $cur_postponed_dates[] = date_format($one_postpone_entry->getStartDate(), 'Y-m-d');
+                    $em->remove($one_postpone_entry);
+                }
 
                 $new_voided_dates = array();
+                $new_postponed_dates = array();
 
                 foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'schedule')) as $one_date_entry) {
                     //$one_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
@@ -1116,6 +1159,9 @@ class NewsImport
                     //if (false !== stristr($cur_voided_dates, $one_date_str)) {
                     if (in_array($one_date_str, $cur_voided_dates)) {
                         $new_voided_dates[] = $one_date_str;
+                    }
+                    if (in_array($one_date_str, $cur_postponed_dates)) {
+                        $new_postponed_dates[] = $one_date_str;
                     }
 
                     $all_event_dates[] = $one_date_str;
@@ -1146,6 +1192,16 @@ class NewsImport
                         )
                     );
                     $repository->add($void_datetime, $event_art_rem->getArticleNumber(), 'voided', false, false);
+                }
+                foreach ($new_postponed_dates as $one_postponed_date) {
+                    $postpone_datetime = new ArticleDatetime(
+                        array(
+                            'start_date' => $one_postponed_date,
+                            'end_date' => $one_postponed_date,
+                            'recurring' => false,
+                        )
+                    );
+                    $repository->add($postpone_datetime, $event_art_rem->getArticleNumber(), 'postponed', false, false);
                 }
 
                 if (0 == count($all_event_dates)) {
