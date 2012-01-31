@@ -961,7 +961,7 @@ class NewsImport
                     }
 
                     if ($image_found) {
-                        $one_img_res = ArticleImage::AddImageToArticle($use_image_obj->getImageId(), $art_number, 1);
+                        $one_img_res = ArticleImage::AddImageToArticle($use_image_obj->getImageId(), $art_number, null);
                         continue;
                     }
 
@@ -1044,7 +1044,7 @@ class NewsImport
                                 'provider_id' => $one_event['provider_id'],
                             );
                             self::$s_img_cache->insertImageIntoCache($one_image_info);
-                            $one_img_res = ArticleImage::AddImageToArticle($one_image_obj->getImageId(), $art_number, 1);
+                            $one_img_res = ArticleImage::AddImageToArticle($one_image_obj->getImageId(), $art_number, null);
                         }
                     }
                     catch (Exception $exc) {
