@@ -487,6 +487,10 @@ class EventData_Parser_SimpleXML {
             // array of events info
             $entry_set = $event_location->entry;
 
+            // first, put all the location's events here
+            // they will be grouped by tour ids then, and filtered finally
+            $location_events = array();
+
             // note that most of event properties are usually empty
             foreach ($entry_set as $event) {
 
@@ -494,17 +498,26 @@ class EventData_Parser_SimpleXML {
                 $event_other = array();
 
                 $e_canceled = false;
+                $e_postponed = false;
                 if (!empty($p_cancels)) {
                     foreach ($p_cancels as $one_cancel_spec) {
                         $one_cancel_field = $one_cancel_spec['field'];
                         $one_cancel_value = $one_cancel_spec['value'];
+                        $one_cancel_type = strtolower($one_cancel_spec['type']);
 
-                        if ($event->$one_cancel_field == $one_cancel_value) {
-                            $e_canceled = true;
+                        //if (strtolower('' . $event->$one_cancel_field) == strtolower($one_cancel_value)) {}
+                        if (false !== stripos('' . $event->$one_cancel_field, $one_cancel_value)) {
+                            if ('cancel' == $one_cancel_type) {
+                                $e_canceled = true;
+                            }
+                            if ('postpone' == $one_cancel_type) {
+                                $e_postponed = true;
+                            }
                         }
                     }
                 }
                 $event_info['canceled'] = $e_canceled;
+                $event_info['postponed'] = $e_postponed;
 
                 $e_important = false;
                 $x_evehig = trim('' . $event->evehig);
@@ -851,6 +864,7 @@ class EventData_Parser_SimpleXML {
 
                 // * main date-time info
 
+/*
                 // year, four digits
                 $x_evedatyeanum2 = trim('' . $event->evedatyeanum2);
                 $event_info['date_year'] = $x_evedatyeanum2;
@@ -862,7 +876,7 @@ class EventData_Parser_SimpleXML {
                 // day, one/two digits
                 $x_evedatdaynum1 = trim('' . $event->evedatdaynum1);
                 $event_info['date_day'] = $x_evedatdaynum1;
-
+*/
                 // hours, like '14.30'
                 $x_eveda2 = trim('' . $event->eveda2);
                 $event_info['time'] = $x_eveda2;
@@ -1035,6 +1049,19 @@ class EventData_Parser_SimpleXML {
                     $event_info['geo'] = array('longitude' => $x_loclng, 'latitude' => $x_loclat);
                 }
 
+                if (empty($location_events[$event_info['tour_id']])) {
+                    $location_events[$event_info['tour_id']] = array('info' => $event_info, 'dates' => array());
+                }
+
+                $location_events[$event_info['tour_id']]['dates'][] = array(
+                    'date' => $event_info['date'],
+                    'time' => $event_info['time'],
+                    'prices' => $event_info['prices'],
+                    'canceled' => $event_info['canceled'],
+                    'postponed' => $event_info['postponed'],
+                );
+
+/*
                 $p_events_all[$event_info['event_id']] = $event_info;
 
                 if (!empty($this->m_last_events)) {
@@ -1046,6 +1073,39 @@ class EventData_Parser_SimpleXML {
                 }
 
                 $p_events_dif[$event_info['event_id']] = $event_info;
+*/
+
+            }
+
+            // filter (non)changed events
+
+            foreach ($location_events as $one_tour_data) {
+
+                $event_info = $one_tour_data['info'];
+                $event_dates = $one_tour_data['dates'];
+
+                $event_specifier = $event_info['location_id'] . '-' . $event_info['tour_id'];
+                unset($event_info['date']);
+                unset($event_info['time']);
+                //unset($event_info['prices']);
+                unset($event_info['canceled']);
+                unset($event_info['postponed']);
+                $event_info['event_id'] = $event_specifier;
+                $event_info['uses_multidates'] = true;
+                $event_info['multidates'] = $event_dates;
+
+                $p_events_all[$event_specifier] = $event_info;
+
+                if (!empty($this->m_last_events)) {
+                    if (array_key_exists($event_specifier, $this->m_last_events)) {
+                        if (json_encode($event_info) == $this->m_last_events[$event_specifier]) {
+                            //continue;
+                        }
+                    }
+                }
+
+                $p_events_dif[$event_specifier] = $event_info;
+
             }
 
         }

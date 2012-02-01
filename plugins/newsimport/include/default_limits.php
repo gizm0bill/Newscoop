@@ -18,7 +18,8 @@ if (!function_exists('newsimport_getBaselRegions')) {
 
 $event_data_cancel = array(
     'events_1' => array(
-        array('field' => 'evett1', 'value' => 'Abgesagt'),
+        array('type' => 'cancel', 'field' => 'evett1', 'value' => 'Abgesagt'),
+        array('type' => 'postpone', 'field' => 'evett1', 'value' => 'Verschoben'),
     ),
 );
 

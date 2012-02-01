@@ -881,4 +881,4 @@ class ArticleTypeField extends DatabaseObject {
             self::TYPE_COMPLEX_DATE => 'VARCHAR(255) DEFAULT NULL',
         );
 	}
-}
+} // class ArticleTypeField

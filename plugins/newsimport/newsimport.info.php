@@ -318,7 +318,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             // other details - free form
             'genre' => array('type' => 'text', 'params' => array(), 'hidden' => false), // Sonderausstellung/Dauerausstellung; Jazz, Festival, ... (or movie genre)
             'languages' => array('type' => 'text', 'params' => array(), 'hidden' => false), // usually empty
-            'prices' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 1), 'hidden' => false), // some textual or numerical info, if available
+            'prices' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), // some textual or numerical info, if available
             'minimal_age' => array('type' => 'text', 'params' => array(), 'hidden' => false), // textual or numerical info, if any, but usually empty
             // other details - fixed form
             'canceled' => array('type' => 'switch', 'params' => array(), 'hidden' => false), // if event was canceled
@@ -327,6 +327,13 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             // category available as article topic
             // images as article images
             // geolocation as map POIs
+        );
+
+        $evt_fields = array(
+            'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
+            'multi_time' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), // event_times per day
+            'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone
+            'postponed' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are postponed
         );
 
         $scr_fields = array(
@@ -378,6 +385,11 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             $art_fields_use = $art_fields;
             if ($scr_type_name == $art_type_name) {
                 foreach ($scr_fields as $one_field_name => $one_field_params) {
+                    $art_fields_use[$one_field_name] = $one_field_params;
+                }
+            }
+            if ($evt_type_name == $art_type_name) {
+                foreach ($evt_fields as $one_field_name => $one_field_params) {
                     $art_fields_use[$one_field_name] = $one_field_params;
                 }
             }
