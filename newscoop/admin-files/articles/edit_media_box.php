@@ -1,11 +1,19 @@
 <div class="articlebox" title="<?php putGS('Media'); ?>"><div class="tabs">
     <ul>
         <li><a href="#media-images"><?php putGS('Images'); ?></a></li>
+        <li><a href="#media-slideshows"><?php putGS('Slideshows'); ?></a></li>
         <li><a href="#media-attachments"><?php putGS('Files'); ?></a></li>
     </ul>
     <div id="media-images">
         <?php if ($inEditMode && $g_user->hasPermission('AttachImageToArticle')) { ?>
         <a class="iframe ui-state-default icon-button right-floated" href="<?php echo camp_html_article_url($articleObj, $f_language_id, "images/popup.php"); ?>"><span class="ui-icon ui-icon-plusthick"></span><?php putGS('Attach'); ?></a>
+        <a class="iframe ui-state-default icon-button right-floated" href="<?php echo $this->view->url(array(
+            'module' => 'admin',
+            'controller' => 'image',
+            'action' => 'article',
+            'article_number' => $articleObj->getArticleNumber(),
+            'language_id' => $f_language_id,
+        )); ?>"><span class="ui-icon ui-icon-image"></span><?php putGS('Place'); ?></a>
         <div class="clear"></div>
         <?php } ?>
 
@@ -34,6 +42,15 @@
             </li>
             <?php } ?>
         </ul>
+    </div>
+
+    <div id="media-slideshows">
+    <!-- BEGIN Slideshows -->
+    <?php echo $this->view->action('box', 'slideshow', 'admin', array(
+        'article_number' => $articleObj->getArticleNumber(),
+    )); ?>
+    <!-- END Slideshows -->
+
     </div>
 
     <div id="media-attachments">

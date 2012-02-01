@@ -1,0 +1,111 @@
+<?php $this->placeholder('bodyId')->set('next'); ?>
+<h1><?php putGS('Slideshow'); ?></h1>
+
+<form method="<?php echo $this->form->getMethod(); ?>"><div class="inline">
+    <input type="text" class="<?php echo $this->form->headline->hasErrors() ? ' error' : ''; ?>" name="headline" value="<?php echo $this->form->headline->getValue(); ?>" title="<?php echo $this->form->headline->hasErrors() ? implode(", ", $this->form->headline->getMessages()) : getGS('Slideshow headline'); ?>" />
+    <input type="text" class="short<?php echo $this->form->slug->hasErrors() ? ' error' : ''; ?>" name="slug" value="<?php echo $this->form->slug->getValue(); ?>" placeholder="<?php putGS('Slug'); ?>" title="<?php echo $this->form->slug->hasErrors() ? implode(", ", $this->form->slug->getMessages()) : getGS("Used for identification, e.g. 'basel'"); ?>" />
+    <button><?php putGS('Save'); ?></button>
+</div></form>
+
+<ul id="slideshow-items" class="slideshow">
+    <?php foreach ($this->slideshow->getItems() as $item) { ?>
+    <?php echo $this->slideshowItem($item); ?>
+    <?php } ?>
+</ul>
+
+<form method="<?php echo $this->form->getMethod(); ?>" action="<?php echo $this->url(array(
+    'action' => 'add-video-item',
+)); ?>"><div class="inline">
+    <input type="text" name="url" title="<?php putGS("Add video url (e.g. http://vimeo.com/25083275 for Vimeo, http://youtu.be/1XsPVO61e9w for YouTube)"); ?>" placeholder="<?php putGS('Video URL'); ?>" /> <button><?php putGS('Add video'); ?></button>
+</div></form>
+
+<script>
+/**
+ * Set order of items
+ *
+ * @return void
+ */
+function setOrder() {
+    $.post("<?php echo $this->url(array(
+        'module' => 'admin',
+        'controller' => 'slideshow',
+        'action' => 'set-order',
+        'format' => 'json',
+    )); ?>", {
+        order: $('#slideshow-items').sortable('toArray'),
+    }, function (data, textStatus) {
+    }, 'json');
+}
+
+var draggableOptions = {
+    revert: true,
+    connectToSortable: 'ul.slideshow',
+    opacity: 0.8,
+    helper: 'clone',
+    cursor: 'move'
+};
+
+$(function() {
+    $('.slideshow').sortable({
+        placeholder: 'placeholder',
+        receive: function(event, ui) {
+            var imageId = ui.item.attr('id');
+            $.post("<?php echo $this->url(array(
+                'module' => 'admin',
+                'controller' => 'slideshow',
+                'action' => 'add-item',
+                'format' => 'json',
+            )); ?>", {
+                image: imageId,
+            }, function (data, textStatus) {
+                if (data.error_message) {
+                    $('#slideshow-items #' + imageId).detach();
+                    alert(data.error_message);
+                    return;
+                }
+
+                $('#slideshow-items #' + imageId).replaceWith(data.item);
+                setOrder();
+            }, 'json');
+        },
+        update: setOrder,
+        cursor: 'move'
+    });
+
+    $('.thumbnails li').draggable(draggableOptions);
+
+    $('#slideshow-items .remove').live('click', function(e) {
+        e.preventDefault();
+        var link = $(this);
+        $.post(link.attr('href') + '?format=json', function (data, textStatus) {
+            link.closest('li').detach();
+        });
+    });
+
+    $('#select-image').tabs();
+});
+</script>
+
+<div id="select-image">
+    <ul>
+        <li><a href="#attached-images"><?php putGS('Attached images'); ?></a></li>
+        <li><a href="#media-archive"><?php putGS('Media Archive'); ?></a></li>
+    </ul>
+
+    <div id="attached-images">
+        <ul class="thumbnails">
+            <?php foreach ($this->images as $image) { ?>
+            <li id="image-<?php echo $image->getId(); ?>">
+                <figure>
+                    <div><?php echo $this->thumbnail($image->getPath(), 100, 100, 'fit')->getImg($this); ?></div>
+                    <figcaption><label for="default-<?php echo $image->getId(); ?>"><?php echo $image->getWidth(), 'x', $image->getHeight(); ?></label></figcaption>
+                </figure>
+            </li>
+            <?php } ?>
+        </ul>
+    </div>
+
+    <div id="media-archive">
+        <?php echo $this->imageArchive(); ?>
+    </div>
+</div>

@@ -24,6 +24,8 @@ session.cookie_path = "/"
 
 translation.path = APPLICATION_PATH "/languages"
 
+theme_path = APPLICATION_PATH "/../themes"
+
 ; doctrine resource
 resources.doctrine.cache = "Doctrine\Common\Cache\ArrayCache";
 resources.doctrine.entity.dir = APPLICATION_PATH "/../library/Newscoop/Entity"
@@ -244,6 +246,12 @@ characterGroup.o = "o ö ô œ ò ó"
 characterGroup.s = "s ß"
 characterGroup.u = "u ü ù û ú"
 characterGroup.y = "y ÿ"
+
+image.cache_url = "images/cache"
+image.cache_path = APPLICATION_PATH "/../images/cache"
+
+image.cache_url = "images/cache"
+image.cache_path = APPLICATION_PATH "/../images/cache"
 
 [staging : production]
 
