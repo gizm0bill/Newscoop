@@ -632,7 +632,7 @@ class NewsImport
                         'postponed' => $old_postponed,
                         'prices' => '',
                         'date' => $old_date_str,
-                        'time' => $one_date_entry->getStartTime(),
+                        'time' => date_format($one_date_entry->getStartTime(), 'H.i'),
                     );
                     $all_event_dates[$old_date_str] = $old_info;
                 }
