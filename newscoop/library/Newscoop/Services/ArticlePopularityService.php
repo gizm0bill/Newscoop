@@ -10,11 +10,7 @@ namespace Newscoop\Services;
 use Doctrine\ORM\EntityManager,
     Newscoop\Entity\ArticlePopularity,
     Newscoop\Entity\Article,
-    Newscoop\Entity\Language,
-    Zend_Gdata,
-    Zend_Gdata_Query,
-    Zend_Gdata_ClientLogin,
-    DOMDocument;
+    Newscoop\Entity\Language;
 
 /**
  * Article pouplarity service
@@ -22,10 +18,10 @@ use Doctrine\ORM\EntityManager,
 class ArticlePopularityService
 {
     const SITE_URL = 'http://www.tageswoche.ch';
-
+    const GOOGLE_QUERY_URL = 'https://www.google.com/analytics/feeds/data';
     const TWITTER_QUERY_URL = 'http://urls.api.twitter.com/1/urls/count.json?url=';
-
     const FACEBOOK_QUERY_URL = 'https://graph.facebook.com/?ids=';
+    const ITEMS_AGE = 'P7D';
 
     /** @var array */
     private $criteria = array(
@@ -48,6 +44,9 @@ class ArticlePopularityService
     /** @var Doctrine\ORM\EntityManager */
     private $em;
 
+    /** @var DateTime */
+    private $when;
+
 
     /**
      * @param array $config
@@ -57,6 +56,8 @@ class ArticlePopularityService
     {
         $this->em = $em;
         $this->gd = null;
+        $date = new \DateTime();
+        $this->when = $date->sub(new \DateInterval(self::ITEMS_AGE));
     }
 
     /**
@@ -137,8 +138,8 @@ class ArticlePopularityService
         if (is_null($this->gd)) {
             $email = '';
             $pass = '';
-            $client = Zend_Gdata_ClientLogin::getHttpClient($email, $pass, 'analytics');
-            $this->gd = new Zend_Gdata($client);
+            $client = \Zend_Gdata_ClientLogin::getHttpClient($email, $pass, 'analytics');
+            $this->gd = new \Zend_Gdata($client);
             $this->gd->useObjectMapping(false);
         }
 
@@ -180,19 +181,15 @@ class ArticlePopularityService
      */
     public function updateMetrics()
     {
-        $entries = $this->getRepository()->findAll();
+        $date = new \DateTime();
+        $date->sub(new \DateInterval(self::ITEMS_AGE));
+
+        $entries = $this->findItems($date);
         if (!is_array($entries)) {
             $entries = array();
         }
 
-        $weekBefore = date('Y-m-d', strtotime('-7 days'));
         foreach($entries as $entry) {
-            $article = $this->getRepository()->getArticle($entry);
-            if (is_null($article) || $article->getPublishDate() < $weekBefore) {
-                print "not processed\n";
-                continue;
-            }
-
             $response = $this->ping($entry->getURL());
             if (!$response || !$response->isSuccessful()) {
 		continue;
@@ -262,7 +259,6 @@ class ArticlePopularityService
      */
     public function findArticle($number, Language $language)
     {
-        // get article
         $article = $this->em->getRepository('Newscoop\Entity\Article')
             ->findOneBy(array('language' => $language->getId(), 'number' => $number));
 
@@ -274,28 +270,49 @@ class ArticlePopularityService
     }
 
     /**
+     * @param string
+     * @return array
+     */
+    public function findItems()
+    {
+        $query = $this->em
+            ->createQuery("SELECT ap
+                FROM Newscoop\Entity\Article a, Newscoop\Entity\ArticlePopularity ap
+                WHERE a.published > '" . $this->when->format('Y-m-d H:i:s') . "' AND a.number = ap.article_id");
+
+        return $query->getResult();
+    }
+
+    /**
      * Read google analytics metrics 
      *
+     * @param Zend_Gdata $client
      * @param string $uri 
      * @return array 
      */
-    public function fetchGAData($gdClient, $uri)
+    public function fetchGAData(\Zend_Gdata $client, $uri)
     {
         $data = array();
-        if (is_null($gdClient)) {
+        if (is_null($client)) {
             return $data;
         }
 
-        try {
-            $dimensions = array('ga:pagePath');
-            $metrics = array(
-                'ga:uniquePageviews',
-                'ga:avgTimeOnPage'
-            );
-            $reportURL = 'https://www.google.com/analytics/feeds/data?ids=ga:48980166&dimensions=' . @implode(',', $dimensions) . '&metrics=' . @implode(',', $metrics) . '&start-date=2011-11-02&end-date=2011-11-09&filters=ga:pagePath%3D%3D' . urlencode($uri);
+        $today = new DateTime();
+        $dimensions = array('ga:pagePath');
+        $metrics = array(
+            'ga:uniquePageviews',
+            'ga:avgTimeOnPage'
+        );
+        $reportURL = self::GOOGLE_QUERY_URL
+            . '?ids=ga:48980166&dimensions=' . @implode(',', $dimensions)
+            . '&metrics=' . @implode(',', $metrics)
+            . '&start-date=' . $this->when->format('Y-m-d')
+            . '&end-date=' . $today->format('Y-m-d') . '&filters=ga:pagePath%3D%3D'
+            . urlencode($uri);
 
-            $xml = $gdClient->getFeed($reportURL);
-            $dom = new DOMDocument();
+        try {
+            $xml = $client->getFeed($reportURL);
+            $dom = new \DOMDocument();
             $dom->loadXML($xml); 
             $entries = $dom->getElementsByTagName('entry');
             foreach($entries as $entry) {
@@ -304,7 +321,8 @@ class ArticlePopularityService
                 }
             }
         } catch (\Zend_Exception $e) {
-            echo 'Caught exception: ' . get_class($e) . "\n"; echo 'Message: ' . $e->getMessage() . "\n";
+            echo 'Caught exception: ' . get_class($e) . "\n";
+            echo 'Message: ' . $e->getMessage() . "\n";
         }
 
         return $data;
@@ -327,7 +345,7 @@ class ArticlePopularityService
         curl_close($ch);
 
         $tdata = json_decode($tdata);
-        return (int) $tdata->count;
+        return isset($tdata->count) ? (int) $tdata->count : 0;
     }
 
     /**
@@ -382,7 +400,8 @@ class ArticlePopularityService
             $client = new \Zend_Http_Client($uri);
             $response = $client->request();
         } catch(\Zend_Exception $e) {
-            echo 'Caught exception: ' . get_class($e) . "\n"; echo 'Message: ' . $e->getMessage() . "\n";
+            echo 'Caught exception: ' . get_class($e) . "\n";
+            echo 'Message: ' . $e->getMessage() . "\n";
             return false;
         }
 
