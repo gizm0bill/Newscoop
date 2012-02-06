@@ -1180,3 +1180,8 @@ dl.slideshow-preview figure > div > * {
     background-color: #fff;
     font-size: 1.3em;
 }
+
+#rendition-list input {
+    border: 1px solid #ccc;
+    padding: 2px 5px;
+}
