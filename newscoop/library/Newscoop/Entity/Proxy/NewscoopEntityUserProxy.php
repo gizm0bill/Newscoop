@@ -304,6 +304,12 @@ class NewscoopEntityUserProxy extends \Newscoop\Entity\User implements \Doctrine
         return parent::setAuthor($author);
     }
 
+    public function getAuthor()
+    {
+        $this->__load();
+        return parent::getAuthor();
+    }
+
     public function getAuthorId()
     {
         $this->__load();
