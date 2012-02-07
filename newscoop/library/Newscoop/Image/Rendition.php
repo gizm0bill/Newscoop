@@ -49,6 +49,18 @@ class Rendition
     private $coords;
 
     /**
+     * @Column(type="integer", nullable=True)
+     * @var int
+     */
+    private $offset;
+
+    /**
+     * @Column(nullable=True)
+     * @var string
+     */
+    private $label;
+
+    /**
      * @param int $width
      * @param int $height
      * @param string $specs
@@ -130,19 +142,7 @@ class Rendition
      */
     public function getPreview($width, $height)
     {
-        if ($this->width <= $width && $this->height <= $height) { // original smaller
-            $width = $this->width;
-            $height = $this->height;
-        } else if ($this->height <= $height) { // original width bigger
-            $height = round((float) $height * (float) $width / (float) $this->width);
-        } else if ($this->width <= $width) { // original height bigger
-            $width = round((float) $width * (float) $height / (float) $this->height);
-        } else {
-            $ratio = min((float) $width / (float) $this->width, (float) $height / (float) $this->height);
-            $width = round((float) $ratio * (float) $this->width);
-            $height = round((float) $ratio * (float) $this->height);
-        }
-
+        list($width, $height) = NetteImage::calculateSize($this->width, $this->height, $width, $height);
         return new Rendition($width, $height, $this->getSpecs());
     }
 
@@ -294,6 +294,38 @@ class Rendition
      */
     public function fits(ImageInterface $image)
     {
-        return $image->getWidth() >= $this->width && $image->getHeight() >= $this->height;
+        return $this->specs === 'fit' || ($image->getWidth() >= $this->width && $image->getHeight() >= $this->height);
+    }
+
+    /**
+     * Set offset
+     *
+     * @param int $offset
+     * @return void
+     */
+    public function setOffset($offset)
+    {
+        $this->offset = (int) $offset;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return void
+     */
+    public function setLabel($label)
+    {
+        $this->label = empty($label) ? null : (string) $label;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label !== null ? $this->label : $this->getName();
     }
 }

@@ -1,5 +1,11 @@
 <?php 
-regGS("This article cannot be previewed. Please make sure it has the publication has a theme assigned.", "This article cannot be previewed. Please make sure it has the publication has a theme assigned.");
+regGS("This issue cannot be previewed. Please make sure the publication has a theme assigned.", "This issue cannot be previewed. Please make sure the publication has a theme assigned.");
+regGS("Article Playlist", "Article Playlist");
+regGS("Add article to a playlist", "Add article to a playlist");
+regGS("You're not allowed to edit article.", "You're not allowed to edit article.");
+regGS("Webcode", "Webcode");
+regGS("Related Articles", "Related Articles");
+regGS("Context Box updated", "Context Box updated");
 regGS("On", "On");
 regGS("Off", "Off");
 regGS("You do not have the right to moderate comments.", "You do not have the right to moderate comments.");

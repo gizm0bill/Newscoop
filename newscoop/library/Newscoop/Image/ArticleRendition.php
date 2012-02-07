@@ -60,7 +60,7 @@ class ArticleRendition
      */
     public function getName()
     {
-        return $this->rendition->getName();
+        return $this->rendition ? $this->rendition->getName() : null;
     }
 
     /**

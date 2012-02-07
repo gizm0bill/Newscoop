@@ -64,10 +64,34 @@ class NewscoopImageLocalImageProxy extends \Newscoop\Image\LocalImage implements
         return parent::getDescription();
     }
 
+    public function isLocal()
+    {
+        $this->__load();
+        return parent::isLocal();
+    }
+
+    public function hasWidth()
+    {
+        $this->__load();
+        return parent::hasWidth();
+    }
+
+    public function getPhotographer()
+    {
+        $this->__load();
+        return parent::getPhotographer();
+    }
+
+    public function getCaption()
+    {
+        $this->__load();
+        return parent::getCaption();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'basename', 'description');
+        return array('__isInitialized__', 'id', 'location', 'basename', 'url', 'description', 'width', 'height', 'photographer');
     }
 
     public function __clone()

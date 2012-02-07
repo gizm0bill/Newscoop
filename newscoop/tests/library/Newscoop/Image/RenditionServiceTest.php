@@ -7,8 +7,6 @@
 
 namespace Newscoop\Image;
 
-require_once __DIR__ . '/LocalImageTest.php';
-
 /**
  */
 class RenditionServiceTest extends \TestCase
@@ -52,17 +50,17 @@ class RenditionServiceTest extends \TestCase
 
     public function testArticleRenditionWithDefault()
     {
-        $this->imageService->addArticleImage(self::ARTICLE_NUMBER, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->imageService->addArticleImage(self::ARTICLE_NUMBER, new LocalImage(self::PICTURE_LANDSCAPE));
         $rendition = new Rendition(200, 200, 'fit', 'thumbnail');
         $renditions = $this->service->getArticleRenditions(self::ARTICLE_NUMBER);
         $this->assertTrue(isset($renditions[$rendition]));
-        $this->assertContains(LocalImageTest::PICTURE_LANDSCAPE, $renditions[$rendition]->getImage()->getPath());
+        $this->assertContains(self::PICTURE_LANDSCAPE, $renditions[$rendition]->getImage()->getPath());
     }
 
     public function testArticleRenditions()
     {
-        $this->imageService->addArticleImage(self::ARTICLE_NUMBER, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
-        $this->orm->persist($imageTest = new LocalImage(LocalImageTest::PICTURE_PORTRAIT));
+        $this->imageService->addArticleImage(self::ARTICLE_NUMBER, new LocalImage(self::PICTURE_LANDSCAPE));
+        $this->orm->persist($imageTest = new LocalImage(self::PICTURE_PORTRAIT));
         $this->orm->flush();
 
         $this->orm->persist($renditionThumbnail = new Rendition(200, 200, 'fit', 'thumbnail'));
@@ -73,18 +71,18 @@ class RenditionServiceTest extends \TestCase
         $renditions = $this->service->getArticleRenditions(self::ARTICLE_NUMBER);
 
         $this->assertInstanceOf('Newscoop\Image\ArticleRendition', $renditions[$renditionThumbnail]);
-        $this->assertContains(LocalImageTest::PICTURE_LANDSCAPE, $renditions[$renditionThumbnail]->getImage()->getPath());
+        $this->assertContains(self::PICTURE_LANDSCAPE, $renditions[$renditionThumbnail]->getImage()->getPath());
         $this->assertTrue($renditions[$renditionThumbnail]->isDefault());
 
         $this->assertInstanceOf('Newscoop\Image\ArticleRendition', $renditions[$renditionLandscape]);
-        $this->assertContains(LocalImageTest::PICTURE_PORTRAIT, $renditions[$renditionLandscape]->getImage()->getPath());
+        $this->assertContains(self::PICTURE_PORTRAIT, $renditions[$renditionLandscape]->getImage()->getPath());
         $this->assertFalse($renditions[$renditionLandscape]->isDefault());
     }
 
     public function testArticleRenditionTwice()
     {
-        $this->orm->persist($image1 = new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
-        $this->orm->persist($image2 = new LocalImage(LocalImageTest::PICTURE_PORTRAIT));
+        $this->orm->persist($image1 = new LocalImage(self::PICTURE_LANDSCAPE));
+        $this->orm->persist($image2 = new LocalImage(self::PICTURE_PORTRAIT));
         $this->orm->flush();
 
         $this->orm->persist($rendition = new Rendition(200, 200, 'fit', 'thumb'));
@@ -94,12 +92,12 @@ class RenditionServiceTest extends \TestCase
         $this->service->setArticleRendition(self::ARTICLE_NUMBER, $rendition, $image2);
 
         $renditions = $this->service->getArticleRenditions(self::ARTICLE_NUMBER);
-        $this->assertContains(LocalImageTest::PICTURE_PORTRAIT, $renditions[$rendition]->getImage()->getPath());
+        $this->assertContains(self::PICTURE_PORTRAIT, $renditions[$rendition]->getImage()->getPath());
     }
 
     public function testSaveRenditionSpecs()
     {
-        $this->orm->persist($image = new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->orm->persist($image = new LocalImage(self::PICTURE_LANDSCAPE));
         $this->orm->flush();
         
         $this->orm->persist($rendition = new Rendition(300, 300, 'crop_0_15_300_315', 'test'));
@@ -118,7 +116,7 @@ class RenditionServiceTest extends \TestCase
     public function testUnsetArticleRendition()
     {
         $this->orm->persist($rendition = new Rendition(300, 300, 'crop_0_15_300_315', 'test'));
-        $this->orm->persist($image = new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->orm->persist($image = new LocalImage(self::PICTURE_LANDSCAPE));
         $this->orm->flush();
 
         $this->service->setArticleRendition(self::ARTICLE_NUMBER, $rendition, $image);
@@ -135,7 +133,7 @@ class RenditionServiceTest extends \TestCase
      */
     public function testSetArticleRenditionSmallPicture()
     {
-        $this->orm->persist($image = new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->orm->persist($image = new LocalImage(self::PICTURE_LANDSCAPE));
         $this->orm->flush($image);
 
         $rendition = new Rendition(900, 600, 'test');
@@ -163,7 +161,7 @@ class RenditionServiceTest extends \TestCase
     public function testSetRenditionImageSpecs()
     {
         $this->orm->persist($rendition = new Rendition(200, 200, 'crop', 'rend'));
-        $this->orm->persist($image = new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->orm->persist($image = new LocalImage(self::PICTURE_LANDSCAPE));
         $this->orm->flush();
 
         $this->service->setArticleRendition(self::ARTICLE_NUMBER, $rendition, $image, '0_0_200_200');
@@ -175,5 +173,46 @@ class RenditionServiceTest extends \TestCase
         $this->assertEquals('0_0_200_200', $articleRendition->getImageSpecs());
         $this->assertEquals('crop_0_0_200_200', $articleRendition->getRendition()->getSpecs());
         $this->assertEquals('crop', $rendition->getSpecs());
+    }
+
+    public function testOrder()
+    {
+        $order = array('preview', 'square', 'portrait', 'landscape', 'thumbnail');
+        $this->service->getRenditions(); // load into db
+        $this->service->setRenditionsOrder($order);
+        $renditions = $this->service->getRenditions();
+        $this->assertEquals($order, array_keys($renditions));
+    }
+
+    public function testLabels()
+    {
+        $renditions = $this->service->getRenditions();
+        foreach ($renditions as $renditionName => $rendition) {
+            $this->assertEquals($renditionName, $rendition->getLabel());
+        }
+
+        $this->service->setRenditionsLabels(array(
+            'preview' => 'Test',
+        ));
+
+        $this->assertEquals('Test', $renditions['preview']->getLabel());
+    }
+
+    /**
+     * @ticket WOBS-955
+     */
+    public function testGetArticleRenditionsAfterRemovingRendition()
+    {
+        $this->orm->persist($image = new LocalImage(self::PICTURE_LANDSCAPE));
+        $this->orm->flush($image);
+
+        $renditions = $this->service->getRenditions();
+        $this->service->setArticleRendition(self::ARTICLE_NUMBER, $renditions['thumbnail'], $image);
+
+        $this->orm->remove($renditions['thumbnail']);
+        $this->orm->flush();
+        $this->orm->clear();
+
+        $this->service->getArticleRenditions(self::ARTICLE_NUMBER);
     }
 }

@@ -35,7 +35,7 @@ return array(
     'File is uploaded and your message is sent.' => 'Nachricht inklusive Datei gesendet.',
     'Your message is sent.' => 'Nachricht gesendet.',
     'Following errors have been found:' => 'Oh nein, gleich mehrere Fehler sind aufgetreten:',
-    'You have been banned from writing comments.' => 'Die Redaktion lässt keine weiteren Kommentare von Ihnen zu.',
+    'You have been banned from writing comments.' => 'Die Redaktion hat die Kommentarfunktion bei Ihnen gesperrt. Bei Fragen oder Unklarheiten wenden Sie sich bitte an <a href="mailto:dienstpult@tageswoche.ch">dienstpult@tageswoche.ch</a>',
     'The comment content was not filled in.' => 'Sie haben Ihren Kommentar vergessen.',
     'January' => 'Januar',
     'February' => 'Februar',

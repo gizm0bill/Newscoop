@@ -11,8 +11,6 @@ use Newscoop\Image\LocalImage,
     Newscoop\Image\Rendition,
     Newscoop\Image\LocalImageTest;
 
-require_once __DIR__ . '/../Image/LocalImageTest.php';
-
 /**
  */
 class PackageServiceTest extends \TestCase
@@ -27,7 +25,7 @@ class PackageServiceTest extends \TestCase
 
     public function setUp()
     {
-        $this->orm = $this->setUpOrm('Newscoop\Package\Package', 'Newscoop\Package\Item', 'Newscoop\Image\LocalImage', 'Newscoop\Image\Rendition');
+        $this->orm = $this->setUpOrm('Newscoop\Package\Package', 'Newscoop\Package\Item', 'Newscoop\Image\LocalImage', 'Newscoop\Image\Rendition', 'Newscoop\Package\Article');
         $this->service = new PackageService($this->orm);
     }
 
@@ -43,12 +41,11 @@ class PackageServiceTest extends \TestCase
 
     public function testSave()
     {
-        $this->assertEquals(0, count($this->service->findByArticle(self::ARTICLE_NUMBER)));
+        $this->assertEquals(0, count($this->service->findBy(array())));
 
         $rendition = $this->getRendition(500, 333, 'crop', 'square');
 
         $package = $this->service->save(array(
-            'article' => self::ARTICLE_NUMBER,
             'headline' => 'headline',
             'rendition' => $rendition,
             'slug' => 'SLUG',
@@ -56,7 +53,6 @@ class PackageServiceTest extends \TestCase
 
         $this->assertInstanceOf('Newscoop\Package\Package', $package);
         $this->assertNotNull($package->getId());
-        $this->assertEquals(self::ARTICLE_NUMBER, $package->getArticleNumber());
         $this->assertEquals('headline', $package->getHeadline());
         $this->assertContains('1', (string) $package);
         $this->assertEquals(500, $package->getRendition()->getWidth());
@@ -64,15 +60,13 @@ class PackageServiceTest extends \TestCase
         $this->assertEquals('crop', $package->getRendition()->getSpecs());
         $this->assertEquals('square', $package->getRendition()->getName());
         $this->assertEquals('SLUG', $package->getSlug());
-
-        $this->assertEquals(1, count($this->service->findByArticle(self::ARTICLE_NUMBER)));
     }
 
     public function testFind()
     {
         $this->assertNull($this->service->find(1));
-        $this->service->save(array('headline' => 'test'));
-        $this->assertNotNull($this->service->find(1));
+        $package = $this->service->save(array('headline' => 'test'));
+        $this->assertNotNull($this->service->find($package->getId()));
     }
 
     public function testAddItem()
@@ -132,7 +126,7 @@ class PackageServiceTest extends \TestCase
             'rendition' => $rendition,
         ));
 
-        $this->service->addItem($package, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
         $this->assertEquals($rendition, $package->getItems()->first()->getRendition());
     }
 
@@ -141,7 +135,7 @@ class PackageServiceTest extends \TestCase
         $this->assertNull($this->service->findItem(1));
 
         $package = $this->service->save(array('headline' => 'test'));
-        $this->service->addItem($package, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
 
         $this->assertNotNull($this->service->findItem(1));
     }
@@ -154,7 +148,7 @@ class PackageServiceTest extends \TestCase
             'rendition' => $rendition,
         ));
 
-        $item = $this->service->addItem($package, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $item = $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
 
         $this->service->saveItem(array(
             'caption' => 'testcap',
@@ -184,10 +178,10 @@ class PackageServiceTest extends \TestCase
     {
         $package = $this->service->save(array(
             'headline' => 'test',
-            'rendition' => $this->getRendition(800, 600, 'fit', 'test'),
+            'rendition' => $this->getRendition(800, 600, 'crop', 'test'),
         ));
 
-        $this->service->addItem($package, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
     }
 
     /**
@@ -226,7 +220,7 @@ class PackageServiceTest extends \TestCase
     {
         $this->service->save(array('headline' => 'tic'));
         $package = $this->service->save(array('headline' => 'toc'));
-        $this->service->addItem($package, new LocalImage(LocalImageTest::PICTURE_LANDSCAPE));
+        $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
 
         $packages = $this->service->findBy(array(), array('headline' => 'asc'));
         $this->assertEquals(0, $packages[0]->getItemsCount());
@@ -244,6 +238,26 @@ class PackageServiceTest extends \TestCase
         foreach ($packages as $package) {
             $this->assertNull($package->getSlug());
         }
+    }
+
+    public function testAttachToArticle()
+    {
+        $this->assertEquals(0, count($this->service->findByArticle(1)));
+
+        $package = $this->service->save(array('headline' => 'tic'));
+        $this->service->addArticle($package, 1);
+        $this->service->addArticle($package, 2);
+
+        $this->assertEquals(1, count($this->service->findByArticle(1)));
+        $this->assertEquals(1, count($this->service->findByArticle(2)));
+
+        $this->service->removeArticle($package, 1);
+
+        $this->assertEquals(0, count($this->service->findByArticle(1)));
+        $this->assertEquals(1, count($this->service->findByArticle(2)));
+
+        $this->assertEquals(1, count($this->service->findAvailableForArticle(1)));
+        $this->assertEquals(0, count($this->service->findAvailableForArticle(2)));
     }
 
     /**
