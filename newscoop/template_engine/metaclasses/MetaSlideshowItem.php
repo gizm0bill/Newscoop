@@ -55,6 +55,9 @@ final class MetaSlideshowItem
                 'width' => $thumbnail->width,
                 'height' => $thumbnail->height,
                 'original' => $item->getImage()->getPath(),
+                'id' => $item->getImage()->getId(),
+                'caption' => $item->getImage()->getCaption(),
+                'photographer' => $item->getImage()->getPhotographer(),
             );
         } else {
             $this->video = (object) array(
