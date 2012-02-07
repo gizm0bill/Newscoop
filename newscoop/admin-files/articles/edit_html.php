@@ -314,9 +314,7 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
         <?php
             } elseif ( $dbColumn->getType() == ArticleTypeField::TYPE_COMPLEX_DATE ) {
                 $hasMultiDates = true;
-                if ( is_null($multiDatesField) ) {
-                    $multiDatesField = $dbColumn->getName();	
-                }
+                $multiDatesFields[] = $dbColumn->getPrintName();
             }
         }
         ?>
