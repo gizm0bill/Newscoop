@@ -1,4 +1,11 @@
 <?php 
+regGS("Topic created", "");
+regGS("The topic name is already in use by another topic.", "");
+regGS("Invalid parameter given to Audioclip::editMetadata()", "");
+regGS("File $1 does not exist", "");
+regGS("Complex Date", "");
+regGS("Cannot update audioclip metadata on storage server", "");
+regGS("Cannot update audioclip metadata on Campsite", "");
 regGS("vertices", "");
 regGS("There was a problem trying to execute the XML RPC function.", "");
 regGS("The Campcaster server configuration is invalid.", "");
@@ -20,10 +27,6 @@ regGS("Center", "");
 regGS("Title", "");
 regGS("Invalid security token.", "");
 regGS("Callback '$1' is not callable.", "");
-regGS("Author type $1 linked to author $2", "");
-regGS("Author type \"$1\" created.", "");
-regGS("Author #$1 \"$2\" deleted.", "");
-regGS("Article type \"$1\" deleted.", "");
 regGS("Article translated to \"$4\" ($5)", "");
 regGS("Article status changed from $1 to $2.", "");
 regGS("Article deleted.", "");

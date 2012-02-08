@@ -1,4 +1,10 @@
 <?php 
+regGS("Unapproved", "Unapproved");
+regGS("This article cannot be previewed. Please make sure the article has an issue assigned.", "This article cannot be previewed. Please make sure the article has an issue assigned.");
+regGS("Slideshows", "Slideshows");
+regGS("Pending articles", "Pending articles");
+regGS("Pending Articles", "Pending Articles");
+regGS("Multi date event", "Multi date event");
 regGS("This issue cannot be previewed. Please make sure the publication has a theme assigned.", "This issue cannot be previewed. Please make sure the publication has a theme assigned.");
 regGS("Article Playlist", "Article Playlist");
 regGS("Add article to a playlist", "Add article to a playlist");
@@ -16,7 +22,6 @@ regGS("There already is an article with the same name. Please change the name an
 regGS("Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.", "Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.");
 regGS("Geolocation", "Geolocation");
 regGS("Newscoop", "Newscoop");
-regGS("Pending Article", "Pending Article");
 regGS("Overwrite articles with matching names", "Overwrite articles with matching names");
 regGS("Article \"<i>$1</i>\" already exists, and was not overwritten.<br />", "Article \"<i>$1</i>\" already exists, and was not overwritten.<br />");
 regGS("Files", "Files");
