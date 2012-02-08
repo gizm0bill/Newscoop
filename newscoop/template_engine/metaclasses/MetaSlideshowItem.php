@@ -42,6 +42,8 @@ final class MetaSlideshowItem
      */
     public function __construct(\Newscoop\Package\Item $item)
     {
+        global $Campsite;
+
         $this->caption = $item->getCaption();
         $this->is_image = $item->isImage();
         $this->is_video = $item->isVideo();
@@ -54,10 +56,10 @@ final class MetaSlideshowItem
                 ), 'image', true, false),
                 'width' => $thumbnail->width,
                 'height' => $thumbnail->height,
-                'original' => $item->getImage()->getPath(),
                 'id' => $item->getImage()->getId(),
                 'caption' => $item->getImage()->getCaption(),
                 'photographer' => $item->getImage()->getPhotographer(),
+                'original' => $item->getImage()->isLocal() ? $Campsite['IMAGE_BASE_URL'] . str_replace('images/', '', $item->getImage()->getPath()) : $item->getImage()->getPath(),
             );
         } else {
             $this->video = (object) array(
