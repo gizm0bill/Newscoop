@@ -1,4 +1,9 @@
 <?php 
+regGS("unlock", "unlock");
+regGS("Printdesk", "Printdesk");
+regGS("Newswires Ingest", "Newswires Ingest");
+regGS("Feedback Messages", "Feedback Messages");
+regGS("Article Playlists", "Article Playlists");
 regGS("Check all", "Check all");
 regGS("view", "view");
 regGS("undo/redo", "undo/redo");

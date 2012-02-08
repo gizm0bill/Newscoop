@@ -1,6 +1,11 @@
 <?php 
+regGS("Unapproved", "");
+regGS("This article cannot be previewed. Please make sure the article has an issue assigned.", "");
+regGS("Slideshows", "");
+regGS("Pending articles", "");
+regGS("Pending Articles", "");
+regGS("Multi date event", "");
 regGS("Newscoop", "");
-regGS("Pending Article", "");
 regGS("Overwrite articles with matching names", "");
 regGS("Article \"<i>$1</i>\" already exists, and was not overwritten.<br />", "");
 regGS("Files", "");
