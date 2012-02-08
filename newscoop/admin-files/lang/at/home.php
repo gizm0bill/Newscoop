@@ -1,8 +1,12 @@
 <?php 
+regGS("Renditions", "");
+regGS("Printdesk", "");
+regGS("Pending articles", "");
+regGS("Last", "");
+regGS("First", "");
 regGS("User name", "");
 regGS("Newscoop", "");
 regGS("Campsite", "");
-regGS("Password recovery request for $1", "");
 regGS("Your password has been reset.", "");
 regGS("Proceed to login.", "");
 regGS("Hi, \n\nfor password recovery, please follow this link: $1", "");
