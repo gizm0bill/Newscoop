@@ -241,7 +241,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             new Zend_Controller_Router_Route(':webcode', array(
                 'module' => 'default'
             ), array(
-                'webcode' => '^@[a-z]{5,6}',
+                'webcode' => '[\+\s@][a-z]{5,6}',
             )));
 
          $router->addRoute
@@ -256,7 +256,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ), array(
                 'module' => 'default',
                 'language' => '[a-z]{2}',
-                'webcode' => '^@[a-z]{5,6}',
+                'webcode' => '^[\+\s@][a-z]{5,6}',
             )));
 
         $router->addRoute(
