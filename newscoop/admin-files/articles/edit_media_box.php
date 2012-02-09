@@ -6,14 +6,20 @@
     </ul>
     <div id="media-images">
         <?php if ($inEditMode && $g_user->hasPermission('AttachImageToArticle')) { ?>
-        <a class="iframe ui-state-default icon-button right-floated" href="<?php echo camp_html_article_url($articleObj, $f_language_id, "images/popup.php"); ?>"><span class="ui-icon ui-icon-plusthick"></span><?php putGS('Attach'); ?></a>
+        <a id="attach-images" class="ui-state-default icon-button right-floated" href="<?php echo $this->view->url(array(
+            'module' => 'admin',
+            'controller' => 'image',
+            'action' => 'article-attach',
+            'article_number' => $articleObj->getArticleNumber(),
+            'language_id' => $f_language_id,
+        )); ?>"><span class="ui-icon ui-icon-plusthick"></span><?php putGS('Attach'); ?></a>
         <a id="place-images" class="ui-state-default icon-button right-floated" href="<?php echo $this->view->url(array(
             'module' => 'admin',
             'controller' => 'image',
             'action' => 'article',
             'article_number' => $articleObj->getArticleNumber(),
             'language_id' => $f_language_id,
-        )); ?>"><span class="ui-icon ui-icon-image"></span><?php putGS('Place images'); ?></a>
+        )); ?>"><span class="ui-icon ui-icon-image"></span><?php putGS('Place'); ?></a>
         <div class="clear"></div>
         <?php } ?>
 
@@ -32,7 +38,7 @@
                     <img src="<?php p($image->getThumbnailUrl()); ?>" />
                     <?php } ?>
                 </div>
-                <small><?php $image->getStatus() == 'approved' ? putGS('Approved') : putGS('Unapproved'); ?></small><br />
+                <strong><?php echo $articleImage->getTemplateId(); ?></strong> <small><?php $image->getStatus() == 'approved' ? putGS('Approved') : putGS('Unapproved'); ?></small><br />
                 <?php echo htmlspecialchars($image->getDescription()); ?><br />
                 <?php echo $imageSize[0], ' x ', $imageSize[1]; ?>
 
