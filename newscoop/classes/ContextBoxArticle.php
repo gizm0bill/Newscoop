@@ -86,10 +86,10 @@ class ContextBoxArticle extends DatabaseObject
 
         if (isset($params['role']) && $params['role'] == 'child') {
             $sql = 'SELECT b.fk_article_no FROM context_boxes b'
-                . ' WHERE b.id IN (SELECT c.fk_context_id '
+                . ' WHERE b.id = (SELECT c.fk_context_id '
                 . '     FROM Articles a, context_articles c '
                 . '     WHERE c.fk_article_no = ' . $params['article']
-                . '     AND a.Number = c.fk_article_no) ORDER BY id desc';
+                . '     AND a.Number = c.fk_article_no ORDER BY id desc LIMIT 1)';
         } else {
             $sql = 'SELECT fk_article_no FROM context_articles'
                 . ' WHERE fk_context_id = ' . $params['context_box']
