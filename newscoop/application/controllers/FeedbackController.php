@@ -147,7 +147,9 @@ class FeedbackController extends Zend_Controller_Action
     {
         $toEmail = 'dienstpult@tageswoche.ch';
         
-        $user = new User($values['user']);
+        $userRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\User');
+        $user = $userRepository->find($values['user']);
+
         $fromEmail = $user->getEmail();
         
         $message = $values['message'];
