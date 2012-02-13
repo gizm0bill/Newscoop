@@ -16,8 +16,6 @@ $f_article_edit = $_POST['f_article_edit'];
 $f_language_id = $_POST['f_language_id'];
 $f_article_number = $_POST['f_article_number'];
 
-var_dump($_POST);die;
-
 if (!SecurityToken::isValid() && !isset($f_article_edit)) {
     camp_html_display_error(getGS('Invalid security token!'));
     exit;
