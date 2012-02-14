@@ -58,6 +58,7 @@ class Admin_BlogController extends Zend_Controller_Action
         $list->setSection($section->getSectionNumber());
         $list->setLanguage($section->getLanguageId());
         $list->setType($blogConfig['article_type']);
+        $list->setOrder(true);
 
         $this->view->list = $list;
         $this->view->form = $form;
