@@ -12,8 +12,15 @@
     'action' => 'edit-image-data'
 ))); ?>">
 
-<div style="margin: 4px;">
+<div style="margin: 8px;">
     <input type="submit" value="<?php echo(getGS('Save all')); ?>" class="button" style="float: none;">
+    <input type="button" value="<?php echo(getGS('Next: Place Images')); ?>" class="button" style="float: none;" onClick="document.location = '<?php echo($this->url(array(
+            'module' => 'admin',
+            'controller' => 'image',
+            'action' => 'article',
+            'article_number' => $this->article,
+            'language_id' => $this->languageId,
+        ))); ?>';">
 </div>
 
 <ul class="thumbnails">
@@ -50,6 +57,12 @@ function useForAll(field, id) {
 
 <?php } else { ?>
     <script>
-        document.location = parent.$('#place-images').attr('href');
+        document.location = '<?php echo($this->url(array(
+            'module' => 'admin',
+            'controller' => 'image',
+            'action' => 'article',
+            'article_number' => $this->article,
+            'language_id' => $this->languageId,
+        ))); ?>';
     </script>
 <?php } ?>
