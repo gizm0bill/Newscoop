@@ -152,8 +152,12 @@ class Admin_ImageController extends Zend_Controller_Action
             }
         }
         
+        $this->view->article = $this->_getParam('article_number');
+        $this->view->languageId = $this->_getParam('language_id');
+        
         $this->_helper->layout->setLayout('iframe');
         
+        /*
         // image service doesnt work for this...
         $imageSearch = new ImageSearch('0000', 'id', 'ASC', 0, 100);
         $imageSearch->run();
@@ -163,6 +167,16 @@ class Admin_ImageController extends Zend_Controller_Action
         foreach ($imageData as $item) {
             $images[] = $this->_helper->service('image')->find($item['id']);
         }
+        */
+        
+        $images = array();
+        $articleImages = $this->_helper->service('image')->findByArticle($this->_getParam('article_number'));
+        foreach ($articleImages as $k => $articleImage) {
+			$image = $articleImage->getImage();
+			if ($image->getDate() == '0000-00-00') {
+				$images[] = $image;
+			}
+		}
         
         $this->view->images = $images;
     }
