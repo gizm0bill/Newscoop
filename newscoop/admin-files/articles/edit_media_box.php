@@ -19,7 +19,7 @@
             'action' => 'article',
             'article_number' => $articleObj->getArticleNumber(),
             'language_id' => $f_language_id,
-        )); ?>"><span class="ui-icon ui-icon-image"></span><?php putGS('Place'); ?></a>
+        )); ?>"><span class="ui-icon ui-icon-image"></span><?php putGS('Place images'); ?></a>
         <div class="clear"></div>
         <?php } ?>
 
@@ -38,7 +38,7 @@
                     <img src="<?php p($image->getThumbnailUrl()); ?>" />
                     <?php } ?>
                 </div>
-                <strong><?php echo $articleImage->getTemplateId(); ?></strong> <small><?php $image->getStatus() == 'approved' ? putGS('Approved') : putGS('Unapproved'); ?></small><br />
+                <small><?php $image->getStatus() == 'approved' ? putGS('Approved') : putGS('Unapproved'); ?></small><br />
                 <?php echo htmlspecialchars($image->getDescription()); ?><br />
                 <?php echo $imageSize[0], ' x ', $imageSize[1]; ?>
 
