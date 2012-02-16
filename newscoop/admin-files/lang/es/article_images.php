@@ -1,4 +1,17 @@
 <?php 
+regGS("Save headline", "");
+regGS("Place Images", "");
+regGS("Finish", "");
+regGS("Use for all", "");
+regGS("Next: Upload and Edit Metadata", "");
+regGS("Next: Place Images", "");
+regGS("Add New Image", "");
+regGS("Place: ", "");
+regGS("Photographer: ", "");
+regGS("No images found.", "");
+regGS("Image Files: ", "");
+regGS("Edit Image Data", "");
+regGS("Description: ", "");
 regGS("Saving...", "");
 regGS("Saved", "");
 regGS("No slideshows to attach", "");
