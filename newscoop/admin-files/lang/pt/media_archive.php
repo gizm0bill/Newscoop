@@ -1,5 +1,4 @@
 <?php 
-regGS("Image added.", "");
 regGS("You can't update used files.", "");
 regGS("Source", "");
 regGS("Slideshows", "");

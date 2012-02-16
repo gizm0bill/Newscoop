@@ -1,4 +1,17 @@
 <?php 
+regGS("Save headline", "Save headline");
+regGS("Place Images", "Place Images");
+regGS("Finish", "Finish");
+regGS("Use for all", "Use for all");
+regGS("Next: Upload and Edit Metadata", "Next: Upload and Edit Metadata");
+regGS("Next: Place Images", "Next: Place Images");
+regGS("Add New Image", "Add New Image");
+regGS("Place: ", "Place: ");
+regGS("Photographer: ", "Photographer: ");
+regGS("No images found.", "No images found.");
+regGS("Image Files: ", "Image Files: ");
+regGS("Edit Image Data", "Edit Image Data");
+regGS("Description: ", "Description: ");
 regGS("Saving...", "Saving...");
 regGS("Saved", "Saved");
 regGS("No slideshows to attach", "No slideshows to attach");

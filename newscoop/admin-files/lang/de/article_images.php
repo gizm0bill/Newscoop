@@ -1,4 +1,17 @@
 <?php 
+regGS("Save headline", "Name speichern");
+regGS("Place Images", "Bilder zuschneiden");
+regGS("Finish", "Fertig");
+regGS("Use for all", "Für alle Bilder verwenden");
+regGS("Next: Upload and Edit Metadata", "Weiter (Bildlegende erfassen)");
+regGS("Next: Place Images", "Weiter (Bilder zuschneiden)");
+regGS("Add New Image", "Neues Bild hinzufügen");
+regGS("Place: ", "Ort");
+regGS("Photographer: ", "FotografIn");
+regGS("No images found.", "Keine Bilder gefunden");
+regGS("Image Files: ", "Bilddateien");
+regGS("Edit Image Data", "Bildinformationen bearbeiten");
+regGS("Description: ", "Bildlegende");
 regGS("Saving...", "Wird gespeichert...");
 regGS("Saved", "Gespeichert");
 regGS("No slideshows to attach", "Keine Slideshows verfügbar");
