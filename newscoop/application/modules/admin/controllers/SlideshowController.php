@@ -13,6 +13,8 @@ use Newscoop\Image\Rendition,
  */
 class Admin_SlideshowController extends Zend_Controller_Action
 {
+    const SLIDESHOW_RENDITION = 'artikel';
+
     public function init()
     {
         camp_load_translation_strings('article_images');
@@ -39,7 +41,7 @@ class Admin_SlideshowController extends Zend_Controller_Action
     public function createAction()
     {
         $form = new Admin_Form_SlideshowCreate();
-        $form->rendition->setMultiOptions($this->_helper->service('image.rendition')->getOptions());
+        $this->setSlideshowRenditions($form);
 
         $request = $this->getRequest();
         if ($request->isPost() && $form->isValid($request->getPost())) {
@@ -188,5 +190,30 @@ class Admin_SlideshowController extends Zend_Controller_Action
     private function getSlideshow()
     {
         return $this->_helper->service('package')->find($this->_getParam('slideshow'));
+    }
+
+    /**
+     * Set slideshow renditions
+     *
+     * @param Zend_Form $form
+     * @return void
+     */
+    private function setSlideshowRenditions(\Zend_Form $form)
+    {
+        $renditions = $this->_helper->service('image.rendition')->getOptions();
+        if (array_key_exists(self::SLIDESHOW_RENDITION, $renditions)) {
+            $renditions = array(
+                self::SLIDESHOW_RENDITION => $renditions[self::SLIDESHOW_RENDITION],
+            );
+        }
+
+        if (count($renditions) === 1) {
+            $form->removeElement('rendition');
+            $form->addElement('hidden', 'rendition', array(
+                'value' => array_pop(array_keys($renditions)),
+            ));
+        } else {
+            $form->rendition->setMultiOptions($renditions);
+        }
     }
 }
