@@ -394,7 +394,11 @@ if (isset($publicationObj) && $articleObj->isPublished()) {
       <!-- BEGIN Multi date table -->
       <?php 
       if ($hasMultiDates) {
-          require('edit_multidate_box.php');
+          echo '
+  <script type="text/javascript">
+    window.has_multidates = true;
+  </script>';
+      	require('edit_multidate_box.php');
       }       
       ?>
       <!-- END Multi date table -->

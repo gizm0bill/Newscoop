@@ -169,8 +169,7 @@ class ArticleDatetime extends Entity
         }
         return $this->$getMethod();
     }
-/*
-// TODO: should/not these setters be here?
+    
     public function setStartDate($startDate) {
         $this->startDate = $startDate;
     }
@@ -198,5 +197,4 @@ class ArticleDatetime extends Entity
     public function setEventComment($eventComment) {
         $this->eventComment = $eventComment;
     }
-*/
 }
