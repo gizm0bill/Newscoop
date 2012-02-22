@@ -1,4 +1,6 @@
 <?php 
+regGS("TagesWoche Quick Links", "");
+regGS("News Desk", "");
 regGS("Go", "");
 regGS("Wikipedia Search", "Hledat ve Wikipedii");
 regGS("Files", "Složky");

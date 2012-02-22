@@ -13,6 +13,8 @@ use Newscoop\Image\Rendition,
  */
 class Admin_SlideshowController extends Zend_Controller_Action
 {
+    const SLIDESHOW_RENDITION = 'artikel';
+
     public function init()
     {
         camp_load_translation_strings('article_images');
@@ -39,7 +41,7 @@ class Admin_SlideshowController extends Zend_Controller_Action
     public function createAction()
     {
         $form = new Admin_Form_SlideshowCreate();
-        $form->rendition->setMultiOptions($this->_helper->service('image.rendition')->getOptions());
+        $this->setSlideshowRenditions($form);
 
         $request = $this->getRequest();
         if ($request->isPost() && $form->isValid($request->getPost())) {
@@ -50,8 +52,8 @@ class Admin_SlideshowController extends Zend_Controller_Action
                 $this->_helper->service('package')->addArticle($slideshow, $this->_getParam('article_number'));
             }
             $this->_helper->redirector('edit', 'slideshow', 'admin', array(
-                'slideshow' => $slideshow->getId(),
                 'article_number' => $this->_getParam('article_number'),
+                'slideshow' => $slideshow->getId(),
             ));
         }
 
@@ -110,6 +112,7 @@ class Admin_SlideshowController extends Zend_Controller_Action
             $slideshow = $this->getSlideshow();
             $this->_helper->service('package')->addItem($slideshow, new \Newscoop\Package\RemoteVideo($form->url->getValue()));
             $this->_helper->redirector('edit', 'slideshow', 'admin', array(
+                'article_number' => $this->_getParam('article_number'),
                 'slideshow' => $slideshow->getId(),
             ));
         }
@@ -142,9 +145,9 @@ class Admin_SlideshowController extends Zend_Controller_Action
         if ($request->isPost() && $form->isValid($request->getPost())) {
             $this->_helper->service('package')->saveItem($form->getValues(), $item);
             $this->_helper->redirector('edit-item', 'slideshow', 'admin', array(
+                'article_number' => $this->_getParam('article_number'),
                 'slideshow' => $slideshow->getId(),
                 'item' => $item->getId(),
-                'article_number' => $this->_getParam('article_number'),
             ));
         }
 
@@ -188,5 +191,30 @@ class Admin_SlideshowController extends Zend_Controller_Action
     private function getSlideshow()
     {
         return $this->_helper->service('package')->find($this->_getParam('slideshow'));
+    }
+
+    /**
+     * Set slideshow renditions
+     *
+     * @param Zend_Form $form
+     * @return void
+     */
+    private function setSlideshowRenditions(\Zend_Form $form)
+    {
+        $renditions = $this->_helper->service('image.rendition')->getOptions();
+        if (array_key_exists(self::SLIDESHOW_RENDITION, $renditions)) {
+            $renditions = array(
+                self::SLIDESHOW_RENDITION => $renditions[self::SLIDESHOW_RENDITION],
+            );
+        }
+
+        if (count($renditions) === 1) {
+            $form->removeElement('rendition');
+            $form->addElement('hidden', 'rendition', array(
+                'value' => array_pop(array_keys($renditions)),
+            ));
+        } else {
+            $form->rendition->setMultiOptions($renditions);
+        }
     }
 }

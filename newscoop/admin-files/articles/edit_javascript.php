@@ -309,6 +309,16 @@ $('#place-images').fancybox({
     type: 'iframe'
 });
 
+$('#attach-images').fancybox({
+    hideOnContentClick: false,
+    width: 1300,
+    height: 800,
+    type: 'iframe',
+    onClosed: function() {
+		window.location.reload();
+	}
+});
+
 $('#topic_box_frame a.iframe').each(function() {
     $(this).data('fancybox').width = 1200;
 });

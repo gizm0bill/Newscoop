@@ -214,9 +214,10 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
      *
      * @param int $width
      * @param int $height
+     * @param string $specs
      * @return string
      */
-    public function image($width = 80, $height = 80)
+    public function image($width = 80, $height = 80, $specs = 'crop')
     {
         global $controller;
 
@@ -225,7 +226,7 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
         }
 
         return $controller->view->url(array(
-            'src' => $controller->getHelper('service')->getService('image')->getSrc('images/' . $this->m_dbObject->getImage(), $width, $height),
+            'src' => $controller->getHelper('service')->getService('image')->getSrc('images/' . $this->m_dbObject->getImage(), $width, $height, $specs),
         ), 'image', false, false);
     }
 

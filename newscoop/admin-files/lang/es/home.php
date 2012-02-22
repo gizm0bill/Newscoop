@@ -1,4 +1,9 @@
 <?php 
+regGS("Renditions", "");
+regGS("Printdesk", "");
+regGS("Pending articles", "");
+regGS("Last", "");
+regGS("First", "");
 regGS("Upload of file $1 was not successful.", "La carga del archivo $1 no se realizó de forma exitosa.");
 regGS("The file $1 could not be moved. Check you have enough of disk space.", "No se pudo mover el archivo $1.  Verifica que cuentas con suficiente espacio en el disco.");
 regGS("MiB", "MiB");
@@ -43,7 +48,6 @@ regGS("'%value%' is less than %min% characters long", "'%value%' es menor a %max
 regGS("User name", "Usuario");
 regGS("Newscoop", "Newscoop");
 regGS("Campsite", "Campsite");
-regGS("Password recovery request for $1", "Solicitud de recuperación de contraseña de $1");
 regGS("Your password has been reset.", "Se ha restablecido su contraseña.");
 regGS("Proceed to login.", "Proceda al ingreso.");
 regGS("Hi, \n\nfor password recovery, please follow this link: $1", "Hola, \n\n para recuperar tu contraseña, sigue el siguiente enlace $1");
@@ -138,5 +142,4 @@ regGS("Login failed", "Acceso fallido");
 regGS("Please make sure that you typed the correct user name and password.", "Por favor asegurese de que escribio correctamente su nombre de usuario y clave.");
 regGS("If your problem persists please contact the site administrator $1", "Si su problema persiste favor contacte al administrador del sistema $1");
 regGS("Backup/Restore", "Respaldar/Restablecer");
-regGS("Hi, \\n\\nfor password recovery, please follow this link: $1", "Hola, \\n\\n para recuperar tu contraseña, sigue el siguiente enlace $1");
 ?>

@@ -1,4 +1,9 @@
 <?php 
+regGS("Renditions", "");
+regGS("Printdesk", "");
+regGS("Pending articles", "");
+regGS("Last", "");
+regGS("First", "");
 regGS("Upload of file $1 was not successful.", "");
 regGS("The file $1 could not be moved. Check you have enough of disk space.", "");
 regGS("MiB", "");
@@ -43,7 +48,6 @@ regGS("'%value%' is less than %min% characters long", "");
 regGS("User name", "Jméno uživatele");
 regGS("Newscoop", "Newscoop");
 regGS("Campsite", "Campsite");
-regGS("Password recovery request for $1", "Požadavek na obnovení hesla pro $1");
 regGS("Your password has been reset.", "Vaše heslo bylo obnoveno");
 regGS("Proceed to login.", "Pokračujte na přihlášení se do systému.");
 regGS("Hi, \n\nfor password recovery, please follow this link: $1", "Nazdárek, \n\nfor obnovení hesla, prosím mrkněte se na link: $1");
