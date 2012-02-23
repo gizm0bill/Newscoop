@@ -1066,6 +1066,50 @@ class NewsImport
         }
     } // fn AddEventImages
 
+    /**
+     * Cleans files of the given source
+     *
+     * @param array $p_source
+     * @return void
+     */
+     public static function RemoveOldFiles($p_source) {
+        $days_old = 30;
+
+        $dir_to_clean = '';
+        if (isset($p_source['source_dirs']) && isset($p_source['source_dirs']['old'])) {
+            $dir_to_clean = $p_source['source_dirs']['old'];
+        }
+        if (empty($dir_to_clean) || !is_dir($dir_to_clean)) {
+            return;
+        }
+
+        $file_name_set = scandir($dir_to_clean);
+        if (empty($file_name_set)) {
+            return;
+        }
+
+        $current_time = time();
+        $threshold_time = $current_time - ($days_old * 24 * 60 * 60);
+
+        foreach ($file_name_set as $one_file_name) {
+            $check_path = $dir_to_clean . DIRECTORY_SEPARATOR . $one_file_name;
+            if (!is_file($check_path)) {
+                continue;
+            }
+
+            $last_modified = filectime($check_path);
+            if ($threshold_time > $last_modified) {
+                try {
+                    unlink($check_path);
+                }
+                catch (Exception $exc) {
+                    continue;
+                }
+            }
+
+        }
+
+    }
 
 	/**
      * Prunes out passed events on a given source
@@ -1422,6 +1466,7 @@ class NewsImport
             }
 
             if (isset($p_otherParams['pruning']) && $p_otherParams['pruning']) {
+                self::RemoveOldFiles($one_source);
                 self::PruneEventData($one_source, $limits);
                 continue;
             }
