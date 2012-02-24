@@ -236,7 +236,7 @@ class TrailerProcessor {
         try {
             if ('to_upload' == $state) {
                 //$vimeo_id = $vimeo_obj->upload($file_local_path, true, $p_chunkDir, 2097152, $replace_id);
-                $vimeo_id = $vimeo_obj->upload($file_local_path);
+                $vimeo_id = $vimeo_obj->upload($file_local_path, false, $p_chunkDir, 2097152, $replace_id);
             }
         }
         catch (Exception $exc) {
