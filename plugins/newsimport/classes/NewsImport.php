@@ -1097,7 +1097,7 @@ class NewsImport
                 continue;
             }
 
-            $last_modified = filectime($check_path);
+            $last_modified = filemtime($check_path);
             if ($threshold_time > $last_modified) {
                 try {
                     unlink($check_path);
