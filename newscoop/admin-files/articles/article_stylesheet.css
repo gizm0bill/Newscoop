@@ -7,3 +7,14 @@
 	text-decoration: underline;
 	color: blue;
 }
+
+.swiss-info-free {
+  display: block;
+  border: 2px solid #a5a5a5;
+  padding: 10px;
+  margin: 10px 0;
+  font-size:14px !important;
+  font-style: normal;
+  font-family:Arial, Helvetica, sans-serif;
+}
+

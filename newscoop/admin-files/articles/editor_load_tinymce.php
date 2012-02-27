@@ -54,6 +54,7 @@ function editor_load_tinymce($p_dbColumns, $p_user, $p_articleNumber,
 	}
 	if ($p_user->hasPermission('EditorTable')) {
 	    $plugins[] = 'table';
+            $plugins[] = 'textbox';
 	}
 	if ($p_user->hasPermission('EditorLink')) {
 	    $plugins[] = 'campsiteinternallink';
@@ -219,6 +220,7 @@ function editor_load_tinymce($p_dbColumns, $p_user, $p_articleNumber,
 
 	if ($p_user->hasPermission('EditorTable')) {
 	    $toolbar3[] = "tablecontrols";
+            $toolbar3[] = 'textbox';
 	}
 	$toolbar2[] = 'iframe';
 
