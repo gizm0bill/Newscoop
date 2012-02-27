@@ -468,7 +468,7 @@ class NewsImport
                 $uses_multidates = true;
             }
 
-            $one_event['headline'] = str_replace(array('\\', '/'), array('\'', '-'), $one_event['headline']);
+            $one_event['headline'] = str_replace(array('\\', '&#92;'), array('\'', '&#39;'), $one_event['headline']);
 
             // no date part for movie screenings (all together), and may be the same way for events too lately
             $art_name_date_part = '';
