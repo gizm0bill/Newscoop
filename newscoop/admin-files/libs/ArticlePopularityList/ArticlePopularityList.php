@@ -63,7 +63,7 @@ class ArticlePopularityList extends BaseList
     public function processItem($item)
     {
         $row['id'] = $item->number;
-        $row['Name'] = sprintf('<a href="%s">%s</a>',
+        $row['Name'] = sprintf('<a href="%s" target="_blank">%s</a>',
             $item->url,
             $item->article_title
         );
