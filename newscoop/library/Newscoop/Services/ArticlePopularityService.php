@@ -314,7 +314,7 @@ class ArticlePopularityService
             return $data;
         }
 
-        $today = new DateTime();
+        $today = new \DateTime();
         $dimensions = array('ga:pagePath');
         $metrics = array(
             'ga:uniquePageviews',
