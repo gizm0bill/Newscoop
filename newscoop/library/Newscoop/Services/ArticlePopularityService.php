@@ -284,6 +284,23 @@ class ArticlePopularityService
     }
 
     /**
+     * Fetch ranking list
+     *
+     * @return array
+     */
+    public function fetchRanking()
+    {
+        $query = $this->em
+            ->createQuery("SELECT a.name as article_title, a.number,
+                    ap.url, ap.unique_views, ap.avg_time_on_page, ap.tweets, ap.likes, ap.comments, ap.popularity
+                FROM Newscoop\Entity\Article a, Newscoop\Entity\ArticlePopularity ap
+                WHERE a.published > '" . $this->when->format('Y-m-d H:i:s') . "'
+                    AND a.number = ap.article_id ORDER BY ap.popularity DESC");
+
+        return $query->getResult();
+    }
+
+    /**
      * Read google analytics metrics 
      *
      * @param Zend_Gdata $client
