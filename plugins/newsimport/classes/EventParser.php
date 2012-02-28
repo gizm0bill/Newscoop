@@ -394,7 +394,11 @@ class EventData_Parser_SimpleXML {
      * @return string
      */
     private function makeLink($p_target, $p_label = '', $p_fullLink = true) {
-        $link = '' . $p_target;
+        $link = trim('' . $p_target);
+        if (empty($link)) {
+            return '';
+        }
+
         if ($p_fullLink) {
             if ('http' != substr($link, 0, strlen('http'))) {
                 $link = 'http://' . $link;
