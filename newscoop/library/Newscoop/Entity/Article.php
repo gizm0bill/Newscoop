@@ -18,7 +18,9 @@ class Article
     const STATUS_PUBLISHED = 'Y';
     const STATUS_NOT_PUBLISHED = 'N';
     const STATUS_SUBMITTED = 'S';
-    
+
+    const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @Id
      * @ManyToOne(targetEntity="Newscoop\Entity\Language")
@@ -121,6 +123,17 @@ class Article
     private $authors;
 
     /**
+     * @Column(type="datetime", nullable=True)
+     * @var DateTime
+     */
+    private $indexed;
+
+    /**
+     * @var array
+     */
+    private $data = array();
+
+    /**
      * @param int $number
      * @param Newscoop\Entity\Language $language
      */
@@ -129,6 +142,8 @@ class Article
         $this->number = (int) $number;
         $this->language = $language;
         $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->created = $this->date = date_create()->format(self::DATE_FORMAT); 
     }
 
     /**
@@ -272,6 +287,17 @@ class Article
     }
 
     /**
+     * Set title
+     *
+     * @param string $title
+     * @return void
+     */
+    public function setTitle($title)
+    {
+        $this->name = (string) $title;
+    }
+
+    /**
      * Get title
      *
      * @return string
@@ -331,6 +357,18 @@ class Article
     {
         return $this->published;
     }
+
+    /**
+     * Set published
+     *
+     * @param DateTime $published
+     * @return void
+     */
+    public function setPublished(\DateTime $published)
+    {
+        $this->setStatus(self::STATUS_PUBLISHED);
+        $this->published = $published->format(self::DATE_FORMAT);
+    }
     
     /**
      * Set creator
@@ -375,5 +413,58 @@ class Article
     public function setStatus($status)
     {
         $this->workflowStatus = (string) $status;
+    }
+
+    /**
+     * Set indexed
+     *
+     * @return void
+     */
+    public function setIndexed(\DateTime $indexed = null)
+    {
+        $this->indexed = $indexed === null ? new \DateTime() : $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param DateTime $updated
+     * @return void
+     */
+    public function setUpdated(\DateTime $updated)
+    {
+        $this->date = $updated->format(self::DATE_FORMAT);
+    }
+
+    /**
+     * Set data
+     *
+     * @param array $data
+     * @return void
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * Get data
+     *
+     * @param string $field
+     * @return mixed
+     */
+    public function getData($field = null)
+    {
+        return $field === null ? $this->data : (array_key_exists($field, $this->data) ? $this->data[$field] : null);
     }
 }
