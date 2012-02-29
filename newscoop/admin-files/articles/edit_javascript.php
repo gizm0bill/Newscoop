@@ -333,6 +333,17 @@ $("#context_box a.iframe").fancybox({
     }
 });
 
+$("#multidate_box a.iframe").fancybox({
+    'showCloseButton' : false,
+    'width': 1000,
+    'height'     : 710,
+    'scrolling' : 'auto',
+    'onClosed'      : function() {
+       //loadContextBoxActileList();
+       loadMultiDateEvents();
+    }
+});
+
 $("#playlist a.iframe").fancybox
 ({
     'showCloseButton' : false,
@@ -455,6 +466,7 @@ $(document).ready(function() {
         }
     }
     loadContextBoxActileList();
+    loadMultiDateEvents();
 });
 
 function fnLoadContextBoxArticleList(data) {
@@ -482,6 +494,101 @@ function loadContextBoxActileList() {
         'articleId': '<?php echo Input::Get('f_article_number', 'int', 1)?>',
     });
     callServer(['ArticleList', 'doAction'], aoData, fnLoadContextBoxArticleList);
+}
+
+function loadMultiDateEvents() {
+    if ((window.has_multidates === undefined) || (!window.has_multidates)) {
+        return;
+    }
+
+<?php
+    $f_language_id = Input::Get('f_language_id', 'int', 1);
+    $f_language_selected = (int)camp_session_get('f_language_selected', 0);
+
+    $article_language_use = $f_language_selected;
+    if (empty($article_language_use)) {
+        $article_language_use = $f_language_id;
+    }
+?>
+
+    var url = '<?php echo $Campsite['WEBSITE_URL']; ?>/admin/multidate/getdates';
+    callServer(
+        {
+            method: 'GET',
+            url: url
+        },
+        {
+            articleId : "<?php echo Input::Get('f_article_number', 'int', 1)?>",
+            languageId : "<?php echo $article_language_use; ?>"
+        },
+        function(data) {
+        	var eventList = '';
+        	eventList += '<ul class="block-list">';
+
+            var dispalyed_all = true;
+            
+            for(var i=0; i<data.length; i++) {
+                if (i >= 20 ) {
+                    dispalyed_all = false;
+                    break;
+                }
+                var item = data[i];
+                
+                var start = new Date(item.start * 1000);                
+                var end = new Date(item.end * 1000);
+
+                var start_values = {
+                    'month': start.getMonth() + 1,
+                    'day': start.getDate(),
+                    'hour': start.getHours(),
+                    'minute': start.getMinutes()
+                };
+                var end_values = {
+                    'month': end.getMonth() + 1,
+                    'day': end.getDate(),
+                    'hour': end.getHours(),
+                    'minute': end.getMinutes()
+                };
+                for (var start_key in start_values) {
+                    if (start_values[start_key] < 10) {
+                        start_values[start_key] = '0' + start_values[start_key];
+                    }
+                }
+                for (var end_key in end_values) {
+                    if (end_values[end_key] < 10) {
+                        end_values[end_key] = '0' + end_values[end_key];
+                    }
+                }
+
+                if (item.allDay) {
+                    end_values['hour'] = '24';
+                    end_values['minute'] = '00';
+                }
+
+                var startString = '<span style="float:left">' + (start.getFullYear() + '-' + start_values['month'] + '-' + start_values['day'] + ' ' + start_values['hour'] + ':' + start_values['minute'] ) + '</span>';
+                var endString = '<span style="float:left">' + (end.getFullYear() + '-' + end_values['month'] + '-' + end_values['day'] + ' ' + end_values['hour'] + ':' + end_values['minute'] ) + '</span>';
+
+                var eventString = startString + '<span style="float:left" class="ui-icon ui-icon-arrowthick-1-e"></span>' + endString;
+
+                var event_comment = item.event_comment;
+                if (null === event_comment) {
+                    event_comment = '';
+                }
+                event_comment = event_comment.replace('"', "&quot;")
+                event_comment = event_comment.replace("'", "&apos;")
+                eventList += '<li style="background-color:'+item.backgroundColor+'; color:'+item.textColor+';" title="' + event_comment + '"><span style="float:right">' + item.field_name + '</span>' + eventString + '</li>';
+            }
+
+            var other_notice = '';
+            if (!dispalyed_all) {
+                other_notice = '<li><span class="ui-icon ui-icon-grip-dotted-horizontal"></span></li>';
+            }
+
+            $('#multiDateEventList').html('');
+            $('#multiDateEventList').append(eventList + other_notice + '</ul>');              
+        },
+        true
+    );    
 }
 
 </script>
