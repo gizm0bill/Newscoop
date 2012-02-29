@@ -1,4 +1,5 @@
 <?php 
+regGS("Place images", "Place images");
 regGS("Unapproved", "Unapproved");
 regGS("This article cannot be previewed. Please make sure the article has an issue assigned.", "This article cannot be previewed. Please make sure the article has an issue assigned.");
 regGS("Slideshows", "Slideshows");

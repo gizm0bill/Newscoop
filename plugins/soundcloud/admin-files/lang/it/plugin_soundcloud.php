@@ -1,11 +1,11 @@
 <?php 
-regGS("Soundcloud", "Soundcloud");
+regGS("You do not have the right to upload Soundcloud tracks.", "");
+regGS("Soundcloud", "");
 regGS("select range", "seleziona intervallo");
 regGS("connection error", "errore connessione");
 regGS("a comma separated list of tags", "lista di tag separata da virgola");
 regGS("a comma separated list of genres", "lista di generi separati da virgola");
 regGS("Youtube, Vimeo, Dailymotion and Viddler videos will appear in an on-site player", "Video di Youtube, Vimeo, Dailymotion e Viddlerappariranno dentro al sito.");
-regGS("You do not have the right to upload Soundcloud tracks.", "Non si dispone dei diritti per caricare tracce Soundcloud.");
 regGS("You do not have the right to update Soundcloud tracks.", "Non si dispone dei diritti per aggiornare tracce Soundcloud.");
 regGS("You do not have the right to manage Soundcloud tracks.", "Non si dispone dei diritti per gestire trace Soundcloud.");
 regGS("You do not have the right to manage Soundcloud preferences.", "Non si dispone dei diritti per gestire le preferenze di Soundcloud.");

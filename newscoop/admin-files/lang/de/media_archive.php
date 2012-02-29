@@ -1,17 +1,17 @@
 <?php 
-regGS("You can't update used files.", "");
+regGS("You can't update used files.", "Sie können keine Dateien im Gebrauch aktualisieren. ");
 regGS("Source", "Quelle");
 regGS("Slideshows", "Slideshows");
-regGS("Local", "");
-regGS("Items updated.", "");
+regGS("Local", "Lokal");
+regGS("Items updated.", "Einträge aktualisiert. ");
 regGS("Feedback", "Feedback");
-regGS("Do you want to update unused only?", "");
+regGS("Do you want to update unused only?", "Möchten Sie nur ungenutzte aktualisieren? ");
 regGS("Display Newswires images", "Zeige Newswire Bilder");
-regGS("Disapprove selected", "");
-regGS("Are you sure you want to update selected items?", "");
+regGS("Disapprove selected", "Ausgewählte ablehnen. ");
+regGS("Are you sure you want to update selected items?", "Sind Sie sicher dass Sie die ausgewählten Einträge aktualisieren wollen? ");
 regGS("Approve selected", "Ausgewählte genehmigen.");
 regGS("Image files", "Bilddateien ");
-regGS("Fix all thumbnails", "");
+regGS("Fix all thumbnails", "Alle Thumbnails reparieren.");
 regGS("You do not have the right to add files.", "Sie haben keine Berechtigung Dateien hinzuzufügen. ");
 regGS("Should this file only be available for this translation of the article, or for all translations?", "Soll diese Datei nur für diese Übersetzung des Artikels zur Verfügung stehen oder für alle Übersetzungen? ");
 regGS("Please enter a description for the file: '$1'.", "Bitte geben Sie eine Beschreibung für Datei '$1' ein. ");

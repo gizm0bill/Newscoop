@@ -27,7 +27,7 @@ regGS("no caption", "Bildlegende fehlt");
 regGS("Video URL", "Video URL (youtu.be/... oder vimeo.com/...)");
 regGS("Use default", "zurücksetzen");
 regGS("Slug must be unique", "Dieser Slug wird bereits von einer anderen Slideshow verwendet");
-regGS("Slug", "");
+regGS("Slug", "Kopfzeile (Slug)");
 regGS("Slideshow headline", "Name der Slideshow");
 regGS("Slideshow", "Slideshow");
 regGS("Show all", "Alle anzeigen");

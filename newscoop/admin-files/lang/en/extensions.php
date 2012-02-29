@@ -1,4 +1,5 @@
 <?php 
+regGS("Articles by popularity", "Articles by popularity");
 regGS("TagesWoche Quick Links", "TagesWoche Quick Links");
 regGS("News Desk", "News Desk");
 regGS("Go", "Go");
