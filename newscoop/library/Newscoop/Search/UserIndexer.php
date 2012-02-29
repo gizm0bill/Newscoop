@@ -10,44 +10,20 @@ namespace Newscoop\Search;
 /**
  * User indexer
  */
-class UserIndexer implements IndexerInterface
+class UserIndexer extends IndexerTemplate
 {
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    private $orm;
-
-    /**
-     * @param Doctrine\ORM\EntityManager $orm
-     */
-    public function __construct(\Doctrine\ORM\EntityManager $orm)
-    {
-        $this->orm = $orm;
-    }
-
-    /**
-     * Update index
-     */
-    public function update(Index $index)
-    {
-        foreach ($this->getUsersForIndexing() as $user) {
-            $index->add($this->index($user));
-            $this->orm->flush($user);
-        }
-    }
-
     /**
      * Get users for indexing
      *
      * @return array
      */
-    private function getUsersForIndexing()
+    protected function getIndexable()
     {
         return $this->orm->getRepository('Newscoop\Entity\User')
             ->createQueryBuilder('u')
+            ->andWhere('u.indexed IS NULL OR u.indexed < u.updated')
             ->andWhere('u.status = :active')
             ->andWhere('u.is_public = 1')
-            ->andWhere('u.indexed IS NULL OR u.indexed < u.updated')
             ->setMaxResults(50)
             ->getQuery()
             ->setParameters(array(
@@ -62,9 +38,8 @@ class UserIndexer implements IndexerInterface
      * @param Newscoop\Entity\User $user
      * @return array
      */
-    public function index(\Newscoop\Entity\User $user)
+    protected function getDocument(IndexableInterface $user)
     {
-        $user->setIndexed(new \DateTime());
         return array(
             'id' => sprintf('user-%d', $user->getId()),
             'user' => $user->getUsername(),

@@ -196,9 +196,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('index.user', 'Newscoop\Search\UserIndexer')
             ->addArgument(new sfServiceReference('em'));
 
+        $container->register('index.comment', 'Newscoop\Search\CommentIndexer')
+            ->addArgument(new sfServiceReference('em'));
+
         $container->register('index', 'Newscoop\Search\Index')
             ->addArgument(new sfServiceReference('solr.client'))
             ->addArgument(new sfServiceReference('index.article'))
+            ->addArgument(new sfServiceReference('index.comment'))
             ->addArgument(new sfServiceReference('index.user'));
 
         Zend_Registry::set('container', $container);

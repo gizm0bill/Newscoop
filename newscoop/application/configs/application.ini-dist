@@ -262,6 +262,8 @@ resources.doctrine.functions.rand = "Newscoop\Query\SqliteRandom"
 ; disable listeners during testing
 audit.events = 0
 community_feed.events = 0
+comment.events = 0
+comment_notification.events = 0
 
 ingest.path = APPLICATION_PATH "/../tests/ingest"
 ingest_publisher.image_path = APPLICATION_PATH "/../tests/ingest"

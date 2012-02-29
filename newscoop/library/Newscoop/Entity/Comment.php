@@ -16,7 +16,7 @@ use Newscoop\Entity\Comment\Commenter;
  * @table(name="comment")
  * @entity(repositoryClass="Newscoop\Entity\Repository\CommentRepository")
  */
-class Comment
+class Comment implements \Newscoop\Search\IndexableInterface
 {
     private $allowedEmpty = array( 'br', 'input', 'image' );
 
@@ -123,13 +123,13 @@ class Comment
     private $message;
 
     /**
-     * @column(length=4)
+     * @column(length=4, nullable=True)
      * @var int
      */
     private $thread_level;
 
     /**
-     * @column(length=4)
+     * @column(length=4, nullable=True)
      * @var int
      */
     private $thread_order;
@@ -141,7 +141,7 @@ class Comment
     private $status;
 
     /**
-     * @column(length=39)
+     * @column(length=39, nullable=True)
      * @var int
      */
     private $ip;
@@ -152,7 +152,7 @@ class Comment
      */
     private $time_created;
 
-    /*
+    /**
      * @column(type="datetime")
      * @var DateTime
      */
@@ -175,6 +175,20 @@ class Comment
      * @var int
      */
     private $recommended = 0;
+
+    /**
+     * @Column(type="datetime", nullable=True)
+     * @var DateTime
+     */
+    private $indexed;
+
+    /**
+     */
+    public function __construct()
+    {
+        $this->setStatus('pending');
+        $this->time_created = $this->time_updated = new \DateTime();
+    }
 
     /**
      * Set id
@@ -733,4 +747,14 @@ class Comment
         return $return;
     }
 
+    /**
+     * Set indexed
+     *
+     * @param DateTime $indexed
+     * @return void
+     */
+    public function setIndexed(\DateTime $indexed)
+    {
+        $this->indexed = $indexed;
+    }
 }

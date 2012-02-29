@@ -10,13 +10,8 @@ namespace Newscoop\Search;
 /**
  * Article indexer
  */
-class ArticleIndexer implements IndexerInterface
+class ArticleIndexer extends IndexerTemplate
 {
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    private $orm;
-
     /**
      * @var Newscoop\Webcode\Webcoder
      */
@@ -24,22 +19,12 @@ class ArticleIndexer implements IndexerInterface
 
     /**
      * @param Doctrine\ORM\EntityManager $orm
+     * @param Newscoop\Webcode\Mapper $webcoder
      */
     public function __construct(\Doctrine\ORM\EntityManager $orm, \Newscoop\Webcode\Mapper $webcoder)
     {
-        $this->orm = $orm;
+        parent::__construct($orm);
         $this->webcoder = $webcoder;
-    }
-
-    /**
-     * Update index
-     */
-    public function update(Index $index)
-    {
-        foreach ($this->getArticlesForIndexing() as $article) {
-            $index->add($this->index($article));
-            $this->orm->flush($article);
-        }
     }
 
     /**
@@ -47,7 +32,7 @@ class ArticleIndexer implements IndexerInterface
      *
      * @return array
      */
-    private function getArticlesForIndexing()
+    protected function getIndexable()
     {
         return $this->orm->getRepository('Newscoop\Entity\Article')
             ->createQueryBuilder('a')
@@ -67,14 +52,13 @@ class ArticleIndexer implements IndexerInterface
     }
 
     /**
-     * Index article
+     * Get article document
      *
      * @param Newscoop\Entity\Article $article
-     * @return object
+     * @return array
      */
-    private function index(\Newscoop\Entity\Article $article)
+    protected function getDocument(IndexableInterface $article)
     {
-        $article->setIndexed();
         $doc = array(
             'id' => sprintf('article-%d-%d', $article->getNumber(), $article->getLanguageId()),
             'headline' => $article->getTitle(),
