@@ -1,8 +1,9 @@
 <?php 
-regGS("TagesWoche Quick Links", "");
-regGS("News Desk", "");
-regGS("Go", "");
-regGS("Wikipedia Search", "");
+regGS("Articles by popularity", "Artikel nach Popularität");
+regGS("TagesWoche Quick Links", "TagesWoche Quick Links");
+regGS("News Desk", "News Desk");
+regGS("Go", "Starten");
+regGS("Wikipedia Search", "Wikipedia Suche");
 regGS("Files", "Dateien");
 regGS("Sourcefabric.org newsletter subscription", "Sourcefabric.org Newsletter");
 regGS("Maps search", "Karten-Suche");

@@ -9,10 +9,10 @@ regGS("You do not have the right to delete article types.", "Ihnen fehlt die Ber
 regGS("Small ($1 pixels)", "Klein ($1 Pixel)");
 regGS("Medium ($1 pixels)", "Mittel ($1 Pixel)");
 regGS("Large ($1 pixels)", "Groß ($1 Pixel)");
-regGS("Hide human-readable field names", "");
-regGS("Editor size", "");
-regGS("Edit and translate human-readable field names", "");
-regGS("Custom", "");
+regGS("Hide human-readable field names", "Verberge von Menschen lesbare Feldnamen");
+regGS("Editor size", "Editorgröße");
+regGS("Edit and translate human-readable field names", "Bearbeite und übersetze von Menschen lesbare Feldnamen");
+regGS("Custom", "Benutzerdefiniert");
 regGS("Characters limit", "Maximale Zeichenmenge");
 regGS("The template name may only contain letters and the underscore (_) character.", "Der Templatename darf nur Buchstaben und den Unterstrich (_) enthalten.");
 regGS("The field name was already in use as a base property of the article. The field content will not be displayed in the templates.", "Der Feldname war bereits als Grundeigenschaft für den Artikel in Gebrauch. Der Feldinhalt wird nicht in den Templates angezeigt.");

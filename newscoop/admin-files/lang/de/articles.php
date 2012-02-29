@@ -1,4 +1,5 @@
 <?php 
+regGS("Place images", "Bilder platzieren");
 regGS("Unapproved", "Nicht genehmigt");
 regGS("This article cannot be previewed. Please make sure the article has an issue assigned.", "Vom Artikel kann keine Vorschau erstellt werden. Bitte stellen Sie sicher, dass er einer Ausgabe zugeordnet wurde. ");
 regGS("Slideshows", "Slideshows");
@@ -11,15 +12,15 @@ regGS("Add article to a playlist", "Artikel zur Playlist hinzufügen. ");
 regGS("You're not allowed to edit article.", "Sie haben keine Berechtigung um einen Artikel zu bearbeiten. ");
 regGS("Webcode", "Webcode");
 regGS("Related Articles", "Verwandte Artikel");
-regGS("Context Box updated", "");
+regGS("Context Box updated", "Content Box aktualisiert");
 regGS("On", "An");
 regGS("Off", "Aus");
 regGS("You do not have the right to moderate comments.", "Sie haben keine Berechtigung Kommentare zu moderieren. ");
-regGS("You can not schedule opposing events at the same time", "");
+regGS("You can not schedule opposing events at the same time", "Sie können keine sich widersprechenden Ereignisse zur selben Zeit automatisieren. ");
 regGS("Unable to reach Newscoop. Please check your internet connection.", "Die Verbindung zu Newscoop kann nicht hergestellt werden. Bitte überprüfen Sie ihre Internetverbindung. ");
 regGS("Title", "Titel");
 regGS("There already is an article with the same name. Please change the name and try again.", "Es gibt bereits einen gleichnamigen Artikel. Bitte ändern Sie den Namen des Artikels und versuchen Sie es erneut. ");
-regGS("Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.", "");
+regGS("Please be aware that all scheduled publishing events for this article will be deleted when you set this article to \"New\" state. Please confirm the state change.", "Bitte seien Sie sich darüber im Klaren, dass alle automatisierten Veröffentlichungsereignisse für diesen Artikel gelöscht werden, wenn Sie den Artikel auf \"Neu\" einstellen. Bitte bestätigen Sie die Statusänderung. ");
 regGS("Geolocation", "Geolocation");
 regGS("Newscoop", "Newscoop");
 regGS("Overwrite articles with matching names", "Überschreibe Artikel mit gleichen Namen. ");

@@ -57,7 +57,7 @@ regGS("Comment $4 by $1 in the article $2 ($3)", "");
 regGS("Comment \"$1\" saved.", "");
 regGS("Column", "");
 regGS("Change subscriber information", "");
-regGS("Bans can be applied to a user\", "");
+regGS("Bans can be applied to a user's name, email address or IP address.", "");
 regGS("Ban user", "");
 regGS("Ban for commenter \"$1\" saved.", "");
 regGS("Ban", "");

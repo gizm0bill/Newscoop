@@ -1,5 +1,5 @@
 <?php 
-regGS("You must fill in the $1 field %s.", "");
+regGS("You must fill in the $1 field %s.", "Sie müssen das $1 Feld %s ausfüllen. ");
 regGS("Weekly", "Wöchentlich");
 regGS("Week", "Woche");
 regGS("Results", "Ergebnisse");
@@ -12,7 +12,7 @@ regGS("Daily", "Täglich");
 regGS("Attach Debate", "Debatte hinzufügen");
 regGS("Are you sure you want to reset counters on the selected debatess?", "Wollen Sie wirklich den Zähler der ausgewählten Debatten zurücksetzen?");
 regGS("Are you sure you want to delete the selected debatess?", "Wollen Sie wirklich die ausgewählten Debatten löschen?");
-regGS("Answer %s", "Antwort in Prozent");
+regGS("Answer %s", "Antwort");
 regGS("Answer", "Antwort");
 regGS("Allow not logged in users", "Nicht eingeloggte Nutzer zulassen.");
 regGS("Are you sure you want to delete the debate \"$1\"?", "Wirklich die Umfrage \"$1\" löschen?");
