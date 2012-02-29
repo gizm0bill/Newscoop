@@ -13,7 +13,7 @@ namespace Newscoop\Entity;
  * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository")
  * @Table(name="Articles")
  */
-class Article
+class Article implements \Newscoop\Search\IndexableInterface
 {
     const STATUS_PUBLISHED = 'Y';
     const STATUS_NOT_PUBLISHED = 'N';
@@ -131,7 +131,7 @@ class Article
     /**
      * @var array
      */
-    private $data = array();
+    private $data;
 
     /**
      * @param int $number
@@ -405,6 +405,16 @@ class Article
     }
 
     /**
+     * Get authors
+     *
+     * @return array
+     */
+    public function getAuthors()
+    {
+        return $this->authors->toArray();
+    }
+
+    /**
      * Set status
      *
      * @param string $status
@@ -463,8 +473,16 @@ class Article
      * @param string $field
      * @return mixed
      */
-    public function getData($field = null)
+    public function getData($field)
     {
-        return $field === null ? $this->data : (array_key_exists($field, $this->data) ? $this->data[$field] : null);
+        if ($this->data === null) {
+            $this->data = new \ArticleData($this->type, $this->number, $this->getLanguageId());
+        }
+
+        if (is_array($this->data)) {
+            return array_key_exists($field, $this->data) ? $this->data[$field] : null;
+        } else {
+            return $this->data->getFieldValue($field);
+        }
     }
 }

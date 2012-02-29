@@ -43,7 +43,7 @@ class Index
     /**
      * Update index
      *
-     * @return void
+     * @return \Zend_Http_Response
      */
     public function update()
     {
@@ -56,7 +56,7 @@ class Index
         }
 
         $this->client->setRawData(json_encode(array('add' => $this->adds)), 'application/json');
-        $response = $this->client->request(\Zend_Http_Client::POST);
+        return $this->client->request(\Zend_Http_Client::POST);
     }
 
     /**

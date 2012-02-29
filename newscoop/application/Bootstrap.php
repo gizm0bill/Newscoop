@@ -184,15 +184,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->addArgument(new sfServiceReference('em'))
             ->addArgument(new sfServiceReference('image'));
 
-        $container->register('index.article', 'Newscoop\Search\ArticleIndexer')
-            ->addArgument(new sfServiceReference('em'));
-
         $container->register('solr.client', 'Zend_Http_Client')
             ->addArgument('http://localhost:8983/solr/update/json?commit=true');
 
+        $container->register('index.article', 'Newscoop\Search\ArticleIndexer')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('index.user', 'Newscoop\Search\UserIndexer')
+            ->addArgument(new sfServiceReference('em'));
+
         $container->register('index', 'Newscoop\Search\Index')
             ->addArgument(new sfServiceReference('solr.client'))
-            ->addArgument(new sfServiceReference('index.article'));
+            ->addArgument(new sfServiceReference('index.article'))
+            ->addArgument(new sfServiceReference('index.user'));
 
         Zend_Registry::set('container', $container);
         return $container;

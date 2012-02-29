@@ -48,12 +48,14 @@ class ArticleIndexer implements IndexerInterface
             ->andWhere('a.workflowStatus = :published')
             ->andWhere('a.indexed IS NULL OR a.indexed < a.date')
             ->andWhere('a.date <= :delay')
+            ->andWhere('a.type IN (:types)')
             ->orderBy('a.number', 'desc')
             ->setMaxResults(50)
             ->getQuery()
             ->setParameters(array(
                 'published' => \Newscoop\Entity\Article::STATUS_PUBLISHED,
                 'delay' => date_create('-5 min')->format(\Newscoop\Entity\Article::DATE_FORMAT),
+                'types' => array('blog', 'news', 'dossier', 'newswire'),
             ))
             ->getResult();
     }
@@ -70,21 +72,31 @@ class ArticleIndexer implements IndexerInterface
         $doc = array(
             'id' => sprintf('article-%d-%d', $article->getNumber(), $article->getLanguageId()),
             'headline' => $article->getTitle(),
-            'lead' => $article->getData('lede'),
             'type' => $article->getType(),
+            'published' => gmdate('Y-m-d\TH:i:s\Z', date_create($article->getPublishDate())->getTimestamp()),
+            'author' => array_map(function($author) {
+                return $author->getFullName();
+            }, $article->getAuthors()),
         );
 
         switch ($article->getType()) {
             case 'blog':
             case 'news':
+                $doc['lead'] = $article->getData('lede');
                 $doc['content'] = $article->getData('body');
                 break;
 
             case 'dossier':
+                $doc['lead'] = $article->getData('lede');
                 $doc['content'] = $article->getData('history');
+                break;
+
+            case 'newswire':
+                $doc['lead'] = $article->getData('DataLead');
+                $doc['content'] = $article->getData('DataContent');
                 break;
         }
 
-        return $doc;
+        return array_filter($doc);
     }
 }
