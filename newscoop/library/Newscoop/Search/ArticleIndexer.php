@@ -18,11 +18,17 @@ class ArticleIndexer implements IndexerInterface
     private $orm;
 
     /**
+     * @var Newscoop\Webcode\Webcoder
+     */
+    private $webcoder;
+
+    /**
      * @param Doctrine\ORM\EntityManager $orm
      */
-    public function __construct(\Doctrine\ORM\EntityManager $orm)
+    public function __construct(\Doctrine\ORM\EntityManager $orm, \Newscoop\Webcode\Mapper $webcoder)
     {
         $this->orm = $orm;
+        $this->webcoder = $webcoder;
     }
 
     /**
@@ -77,6 +83,7 @@ class ArticleIndexer implements IndexerInterface
             'author' => array_map(function($author) {
                 return $author->getFullName();
             }, $article->getAuthors()),
+            'webcode' => $this->webcoder->encode($article->getNumber()),
         );
 
         switch ($article->getType()) {

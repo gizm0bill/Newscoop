@@ -28,10 +28,14 @@ class ArticleIndexerTest extends \TestCase
     /** @var Newscoop\Search\Index */
     protected $index;
 
+    /** @var Newscoop\Webcode\Mapper */
+    protected $webcoder;
+
     public function setUp()
     {
         $this->orm = $this->setUpOrm('Newscoop\Entity\Article', 'Newscoop\Entity\Language', 'Newscoop\Entity\Author');
-        $this->indexer = new ArticleIndexer($this->orm);
+        $this->webcoder = new \Newscoop\Webcode\Mapper();
+        $this->indexer = new ArticleIndexer($this->orm, $this->webcoder);
 
         $this->index = $this->getMock('Newscoop\Search\Index');
 
@@ -116,6 +120,7 @@ class ArticleIndexerTest extends \TestCase
                 'content' => 'body',
                 'type' => 'blog',
                 'published' => gmdate(self::DATE_FORMAT, $published->getTimestamp()),
+                'webcode' => $this->webcode(1),
             )));
 
         $this->indexer->update($this->index);
@@ -137,6 +142,7 @@ class ArticleIndexerTest extends \TestCase
                 'content' => 'history',
                 'type' => 'dossier',
                 'published' => gmdate(self::DATE_FORMAT, $published->getTimestamp()),
+                'webcode' => $this->webcode(1),
             )));
 
         $this->indexer->update($this->index);
@@ -158,6 +164,7 @@ class ArticleIndexerTest extends \TestCase
                 'content' => 'body',
                 'type' => 'news',
                 'published' => gmdate(self::DATE_FORMAT, $published->getTimestamp()),
+                'webcode' => $this->webcode(1),
             )));
 
         $this->indexer->update($this->index);
@@ -179,6 +186,7 @@ class ArticleIndexerTest extends \TestCase
                 'type' => 'news',
                 'author' => array('john doe'),
                 'published' => gmdate(self::DATE_FORMAT, $published->getTimestamp()),
+                'webcode' => $this->webcode(1),
             )));
 
         $this->indexer->update($this->index);
@@ -198,5 +206,10 @@ class ArticleIndexerTest extends \TestCase
         $this->orm->flush($article);
 
         return $article;
+    }
+
+    private function webcode($number)
+    {
+        return $this->webcoder->encode($number);
     }
 }
