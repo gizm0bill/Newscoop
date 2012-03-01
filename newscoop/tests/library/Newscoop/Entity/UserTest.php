@@ -359,4 +359,20 @@ class UserTest extends \RepositoryTestCase
     {
         $this->repository->countByUsernameFirstCharacterIn(array());
     }
+
+    public function testIsIndexable()
+    {
+        $user = new User();
+        $this->assertFalse($user->isIndexable());
+
+        $user->setPublic(true);
+        $this->assertFalse($user->isIndexable());
+
+        $user->setPublic(false);
+        $user->setActive();
+        $this->assertFalse($user->isIndexable());
+
+        $user->setPublic();
+        $this->assertTrue($user->isIndexable());
+    }
 }

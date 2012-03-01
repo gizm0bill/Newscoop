@@ -797,8 +797,38 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterf
      * @param DateTime $indexed
      * @return void
      */
-    public function setIndexed(\DateTime $indexed)
+    public function setIndexed(\DateTime $indexed = null)
     {
         $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Get document id
+     *
+     * @return string
+     */
+    public function getDocumentId()
+    {
+        return sprintf('user-%d', $this->id);
+    }
+
+    /**
+     * Test if user is indexable
+     *
+     * @return bool
+     */
+    public function isIndexable()
+    {
+        return $this->isPublic() && $this->isActive();
     }
 }

@@ -18,37 +18,6 @@ abstract class IndexerTemplate implements IndexerInterface
     protected $orm;
 
     /**
-     * @param Doctrine\ORM\EntityManager $orm
-     */
-    public function __construct(\Doctrine\ORM\EntityManager $orm)
-    {
-        $this->orm = $orm;
-    }
-
-    /**
-     * Update index
-     */
-    public function update(Index $index)
-    {
-        foreach ($this->getIndexable() as $indexable) {
-            $index->add($this->index($indexable));
-            $this->orm->flush($indexable);
-        }
-    }
-
-    /**
-     * Index entity
-     *
-     * @param Newscoop\Search\IndexableInterface $indexable
-     * @return array
-     */
-    final protected function index(IndexableInterface $indexable)
-    {
-        $indexable->setIndexed(new \DateTime());
-        return $this->getDocument($indexable);
-    }
-
-    /**
      * Get indexable entities
      *
      * @return array
@@ -62,4 +31,46 @@ abstract class IndexerTemplate implements IndexerInterface
      * @return array
      */
     abstract protected function getDocument(IndexableInterface $entity);
+
+    /**
+     * @param Doctrine\ORM\EntityManager $orm
+     */
+    public function __construct(\Doctrine\ORM\EntityManager $orm)
+    {
+        $this->orm = $orm;
+    }
+
+    /**
+     * Update index
+     *
+     * @return void
+     */
+    public function update(Index $index)
+    {
+        foreach ($this->getIndexable() as $indexable) {
+            $index->add($this->index($indexable));
+        }
+    }
+
+    /**
+     * Commit entity changes
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        $this->orm->flush();
+    }
+
+    /**
+     * Index entity
+     *
+     * @param Newscoop\Search\IndexableInterface $indexable
+     * @return array
+     */
+    final protected function index(IndexableInterface $indexable)
+    {
+        $indexable->setIndexed(new \DateTime());
+        return $this->getDocument($indexable);
+    }
 }

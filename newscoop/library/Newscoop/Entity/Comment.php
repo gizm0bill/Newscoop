@@ -753,8 +753,38 @@ class Comment implements \Newscoop\Search\IndexableInterface
      * @param DateTime $indexed
      * @return void
      */
-    public function setIndexed(\DateTime $indexed)
+    public function setIndexed(\DateTime $indexed = null)
     {
         $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Get document id
+     *
+     * @return string
+     */
+    public function getDocumentId()
+    {
+        return sprintf('comment-%d', $this->id);
+    }
+
+    /**
+     * Test if comment is indexable
+     *
+     * @return bool
+     */
+    public function isIndexable()
+    {
+        return $this->getStatus() === 'approved';
     }
 }

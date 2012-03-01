@@ -9,29 +9,17 @@ namespace Newscoop\Search;
 
 use Newscoop\Entity\Comment;
 
+require_once __DIR__ . '/IndexerTestTemplate.php';
+
 /**
  */
-class CommentIndexerTest extends \TestCase
+class CommentIndexerTest extends IndexerTestTemplate
 {
-    /** @var Newscoop\Search\CommentIndexer */
-    protected $indexer;
-
-    /** @var Doctrine\ORM\EntityManager */
-    protected $orm;
-
-    /** @var Newscoop\Search\Index */
-    protected $index;
-
     public function setUp()
     {
+        parent::setUp();
         $this->orm = $this->setUpOrm('Newscoop\Entity\Comment', 'Newscoop\Entity\Article', 'Newscoop\Entity\Language');
         $this->indexer = new CommentIndexer($this->orm);
-        $this->index = $this->getMock('Newscoop\Search\Index');
-    }
-
-    public function tearDown()
-    {
-        $this->tearDownOrm($this->orm);
     }
 
     public function testInstance()
@@ -40,22 +28,11 @@ class CommentIndexerTest extends \TestCase
         $this->assertInstanceOf('Newscoop\Search\IndexerInterface', $this->indexer);
     }
 
-    public function testUpdateNoComments()
-    {
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
-    }
-
     public function testUpdatePending()
     {
         $comment = $this->getComment('sub', 'msg');
 
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
+        $this->updateExpectNoAdd();
     }
 
     public function testUpdate()

@@ -92,6 +92,8 @@ listener[] = user_points
 listener[] = user_attributes
 listener[] = comment_notification
 
+subscriber[] = index
+
 ; audit events
 audit.events[] = comment.update
 audit.events[] = comment.delete
@@ -264,6 +266,7 @@ audit.events = 0
 community_feed.events = 0
 comment.events = 0
 comment_notification.events = 0
+subscriber = 0
 
 ingest.path = APPLICATION_PATH "/../tests/ingest"
 ingest_publisher.image_path = APPLICATION_PATH "/../tests/ingest"

@@ -18,6 +18,11 @@ class Index
     private $client;
 
     /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $orm;
+
+    /**
      * @var array
      */
     private $indexers = array();
@@ -28,13 +33,13 @@ class Index
     private $adds = array();
 
     /**
+     * @param Zend_Http_Client $client
+     * @param Doctrine\ORM\EntityManager $orm
      */
-    public function __construct()
+    public function __construct(\Zend_Http_Client $client, \Doctrine\ORM\EntityManager $orm)
     {
-        $this->client = array_pop(array_filter(func_get_args(), function($arg) {
-            return $arg instanceof \Zend_Http_Client;
-        }));
-
+        $this->client = $client;
+        $this->orm = $orm;
         $this->indexers = array_filter(func_get_args(), function($arg) {
             return $arg instanceof IndexerInterface;
         });
@@ -43,7 +48,7 @@ class Index
     /**
      * Update index
      *
-     * @return \Zend_Http_Response
+     * @return void
      */
     public function update()
     {
@@ -53,10 +58,17 @@ class Index
 
         foreach ($this->indexers as $indexer) {
             $indexer->update($this);
+            if (!empty($this->adds)) {
+                $this->client->setRawData(json_encode(array('add' => $this->adds)), 'application/json');
+                $response = $this->client->request(\Zend_Http_Client::POST);
+                if ($response->isSuccessful()) {
+                    $indexer->commit();
+                    $this->adds = array();
+                } else {
+                    throw new \RuntimeException("Failed to update index.");
+                }
+            }
         }
-
-        $this->client->setRawData(json_encode(array('add' => $this->adds)), 'application/json');
-        return $this->client->request(\Zend_Http_Client::POST);
     }
 
     /**
@@ -68,5 +80,39 @@ class Index
     public function add(array $document)
     {
         $this->adds[] = $document;
+    }
+
+    /**
+     * Delete document from index
+     *
+     * @param Newscoop\Search\IndexableInterface $indexable
+     * @return void
+     */
+    public function delete(\sfEvent $event)
+    {
+        $indexable = $event['entity'];
+        if ($indexable->getIndexed() !== null && !$indexable->isIndexable()) {
+            $this->client->setRawData(json_encode(array('delete' => array('id' => $indexable->getDocumentId()))), 'application/json');
+            $this->client->request(\Zend_Http_Client::POST);
+            $indexable->setIndexed(null);
+            $this->orm->flush($indexable);
+        }
+    }
+
+    /**
+     * Get subscribed events
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'article.update' => 'delete',
+            'article.delete' => 'delete',
+            'user.update' => 'delete',
+            'user.delete' => 'delete',
+            'comment.update' => 'delete',
+            'comment.delete' => 'delete',
+        );
     }
 }

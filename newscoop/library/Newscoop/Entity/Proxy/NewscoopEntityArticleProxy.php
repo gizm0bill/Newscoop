@@ -106,6 +106,12 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getNumber();
     }
 
+    public function setTitle($title)
+    {
+        $this->__load();
+        return parent::setTitle($title);
+    }
+
     public function getTitle()
     {
         $this->__load();
@@ -124,6 +130,12 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::commentsEnabled();
     }
 
+    public function setType($type)
+    {
+        $this->__load();
+        return parent::setType($type);
+    }
+
     public function getType()
     {
         $this->__load();
@@ -134,6 +146,12 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
     {
         $this->__load();
         return parent::getPublishDate();
+    }
+
+    public function setPublished(\DateTime $published)
+    {
+        $this->__load();
+        return parent::setPublished($published);
     }
 
     public function setCreator(\Newscoop\Entity\User $p_user)
@@ -148,10 +166,70 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getCreator();
     }
 
+    public function addAuthor(\Newscoop\Entity\Author $author)
+    {
+        $this->__load();
+        return parent::addAuthor($author);
+    }
+
+    public function getAuthors()
+    {
+        $this->__load();
+        return parent::getAuthors();
+    }
+
+    public function setStatus($status)
+    {
+        $this->__load();
+        return parent::setStatus($status);
+    }
+
+    public function setIndexed(\DateTime $indexed = NULL)
+    {
+        $this->__load();
+        return parent::setIndexed($indexed);
+    }
+
+    public function getIndexed()
+    {
+        $this->__load();
+        return parent::getIndexed();
+    }
+
+    public function setUpdated(\DateTime $updated)
+    {
+        $this->__load();
+        return parent::setUpdated($updated);
+    }
+
+    public function setData(array $data)
+    {
+        $this->__load();
+        return parent::setData($data);
+    }
+
+    public function getData($field)
+    {
+        $this->__load();
+        return parent::getData($field);
+    }
+
+    public function getDocumentId()
+    {
+        $this->__load();
+        return parent::getDocumentId();
+    }
+
+    public function isIndexable()
+    {
+        $this->__load();
+        return parent::isIndexable();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'creator', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus');
+        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'creator', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'authors', 'indexed');
     }
 
     public function __clone()

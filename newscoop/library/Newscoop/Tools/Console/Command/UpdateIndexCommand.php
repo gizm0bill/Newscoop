@@ -32,8 +32,7 @@ class UpdateIndexCommand extends Console\Command\Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $ingest = $this->getHelper('container')->getService('index');
-        $ingest->update();
+        $this->getHelper('container')->getService('index')->update();
         $output->writeln('Search Index updated.');
     }
 }

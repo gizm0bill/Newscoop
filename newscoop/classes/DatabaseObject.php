@@ -1123,6 +1123,14 @@ class DatabaseObject
             return;
         }
 
+        if ($subject instanceof \Article) {
+            $params['entity'] = \Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\Article')
+                ->find(array(
+                    'number' => $subject->getArticleNumber(),
+                    'language' => $subject->getLanguageId(),
+                ));
+        }
+
         try {
             self::$eventDispatcher->notify(new sfEvent($subject, $event, $params));
         }

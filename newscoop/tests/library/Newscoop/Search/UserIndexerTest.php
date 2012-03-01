@@ -9,30 +9,17 @@ namespace Newscoop\Search;
 
 use Newscoop\Entity\User;
 
+require_once __DIR__ . '/IndexerTestTemplate.php';
+
 /**
  */
-class UserIndexerTest extends \TestCase
+class UserIndexerTest extends IndexerTestTemplate
 {
-    /** @var Newscoop\Search\ArticleIndexer */
-    protected $indexer;
-
-    /** @var Doctrine\ORM\EntityManager */
-    protected $orm;
-
-    /** @var Newscoop\Search\Index */
-    protected $index;
-
     public function setUp()
     {
+        parent::setUp();
         $this->orm = $this->setUpOrm('Newscoop\Entity\User', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\UserAttribute');
         $this->indexer = new UserIndexer($this->orm);
-
-        $this->index = $this->getMock('Newscoop\Search\Index');
-    }
-
-    public function tearDown()
-    {
-        $this->tearDownOrm($this->orm);
     }
 
     public function testInstance()
@@ -41,24 +28,13 @@ class UserIndexerTest extends \TestCase
         $this->assertInstanceOf('Newscoop\Search\IndexerInterface', $this->indexer);
     }
 
-    public function testUpdateNoUsers()
-    {
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
-    }
-
     public function testUpdateNotActiveNotPublic()
     {
         $user = new User('email');
         $this->orm->persist($user);
         $this->orm->flush($user);
 
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
+        $this->updateExpectNoAdd();
     }
 
     public function testUpdateActiveNotPublic()
@@ -68,10 +44,7 @@ class UserIndexerTest extends \TestCase
         $this->orm->persist($user);
         $this->orm->flush($user);
 
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
+        $this->updateExpectNoAdd();
     }
 
     public function testUpdateNotActivePublic()
@@ -81,10 +54,7 @@ class UserIndexerTest extends \TestCase
         $this->orm->persist($user);
         $this->orm->flush($user);
 
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
+        $this->updateExpectNoAdd();
     }
 
     public function testUpdate()
@@ -109,6 +79,8 @@ class UserIndexerTest extends \TestCase
             )));
 
         $this->indexer->update($this->index);
+        $this->indexer->commit();
+        $this->orm->clear();
         $this->indexer->update($this->index);
     }
 }

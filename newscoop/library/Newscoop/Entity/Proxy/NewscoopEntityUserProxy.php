@@ -322,10 +322,34 @@ class NewscoopEntityUserProxy extends \Newscoop\Entity\User implements \Doctrine
         return parent::preUpdate();
     }
 
+    public function setIndexed(\DateTime $indexed = NULL)
+    {
+        $this->__load();
+        return parent::setIndexed($indexed);
+    }
+
+    public function getIndexed()
+    {
+        $this->__load();
+        return parent::getIndexed();
+    }
+
+    public function getDocumentId()
+    {
+        $this->__load();
+        return parent::getDocumentId();
+    }
+
+    public function isIndexable()
+    {
+        $this->__load();
+        return parent::isIndexable();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'email', 'username', 'password', 'first_name', 'last_name', 'created', 'updated', 'status', 'is_admin', 'is_public', 'points', 'image', 'role', 'groups', 'attributes', 'commenters', 'subscriber', 'author');
+        return array('__isInitialized__', 'id', 'email', 'username', 'password', 'first_name', 'last_name', 'created', 'updated', 'status', 'is_admin', 'is_public', 'points', 'image', 'role', 'groups', 'attributes', 'commenters', 'subscriber', 'author', 'indexed');
     }
 
     public function __clone()

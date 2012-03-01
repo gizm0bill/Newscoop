@@ -40,7 +40,7 @@ class CommentIndexer extends IndexerTemplate
     protected function getDocument(IndexableInterface $comment)
     {
         return array(
-            'id' => sprintf('comment-%d', $comment->getId()),
+            'id' => $comment->getDocumentId(),
             'type' => 'comment',
             'subject' => $comment->getSubject(),
             'message' => $comment->getMessage(),

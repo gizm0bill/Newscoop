@@ -46,6 +46,12 @@ class NewscoopEntityTopicProxy extends \Newscoop\Entity\Topic implements \Doctri
         return parent::getName();
     }
 
+    public function __toString()
+    {
+        $this->__load();
+        return parent::__toString();
+    }
+
 
     public function __sleep()
     {

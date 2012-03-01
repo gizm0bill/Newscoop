@@ -13,10 +13,31 @@ namespace Newscoop\Search;
 interface IndexableInterface
 {
     /**
+     * Get document id
+     *
+     * @return string
+     */
+    public function getDocumentId();
+
+    /**
      * Set indexed date
      *
      * @param DateTime $indexed
      * @return void
      */
-    public function setIndexed(\DateTime $indexed);
+    public function setIndexed(\DateTime $indexed = null);
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed();
+
+    /**
+     * Test if item can be indexed
+     *
+     * @return bool
+     */
+    public function isIndexable();
 }

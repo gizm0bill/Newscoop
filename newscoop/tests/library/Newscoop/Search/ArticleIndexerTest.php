@@ -10,56 +10,35 @@ namespace Newscoop\Search;
 use Newscoop\Entity\Article,
     Newscoop\Entity\Language;
 
+require_once __DIR__ . '/IndexerTestTemplate.php';
+
 /**
  */
-class ArticleIndexerTest extends \TestCase
+class ArticleIndexerTest extends IndexerTestTemplate
 {
     const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
 
-    /** @var Newscoop\Search\ArticleIndexer */
-    protected $indexer;
-
-    /** @var Doctrine\ORM\EntityManager */
-    protected $orm;
-
     /** @var Newscoop\Entity\Language */
     protected $language;
-
-    /** @var Newscoop\Search\Index */
-    protected $index;
 
     /** @var Newscoop\Webcode\Mapper */
     protected $webcoder;
 
     public function setUp()
     {
+        parent::setUp();
         $this->orm = $this->setUpOrm('Newscoop\Entity\Article', 'Newscoop\Entity\Language', 'Newscoop\Entity\Author');
         $this->webcoder = new \Newscoop\Webcode\Mapper();
         $this->indexer = new ArticleIndexer($this->orm, $this->webcoder);
-
-        $this->index = $this->getMock('Newscoop\Search\Index');
 
         $this->language = new Language();
         $this->orm->persist($this->language);
         $this->orm->flush($this->language);
     }
 
-    public function tearDown()
-    {
-        $this->tearDownOrm($this->orm);
-    }
-
     public function testInstance()
     {
         $this->assertInstanceOf('Newscoop\Search\ArticleIndexer', $this->indexer);
-    }
-
-    public function testUpdateNoArticles()
-    {
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
     }
 
     public function testUpdateNotPublished()
@@ -69,10 +48,7 @@ class ArticleIndexerTest extends \TestCase
 
         $this->assertNull(null, $article->getIndexed());
 
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
+        $this->updateExpectNoAdd();
     }
 
     public function testUpdateNotUpdated()
@@ -82,10 +58,7 @@ class ArticleIndexerTest extends \TestCase
         $article->setUpdated(new \DateTime('now'));
         $this->orm->flush($article);
 
-        $this->index->expects($this->never())
-            ->method('add');
-
-        $this->indexer->update($this->index);
+        $this->updateExpectNoAdd();
     }
 
     public function testUpdate()
@@ -95,10 +68,12 @@ class ArticleIndexerTest extends \TestCase
         $article->setUpdated(new \DateTime('-6 min'));
         $this->orm->flush($article);
 
-        $this->index->expects($this->once())
+        $this->index->expects($this->exactly(2))
             ->method('add');
 
         $this->indexer->update($this->index);
+        $this->indexer->update($this->index);
+        $this->indexer->commit();
         $this->indexer->update($this->index);
 
         $this->assertNotNull($article->getIndexed());

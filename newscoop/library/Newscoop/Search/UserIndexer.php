@@ -41,7 +41,7 @@ class UserIndexer extends IndexerTemplate
     protected function getDocument(IndexableInterface $user)
     {
         return array(
-            'id' => sprintf('user-%d', $user->getId()),
+            'id' => $user->getDocumentId(),
             'user' => $user->getUsername(),
             'bio' => $user->getAttribute('bio'),
             'type' => 'user',

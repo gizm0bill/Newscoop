@@ -432,7 +432,7 @@ class Article implements \Newscoop\Search\IndexableInterface
      */
     public function setIndexed(\DateTime $indexed = null)
     {
-        $this->indexed = $indexed === null ? new \DateTime() : $indexed;
+        $this->indexed = $indexed;
     }
 
     /**
@@ -484,5 +484,25 @@ class Article implements \Newscoop\Search\IndexableInterface
         } else {
             return $this->data->getFieldValue($field);
         }
+    }
+
+    /**
+     * Get document id
+     *
+     * @return string
+     */
+    public function getDocumentId()
+    {
+        return sprintf('article-%d-%d', $this->number, $this->getLanguageId());
+    }
+
+    /**
+     * Test if article can be indexed
+     *
+     * @return bool
+     */
+    public function isIndexable()
+    {
+        return $this->workflowStatus === self::STATUS_PUBLISHED;
     }
 }

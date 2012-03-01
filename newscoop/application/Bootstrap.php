@@ -71,6 +71,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('view');
         $container->setService('view', $this->getResource('view'));
 
+        $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
+            ->addMethodCall('setListeners', array($container))
+            ->addMethodCall('setSubscribers', array($container));
+
         $container->register('image', 'Newscoop\Image\ImageService')
             ->addArgument('%image%')
             ->addArgument(new sfServiceReference('em'));
@@ -110,17 +114,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $container->register('audit.maintenance', 'Newscoop\Services\AuditMaintenanceService')
             ->addArgument(new sfServiceReference('em'));
-
-        $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
-            ->setConfigurator(function($service) use ($container) {
-                foreach ($container->getParameter('listener') as $listener) {
-                    $listenerService = $container->getService($listener);
-                    $listenerParams = $container->getParameter($listener);
-                    foreach ((array) $listenerParams['events'] as $event) {
-                        $service->connect($event, array($listenerService, 'update'));
-                    }
-                }
-            });
 
         $container->register('user.topic', 'Newscoop\Services\UserTopicService')
             ->addArgument(new sfServiceReference('em'))
@@ -201,6 +194,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $container->register('index', 'Newscoop\Search\Index')
             ->addArgument(new sfServiceReference('solr.client'))
+            ->addArgument(new sfServiceReference('em'))
             ->addArgument(new sfServiceReference('index.article'))
             ->addArgument(new sfServiceReference('index.comment'))
             ->addArgument(new sfServiceReference('index.user'));

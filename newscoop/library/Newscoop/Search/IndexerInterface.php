@@ -19,4 +19,13 @@ interface IndexerInterface
      * @return void
      */
     public function update(\Index $index);
+
+    /**
+     * Commit the changes
+     *
+     * before commiting update should return the same entities
+     *
+     * @return void
+     */
+    public function commit();
 }

@@ -70,4 +70,13 @@ class CommentTest extends \RepositoryTestCase
         $comment = $this->repository->save(new Comment(), $values);
         $this->assertEquals(2, $comment->getThreadOrder());
     }
+
+    public function testIsIndexable()
+    {
+        $comment = new Comment();
+        $this->assertFalse($comment->isIndexable());
+
+        $comment->setStatus('approved');
+        $this->assertTrue($comment->isIndexable());
+    }
 }

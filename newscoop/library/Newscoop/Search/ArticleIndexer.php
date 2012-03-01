@@ -60,7 +60,7 @@ class ArticleIndexer extends IndexerTemplate
     protected function getDocument(IndexableInterface $article)
     {
         $doc = array(
-            'id' => sprintf('article-%d-%d', $article->getNumber(), $article->getLanguageId()),
+            'id' => $article->getDocumentId(),
             'headline' => $article->getTitle(),
             'type' => $article->getType(),
             'published' => gmdate('Y-m-d\TH:i:s\Z', date_create($article->getPublishDate())->getTimestamp()),
