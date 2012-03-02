@@ -41,7 +41,7 @@ class DoctrineEventDispatcherProxy implements EventSubscriber
         return array(
             Events::postPersist,
             Events::postUpdate,
-            Events::preRemove,
+            Events::postRemove,
         );
     }
 
@@ -95,12 +95,12 @@ class DoctrineEventDispatcherProxy implements EventSubscriber
     }
 
     /**
-     * Dispatch entity.delete on preRemove.
+     * Dispatch entity.delete on postRemove.
      *
      * @param Doctrine\ORM\Event\LifecycleEventArgs $args
      * @return void
      */
-    public function preRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args)
     {
         $entityName = $this->getEntityName($args->getEntity());
         $this->dispatcher->notify(new \sfEvent($this, "{$entityName}.delete", array(

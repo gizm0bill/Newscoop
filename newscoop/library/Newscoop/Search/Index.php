@@ -25,12 +25,17 @@ class Index
     /**
      * @var array
      */
-    private $indexers = array();
+    private $repositories = array();
 
     /**
      * @var array
      */
-    private $adds = array();
+    private $add = array();
+
+    /**
+     * @var array
+     */
+    private $delete = array();
 
     /**
      * @param Zend_Http_Client $client
@@ -40,9 +45,17 @@ class Index
     {
         $this->client = $client;
         $this->orm = $orm;
-        $this->indexers = array_filter(func_get_args(), function($arg) {
-            return $arg instanceof IndexerInterface;
-        });
+    }
+
+    /**
+     * Add repository
+     *
+     * @param Newscoop\Search\IndexableRepositoryInterface $repository
+     * @return void
+     */
+    public function addRepository(IndexableRepositoryInterface $repository)
+    {
+        $this->repositories[] = $repository;
     }
 
     /**
@@ -52,34 +65,23 @@ class Index
      */
     public function update()
     {
-        if ($this->client === null) {
-            throw new \RuntimeException("Client must be provided before update.");
-        }
-
-        foreach ($this->indexers as $indexer) {
-            $indexer->update($this);
-            if (!empty($this->adds)) {
-                $this->client->setRawData(json_encode(array('add' => $this->adds)), 'application/json');
-                $response = $this->client->request(\Zend_Http_Client::POST);
-                if ($response->isSuccessful()) {
-                    $indexer->commit();
-                    $this->adds = array();
-                } else {
-                    throw new \RuntimeException("Failed to update index.");
+        foreach ($this->repositories as $repository) {
+            $updated = array();
+            foreach ($repository->findIndexable() as $indexable) {
+                if ($indexable->isIndexable()) {
+                    $this->add[] = $indexable->getDocument();
+                } else if ($indexable->getIndexed() !== null) {
+                    $this->delete[] = $indexable->getDocumentId();
                 }
+
+                $updated[] = $indexable;
+            }
+
+            $this->flush();
+            if (!empty($updated)) {
+                $repository->setIndexedNow($updated);
             }
         }
-    }
-
-    /**
-     * Add document to index
-     *
-     * @param array $document
-     * @return void
-     */
-    public function add(array $document)
-    {
-        $this->adds[] = $document;
     }
 
     /**
@@ -91,11 +93,9 @@ class Index
     public function delete(\sfEvent $event)
     {
         $indexable = $event['entity'];
-        if ($indexable->getIndexed() !== null && !$indexable->isIndexable()) {
+        if ($indexable->getIndexed() !== null) {
             $this->client->setRawData(json_encode(array('delete' => array('id' => $indexable->getDocumentId()))), 'application/json');
             $this->client->request(\Zend_Http_Client::POST);
-            $indexable->setIndexed(null);
-            $this->orm->flush($indexable);
         }
     }
 
@@ -107,12 +107,44 @@ class Index
     public static function getSubscribedEvents()
     {
         return array(
-            'article.update' => 'delete',
             'article.delete' => 'delete',
-            'user.update' => 'delete',
             'user.delete' => 'delete',
-            'comment.update' => 'delete',
             'comment.delete' => 'delete',
         );
+    }
+
+    /**
+     * Flush changes
+     *
+     * @return void
+     */
+    private function flush()
+    {
+        $commands = array();
+
+        if (!empty($this->add)) {
+            $commands[] = sprintf('"add":%s', json_encode($this->add));
+        }
+
+        if (!empty($this->delete)) {
+            foreach ($this->delete as $id) {
+                $commands[] = sprintf('"delete":%s', json_encode(array('id' => $id)));
+            }
+        }
+
+        if (empty($commands)) {
+            return;
+        }
+
+        $json = '{' . implode(',', $commands) . '}';
+        $this->client->setRawData($json, 'application/json');
+
+        $response = $this->client->request(\Zend_Http_Client::POST);
+        if ($response->isSuccessful()) {
+            $this->add = $this->delete = array();
+            return;
+        }
+
+        throw new \RuntimeException("Failed to update index.");
     }
 }

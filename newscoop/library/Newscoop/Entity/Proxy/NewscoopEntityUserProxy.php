@@ -346,6 +346,12 @@ class NewscoopEntityUserProxy extends \Newscoop\Entity\User implements \Doctrine
         return parent::isIndexable();
     }
 
+    public function getDocument()
+    {
+        $this->__load();
+        return parent::getDocument();
+    }
+
 
     public function __sleep()
     {

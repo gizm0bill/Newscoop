@@ -787,4 +787,19 @@ class Comment implements \Newscoop\Search\IndexableInterface
     {
         return $this->getStatus() === 'approved';
     }
+
+    /**
+     * Get document
+     *
+     * @return array
+     */
+    public function getDocument()
+    {
+        return array(
+            'id' => $this->getDocumentId(),
+            'type' => 'comment',
+            'subject' => $this->getSubject(),
+            'message' => $this->getMessage(),
+        );
+    }
 }

@@ -97,7 +97,7 @@ class NewscoopEntityIssueProxy extends \Newscoop\Entity\Issue implements \Doctri
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'publication', 'number', 'language', 'name', 'sections', 'template', 'sectionTemplate', 'articleTemplate', 'shortName', 'outputSettingsIssues', 'id');
+        return array('__isInitialized__', 'number', 'name', 'shortName', 'id', 'publication', 'language', 'sections', 'template', 'sectionTemplate', 'articleTemplate', 'outputSettingsIssues');
     }
 
     public function __clone()

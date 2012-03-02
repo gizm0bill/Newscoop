@@ -139,7 +139,7 @@ class NewscoopEntityCommentCommenterProxy extends \Newscoop\Entity\Comment\Comme
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'user', 'name', 'email', 'url', 'ip', 'time_created', 'comments');
+        return array('__isInitialized__', 'id', 'name', 'email', 'url', 'ip', 'time_created', 'user', 'comments');
     }
 
     public function __clone()

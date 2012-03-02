@@ -831,4 +831,19 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterf
     {
         return $this->isPublic() && $this->isActive();
     }
+
+    /**
+     * Get document
+     *
+     * @return array
+     */
+    public function getDocument()
+    {
+        return array(
+            'id' => $this->getDocumentId(),
+            'type' => 'user',
+            'user' => $this->getUsername(),
+            'bio' => $this->getAttribute('bio'),
+        );
+    }
 }

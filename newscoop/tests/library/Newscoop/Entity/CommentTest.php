@@ -71,6 +71,12 @@ class CommentTest extends \RepositoryTestCase
         $this->assertEquals(2, $comment->getThreadOrder());
     }
 
+    public function testGetDocumentId()
+    {
+        $comment = new Comment();
+        $this->assertEquals('comment-0', $comment->getDocumentId());
+    }
+
     public function testIsIndexable()
     {
         $comment = new Comment();
@@ -78,5 +84,19 @@ class CommentTest extends \RepositoryTestCase
 
         $comment->setStatus('approved');
         $this->assertTrue($comment->isIndexable());
+    }
+
+    public function testGetDocument()
+    {
+        $comment = new Comment();
+        $comment->setSubject('sub');
+        $comment->setMessage('msg');
+
+        $this->assertEquals(array(
+            'id' => $comment->getDocumentId(),
+            'type' => 'comment',
+            'subject' => 'sub',
+            'message' => 'msg',
+        ), $comment->getDocument());
     }
 }

@@ -229,7 +229,7 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'creator', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'authors', 'indexed');
+        return array('__isInitialized__', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'indexed', 'language', 'publication', 'issue', 'section', 'creator', 'authors');
     }
 
     public function __clone()

@@ -17,6 +17,9 @@ class IndexTest extends \TestCase
     /** @var Doctrine\ORM\EntityManager */
     private $orm;
 
+    /** @var Newscoop\Search\Client */
+    private $index;
+
     public function setUp()
     {
         $this->client = $this->getMockBuilder('Zend_Http_Client')
@@ -27,70 +30,81 @@ class IndexTest extends \TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->index = new Index($this->client, $this->orm);
     }
 
     public function testInstance()
     {
-        $this->assertInstanceOf('Newscoop\Search\Index', new Index($this->client, $this->orm));
+        $this->assertInstanceOf('Newscoop\Search\Index', $this->index);
     }
 
-    public function testIndexerUpdatingIndexers()
+    public function testIndexUpdateAdd()
     {
-        $indexer = $this->getMockBuilder('Newscoop\Search\ArticleIndexer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $repository = $this->getMock('Newscoop\Search\IndexableRepositoryInterface');
+        $indexable = $this->getMock('Newscoop\Search\IndexableInterface');
 
-        $index = new Index($this->client, $this->orm, $indexer, $indexer, $indexer);
+        $repository->expects($this->once())
+            ->method('findIndexable')
+            ->will($this->returnValue(array($indexable)));
 
-        $indexer->expects($this->exactly(3))
-            ->method('update')
-            ->with($this->equalTo($index));
+        $indexable->expects($this->once())
+            ->method('getDocument')
+            ->will($this->returnValue(array(
+                'id' => 'article-1-1',
+            )));
 
-        $index->update();
-    }
-
-    public function testIndexerCallClient()
-    {
-        $this->client->expects($this->once())
-            ->method('setRawData')
-            ->with($this->equalTo(json_encode(array('add' => array(array('id' => 'article-1-1'),)))), $this->equalTo('application/json'))
-            ->will($this->returnValue($this->client));
-
-        $response = $this->getMockBuilder('Zend_Http_Response')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $response->expects($this->once())
-            ->method('isSuccessful')
+        $indexable->expects($this->once())
+            ->method('isIndexable')
             ->will($this->returnValue(true));
 
-        $this->client->expects($this->once())
-            ->method('request')
-            ->with($this->equalTo(\Zend_Http_Client::POST))
-            ->will($this->returnValue($response));
+        $indexable->expects($this->once())
+            ->method('setIndexed')
+            ->with($this->isInstanceOf('DateTime'));
 
-        $article = $this->getMockBuilder('Newscoop\Entity\Article')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->clientExpects(array('add' => array(array('id' => 'article-1-1'),)), true);
 
-        $indexer = $this->getMockBuilder('Newscoop\Search\ArticleIndexer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orm->expects($this->once())
+            ->method('flush');
 
-        $indexer->expects($this->exactly(2))
-            ->method('update');
+        $this->index->addRepository($repository);
+        $this->index->update();
+    }
 
-        $indexer->expects($this->once())
-            ->method('commit');
+    public function testIndexUpdateDelete()
+    {
+        $repository = $this->getMock('Newscoop\Search\IndexableRepositoryInterface');
+        $indexable = $this->getMock('Newscoop\Search\IndexableInterface');
 
-        $index = new Index($this->client, $this->orm, $indexer);
+        $repository->expects($this->once())
+            ->method('findIndexable')
+            ->will($this->returnValue(array($indexable)));
 
-        $index->add(array( // fake index method
-            'id' => 'article-1-1',
-        ));
+        $indexable->expects($this->once())
+            ->method('isIndexable')
+            ->will($this->returnValue(false));
 
-        $index->update();
-        $index->update();
+        $indexable->expects($this->once())
+            ->method('getIndexed')
+            ->will($this->returnValue(new \DateTime()));
+
+        $indexable->expects($this->once())
+            ->method('getDocumentId')
+            ->will($this->returnValue('article-1-1'));
+
+        $indexable->expects($this->never())
+            ->method('getDocument');
+
+        $indexable->expects($this->once())
+            ->method('setIndexed')
+            ->with($this->isInstanceOf('DateTime'));
+
+        $this->clientExpects(array('delete' => array('id' => 'article-1-1')), true);
+
+        $this->orm->expects($this->once())
+            ->method('flush');
+
+        $this->index->addRepository($repository);
+        $this->index->update();
     }
 
     public function testDelete()
@@ -115,20 +129,8 @@ class IndexTest extends \TestCase
             ->will($this->returnValue(new \DateTime()));
 
         $article->expects($this->once())
-            ->method('isIndexable')
-            ->will($this->returnValue(false));
-
-        $article->expects($this->once())
             ->method('getDocumentId')
             ->will($this->returnValue('article-1-1'));
-
-        $article->expects($this->once())
-            ->method('setIndexed')
-            ->with($this->equalTo(null));
-
-        $this->orm->expects($this->once())
-            ->method('flush')
-            ->with($this->equalTo($article));
 
         $event = new \sfEvent($this, 'delete', array('entity' => $article));
         $index->delete($event);
@@ -147,12 +149,37 @@ class IndexTest extends \TestCase
             ->method('getIndexed')
             ->will($this->returnValue(null));
 
-        $this->orm->expects($this->never())
-            ->method('flush');
-
         $index = new Index($this->client, $this->orm);
 
         $event = new \sfEvent($this, 'delete', array('entity' => $article));
         $index->delete($event);
+    }
+
+    /**
+     * Set client expectations
+     *
+     * @param array $data
+     * @param bool $success
+     * @return void
+     */
+    private function clientExpects($data, $success)
+    {
+        $this->client->expects($this->once())
+            ->method('setRawData')
+            ->with($this->equalTo(json_encode($data)), $this->equalTo('application/json'))
+            ->will($this->returnValue($this->client));
+
+        $response = $this->getMockBuilder('Zend_Http_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $response->expects($this->once())
+            ->method('isSuccessful')
+            ->will($this->returnValue($success));
+
+        $this->client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo(\Zend_Http_Client::POST))
+            ->will($this->returnValue($response));
     }
 }

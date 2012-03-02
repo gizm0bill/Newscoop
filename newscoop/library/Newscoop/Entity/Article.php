@@ -10,7 +10,7 @@ namespace Newscoop\Entity;
 /**
  * Article entity
  *
- * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository")
+ * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository") @HasLifecycleCallbacks
  * @Table(name="Articles")
  */
 class Article implements \Newscoop\Search\IndexableInterface
@@ -503,6 +503,82 @@ class Article implements \Newscoop\Search\IndexableInterface
      */
     public function isIndexable()
     {
-        return $this->workflowStatus === self::STATUS_PUBLISHED;
+        return $this->workflowStatus === self::STATUS_PUBLISHED && in_array($this->type, array('news'));;
+    }
+
+    /**
+     * Set webcoder
+     *
+     * @PostLoad
+     * @param Newscoop\Webcode\Mapper $webcoder
+     * @return void
+     */
+    public function setWebcoder(\Newscoop\Webcode\Mapper $webcoder = null)
+    {
+        $this->webcoder = $webcoder !== null ? $webcoder : self::getDefaultWebcoder();
+    }
+
+    /**
+     * Get webcode mapper
+     *
+     * @return Newscoop\Webcode\Mapper
+     */
+    private static function getDefaultWebcoder()
+    {
+        static $webcoder;
+        if ($webcoder === null) {
+            $webcoder = new \Newscoop\Webcode\Mapper;
+        }
+
+        return $webcoder;
+    }
+
+    /**
+     * Get webcode
+     *
+     * @return string
+     */
+    public function getWebcode()
+    {
+        return $this->webcoder->encode($this->number);
+    }
+
+    /**
+     * Get document
+     *
+     * @return array
+     */
+    public function getDocument()
+    {
+        $doc = array(
+            'id' => $this->getDocumentId(),
+            'headline' => $this->getTitle(),
+            'type' => $this->getType(),
+            'published' => gmdate('Y-m-d\TH:i:s\Z', date_create($this->getPublishDate())->getTimestamp()),
+            'author' => array_map(function($author) {
+                return $author->getFullName();
+            }, $this->getAuthors()),
+            'webcode' => $this->getWebcode(),
+        );
+
+        switch ($this->getType()) {
+            case 'blog':
+            case 'news':
+                $doc['lead'] = $this->getData('lede');
+                $doc['content'] = $this->getData('body');
+                break;
+
+            case 'dossier':
+                $doc['lead'] = $this->getData('lede');
+                $doc['content'] = $this->getData('history');
+                break;
+
+            case 'newswire':
+                $doc['lead'] = $this->getData('DataLead');
+                $doc['content'] = $this->getData('DataContent');
+                break;
+        }
+
+        return array_filter($doc);
     }
 }

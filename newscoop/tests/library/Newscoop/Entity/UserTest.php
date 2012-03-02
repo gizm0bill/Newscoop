@@ -375,4 +375,24 @@ class UserTest extends \RepositoryTestCase
         $user->setPublic();
         $this->assertTrue($user->isIndexable());
     }
+
+    public function testGetDocumentId()
+    {
+        $user = new User();
+        $this->assertEquals('user-0', $user->getDocumentId());
+    }
+
+    public function testGetDocument()
+    {
+        $user = new User();
+        $user->setUsername('name');
+        $user->addAttribute('bio', 'abc');
+
+        $this->assertEquals(array(
+            'id' => $user->getDocumentId(),
+            'type' => 'user',
+            'user' => 'name',
+            'bio' => 'abc',
+        ), $user->getDocument());
+    }
 }
