@@ -453,7 +453,7 @@ class Debate extends DatabaseObject
     	    $constraints[] = $comparisonOperation;
 	    }
 
-	    $order = array($p_orderBy => 'ASC');
+	    $order = array($p_orderBy => 'DESC');
 
         return Debate::GetList($constraints, $p_item, $order, $p_offset, $p_limit, $p_count);
     }
