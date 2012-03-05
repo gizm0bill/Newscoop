@@ -161,7 +161,11 @@ tables['<?php echo $this->id; ?>'] = table.dataTable({
 	},
     <?php if ($this->items !== NULL) { // display all items ?>
     'bPaging': false,
+        <?php if (isset($this->page_size) && !empty($this->page_size)) { ?>
+    'iDisplayLength': <?php echo $this->page_size; ?>,
+        <?php } else { ?>
     'iDisplayLength': <?php echo sizeof($this->items); ?>,
+        <?php } ?>
     <?php } else { // no items - server side ?>
     'bServerSide': true,
     'sAjaxSource': '', // callServer handle
