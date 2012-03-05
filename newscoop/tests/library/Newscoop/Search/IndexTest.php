@@ -57,14 +57,11 @@ class IndexTest extends \TestCase
             ->method('isIndexable')
             ->will($this->returnValue(true));
 
-        $indexable->expects($this->once())
-            ->method('setIndexed')
-            ->with($this->isInstanceOf('DateTime'));
-
         $this->clientExpects(array('add' => array(array('id' => 'article-1-1'),)), true);
 
-        $this->orm->expects($this->once())
-            ->method('flush');
+        $repository->expects($this->once())
+            ->method('setIndexedNow')
+            ->with($this->equalTo(array($indexable)));
 
         $this->index->addRepository($repository);
         $this->index->update();
@@ -94,14 +91,11 @@ class IndexTest extends \TestCase
         $indexable->expects($this->never())
             ->method('getDocument');
 
-        $indexable->expects($this->once())
-            ->method('setIndexed')
-            ->with($this->isInstanceOf('DateTime'));
-
         $this->clientExpects(array('delete' => array('id' => 'article-1-1')), true);
 
-        $this->orm->expects($this->once())
-            ->method('flush');
+        $repository->expects($this->once())
+            ->method('setIndexedNow')
+            ->with($this->equalTo(array($indexable)));
 
         $this->index->addRepository($repository);
         $this->index->update();
