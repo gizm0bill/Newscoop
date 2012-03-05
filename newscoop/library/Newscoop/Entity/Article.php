@@ -499,11 +499,12 @@ class Article implements \Newscoop\Search\IndexableInterface
     /**
      * Test if article can be indexed
      *
+     * @param array $config
      * @return bool
      */
-    public function isIndexable()
+    public function isIndexable(array $config = array())
     {
-        return $this->workflowStatus === self::STATUS_PUBLISHED && in_array($this->type, array('news'));;
+        return $this->workflowStatus === self::STATUS_PUBLISHED && in_array($this->type, array_key_exists('article_type', $config) ? $config['article_type'] : array());
     }
 
     /**

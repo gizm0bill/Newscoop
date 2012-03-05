@@ -340,10 +340,11 @@ class NewscoopEntityUserProxy extends \Newscoop\Entity\User implements \Doctrine
         return parent::getDocumentId();
     }
 
-    public function isIndexable()
+    public function isIndexable(array $config = array (
+))
     {
         $this->__load();
-        return parent::isIndexable();
+        return parent::isIndexable($config);
     }
 
     public function getDocument()

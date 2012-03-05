@@ -20,6 +20,9 @@ class IndexTest extends \TestCase
     /** @var Newscoop\Search\Client */
     private $index;
 
+    /** @var array */
+    private $config = array('tic' => 'toc');
+
     public function setUp()
     {
         $this->client = $this->getMockBuilder('Zend_Http_Client')
@@ -30,7 +33,7 @@ class IndexTest extends \TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->index = new Index($this->client, $this->orm);
+        $this->index = new Index($this->config, $this->client, $this->orm);
     }
 
     public function testInstance()
@@ -55,6 +58,7 @@ class IndexTest extends \TestCase
 
         $indexable->expects($this->once())
             ->method('isIndexable')
+            ->with($this->equalTo($this->config))
             ->will($this->returnValue(true));
 
         $this->clientExpects(array('add' => array(array('id' => 'article-1-1'),)), true);
@@ -78,6 +82,7 @@ class IndexTest extends \TestCase
 
         $indexable->expects($this->once())
             ->method('isIndexable')
+            ->with($this->equalTo($this->config))
             ->will($this->returnValue(false));
 
         $indexable->expects($this->once())
@@ -112,7 +117,7 @@ class IndexTest extends \TestCase
             ->method('request')
             ->with($this->equalTo(\Zend_Http_Client::POST));
 
-        $index = new Index($this->client, $this->orm);
+        $index = new Index($this->config, $this->client, $this->orm);
 
         $article = $this->getMockBuilder('Newscoop\Entity\Article')
             ->disableOriginalConstructor()
@@ -143,10 +148,24 @@ class IndexTest extends \TestCase
             ->method('getIndexed')
             ->will($this->returnValue(null));
 
-        $index = new Index($this->client, $this->orm);
+        $index = new Index($this->config, $this->client, $this->orm);
 
         $event = new \sfEvent($this, 'delete', array('entity' => $article));
         $index->delete($event);
+    }
+
+    public function testRebuild()
+    {
+        $repository = $this->getMock('Newscoop\Search\IndexableRepositoryInterface');
+        $repository->expects($this->exactly(2))
+            ->method('setIndexedNull');
+
+        $this->clientExpects(array('delete' => array('query' => '*:*')), true);
+
+        $index = new Index($this->config, $this->client, $this->orm);
+        $index->addRepository($repository);
+        $index->addRepository($repository);
+        $index->rebuild();
     }
 
     /**

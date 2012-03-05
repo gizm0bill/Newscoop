@@ -44,7 +44,8 @@ interface IndexableInterface
     /**
      * Test if item can be indexed
      *
+     * @param array $config
      * @return bool
      */
-    public function isIndexable();
+    public function isIndexable(array $config);
 }

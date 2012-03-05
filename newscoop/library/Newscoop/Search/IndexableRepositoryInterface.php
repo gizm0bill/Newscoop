@@ -20,10 +20,17 @@ interface IndexableRepositoryInterface
     public function findIndexable();
 
     /**
-     * Set indexed property for entities
+     * Set indexed to now for given entities
      *
      * @param array $entities
      * @return void
      */
     public function setIndexedNow(array $entities);
+
+    /**
+     * Set indexed to null for all entities
+     *
+     * @return void
+     */
+    public function setIndexedNull();
 }

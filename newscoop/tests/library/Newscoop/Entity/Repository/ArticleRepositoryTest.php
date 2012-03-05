@@ -7,7 +7,8 @@
 
 namespace Newscoop\Entity\Repository;
 
-use Newscoop\Entity\Article;
+use Newscoop\Entity\Article,
+    Newscoop\Entity\Language;
 
 /**
  */
@@ -38,13 +39,13 @@ class ArticleRepositoryTest extends \TestCase
 
     public function testFindIndexable()
     {
-        $language = new \Newscoop\Entity\Language();
+        $language = new Language();
         $this->orm->persist($language);
         $this->orm->flush($language);
 
         $this->assertEmpty($this->repository->findIndexable());
 
-        $article = new \Newscoop\Entity\Article(1, $language);
+        $article = new Article(1, $language);
         $this->orm->persist($article);
         $this->orm->flush($article);
 
@@ -59,5 +60,38 @@ class ArticleRepositoryTest extends \TestCase
         $this->orm->flush();
 
         $this->assertEmpty($this->repository->findIndexable());
+    }
+
+    public function testSetIndexedNow()
+    {
+        $language = new Language();
+        $this->orm->persist($language);
+        $this->orm->flush();
+
+        $article = new Article(1, $language);
+        $article->setIndexed(new \DateTime('-5 min'));
+        $article->setUpdated(new \DateTime(gmdate('Y-m-d H:i:s'))); // sqlite is using gmtime for CURRENT_TIME
+        $this->orm->persist($article);
+        $this->orm->flush();
+
+        $this->repository->setIndexedNow(array($article));
+
+        $this->assertEmpty($this->repository->findIndexable());
+    }
+
+    public function testSetIndexedNull()
+    {
+        $language = new Language();
+        $this->orm->persist($language);
+        $this->orm->flush();
+
+        $article = new Article(1, $language);
+        $article->setIndexed(new \DateTime());
+        $this->orm->persist($article);
+        $this->orm->flush();
+
+        $this->repository->setIndexedNull();
+
+        $this->assertNotEmpty($this->repository->findIndexable());
     }
 }

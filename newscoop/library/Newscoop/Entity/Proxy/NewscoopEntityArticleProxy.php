@@ -220,16 +220,35 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getDocumentId();
     }
 
-    public function isIndexable()
+    public function isIndexable(array $config = array (
+))
     {
         $this->__load();
-        return parent::isIndexable();
+        return parent::isIndexable($config);
+    }
+
+    public function setWebcoder(\Newscoop\Webcode\Mapper $webcoder = NULL)
+    {
+        $this->__load();
+        return parent::setWebcoder($webcoder);
+    }
+
+    public function getWebcode()
+    {
+        $this->__load();
+        return parent::getWebcode();
+    }
+
+    public function getDocument()
+    {
+        $this->__load();
+        return parent::getDocument();
     }
 
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'indexed', 'language', 'publication', 'issue', 'section', 'creator', 'authors');
+        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'creator', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'authors', 'indexed');
     }
 
     public function __clone()

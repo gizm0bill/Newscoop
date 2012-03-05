@@ -522,4 +522,15 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Indexa
             ->setParameter('users', array_map(function($user) { return $user->getId(); }, $users))
             ->execute();
     }
+
+    /**
+     * Set indexed null
+     *
+     * @return void
+     */
+    public function setIndexedNull()
+    {
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\User u SET u.indexed = NULL')
+            ->execute();
+    }
 }

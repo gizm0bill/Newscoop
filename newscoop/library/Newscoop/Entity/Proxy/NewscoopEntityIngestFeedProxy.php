@@ -40,6 +40,24 @@ class NewscoopEntityIngestFeedProxy extends \Newscoop\Entity\Ingest\Feed impleme
         return parent::getTitle();
     }
 
+    public function setMode($mode)
+    {
+        $this->__load();
+        return parent::setMode($mode);
+    }
+
+    public function getMode()
+    {
+        $this->__load();
+        return parent::getMode();
+    }
+
+    public function isAutoMode()
+    {
+        $this->__load();
+        return parent::isAutoMode();
+    }
+
     public function setUpdated(\DateTime $updated)
     {
         $this->__load();
@@ -52,28 +70,10 @@ class NewscoopEntityIngestFeedProxy extends \Newscoop\Entity\Ingest\Feed impleme
         return parent::getUpdated();
     }
 
-    public function addEntry(\Newscoop\Entity\Ingest\Feed\Entry $entry)
-    {
-        $this->__load();
-        return parent::addEntry($entry);
-    }
-
-    public function removeEntry(\Newscoop\Entity\Ingest\Feed\Entry $entry)
-    {
-        $this->__load();
-        return parent::removeEntry($entry);
-    }
-
-    public function getEntries()
-    {
-        $this->__load();
-        return parent::getEntries();
-    }
-
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'updated', 'entries');
+        return array('__isInitialized__', 'id', 'title', 'updated', 'mode');
     }
 
     public function __clone()

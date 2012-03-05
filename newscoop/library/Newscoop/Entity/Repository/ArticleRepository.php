@@ -39,13 +39,33 @@ class ArticleRepository extends DatatableSource implements \Newscoop\Search\Inde
      */
     public function setIndexedNow(array $articles)
     {
+        $groups = array();
         foreach ($articles as $article) {
-            $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Article a SET a.indexed = CURRENT_TIMESTAMP() WHERE a.number = :number AND a.language = :language')
+            if (!array_key_exists($article->getLanguageId(), $groups)) {
+                $groups[$article->getLanguageId()] = array();
+            }
+
+            $groups[$article->getLanguageId()][] = $article->getNumber();
+        }
+
+        foreach ($groups as $languageId => $articleIds) {
+            $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Article a SET a.indexed = CURRENT_TIMESTAMP() WHERE a.number IN (:ids) AND a.language = :language')
                 ->setParameters(array(
-                    'number' => (int) $article->getNumber(),
-                    'language' => (int) $article->getLanguageId(),
+                    'ids' => $articleIds,
+                    'language' => (int) $languageId,
                 ))
                 ->execute();
         }
+    }
+
+    /**
+     * Set indexed null
+     *
+     * @return void
+     */
+    public function setIndexedNull()
+    {
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Article a SET a.indexed = NULL')
+            ->execute();
     }
 }

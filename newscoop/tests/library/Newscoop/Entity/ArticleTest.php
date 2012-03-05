@@ -23,7 +23,12 @@ class ArticleTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($article->isIndexable());
 
         $article->setPublished(new \DateTime());
-        $this->assertTrue($article->isIndexable());
+        $this->assertFalse($article->isIndexable());
+
+        $article->setType('news');
+        $this->assertFalse($article->isIndexable());
+
+        $this->assertTrue($article->isIndexable(array('article_type' => array('news'))));
     }
 
     public function testGetDocument()

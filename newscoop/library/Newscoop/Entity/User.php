@@ -825,9 +825,10 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterf
     /**
      * Test if user is indexable
      *
+     * @param array $config
      * @return bool
      */
-    public function isIndexable()
+    public function isIndexable(array $config = array())
     {
         return $this->isPublic() && $this->isActive();
     }

@@ -249,6 +249,12 @@ image.cache_path = APPLICATION_PATH "/../images/cache"
 image.cache_url = "images/cache"
 image.cache_path = APPLICATION_PATH "/../images/cache"
 
+index.article_type[] = "news"
+index.article_type[] = "newswire"
+index.article_type[] = "dossier"
+index.article_type[] = "event"
+index.article_type[] = "blog"
+
 [staging : production]
 
 [testing : production]

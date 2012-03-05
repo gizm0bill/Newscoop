@@ -37,9 +37,7 @@ class DoctrineEventDispatcherProxyTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(array(
             Events::postPersist,
-            //Events::preUpdate, @fixme
-            Events::postUpdate,
-            Events::preRemove,
+            Events::postRemove,
         ), $this->proxy->getSubscribedEvents());
 
         foreach ($this->proxy->getSubscribedEvents() as $event) {

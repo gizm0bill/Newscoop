@@ -12,6 +12,13 @@ namespace Newscoop\Search;
  */
 class Index
 {
+    const APPLICATION_JSON = 'application/json';
+
+    /**
+     * @var array
+     */
+    private $config = array();
+
     /**
      * @var Zend_Http_Client
      */
@@ -38,11 +45,13 @@ class Index
     private $delete = array();
 
     /**
+     * @param array $config
      * @param Zend_Http_Client $client
      * @param Doctrine\ORM\EntityManager $orm
      */
-    public function __construct(\Zend_Http_Client $client, \Doctrine\ORM\EntityManager $orm)
+    public function __construct(array $config, \Zend_Http_Client $client, \Doctrine\ORM\EntityManager $orm)
     {
+        $this->config = array_merge($this->config, $config);
         $this->client = $client;
         $this->orm = $orm;
     }
@@ -68,7 +77,7 @@ class Index
         foreach ($this->repositories as $repository) {
             $updated = array();
             foreach ($repository->findIndexable() as $indexable) {
-                if ($indexable->isIndexable()) {
+                if ($indexable->isIndexable($this->config)) {
                     $this->add[] = $indexable->getDocument();
                 } else if ($indexable->getIndexed() !== null) {
                     $this->delete[] = $indexable->getDocumentId();
@@ -94,8 +103,24 @@ class Index
     {
         $indexable = $event['entity'];
         if ($indexable->getIndexed() !== null) {
-            $this->client->setRawData(json_encode(array('delete' => array('id' => $indexable->getDocumentId()))), 'application/json');
+            $this->client->setRawData(json_encode(array('delete' => array('id' => $indexable->getDocumentId()))), self::APPLICATION_JSON);
             $this->client->request(\Zend_Http_Client::POST);
+        }
+    }
+
+    /**
+     * Rebuild index
+     *
+     * @return void
+     */
+    public function rebuild()
+    {
+        $this->client->setRawData(json_encode(array('delete' => array('query' => '*:*'))), self::APPLICATION_JSON);
+        $response = $this->client->request(\Zend_Http_Client::POST);
+        if ($response->isSuccessful()) {
+            foreach ($this->repositories as $repository) {
+                $repository->setIndexedNull();
+            }
         }
     }
 
@@ -120,24 +145,13 @@ class Index
      */
     private function flush()
     {
-        $commands = array();
-
-        if (!empty($this->add)) {
-            $commands[] = sprintf('"add":%s', json_encode($this->add));
-        }
-
-        if (!empty($this->delete)) {
-            foreach ($this->delete as $id) {
-                $commands[] = sprintf('"delete":%s', json_encode(array('id' => $id)));
-            }
-        }
-
+        $commands = array_merge($this->buildAddCommands(), $this->buildDeleteCommands());
         if (empty($commands)) {
             return;
         }
 
-        $json = '{' . implode(',', $commands) . '}';
-        $this->client->setRawData($json, 'application/json');
+        $jsonData = '{' . implode(',', $commands) . '}';
+        $this->client->setRawData($jsonData, self::APPLICATION_JSON);
 
         $response = $this->client->request(\Zend_Http_Client::POST);
         if ($response->isSuccessful()) {
@@ -146,5 +160,30 @@ class Index
         }
 
         throw new \RuntimeException("Failed to update index.");
+    }
+
+    /**
+     * Build add commands
+     *
+     * @return array
+     */
+    private function buildAddCommands()
+    {
+        return empty($this->add) ? array() : array(sprintf('"add":%s', json_encode($this->add)));
+    }
+
+    /**
+     * Build delete commands
+     *
+     * @return array
+     */
+    private function buildDeleteCommands()
+    {
+        $commands = array();
+        foreach ($this->delete as $id) {
+            $commands[] = sprintf('"delete":%s', json_encode(array('id' => $id)));
+        }
+
+        return $commands;
     }
 }

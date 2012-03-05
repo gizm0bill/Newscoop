@@ -478,6 +478,20 @@ class DatabaseObject
 	{
 		global $g_ado_db;
 
+        $params = array(
+            'id' => $this->getKey(),
+            'diff' => $this->m_data,
+            'title' => method_exists($this, 'getName') ? $this->getName() : '',
+        );
+
+        if ($this instanceof \Article) {
+            $params['entity'] = \Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\Article')
+                ->find(array(
+                    'number' => $subject->getArticleNumber(),
+                    'language' => $subject->getLanguageId(),
+                ));
+        }
+
 		$queryStr = 'DELETE FROM ' . $this->m_dbTableName
 					.' WHERE ' . $this->getKeyWhereClause()
 					.' LIMIT 1';
@@ -491,11 +505,7 @@ class DatabaseObject
 		    $cacheObj->delete($cacheKey);
 		}
 
-        self::dispatchEvent("{$this->getResourceName()}.delete", $this, array(
-            'id' => $this->getKey(),
-            'diff' => $this->m_data,
-            'title' => method_exists($this, 'getName') ? $this->getName() : '',
-        ));
+        self::dispatchEvent("{$this->getResourceName()}.delete", $this, $params);
 
 		// Always set "exists" to false because if a row wasnt
 		// deleted it means it probably didnt exist in the first place.
@@ -1121,14 +1131,6 @@ class DatabaseObject
     {
         if (empty(self::$eventDispatcher)) {
             return;
-        }
-
-        if ($subject instanceof \Article) {
-            $params['entity'] = \Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\Article')
-                ->find(array(
-                    'number' => $subject->getArticleNumber(),
-                    'language' => $subject->getLanguageId(),
-                ));
         }
 
         try {

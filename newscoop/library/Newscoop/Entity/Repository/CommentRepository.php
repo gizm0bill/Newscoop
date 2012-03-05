@@ -498,4 +498,15 @@ class CommentRepository extends DatatableSource implements \Newscoop\Search\Inde
             ->setParameter('comments', array_map(function($comment) { return $comment->getId(); }, $comments))
             ->execute();
     }
+
+    /**
+     * Set indexed null
+     *
+     * @return void
+     */
+    public function setIndexedNull()
+    {
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Comment c SET c.indexed = NULL')
+            ->execute();
+    }
 }

@@ -32,7 +32,7 @@ class ClearIndexCommand extends Console\Command\Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $this->getHelper('container')->getService('index')->clear();
+        $this->getHelper('container')->getService('index')->rebuild();
         $output->writeln('Search Index cleared.');
     }
 }

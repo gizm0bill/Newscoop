@@ -781,9 +781,10 @@ class Comment implements \Newscoop\Search\IndexableInterface
     /**
      * Test if comment is indexable
      *
+     * @param array $config
      * @return bool
      */
-    public function isIndexable()
+    public function isIndexable(array $config = array())
     {
         return $this->getStatus() === 'approved';
     }

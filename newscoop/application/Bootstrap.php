@@ -181,6 +181,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->addArgument('http://localhost:8983/solr/update/json?commit=true');
 
         $container->register('index', 'Newscoop\Search\Index')
+            ->addArgument('%index%')
             ->addArgument(new sfServiceReference('solr.client'))
             ->addArgument(new sfServiceReference('em'))
             ->setConfigurator(function($index) use ($container) {

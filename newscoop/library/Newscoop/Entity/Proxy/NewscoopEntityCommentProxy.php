@@ -262,10 +262,41 @@ class NewscoopEntityCommentProxy extends \Newscoop\Entity\Comment implements \Do
         return parent::getProperty($p_key);
     }
 
+    public function setIndexed(\DateTime $indexed = NULL)
+    {
+        $this->__load();
+        return parent::setIndexed($indexed);
+    }
+
+    public function getIndexed()
+    {
+        $this->__load();
+        return parent::getIndexed();
+    }
+
+    public function getDocumentId()
+    {
+        $this->__load();
+        return parent::getDocumentId();
+    }
+
+    public function isIndexable(array $config = array (
+))
+    {
+        $this->__load();
+        return parent::isIndexable($config);
+    }
+
+    public function getDocument()
+    {
+        $this->__load();
+        return parent::getDocument();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'commenter', 'forum', 'parent', 'article_num', 'thread', 'language', 'subject', 'message', 'thread_level', 'thread_order', 'status', 'ip', 'time_created', 'likes', 'dislikes', 'recommended');
+        return array('__isInitialized__', 'id', 'commenter', 'forum', 'parent', 'article_num', 'thread', 'language', 'subject', 'message', 'thread_level', 'thread_order', 'status', 'ip', 'time_created', 'time_updated', 'likes', 'dislikes', 'recommended', 'indexed');
     }
 
     public function __clone()
