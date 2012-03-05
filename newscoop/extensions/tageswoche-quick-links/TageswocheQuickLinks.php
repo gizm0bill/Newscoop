@@ -16,6 +16,17 @@
  */
 class TageswocheQuickLinks extends Widget
 {
+    const BASE_LINK = '/admin/articles/add.php';
+
+    /* @var array */
+    protected $params = array(
+        'f_publication_id' => 'publication',
+        'f_issue_number' => 'issue',
+        'f_section_number' => 'section',
+        'f_language_id' => 'language',
+        'f_article_type' => 'type',
+    );
+
     /* @var array */
     protected $items = array();
 
@@ -32,16 +43,32 @@ class TageswocheQuickLinks extends Widget
 
         $items = array();
         foreach ($config as $item) {
+            $params = $this->params;
+
             if ($item['issue'] == '__current__') {
                 $item['issue'] = $this->getCurrentIssue($item['publication'], $item['language']);
             }
 
-            $items[] = array(
-                'label' => $item['label'],
-                'link' => '/admin/articles/add.php?f_publication_id=' . $item['publication'] .
-                    '&f_issue_number=' . $item['issue'] . '&f_section_number=' . $item['section'] .
-                    '&f_language_id=' . $item['language'] . '&f_article_type=' . $item['type']
-            );
+            if (isset($item['base_link'])) {
+                $link = $item['base_link'];
+                $params = array(
+                    'Pub' => 'publication',
+                    'Issue' => 'issue',
+                    'Language' => 'language',
+                );
+            } else {
+                $link = self::BASE_LINK;
+            }
+
+            $params_query = array();
+            foreach ($params as $param => $resource) {
+                if (isset($item[$resource]) && $item[$resource]) {
+                    $params_query[] = $param . '=' . $item[$resource];
+                }
+            }
+
+            $link .= '?' . implode('&amp;', $params_query);
+            $items[] = array('label' => $item['label'], 'link' => $link);
         }
 
         $this->items = $items;
