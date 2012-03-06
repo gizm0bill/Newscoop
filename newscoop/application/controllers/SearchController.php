@@ -9,29 +9,44 @@
  */
 class SearchController extends Zend_Controller_Action
 {
+    public function init()
+    {
+        $this->_helper->contextSwitch
+            ->addActionContext('index', 'json')
+            ->initContext();
+    }
+
     public function indexAction()
     {
-        $form = new Application_Form_SearchForm();
-        $form->setMethod('GET');
-
-        if ($form->isValid($this->getRequest()->getQuery())) {
-            try {
-                $q = $form->q->getValue();
-                $client = $this->_helper->service('solr.client.select');
-                $client->setParameterGet(array(
-                    'q' => $q,
-                    'wt' => 'json',
-                ));
-
-                $response = $client->request(); if ($response->isSuccessful()) {
-                    $this->view->result = json_decode($response->getBody(), true);
-                }
-            } catch (\Exception $e) {
-                var_dump($e);
-                exit;
-            }
+        if (!$this->_getParam('q')) {
+            $this->_forward('blank');
+            return;
         }
 
-        $this->view->form = $form;
+        try {
+            $client = $this->_helper->service('solr.client.select');
+            $client->setParameterGet(array(
+                'q' => $this->_getParam('q', '*'),
+                'fq' => $this->_getParam('fq', ''),
+                'wt' => 'json',
+                'facet' => 'true',
+                'facet.field' => 'type',
+            ));
+
+            $response = $client->request();
+            if ($response->isSuccessful()) {
+                $this->view->result = json_decode($response->getBody(), true);
+            } else {
+                var_dump($response);
+                exit;
+            }
+
+            if ($this->_helper->contextSwitch->getCurrentContext() === 'json') {
+                $this->_helper->json($this->view->result);
+            }
+        } catch (\Exception $e) {
+            var_dump($e);
+            exit;
+        }
     }
 }

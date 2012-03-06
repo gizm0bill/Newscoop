@@ -294,6 +294,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 1 => 'src',
             ), $options['image']['cache_url'] . '/%s'));
 
+         $router->addRoute('search',
+             new Zend_Controller_Router_Route('search/:q/:fq', array(
+                 'module' => 'default',
+                 'controller' => 'search',
+                 'action' => 'index',
+                 'fq' => '',
+             )));
+
          $router->addRoute('rest',
              new Zend_Rest_Route($front, array(), array(
                  'admin' => array(
