@@ -17,7 +17,7 @@ class IndexTest extends \TestCase
     /** @var Doctrine\ORM\EntityManager */
     private $orm;
 
-    /** @var Newscoop\Search\Client */
+    /** @var Newscoop\Search\Index */
     private $index;
 
     /** @var array */
@@ -117,8 +117,6 @@ class IndexTest extends \TestCase
             ->method('request')
             ->with($this->equalTo(\Zend_Http_Client::POST));
 
-        $index = new Index($this->config, $this->client, $this->orm);
-
         $article = $this->getMockBuilder('Newscoop\Entity\Article')
             ->disableOriginalConstructor()
             ->getMock();
@@ -132,7 +130,8 @@ class IndexTest extends \TestCase
             ->will($this->returnValue('article-1-1'));
 
         $event = new \sfEvent($this, 'delete', array('entity' => $article));
-        $index->delete($event);
+
+        $this->index->delete($event);
     }
 
     public function testDeleteNotIndexed()
@@ -162,10 +161,9 @@ class IndexTest extends \TestCase
 
         $this->clientExpects(array('delete' => array('query' => '*:*')), true);
 
-        $index = new Index($this->config, $this->client, $this->orm);
-        $index->addRepository($repository);
-        $index->addRepository($repository);
-        $index->rebuild();
+        $this->index->addRepository($repository);
+        $this->index->addRepository($repository);
+        $this->index->rebuild();
     }
 
     /**

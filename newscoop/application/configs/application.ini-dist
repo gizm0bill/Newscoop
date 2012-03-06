@@ -249,6 +249,8 @@ image.cache_path = APPLICATION_PATH "/../images/cache"
 image.cache_url = "images/cache"
 image.cache_path = APPLICATION_PATH "/../images/cache"
 
+index.update_url = "http://localhost:8983/solr/update/json?commit=true"
+index.select_url = "http://localhost:8983/solr/select/"
 index.article_type[] = "news"
 index.article_type[] = "newswire"
 index.article_type[] = "dossier"

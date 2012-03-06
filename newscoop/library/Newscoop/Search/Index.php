@@ -159,7 +159,7 @@ class Index
             return;
         }
 
-        throw new \RuntimeException("Failed to update index.");
+        throw new \RuntimeException($response->getMessage(), $response->getStatus());
     }
 
     /**
