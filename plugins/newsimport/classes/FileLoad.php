@@ -57,7 +57,7 @@ class FileLoad
         $content = iconv('UTF-8','UTF-8//IGNORE', $content);
 
         //$content = str_replace(array('&#32;', '&#40;', '&#41;', '&#45;', '&#46;', '&#47;', '&#58;', '&#64;', '&#13;&#10;'), array(' ', '(', ')', '-', '.', '/', ':', '@', "\n"), $content);
-        $forbidden_contractions = array('38', '60', '62'); // do not translate into &, <, >
+        $forbidden_contractions = array('38', '60', '62', '150', '151', '132', '147'); // do not translate into &, <, >, dashes, and some other ones
 
         $content_lines = explode('&#', $content);
         $content = array_shift($content_lines);

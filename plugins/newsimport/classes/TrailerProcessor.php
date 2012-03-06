@@ -313,6 +313,12 @@ class TrailerProcessor {
         }
         //$db->commit();
 
+        try {
+            unlink($file_local_path);
+        }
+        catch (Exception $exc) {
+        }
+
         return true;
     }
 
@@ -434,6 +440,43 @@ exit(1);
 
     }
 
+    public function cleanTrailers($p_localDir)
+    {
+        $days_old = 30;
+
+        $dir_to_clean = $p_localDir;
+        if (empty($dir_to_clean) || !is_dir($dir_to_clean)) {
+            return;
+        }
+
+        $file_name_set = scandir($dir_to_clean);
+        if (empty($file_name_set)) {
+            return;
+        }
+
+        $current_time = time();
+        $threshold_time = $current_time - ($days_old * 24 * 60 * 60);
+
+        foreach ($file_name_set as $one_file_name) {
+            $check_path = $dir_to_clean . DIRECTORY_SEPARATOR . $one_file_name;
+            if (!is_file($check_path)) {
+                continue;
+            }
+
+            $last_modified = filemtime($check_path);
+            if ($threshold_time > $last_modified) {
+                try {
+                    unlink($check_path);
+                }
+                catch (Exception $exc) {
+                    continue;
+                }
+            }
+
+        }
+
+    }
+
     public static function AskForTrailers()
     {
         // process upto $max (... 100) trailers at one run
@@ -508,6 +551,8 @@ exit(1);
             }
 
         }
+
+        $trail_proc->cleanTrailers($local_trailer_dir);
 
     }
 
