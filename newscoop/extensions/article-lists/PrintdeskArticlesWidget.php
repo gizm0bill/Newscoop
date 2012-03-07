@@ -111,6 +111,8 @@ class PrintdeskArticleList extends BaseList
             $pubs = array();
         }
 
+        $allowed_pub_ids = array(1);
+
         foreach ($pubs as $one_pub) {
             $pub_issues = Issue::GetIssues($one_pub->getPublicationId());
             if (empty($pub_issues)) {
@@ -120,6 +122,10 @@ class PrintdeskArticleList extends BaseList
             $pub_number = $one_pub->getPublicationId();
             $pub_name = $one_pub->getName();
             $pub_lang = $one_pub->getLanguageId();
+
+            if (!in_array($pub_number, $allowed_pub_ids)) {
+                continue;
+            }
 
             $issues = array();
             foreach ($pub_issues as $one_issue) {
@@ -219,7 +225,7 @@ window.pub_issues_' . $this->id . ' = {};
     }
 </style>
 <fieldset class="filters"><legend>'. getGS('Filter') . '</legend>
-<select name="publication" id="printdesk_publication_filter_' . $this->id . '">
+<select name="publication" id="printdesk_publication_filter_' . $this->id . '" class="select_hidden">
 ';
 
         foreach ($pubs_info as $pub_id => $pub_info) {
@@ -337,10 +343,13 @@ window.update_printdesk_table = function(table, art_data) {
     for (var dind = 0; dind < data_len; dind++) {
         var one_row_data = art_data[dind];
 
+        var article_link = "<a href=\'" + one_row_data["Preview"] + "\' target=\'_blank\'>" + one_row_data["Name"] + "</a>";
+
         insert_data.push([
             one_row_data["id"],
             one_row_data["Section"],
-            one_row_data["Name"]
+            //one_row_data["Name"]
+            article_link
         ]);
 
     }
