@@ -42,9 +42,9 @@ DROP TABLE IF EXISTS `article_datetimes`;
 CREATE TABLE `article_datetimes` (
   `id_article_datetime` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `start_time` time DEFAULT NULL COMMENT 'NULL = 00:00',
-  `end_time` time DEFAULT NULL COMMENT 'NULL = 23:59',
+  `end_time` time DEFAULT NULL COMMENT 'NULL = 24:00',
   `start_date` date NOT NULL,
-  `end_date` date DEFAULT NULL COMMENT 'NULL = only 1 day',
+  `end_date` date DEFAULT NULL COMMENT 'NULL = no end',
   `recurring` enum('daily','weekly','monthly','yearly') DEFAULT NULL,
   `article_id` int(10) unsigned NOT NULL,
   `article_type` varchar(166) NOT NULL,
