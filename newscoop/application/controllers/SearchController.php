@@ -18,19 +18,12 @@ class SearchController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        if (!$this->_getParam('q')) {
-            $this->_forward('blank');
-            return;
-        }
-
         try {
             $client = $this->_helper->service('solr.client.select');
             $client->setParameterGet(array(
                 'q' => $this->_getParam('q', '*'),
                 'fq' => $this->_getParam('fq', ''),
                 'wt' => 'json',
-                'facet' => 'true',
-                'facet.field' => 'type',
             ));
 
             $response = $client->request();
