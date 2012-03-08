@@ -11,13 +11,26 @@ var DocumentCollection = Backbone.Collection.extend({
     model: Document,
 
     url: function() {
-        var params = {type: this.type, date: this.date, page: this.page, format: 'json'};
-        return "?" + jQuery.param(params);
+        var params = {q: this.query, type: this.type, date: this.date, page: this.page, format: 'json'};
+        return '?' + jQuery.param(params);
     },
 
     nav: function() {
-        var params = {type: this.type, date: this.date, page: this.page};
-        return this.query + "?" + jQuery.param(params);
+        var params = {q: this.query};
+
+        if (this.type !== '') {
+            params.type = this.type;
+        }
+
+        if (this.date !== '') {
+            params.date = this.date;
+        }
+
+        if (this.page !== 0) {
+            params.page = this.page;
+        }
+
+        return '?' + jQuery.param(params);
     },
 
     parse: function(response) {

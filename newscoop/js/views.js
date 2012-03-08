@@ -40,21 +40,21 @@ var ResultView = Backbone.View.extend({
         this.collection.query = this._getQuery();
         this.collection.type = '';
         this.collection.date = '';
-        this.router.navigate("search/" + this.collection.nav());
+        this.router.navigate(this.collection.nav());
         this.collection.fetch();
     },
 
     filterType: function(e) {
         e.preventDefault();
         this.collection.type = e.target.hash.slice(1);
-        this.router.navigate("search/" + this.collection.nav());
+        this.router.navigate(this.collection.nav());
         this.collection.fetch();
     },
 
     filterDate: function(e) {
         e.preventDefault();
         this.collection.date = e.target.hash.slice(1);
-        this.router.navigate("search/" + this.collection.nav());
+        this.router.navigate(this.collection.nav());
         this.collection.fetch();
     },
 

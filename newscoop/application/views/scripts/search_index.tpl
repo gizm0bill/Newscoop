@@ -47,7 +47,7 @@ $(function() {
     var documents = new DocumentCollection();
     var router = new SearchRouter();
     var appView = new ResultView({collection: documents, router: router});
-    Backbone.history.start({pushState: true, root: {{ json_encode($view->baseUrl('/')) }}});
+    Backbone.history.start({pushState: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'search']), '/')) }}});
     documents.parseReset({{ json_encode($result) }});
 });
 </script>

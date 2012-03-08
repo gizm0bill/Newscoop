@@ -26,24 +26,29 @@ class SearchController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        if (!$this->_getParam('q', false)) {
+            $this->render('blank');
+            return;
+        }
+
+        $client = $this->_helper->service('solr.client.select');
+        $client->setParameterGet($this->buildSolrParams());
+
         try {
-            $client = $this->_helper->service('solr.client.select');
-            $client->setParameterGet($this->buildSolrParams());
-
             $response = $client->request();
-            if ($response->isSuccessful()) {
-                $this->view->result = json_decode($response->getBody(), true);
-            } else {
-                var_dump($response);
-                exit;
-            }
-
-            if ($this->_helper->contextSwitch->getCurrentContext() === 'json') {
-                $this->_helper->json($this->view->result);
-            }
         } catch (\Exception $e) {
-            var_dump($e);
+            var_dump($e); exit;
+        }
+
+        if (!$response->isSuccessful()) {
+            var_dump($response);
             exit;
+        }
+
+        if ($this->_helper->contextSwitch->getCurrentContext() === 'json') {
+            $this->_helper->json(json_decode($response->getBody(), true));
+        } else {
+            $this->view->result = json_decode($response->getBody(), true);
         }
     }
 
