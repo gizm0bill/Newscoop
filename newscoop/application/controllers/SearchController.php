@@ -46,9 +46,9 @@ class SearchController extends Zend_Controller_Action
         }
 
         if ($this->_helper->contextSwitch->getCurrentContext() === 'json') {
-            $this->_helper->json(json_decode($response->getBody(), true));
+            $this->_helper->json($this->decodeSolrResponse($response));
         } else {
-            $this->view->result = json_decode($response->getBody(), true);
+            $this->view->result = $this->decodeSolrResponse($response);
         }
     }
 
@@ -61,13 +61,28 @@ class SearchController extends Zend_Controller_Action
     {
         return array(
             'wt' => 'json',
-            'q' => $this->_getParam('q'),
+            'q' => $this->buildSolrQuery(),
             'start' => $this->_getParam('page', 0) * self::LIMIT,
             'fq' => implode(' AND ', array_filter(array(
                 $this->buildSolrTypeParam(),
                 $this->buildSolrDateParam(),
             ))),
         );
+    }
+
+    /**
+     * Build solr query
+     *
+     * @return string
+     */
+    private function buildSolrQuery()
+    {
+        $q = $this->_getParam('q');
+        if ($this->_helper->service('webcoder')->isWebcode($q)) {
+            return sprintf('webcode:\%s', $q);
+        }
+
+        return $q;
     }
 
     /**
@@ -93,5 +108,17 @@ class SearchController extends Zend_Controller_Action
         }
 
         return sprintf('published:%s', self::$dates[$date]);
+    }
+
+    /**
+     * Decode solr response
+     *
+     * @return array
+     */
+    private function decodeSolrResponse(\Zend_Http_Response $response)
+    {
+        $decoded = json_decode($response->getBody(), true);
+        $decoded['responseHeader']['params']['q'] = $this->_getParam('q'); // this might be modified, keep users query
+        return $decoded;
     }
 }

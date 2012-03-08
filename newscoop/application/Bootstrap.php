@@ -193,6 +193,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $index->addRepository($container->getService('em')->getRepository('Newscoop\Entity\Article'));
             });
 
+        $container->register('webcoder', 'Newscoop\Webcode\Mapper');
+
         Zend_Registry::set('container', $container);
         return $container;
     }

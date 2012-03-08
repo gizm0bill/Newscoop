@@ -26,12 +26,15 @@
 
 <script type="text/template" id="doc">
     <% if (doc.get('type') === 'user') { %>
-    <h3><%= doc.escape('user') %></h3>
-    <p><%= doc.escape('bio') %></p> <% } else if (doc.get('type') === 'comment') { %>
-    <h3><%= doc.get('subject') %></h3>
+    <h3>user: <%= doc.escape('user') %></h3>
+    <p><%= doc.escape('bio') %></p>
+    <% } else if (doc.get('type') === 'comment') { %>
+    <h3>comment: <%= doc.get('subject') %></h3>
     <p><%= doc.get('message') %></p>
+    <% } else if (doc.get('type') === 'tweet') { %>
+    <p>tweet: <%= doc.get('tweet') %></p>
     <% } else { %>
-    <h3><%= doc.get('headline') %></h3>
+    <h3>article: <%= doc.get('headline') %></h3>
     <p><%= doc.get('lead') %></p>
     <% } %>
 </script>
