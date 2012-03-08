@@ -295,11 +295,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ), $options['image']['cache_url'] . '/%s'));
 
          $router->addRoute('search',
-             new Zend_Controller_Router_Route('search/:q/:fq', array(
+             new Zend_Controller_Router_Route('search/:q', array(
                  'module' => 'default',
                  'controller' => 'search',
                  'action' => 'index',
-                 'fq' => '',
              )));
 
          $router->addRoute('rest',

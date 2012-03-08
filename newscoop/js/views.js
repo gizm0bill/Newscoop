@@ -19,7 +19,8 @@ var ResultView = Backbone.View.extend({
 
     events: {
         'change #search-field': 'refresh',
-        'click #type-filter a': 'filter'
+        'click #type-filter a': 'filterType',
+        'click #date-filter a': 'filterDate'
     },
 
     initialize: function() {
@@ -29,27 +30,35 @@ var ResultView = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).find('#search-query').text(this.collection.q);
+        $(this.el).find('#search-query').text(this.collection.query);
         $(this.el).find('#search-count').text(this.collection.numFound);
-        $(this.el).find('#search-field').attr('placeholder', this.collection.q);
+        $(this.el).find('#search-field').attr('placeholder', this.collection.query);
         return this;
     },
 
     refresh: function() {
-        this.collection.q = this.getQuery();
-        this.collection.fq = '';
-        this.options.router.navigate("search/" + this.collection.q);
+        this.collection.query = this._getQuery();
+        this.collection.type = '';
+        this.collection.date = '';
+        this.router.navigate("search/" + this.collection.nav());
         this.collection.fetch();
     },
 
-    filter: function(e) {
+    filterType: function(e) {
         e.preventDefault();
-        this.collection.fq = e.target.hash.slice(1);
-        this.options.router.navigate("search/" + this.collection.q + "/" + this.collection.fq);
+        this.collection.type = e.target.hash.slice(1);
+        this.router.navigate("search/" + this.collection.nav());
         this.collection.fetch();
     },
 
-    getQuery: function() {
+    filterDate: function(e) {
+        e.preventDefault();
+        this.collection.date = e.target.hash.slice(1);
+        this.router.navigate("search/" + this.collection.nav());
+        this.collection.fetch();
+    },
+
+    _getQuery: function() {
         return $(this.el).find('#search-field').val();
     }
 });

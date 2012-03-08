@@ -9,6 +9,14 @@
  */
 class SearchController extends Zend_Controller_Action
 {
+    const LIMIT = 10;
+
+    static $dates = array(
+        '24h' => '[NOW-1DAY/HOUR TO NOW]',
+        '7d' => '[NOW-7DAY/DAY TO NOW]',
+        '1y' => '[NOW-1YEAR/DAY TO NOW]',
+    );
+
     public function init()
     {
         $this->_helper->contextSwitch
@@ -20,11 +28,7 @@ class SearchController extends Zend_Controller_Action
     {
         try {
             $client = $this->_helper->service('solr.client.select');
-            $client->setParameterGet(array(
-                'q' => $this->_getParam('q', '*'),
-                'fq' => $this->_getParam('fq', ''),
-                'wt' => 'json',
-            ));
+            $client->setParameterGet($this->buildSolrParams());
 
             $response = $client->request();
             if ($response->isSuccessful()) {
@@ -41,5 +45,48 @@ class SearchController extends Zend_Controller_Action
             var_dump($e);
             exit;
         }
+    }
+
+    /**
+     * Build solr params array
+     *
+     * @return array
+     */
+    private function buildSolrParams()
+    {
+        return array(
+            'wt' => 'json',
+            'q' => $this->_getParam('q'),
+            'start' => $this->_getParam('page', 0) * self::LIMIT,
+            'fq' => implode(' AND ', array_filter(array(
+                $this->buildSolrTypeParam(),
+                $this->buildSolrDateParam(),
+            ))),
+        );
+    }
+
+    /**
+     * Build solr type param
+     *
+     * @return string
+     */
+    private function buildSolrTypeParam()
+    {
+        return $this->_getParam('type', false) ? sprintf('type:%s', $this->_getParam('type')) : null;
+    }
+
+    /**
+     * Build solr date param
+     *
+     * @return string
+     */
+    private function buildSolrDateParam()
+    {
+        $date = $this->_getParam('date', false);
+        if (!$date || !array_key_exists($date, self::$dates)) {
+            return;
+        }
+
+        return sprintf('published:%s', self::$dates[$date]);
     }
 }

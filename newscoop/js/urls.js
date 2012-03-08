@@ -1,9 +1,8 @@
 var SearchRouter = Backbone.Router.extend({
     routes: {
-        "search/:q/:fq": "search",
-        "search/:q": "search"
+        "search/:q*filters": "search"
     },
 
-    search: function(q, fq) {
+    search: function(q, filters) {
     }
 });

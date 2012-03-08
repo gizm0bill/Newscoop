@@ -9,9 +9,16 @@
 
     <div id="type-filter">
         <a href="#">Alle</a>
-        <a href="#type:news">News</a>
-        <a href="#type:blogs">Blogs</a>
-        <a href="#type:user">Users</a>
+        <a href="#news">News</a>
+        <a href="#blogs">Blogs</a>
+        <a href="#user">Users</a>
+    </div>
+
+    <div id="date-filter">
+        <a href="#">Alle</a>
+        <a href="#24h">24 hours</a>
+        <a href="#7d">7 days</a>
+        <a href="#1y">1 year</a>
     </div>
 
     <ul id="results"></ul>
