@@ -347,6 +347,12 @@ class NewscoopEntityUserProxy extends \Newscoop\Entity\User implements \Doctrine
         return parent::isIndexable($config);
     }
 
+    public function setImageService(\Newscoop\Image\ImageService $imageService)
+    {
+        $this->__load();
+        return parent::setImageService($imageService);
+    }
+
     public function getDocument()
     {
         $this->__load();

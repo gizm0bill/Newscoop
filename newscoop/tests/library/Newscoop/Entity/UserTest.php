@@ -386,13 +386,26 @@ class UserTest extends \RepositoryTestCase
     {
         $user = new User();
         $user->setUsername('name');
+        $user->setImage('someimage.jpg');
         $user->addAttribute('bio', 'abc');
+
+        $imageService = $this->getMockBuilder('Newscoop\Image\ImageService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $user->setImageService($imageService);
+
+        $imageService->expects($this->once())
+            ->method('getSrc')
+            ->with($this->equalTo('someimage.jpg'), $this->equalTo(65), $this->equalTo(65), $this->equalTo('crop'))
+            ->will($this->returnValue('imagesrc'));
 
         $this->assertEquals(array(
             'id' => $user->getDocumentId(),
             'type' => 'user',
             'user' => 'name',
             'bio' => 'abc',
+            'image' => 'imagesrc',
         ), $user->getDocument());
     }
 }

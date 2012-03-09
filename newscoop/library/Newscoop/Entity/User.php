@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection,
  *      })
  *  @HasLifecycleCallbacks
  */
-class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterface
+class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterface, \Newscoop\Image\SetImageServiceInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -834,6 +834,17 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterf
     }
 
     /**
+     * Set image service
+     *
+     * @param Newscoop\Image\ImageService $imageService
+     * @return void
+     */
+    public function setImageService(\Newscoop\Image\ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
+    /**
      * Get document
      *
      * @return array
@@ -845,6 +856,7 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterf
             'type' => 'user',
             'user' => $this->getUsername(),
             'bio' => $this->getAttribute('bio'),
+            'image' => $this->image !== null ? $this->imageService->getSrc($this->image, 65, 65, 'crop') : '',
         );
     }
 }

@@ -13,7 +13,7 @@ namespace Newscoop\Entity;
  * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository") @HasLifecycleCallbacks
  * @Table(name="Articles")
  */
-class Article implements \Newscoop\Search\IndexableInterface
+class Article implements \Newscoop\Search\IndexableInterface, \Newscoop\Image\SetImageServiceInterface
 {
     const STATUS_PUBLISHED = 'Y';
     const STATUS_NOT_PUBLISHED = 'N';
@@ -581,5 +581,16 @@ class Article implements \Newscoop\Search\IndexableInterface
         }
 
         return array_filter($doc);
+    }
+
+    /**
+     * Set image service
+     *
+     * @param Newscoop\Image\ImageService $imageService
+     * @return void
+     */
+    public function setImageService(\Newscoop\Image\ImageService $imageService)
+    {
+        $this->imageService = $imageService;
     }
 }

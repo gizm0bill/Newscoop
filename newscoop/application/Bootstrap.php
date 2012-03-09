@@ -210,9 +210,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         DatabaseObject::setEventDispatcher($container->getService('dispatcher'));
         DatabaseObject::setResourceNames($container->getParameter('resourceNames'));
 
-        $container->getService('em')
-            ->getEventManager()
-            ->addEventSubscriber(new DoctrineEventDispatcherProxy($container->getService('dispatcher')));
+        $eventManager = $container->getService('em')->getEventManager();
+        $eventManager->addEventSubscriber(new DoctrineEventDispatcherProxy($container->getService('dispatcher')));
+        $eventManager->addEventSubscriber($container->getService('image'));
     }
 
     protected function _initPlugins()

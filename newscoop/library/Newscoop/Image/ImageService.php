@@ -6,10 +6,11 @@
  */
 
 namespace Newscoop\Image;
+
 /**
  * Image Service
  */
-class ImageService
+class ImageService implements \Doctrine\Common\EventSubscriber
 {
     /**
      * @var array
@@ -289,6 +290,29 @@ class ImageService
             ->select('COUNT(i)')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * Get subscribed events
+     *
+     * @return array
+     */
+    public function getSubscribedEvents()
+    {
+        return array(\Doctrine\ORM\Events::postLoad);
+    }
+
+    /**
+     * Post load
+     *
+     * @param Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @return void
+     */
+    public function postLoad(\Doctrine\ORM\Event\LifecycleEventArgs $eventArgs)
+    {
+        if ($eventArgs->getEntity() instanceof SetImageServiceInterface) {
+            $eventArgs->getEntity()->setImageService($this);
+        }
     }
 
     /**
