@@ -140,7 +140,12 @@ class Admin_ImageController extends Zend_Controller_Action
                         $image->setDescription($values['description']);
                         $image->setPlace($values['place']);
                         $image->setPhotographer($values['photographer']);
-                        $image->setDate(date('Y-m-d'));
+                        if ($values['date']) {
+                            $image->setDate($values['date']);
+                        }
+                        else {
+                            $image->setDate(date('Y-m-d'));
+                        }
                     }
                 }
                 $this->_helper->entity->flushManager();
@@ -161,7 +166,13 @@ class Admin_ImageController extends Zend_Controller_Action
         $images = array();
         $articleImages = $this->_helper->service('image')->findByArticle($this->_getParam('article_number'));
         foreach ($articleImages as $k => $articleImage) {
-			$image = $articleImage->getImage();
+			unset($exifDate);
+			unset($iptcDate);
+			unset($iptcPlace);
+			unset($iptcPhotographer);
+			unset($iptcDescription);
+            
+            $image = $articleImage->getImage();
             $exif = exif_read_data($image->getPath());
             if (isset($exif['DateTime'])) {
                 $exifDate = date('Y-m-d', strtotime($exif['DateTime']));
@@ -198,16 +209,22 @@ class Admin_ImageController extends Zend_Controller_Action
                 }
                 $iptcPlace = implode(', ', $iptcPlace);
             }
-            
-            if ($iptcPhotographer) {
-                $image->setPhotographer($iptcPhotographer);
-            }
-            if ($iptcDescription) {
-                $image->setDescription($iptcDescription);
-            }
-            
+                        
 			if ($image->getDate() == '0000-00-00') {
-				$images[] = $image;
+				if ($iptcPhotographer) {
+                    $image->setPhotographer($iptcPhotographer);
+                }
+                if ($iptcDescription) {
+                    $image->setDescription($iptcDescription);
+                }
+                if ($exifDate) {
+                    $image->setDate($exifDate);
+                }
+                if ($iptcDate) {
+                    $image->setDate($iptcDate);
+                }
+                
+                $images[] = $image;
 			}
 		}
         
