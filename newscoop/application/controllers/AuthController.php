@@ -34,6 +34,10 @@ class AuthController extends Zend_Controller_Action
             $result = $this->auth->authenticate($adapter);
 
             if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
+                if ($values['persistency'] == '1') {
+                    $seconds  = 60 * 60 * 24 * 7; // 7 days
+                    Zend_Session::RememberMe($seconds);
+                }
                 $this->_helper->redirector('index', 'dashboard');
             } else {
                 $form->addError($this->view->translate("Invalid credentials"));
