@@ -27,6 +27,11 @@ class Application_Form_Login extends Zend_Form
             ),
         ));
 
+        $this->addElement('checkbox', 'persistency', array(
+            'label' => 'Keep me signed in',
+            'required' => false,
+        ));
+
         $this->addElement('submit', 'submit', array(
             'label' => 'Sign In',
             'ignore' => true,
