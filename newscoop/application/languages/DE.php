@@ -26,6 +26,7 @@ return array(
 	'Login failed.' => ' Login fehlgeschlagen.',
 	'E-Mail' => 'E-Mail-Adresse',
 	'Password' => 'Passwort',
+        'Keep me signed in' => 'Keep me signed in',
         'Registered as' => 'Angemeldet als',
     'Feedback content is not filled in.' => 'Sie haben Ihre Nachricht vergessen.',
     'Login successful. Please wait...' => 'Login erfolgreich.',
