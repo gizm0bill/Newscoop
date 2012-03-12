@@ -85,20 +85,22 @@
             {{ $view->translate('You have to be registered at TagesWoche in order to comment on articles and send messages directly to the editorial team. Please login or create a free user account on TagesWoche.') }}
             <br><a href="http://www.tageswoche.ch/de/pages/about/3919/Dialogkultur.htm">{{ $view->translate('login_link_text') }}</a>
         </div>
-                <form name="login-form" method="post" autocomplete="" onsubmit="omnibox.login();return false;">
+        <form name="login-form" method="post" autocomplete="" onsubmit="omnibox.login();return false;">
         <div class="text_container right half">
-                        <div class="login_label">{{ $view->translate('E-Mail') }}</div>
+            <div class="login_label">{{ $view->translate('E-Mail') }}</div>
             <input type="text" id="ob_email" name="ob_email" class="small right" VCARD_NAME = "vCard.Email"><br>
             <div class="clear"></div>
-                        <div class="login_label">{{ $view->translate('Password') }}</div>
-                        <div class="clear"></div>
+            <div class="login_label">{{ $view->translate('Password') }}</div>
+            <div class="clear"></div>
             <input type="password" id="ob_password" name="ob_password" class="small right"><br>
             <div class="clear"></div>
-                        <input type="submit" class="login_button right" value="{{ $view->translate('Login') }}">
+            <div class="login_label"><input type="checkbox" id="ob_remember" name="ob_remember" value="1"> {{ $view->translate('Keep me signed in') }}</div>
+            <div class="clear"></div>
+            <input type="submit" class="login_button right" value="{{ $view->translate('Login') }}">
             <a class="register_link right" href="{{ $view->baseUrl('/register') }}">{{ $view->translate('Register') }}</a>
             <a class="register_link right" href="{{ $view->baseUrl('/auth/password-restore ') }}">{{ $view->translate('Forgot password') }}</a>
         </div>
-                </form>
+        </form>
         <div class="clear"></div>
     {{ /if }}
 </div>
