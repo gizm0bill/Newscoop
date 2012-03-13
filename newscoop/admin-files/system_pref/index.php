@@ -37,6 +37,11 @@ if(empty($max_profile_image_filesize) || $max_profile_image_filesize == 0) {
     SystemPref::Set("MaxProfileImageFileSize",ini_get('upload_max_filesize'));
 }
 
+$max_author_image_filesize = SystemPref::Get("MaxAuthorImageFileSize");
+if(empty($max_author_image_filesize) || $max_author_image_filesize == 0) {
+    SystemPref::Set("MaxAuthorImageFileSize",ini_get('upload_max_filesize'));
+}
+
 $availableCacheEngines = CacheEngine::AvailableEngines();
 $availableTemplateCacheHandlers = CampTemplateCache::availableHandlers();
 ?>
@@ -271,6 +276,15 @@ $availableTemplateCacheHandlers = CampTemplateCache::availableHandlers();
     </td>
     <td valign="top">
         <input type="text" name="f_max_profile_image_filesize" value="<?php p(SystemPref::Get("MaxProfileImageFileSize")); ?>" maxlength="12" size="14" class="input_text" alt="blank" emsg="<?php putGS("Please enter a positive number for the '$1' field.", getGS("Max Profile Image File Size")); ?>" />
+    </td>
+</tr>
+<tr>
+    <td align="left">
+        <?php putGS("Maximum author image file size:"); ?>
+        <div style="padding-top: 3px; padding-left: 15px;"><?php putGS("Enter a value between 0 and $1 (the maximum size is specified in 'php.ini'). Please use 'K' for kilobytes, 'M' for megabytes and 'G' for gigabytes, without white spaces between the value and the corresponding letter, e.g. '3M'.", min(ini_get('post_max_size'), ini_get('upload_max_filesize'))); ?></div>
+    </td>
+    <td valign="top">
+        <input type="text" name="f_max_author_image_filesize" value="<?php p(SystemPref::Get("MaxAuthorImageFileSize")); ?>" maxlength="12" size="14" class="input_text" alt="blank" emsg="<?php putGS("Please enter a positive number for the '$1' field.", getGS("Max Author Image File Size")); ?>" />
     </td>
 </tr>
 <?php
