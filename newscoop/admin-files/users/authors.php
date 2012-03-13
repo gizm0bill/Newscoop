@@ -113,10 +113,11 @@ if ($can_save) {
         $attributes = array();
         $image = Image::OnImageUpload($_FILES['file'], $attributes);
         
-        $maxFileSize = camp_convert_bytes(SystemPref::Get("MaxAuthorImageFileSize"));
+        $maxFileSize = SystemPref::Get("MaxAuthorImageFileSize");
         if (!$maxFileSize) {
             $maxFileSize = ini_get('upload_max_filesize');
         }
+        $maxFileSize = camp_convert_bytes($maxFileSize);
         
         if (PEAR::isError($image)) {
             camp_html_add_msg($image->getMessage());
