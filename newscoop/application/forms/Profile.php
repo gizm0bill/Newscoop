@@ -35,10 +35,11 @@ class Application_Form_Profile extends Zend_Form
             'label' => 'Password',
         ));
 
-        $maxFileSize = camp_convert_bytes(SystemPref::Get("MaxProfileImageFileSize"));
+        $maxFileSize = SystemPref::Get("MaxProfileImageFileSize");
         if (!$maxFileSize) {
             $maxFileSize = ini_get('upload_max_filesize');
         }
+        $maxFileSize = camp_convert_bytes($maxFileSize);
         
         $this->addElement('file', 'image', array(
             'label' => 'Profile image',
