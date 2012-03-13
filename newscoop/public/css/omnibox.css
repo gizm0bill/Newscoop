@@ -151,3 +151,22 @@
 	float: right;
 	vertical-align: top;
 }
+
+#ob_wrapper .remember_box {
+    float: right;
+    width: 254px;
+}
+
+#ob_wrapper .remember_box input {
+    width: auto;
+    float: left;
+}
+
+#ob_wrapper .remember_box .remember_label {
+    display: inline;
+    float: left;
+    margin-top: 10px;
+    
+    color: #a5a5a5;
+	font-size:11px; font-family:Arial, Helvetica, sans-serif; line-height:11px;
+}
