@@ -62,6 +62,7 @@ $f_imagecache_lifetime = Input::Get('f_imagecache_lifetime', 'int');
 $f_keyword_separator = strip_tags(Input::Get('f_keyword_separator'));
 $f_login_num = Input::Get('f_login_num', 'int');
 $f_max_upload_filesize = strip_tags(Input::Get('f_max_upload_filesize'));
+$f_max_profile_image_filesize = strip_tags(Input::Get('f_max_profile_image_filesize'));
 $f_password_recovery = Input::Get('f_password_recovery');
 $f_password_recovery_from = Input::Get('f_password_recovery_from');
 if ($f_external_subs_management != 'Y' && $f_external_subs_management != 'N') {
@@ -179,6 +180,16 @@ $max_upload_filesize_bytes = camp_convert_bytes($f_max_upload_filesize);
 if ($max_upload_filesize_bytes > 0 &&
         $max_upload_filesize_bytes <= min(camp_convert_bytes(ini_get('post_max_size')), camp_convert_bytes(ini_get('upload_max_filesize')))) {
     SystemPref::Set("MaxUploadFileSize", $f_max_upload_filesize);
+} else {
+    $msg_ok = 0;
+    camp_html_add_msg(getGS('Invalid Max Upload File Size value submitted'));
+}
+
+// Max Profile Image File Size
+$max_profile_image_filesize_bytes = camp_convert_bytes($f_max_profile_image_filesize);
+if ($max_profile_image_filesize_bytes > 0 &&
+        $max_profile_image_filesize_bytes <= min(camp_convert_bytes(ini_get('post_max_size')), camp_convert_bytes(ini_get('upload_max_filesize')))) {
+    SystemPref::Set("MaxProfileImageFileSize", $f_max_profile_image_filesize);
 } else {
     $msg_ok = 0;
     camp_html_add_msg(getGS('Invalid Max Upload File Size value submitted'));
