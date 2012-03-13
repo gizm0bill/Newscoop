@@ -121,7 +121,7 @@ if ($can_save) {
         if (PEAR::isError($image)) {
             camp_html_add_msg($image->getMessage());
         } else if (filesize($image->getImageStorageLocation()) > $maxFileSize) {
-            camp_html_add_msg(getGS('Image file can not be bigger than $1', SystemPref::Get("MaxAuthorImageFileSize")));
+            camp_html_add_msg(getGS('Image file can not be bigger than $1', $maxFileSize));
         } else {
             $author->setImage($image->getImageId());
         }
