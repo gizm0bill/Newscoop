@@ -94,7 +94,7 @@
             <div class="clear"></div>
             <input type="password" id="ob_password" name="ob_password" class="small right"><br>
             <div class="clear"></div>
-            <div class="login_label"><input type="checkbox" id="ob_remember" name="ob_remember" value="1"> {{ $view->translate('Keep me signed in') }}</div>
+            <div class="remember_box"><input type="checkbox" id="ob_remember" name="ob_remember" value="1"><span class="remember_label">{{ $view->translate('Keep me signed in') }}</span></div>
             <div class="clear"></div>
             <input type="submit" class="login_button right" value="{{ $view->translate('Login') }}">
             <a class="register_link right" href="{{ $view->baseUrl('/register') }}">{{ $view->translate('Register') }}</a>
