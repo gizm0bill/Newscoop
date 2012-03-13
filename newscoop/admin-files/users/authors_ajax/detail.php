@@ -6,6 +6,7 @@ require_once($GLOBALS['g_campsiteDir'] . '/classes/Input.php');
 require_once($GLOBALS['g_campsiteDir'] . '/classes/Image.php');
 require_once($GLOBALS['g_campsiteDir'] . '/classes/ImageSearch.php');
 require_once($GLOBALS['g_campsiteDir'] . '/classes/Log.php');
+require_once($GLOBALS['g_campsiteDir'] . '/classes/SystemPref.php');
 require_once($GLOBALS['g_campsiteDir'] . "/$ADMIN_DIR/localizer/Localizer.php");
 
 camp_load_translation_strings('authors');
@@ -220,6 +221,7 @@ if ($id > 0) {
         <li>&nbsp;</li>
         <li>
           <input type="file" name="file" size="32" class="input_file" />
+          <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo(camp_convert_bytes(SystemPref::Get("MaxAuthorImageFileSize"))); ?>" id="MAX_FILE_SIZE">
         </li>
       </ul>
     </fieldset>

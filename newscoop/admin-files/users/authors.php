@@ -112,8 +112,16 @@ if ($can_save) {
     if ($uploadFileSpecified) {
         $attributes = array();
         $image = Image::OnImageUpload($_FILES['file'], $attributes);
+        
+        $maxFileSize = camp_convert_bytes(SystemPref::Get("MaxAuthorImageFileSize"));
+        if (!$maxFileSize) {
+            $maxFileSize = ini_get('upload_max_filesize');
+        }
+        
         if (PEAR::isError($image)) {
             camp_html_add_msg($image->getMessage());
+        } else if (filesize($image->getImageStorageLocation()) > $maxFileSize) {
+            camp_html_add_msg(getGS('Image file can not be bigger than $1', SystemPref::Get("MaxAuthorImageFileSize")));
         } else {
             $author->setImage($image->getImageId());
         }
