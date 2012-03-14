@@ -321,14 +321,6 @@ class Topic extends DatabaseObject {
 			. ' AND node_right <= '.$this->m_data['node_right'];
 			$deleted = $g_ado_db->Execute($sql);
 
-			if ($deleted) {
-				$myWidth = $this->m_data['node_right'] - $this->m_data['node_left'] + 1;
-				$sql = "UPDATE Topics SET node_left = node_left - $myWidth WHERE node_left > " . $this->m_data['node_left'];
-				$g_ado_db->Execute($sql);
-				$sql = "UPDATE Topics SET node_right = node_right - $myWidth WHERE node_right > " . $this->m_data['node_right'];
-				$g_ado_db->Execute($sql);
-			}
-
 			$this->m_data = array();
 			$this->m_exists = false;
 		}
