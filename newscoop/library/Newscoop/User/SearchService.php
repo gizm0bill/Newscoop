@@ -13,6 +13,19 @@ namespace Newscoop\User;
 class SearchService implements \Newscoop\Search\ServiceInterface
 {
     /**
+     * @var Newscoop\Image\ImageService
+     */
+    protected $imageService;
+
+    /**
+     * @param Newscoop\Image\ImageService $imageService
+     */
+    public function __construct(\Newscoop\Image\ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
+    /**
      * Test if user is indexed
      *
      * @param Newscoop\Entity\User $user
@@ -47,7 +60,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'type' => 'user',
             'user' => $user->getUsername(),
             'bio' => $user->getAttribute('bio'),
-            //'image' => $this->image !== null ? $this->imageService->getSrc($this->image, 65, 65, 'crop') : '',
+            'image' => $user->getImage() !== null ? $this->imageService->getSrc($user->getImage(), 65, 65, 'crop') : '',
         );
     }
 

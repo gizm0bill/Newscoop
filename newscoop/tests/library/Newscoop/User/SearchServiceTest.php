@@ -15,7 +15,11 @@ class SearchServiceTest extends \TestCase
 {
     public function setUp()
     {
-        $this->service = new SearchService();
+        $this->imageService = $this->getMockBuilder('Newscoop\Image\ImageService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->service = new SearchService($this->imageService);
     }
 
     public function testInstance()
@@ -37,11 +41,17 @@ class SearchServiceTest extends \TestCase
         $user->setImage('someimage.jpg');
         $user->addAttribute('bio', 'abc');
 
+        $this->imageService->expects($this->once())
+            ->method('getSrc')
+            ->with($this->equalTo('someimage.jpg'), $this->equalTo(65), $this->equalTo(65), $this->equalTo('crop'))
+            ->will($this->returnValue('imagesrc'));
+
         $this->assertEquals(array(
             'id' => 'user-0',
             'type' => 'user',
             'user' => 'name',
             'bio' => 'abc',
+            'image' => 'imagesrc',
         ), $this->service->getDocument($user));
     }
 

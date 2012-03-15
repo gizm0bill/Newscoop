@@ -12,20 +12,14 @@
  * @param bool $repeat
  * @return void
  */
-function smarty_block_image(array $params, $content, Smarty_Internal_Template $smarty, $repeat)
+function smarty_block_image(array $params, $content, Smarty_Internal_Template $smarty, &$repeat)
 {
     if (!$repeat) {
-        $content = $smarty->getTemplateVars('image') ? $content : '';
         $smarty->assign('image', null);
         return $content;
     }
 
     if (!array_key_exists('rendition', $params)) {
-        throw new \InvalidArgumentException("Rendition not set");
-    }
-
-    $renditions = Zend_Registry::get('container')->getService('image.rendition')->getRenditions();
-    if (!array_key_exists($params['rendition'], $renditions)) {
         throw new \InvalidArgumentException("Unknown rendition");
     }
 
@@ -34,25 +28,15 @@ function smarty_block_image(array $params, $content, Smarty_Internal_Template $s
         throw new \RuntimeException("Not in article context.");
     }
 
-    $articleRenditions = $article->getRenditions();
-    $articleRendition = $articleRenditions[$renditions[$params['rendition']]];
-    if ($articleRendition === null) {
+    $width = array_key_exists('width', $params) ? (int) $params['width'] : null;
+    $height = array_key_exists('height', $params) ? (int) $params['height'] : null;
+    $image = Zend_Registry::get('container')->getService('image.rendition')->getArticleRenditionImage($article->number, $params['rendition'], $width, $height);
+    if (!$image) {
         $smarty->assign('image', false);
+        $repeat = false;
         return;
     }
 
-    if (array_key_exists('width', $params) && array_key_exists('height', $params)) {
-        $preview = $articleRendition->getRendition()->getPreview($params['width'], $params['height']);
-        $thumbnail = $preview->getThumbnail($articleRendition->getImage(), Zend_Registry::get('container')->getService('image'));
-    } else {
-        $thumbnail = $articleRendition->getRendition()->getThumbnail($articleRendition->getImage(), Zend_Registry::get('container')->getService('image'));
-    }
-
-    $smarty->assign('image', (object) array(
-        'src' => Zend_Registry::get('view')->url(array('src' => $thumbnail->src), 'image', true, false),
-        'width' => $thumbnail->width,
-        'height' => $thumbnail->height,
-        'caption' => $articleRendition->getImage()->getCaption(),
-        'photographer' => $articleRendition->getImage()->getPhotographer(),
-    ));
+    $image['src'] = Zend_Registry::get('view')->url(array('src' => $image['src']), 'image', true, false);
+    $smarty->assign('image', (object) $image);
 }

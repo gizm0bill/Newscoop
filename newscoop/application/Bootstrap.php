@@ -188,11 +188,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $container->register('article.search', 'Newscoop\Article\SearchService')
             ->addArgument(new sfServiceReference('webcoder'))
+            ->addArgument(new sfServiceReference('image.rendition'))
             ->addArgument($container['search']['article']);
 
         $container->register('comment.search', 'Newscoop\Comment\SearchService');
 
-        $container->register('user.search', 'Newscoop\User\SearchService');
+        $container->register('user.search', 'Newscoop\User\SearchService')
+            ->addArgument(new sfServiceReference('image'));
 
         $container->register('twitter.search', 'Newscoop\Twitter\SearchService');
 

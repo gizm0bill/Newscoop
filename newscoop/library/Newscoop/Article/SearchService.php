@@ -18,19 +18,27 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     private $webcoder;
 
     /**
+     * @var Newscoop\Image\RenditionService
+     */
+    private $renditionService;
+
+    /**
      * @var array
      */
     private $config = array(
         'type' => array(),
+        'rendition' => null,
     );
 
     /**
      * @param Newscoop\Webcode\Mapper $webcoder
+     * @param Newscoop\Image\RenditionService $renditionService
      * @param array $config
      */
-    public function __construct(\Newscoop\Webcode\Mapper $webcoder, array $config)
+    public function __construct(\Newscoop\Webcode\Mapper $webcoder, \Newscoop\Image\RenditionService $renditionService, array $config)
     {
         $this->webcoder = $webcoder;
+        $this->renditionService = $renditionService;
         $this->config = array_merge($this->config, $config);
     }
 
@@ -64,6 +72,8 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      */
     public function getDocument($article)
     {
+        $image = $this->renditionService->getArticleRenditionImage($article->getNumber(), $this->config['rendition'], 200, 150);
+
         $doc = array(
             'id' => $this->getDocumentId($article),
             'title' => $article->getTitle(),
@@ -73,6 +83,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
                 return $author->getFullName();
             }, $article->getAuthors()),
             'webcode' => $this->webcoder->encode($article->getNumber()),
+            'image' => $image ? $image['src'] : null,
         );
 
         switch ($article->getType()) {

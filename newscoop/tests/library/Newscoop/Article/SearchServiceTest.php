@@ -17,11 +17,21 @@ use Newscoop\Entity\Language,
 class SearchServiceTest extends \TestCase
 {
     const TYPE = 'news';
+    const RENDITION = 'rend';
 
     public function setUp()
     {
         $this->webcoder = new \Newscoop\Webcode\Mapper();
-        $this->service = new SearchService($this->webcoder, array('type' => array(self::TYPE)));
+
+        $this->renditionService = $this->getMockBuilder('Newscoop\Image\RenditionService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->service = new SearchService($this->webcoder, $this->renditionService, array(
+            'type' => array(self::TYPE),
+            'rendition' => self::RENDITION,
+        ));
+
         $this->language = new Language();
     }
 
@@ -45,6 +55,16 @@ class SearchServiceTest extends \TestCase
         $article->setTitle('title');
         $article->setType('news');
         $article->addAuthor(new Author('john', 'doe'));
+        $article->setData(array(
+            'lede' => 'lede',
+            'body' => 'body',
+            'tic' => 'toc',
+        ));
+
+        $this->renditionService->expects($this->once())
+            ->method('getArticleRenditionImage')
+            ->with($this->equalTo($article->getNumber()), $this->equalTo(self::RENDITION), $this->equalTo(200), $this->equalTo(150))
+            ->will($this->returnValue(array('src' => 'artimage')));
 
         $this->assertEquals(array(
             'id' => 'article-1-0',
@@ -53,6 +73,9 @@ class SearchServiceTest extends \TestCase
             'author' => array('john doe'),
             'published' => gmdate('Y-m-d\TH:i:s\Z', $published->getTimestamp()),
             'webcode' => $this->webcoder->encode(1),
+            'lead' => 'lede',
+            'content' => 'body',
+            'image' => 'artimage',
         ), $this->service->getDocument($article));
     }
 
