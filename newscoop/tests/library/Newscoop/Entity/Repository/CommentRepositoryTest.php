@@ -33,11 +33,11 @@ class CommentRepositoryTest extends \TestCase
     public function testInstance()
     {
         $this->assertInstanceOf('Newscoop\Entity\Repository\CommentRepository', $this->repository);
-        $this->assertInstanceOf('Newscoop\Search\IndexableRepositoryInterface', $this->repository);
     }
 
-    public function testFindIndexable()
+    public function testSearchInterface()
     {
+        $this->assertInstanceOf('Newscoop\Search\RepositoryInterface', $this->repository);
         $language = new \Newscoop\Entity\Language();
         $this->orm->persist($language);
         $this->orm->flush($language);
@@ -46,25 +46,24 @@ class CommentRepositoryTest extends \TestCase
         $this->orm->persist($article);
         $this->orm->flush($article);
 
-        $this->assertEmpty($this->repository->findIndexable());
+        $this->assertEmpty($this->repository->getBatch());
 
         $comment = new Comment();
         $comment->setThread($article);
         $comment->setSubject('sub');
         $comment->setMessage('msg');
+        $comment->setTimeUpdated(date_create('-1 day')); // utc sqlite fix
         $this->orm->persist($comment);
         $this->orm->flush($comment);
 
-        $this->assertNotEmpty($this->repository->findIndexable());
+        $this->assertNotEmpty($this->repository->getBatch());
 
-        $comment->setIndexed(new \DateTime('-1 min'));
-        $this->orm->flush();
+        $this->repository->setIndexedNow(array($comment));
 
-        $this->assertNotEmpty($this->repository->findIndexable());
+        $this->assertEmpty($this->repository->getBatch());
 
-        $comment->setIndexed(new \DateTime());
-        $this->orm->flush();
+        $this->repository->setIndexedNull();
 
-        $this->assertEmpty($this->repository->findIndexable());
+        $this->assertNotEmpty($this->repository->getBatch());
     }
 }

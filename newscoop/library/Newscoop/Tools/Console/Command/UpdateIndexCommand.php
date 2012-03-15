@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputArgument,
 /**
  * Index update command
  */
-class UpdateIndexCommand extends Console\Command\Command
+class UpdateIndexCommand extends AbstractIndexCommand
 {
     /**
      * @see Console\Command\Command
@@ -32,7 +32,9 @@ class UpdateIndexCommand extends Console\Command\Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $this->getHelper('container')->getService('index')->update();
+        foreach ($this->getIndexers() as $indexer) {
+            $indexer->update();
+        }
         $output->writeln('Search Index updated.');
     }
 }

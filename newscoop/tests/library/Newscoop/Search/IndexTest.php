@@ -9,19 +9,13 @@ namespace Newscoop\Search;
 
 /**
  */
-class IndexTest extends \TestCase
+class IndexManagerTest extends \TestCase
 {
     /** @var Zend_Http_Client */
     private $client;
 
-    /** @var Doctrine\ORM\EntityManager */
-    private $orm;
-
     /** @var Newscoop\Search\Index */
     private $index;
-
-    /** @var array */
-    private $config = array('tic' => 'toc');
 
     public function setUp()
     {
@@ -29,11 +23,7 @@ class IndexTest extends \TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orm = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->index = new Index($this->config, $this->client, $this->orm);
+        $this->index = new Index($this->client);
     }
 
     public function testInstance()
@@ -41,129 +31,28 @@ class IndexTest extends \TestCase
         $this->assertInstanceOf('Newscoop\Search\Index', $this->index);
     }
 
-    public function testIndexUpdateAdd()
+    public function testAdd()
     {
-        $repository = $this->getMock('Newscoop\Search\IndexableRepositoryInterface');
-        $indexable = $this->getMock('Newscoop\Search\IndexableInterface');
+        $document = array('id' => 'article-1-1');
+        $this->clientExpects(array('add' => array($document)), true);
 
-        $repository->expects($this->once())
-            ->method('findIndexable')
-            ->will($this->returnValue(array($indexable)));
-
-        $indexable->expects($this->once())
-            ->method('getDocument')
-            ->will($this->returnValue(array(
-                'id' => 'article-1-1',
-            )));
-
-        $indexable->expects($this->once())
-            ->method('isIndexable')
-            ->with($this->equalTo($this->config))
-            ->will($this->returnValue(true));
-
-        $this->clientExpects(array('add' => array(array('id' => 'article-1-1'),)), true);
-
-        $repository->expects($this->once())
-            ->method('setIndexedNow')
-            ->with($this->equalTo(array($indexable)));
-
-        $this->index->addRepository($repository);
-        $this->index->update();
+        $this->index->add($document);
+        $this->index->flush();
     }
 
     public function testIndexUpdateDelete()
     {
-        $repository = $this->getMock('Newscoop\Search\IndexableRepositoryInterface');
-        $indexable = $this->getMock('Newscoop\Search\IndexableInterface');
+        $documentId = 'article-1-1';
+        $this->clientExpects(array('delete' => array('id' => $documentId)), true);
 
-        $repository->expects($this->once())
-            ->method('findIndexable')
-            ->will($this->returnValue(array($indexable)));
-
-        $indexable->expects($this->once())
-            ->method('isIndexable')
-            ->with($this->equalTo($this->config))
-            ->will($this->returnValue(false));
-
-        $indexable->expects($this->once())
-            ->method('getIndexed')
-            ->will($this->returnValue(new \DateTime()));
-
-        $indexable->expects($this->once())
-            ->method('getDocumentId')
-            ->will($this->returnValue('article-1-1'));
-
-        $indexable->expects($this->never())
-            ->method('getDocument');
-
-        $this->clientExpects(array('delete' => array('id' => 'article-1-1')), true);
-
-        $repository->expects($this->once())
-            ->method('setIndexedNow')
-            ->with($this->equalTo(array($indexable)));
-
-        $this->index->addRepository($repository);
-        $this->index->update();
+        $this->index->delete($documentId);
+        $this->index->flush();
     }
 
-    public function testDelete()
+    public function testDeleteAll()
     {
-        $this->client->expects($this->once())
-            ->method('setRawData')
-            ->with($this->equalTo(json_encode(array('delete' => array('id' => 'article-1-1')))), $this->equalTo('application/json'))
-            ->will($this->returnValue($this->client));
-
-        $this->client->expects($this->once())
-            ->method('request')
-            ->with($this->equalTo(\Zend_Http_Client::POST));
-
-        $article = $this->getMockBuilder('Newscoop\Entity\Article')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $article->expects($this->once())
-            ->method('getIndexed')
-            ->will($this->returnValue(new \DateTime()));
-
-        $article->expects($this->once())
-            ->method('getDocumentId')
-            ->will($this->returnValue('article-1-1'));
-
-        $event = new \sfEvent($this, 'delete', array('entity' => $article));
-
-        $this->index->delete($event);
-    }
-
-    public function testDeleteNotIndexed()
-    {
-        $article = $this->getMockBuilder('Newscoop\Entity\Article')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->client->expects($this->never())
-            ->method('setRawData');
-
-        $article->expects($this->once())
-            ->method('getIndexed')
-            ->will($this->returnValue(null));
-
-        $index = new Index($this->config, $this->client, $this->orm);
-
-        $event = new \sfEvent($this, 'delete', array('entity' => $article));
-        $index->delete($event);
-    }
-
-    public function testRebuild()
-    {
-        $repository = $this->getMock('Newscoop\Search\IndexableRepositoryInterface');
-        $repository->expects($this->exactly(2))
-            ->method('setIndexedNull');
-
         $this->clientExpects(array('delete' => array('query' => '*:*')), true);
-
-        $this->index->addRepository($repository);
-        $this->index->addRepository($repository);
-        $this->index->rebuild();
+        $this->index->deleteAll();
     }
 
     /**

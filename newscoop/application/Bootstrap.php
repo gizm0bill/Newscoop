@@ -183,15 +183,46 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('solr.client.select', 'Zend_Http_Client')
             ->addArgument('http://localhost:8983/solr/select/');
 
-        $container->register('index', 'Newscoop\Search\Index')
-            ->addArgument('%index%')
-            ->addArgument(new sfServiceReference('solr.client.update'))
-            ->addArgument(new sfServiceReference('em'))
-            ->setConfigurator(function($index) use ($container) {
-                $index->addRepository($container->getService('em')->getRepository('Newscoop\Entity\User'));
-                $index->addRepository($container->getService('em')->getRepository('Newscoop\Entity\Comment'));
-                $index->addRepository($container->getService('em')->getRepository('Newscoop\Entity\Article'));
-            });
+        $container->register('search.index', 'Newscoop\Search\Index')
+            ->addArgument(new sfServiceReference('solr.client.update'));
+
+        $container->register('article.search', 'Newscoop\Article\SearchService')
+            ->addArgument(new sfServiceReference('webcoder'))
+            ->addArgument($container['search']['article']);
+
+        $container->register('comment.search', 'Newscoop\Comment\SearchService');
+
+        $container->register('user.search', 'Newscoop\User\SearchService');
+
+        $container->register('twitter.search', 'Newscoop\Twitter\SearchService');
+
+        $container->register('twitter.client', 'Zend_Http_Client')
+            ->addArgument('https://api.twitter.com/1/favorites.json');
+
+        $container->register('tweet.repository', 'Newscoop\Twitter\TweetRepository')
+            ->addArgument(new sfServiceReference('twitter.client'))
+            ->addArgument(new sfServiceReference('solr.client.select'))
+            ->addArgument('%twitter%');
+
+        $container->register('search_indexer_article', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('article.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\Article'));
+
+        $container->register('search_indexer_comment', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('comment.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\Comment'));
+
+        $container->register('search_indexer_user', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('user.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\User'));
+
+        $container->register('search_indexer_twitter', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('twitter.search'))
+            ->addArgument(new sfServiceReference('tweet.repository'));
 
         $container->register('webcoder', 'Newscoop\Webcode\Mapper');
 

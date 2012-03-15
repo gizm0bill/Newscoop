@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputArgument,
 /**
  * Index clear command
  */
-class ClearIndexCommand extends Console\Command\Command
+class ClearIndexCommand extends AbstractIndexCommand
 {
     /**
      * @see Console\Command\Command
@@ -32,7 +32,10 @@ class ClearIndexCommand extends Console\Command\Command
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $this->getHelper('container')->getService('index')->rebuild();
+        foreach ($this->getIndexers() as $indexer) {
+            $indexer->deleteAll();
+        }
+
         $output->writeln('Search Index cleared.');
     }
 }

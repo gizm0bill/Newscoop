@@ -91,8 +91,11 @@ listener[] = community_feed
 listener[] = user_points
 listener[] = user_attributes
 listener[] = comment_notification
+listener[] = search_indexer_article
+listener[] = search_indexer_comment
+listener[] = search_indexer_user
 
-subscriber[] = index
+subscriber = 0
 
 ; audit events
 audit.events[] = comment.update
@@ -168,6 +171,10 @@ comment.events[] = comment.recommended
 comment.events[] = comment.delete
 
 comment_notification.events[] = comment.create
+
+search_indexer_article.events[] = article.delete
+search_indexer_comment.events[] = comment.delete
+search_indexer_user.events[] = user.delete
 
 ; autoloader dirs
 autoloader.dirs[] = APPLICATION_PATH "/../classes"
@@ -251,11 +258,13 @@ image.cache_path = APPLICATION_PATH "/../images/cache"
 
 index.update_url = "http://localhost:8983/solr/update/json?commit=true"
 index.select_url = "http://localhost:8983/solr/select/"
-index.article_type[] = "news"
-index.article_type[] = "newswire"
-index.article_type[] = "dossier"
-index.article_type[] = "event"
-index.article_type[] = "blog"
+search.article.type[] = "news"
+search.article.type[] = "newswire"
+search.article.type[] = "dossier"
+search.article.type[] = "event"
+search.article.type[] = "link"
+
+twitter.id = "tageswoche"
 
 [staging : production]
 

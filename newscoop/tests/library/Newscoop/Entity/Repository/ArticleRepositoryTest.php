@@ -34,64 +34,34 @@ class ArticleRepositoryTest extends \TestCase
     public function testInstance()
     {
         $this->assertInstanceOf('Newscoop\Entity\Repository\ArticleRepository', $this->repository);
-        $this->assertInstanceOf('Newscoop\Search\IndexableRepositoryInterface', $this->repository);
     }
 
-    public function testFindIndexable()
+    public function testSearchRepositoryInterface()
     {
-        $language = new Language();
-        $this->orm->persist($language);
-        $this->orm->flush($language);
+        $this->assertInstanceOf('Newscoop\Search\RepositoryInterface', $this->repository);
+        $this->assertEmpty($this->repository->getBatch());
 
-        $this->assertEmpty($this->repository->findIndexable());
-
-        $article = new Article(1, $language);
-        $this->orm->persist($article);
-        $this->orm->flush($article);
-
-        $this->assertNotEmpty($this->repository->findIndexable());
-
-        $article->setIndexed(new \DateTime('-1 min'));
-        $this->orm->flush();
-
-        $this->assertNotEmpty($this->repository->findIndexable());
-
-        $article->setIndexed(new \DateTime());
-        $this->orm->flush();
-
-        $this->assertEmpty($this->repository->findIndexable());
-    }
-
-    public function testSetIndexedNow()
-    {
         $language = new Language();
         $this->orm->persist($language);
         $this->orm->flush();
 
-        $article = new Article(1, $language);
-        $article->setIndexed(new \DateTime('-5 min'));
-        $article->setUpdated(new \DateTime(gmdate('Y-m-d H:i:s'))); // sqlite is using gmtime for CURRENT_TIME
-        $this->orm->persist($article);
+        $article1 = new Article(1, $language);
+        $article2 = new Article(2, $language);
+        $article1->setUpdated(new \DateTime('-1 day')); // utc sqlite fix
+        $article2->setUpdated(new \DateTime('-1 day')); // utc sqlite fix
+        $this->orm->persist($article1);
+        $this->orm->persist($article2);
         $this->orm->flush();
 
-        $this->repository->setIndexedNow(array($article));
+        $this->assertEquals(2, count($this->repository->getBatch()));
 
-        $this->assertEmpty($this->repository->findIndexable());
-    }
+        $this->repository->setIndexedNow(array($article1));
 
-    public function testSetIndexedNull()
-    {
-        $language = new Language();
-        $this->orm->persist($language);
-        $this->orm->flush();
-
-        $article = new Article(1, $language);
-        $article->setIndexed(new \DateTime());
-        $this->orm->persist($article);
-        $this->orm->flush();
+        $this->assertEquals(1, count($this->repository->getBatch()));
+        $this->assertEquals(array($article2), $this->repository->getBatch());
 
         $this->repository->setIndexedNull();
 
-        $this->assertNotEmpty($this->repository->findIndexable());
+        $this->assertEquals(2, count($this->repository->getBatch()));
     }
 }

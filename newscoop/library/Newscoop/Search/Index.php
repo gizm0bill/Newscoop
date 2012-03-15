@@ -15,24 +15,9 @@ class Index
     const APPLICATION_JSON = 'application/json';
 
     /**
-     * @var array
-     */
-    private $config = array();
-
-    /**
      * @var Zend_Http_Client
      */
     private $client;
-
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    private $orm;
-
-    /**
-     * @var array
-     */
-    private $repositories = array();
 
     /**
      * @var array
@@ -45,97 +30,47 @@ class Index
     private $delete = array();
 
     /**
-     * @param array $config
      * @param Zend_Http_Client $client
-     * @param Doctrine\ORM\EntityManager $orm
      */
-    public function __construct(array $config, \Zend_Http_Client $client, \Doctrine\ORM\EntityManager $orm)
+    public function __construct(\Zend_Http_Client $client)
     {
-        $this->config = array_merge($this->config, $config);
         $this->client = $client;
-        $this->orm = $orm;
     }
 
     /**
-     * Add repository
+     * Add document
      *
-     * @param Newscoop\Search\IndexableRepositoryInterface $repository
+     * @param array $doc
      * @return void
      */
-    public function addRepository(IndexableRepositoryInterface $repository)
+    public function add(array $doc)
     {
-        $this->repositories[] = $repository;
-    }
-
-    /**
-     * Update index
-     *
-     * @return void
-     */
-    public function update()
-    {
-        foreach ($this->repositories as $repository) {
-            $updated = array();
-            foreach ($repository->findIndexable() as $indexable) {
-                if ($indexable->isIndexable($this->config)) {
-                    $this->add[] = $indexable->getDocument();
-                } else if ($indexable->getIndexed() !== null) {
-                    $this->delete[] = $indexable->getDocumentId();
-                }
-
-                $updated[] = $indexable;
-            }
-
-            $this->flush();
-            if (!empty($updated)) {
-                $repository->setIndexedNow($updated);
-            }
-        }
+        $this->add[] = $doc;
     }
 
     /**
      * Delete document from index
      *
-     * @param Newscoop\Search\IndexableInterface $indexable
+     * @param string $documentId
      * @return void
      */
-    public function delete(\sfEvent $event)
+    public function delete($documentId)
     {
-        $indexable = $event['entity'];
-        if ($indexable->getIndexed() !== null) {
-            $this->client->setRawData(json_encode(array('delete' => array('id' => $indexable->getDocumentId()))), self::APPLICATION_JSON);
-            $this->client->request(\Zend_Http_Client::POST);
-        }
+        $this->delete[] = $documentId;
     }
 
     /**
-     * Rebuild index
+     * Delete all docs
      *
      * @return void
      */
-    public function rebuild()
+    public function deleteAll()
     {
         $this->client->setRawData(json_encode(array('delete' => array('query' => '*:*'))), self::APPLICATION_JSON);
         $response = $this->client->request(\Zend_Http_Client::POST);
-        if ($response->isSuccessful()) {
-            foreach ($this->repositories as $repository) {
-                $repository->setIndexedNull();
-            }
+        if (!$response->isSuccessful()) {
+            $this->throwException($response);
         }
-    }
-
-    /**
-     * Get subscribed events
-     *
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        return array(
-            'article.delete' => 'delete',
-            'user.delete' => 'delete',
-            'comment.delete' => 'delete',
-        );
     }
 
     /**
@@ -143,7 +78,7 @@ class Index
      *
      * @return void
      */
-    private function flush()
+    public function flush()
     {
         $commands = array_merge($this->buildAddCommands(), $this->buildDeleteCommands());
         if (empty($commands)) {
@@ -159,7 +94,7 @@ class Index
             return;
         }
 
-        throw new \RuntimeException($response->getMessage(), $response->getStatus());
+        $this->throwException($response);
     }
 
     /**
@@ -185,5 +120,16 @@ class Index
         }
 
         return $commands;
+    }
+
+    /**
+     * Throw exception by given response
+     *
+     * @param Zend_Http_Response $response
+     * @return void
+     */
+    private function throwException(\Zend_Http_Response $response)
+    {
+        throw new \RuntimeException($response->getMessage(), $response->getStatus());
     }
 }

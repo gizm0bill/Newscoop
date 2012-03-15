@@ -10,10 +10,10 @@ namespace Newscoop\Entity;
 /**
  * Article entity
  *
- * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository") @HasLifecycleCallbacks
+ * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository")
  * @Table(name="Articles")
  */
-class Article implements \Newscoop\Search\IndexableInterface, \Newscoop\Image\SetImageServiceInterface
+class Article implements \Newscoop\Search\DocumentInterface
 {
     const STATUS_PUBLISHED = 'Y';
     const STATUS_NOT_PUBLISHED = 'N';
@@ -123,6 +123,15 @@ class Article implements \Newscoop\Search\IndexableInterface, \Newscoop\Image\Se
     private $authors;
 
     /**
+     * @ManyToMany(targetEntity="Newscoop\Entity\Topic")
+     * @JoinTable(name="ArticleTopics",
+     *      joinColumns={@JoinColumn(name="fk_article_number", referencedColumnName="Number")}
+     *      )
+     * @var Doctrine\Common\Collections\Collection
+     */
+    private $topics;
+
+    /**
      * @Column(type="datetime", nullable=True)
      * @var DateTime
      */
@@ -144,6 +153,7 @@ class Article implements \Newscoop\Search\IndexableInterface, \Newscoop\Image\Se
         $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
 
         $this->created = $this->date = date_create()->format(self::DATE_FORMAT); 
+        $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -487,110 +497,26 @@ class Article implements \Newscoop\Search\IndexableInterface, \Newscoop\Image\Se
     }
 
     /**
-     * Get document id
+     * Test if article is published
      *
-     * @return string
-     */
-    public function getDocumentId()
-    {
-        return sprintf('article-%d-%d', $this->number, $this->getLanguageId());
-    }
-
-    /**
-     * Test if article can be indexed
-     *
-     * @param array $config
      * @return bool
      */
-    public function isIndexable(array $config = array())
+    public function isPublished()
     {
-        return $this->workflowStatus === self::STATUS_PUBLISHED && in_array($this->type, array_key_exists('article_type', $config) ? $config['article_type'] : array());
+        return $this->workflowStatus === self::STATUS_PUBLISHED;
     }
 
     /**
-     * Set webcoder
+     * Add topic
      *
-     * @PostLoad
-     * @param Newscoop\Webcode\Mapper $webcoder
+     * @param ArticleTopic $topic
      * @return void
      */
-    public function setWebcoder(\Newscoop\Webcode\Mapper $webcoder = null)
+    public function addTopic(ArticleTopic $topic)
     {
-        $this->webcoder = $webcoder !== null ? $webcoder : self::getDefaultWebcoder();
-    }
-
-    /**
-     * Get webcode mapper
-     *
-     * @return Newscoop\Webcode\Mapper
-     */
-    private static function getDefaultWebcoder()
-    {
-        static $webcoder;
-        if ($webcoder === null) {
-            $webcoder = new \Newscoop\Webcode\Mapper;
+        if (!$this->topics->contains($topic)) {
+            $this->topics->add($topic);
+            $topic->setArticle($this);
         }
-
-        return $webcoder;
-    }
-
-    /**
-     * Get webcode
-     *
-     * @return string
-     */
-    public function getWebcode()
-    {
-        return $this->webcoder->encode($this->number);
-    }
-
-    /**
-     * Get document
-     *
-     * @return array
-     */
-    public function getDocument()
-    {
-        $doc = array(
-            'id' => $this->getDocumentId(),
-            'headline' => $this->getTitle(),
-            'type' => $this->getType(),
-            'published' => gmdate('Y-m-d\TH:i:s\Z', date_create($this->getPublishDate())->getTimestamp()),
-            'author' => array_map(function($author) {
-                return $author->getFullName();
-            }, $this->getAuthors()),
-            'webcode' => $this->getWebcode(),
-        );
-
-        switch ($this->getType()) {
-            case 'blog':
-            case 'news':
-                $doc['lead'] = $this->getData('lede');
-                $doc['content'] = $this->getData('body');
-                break;
-
-            case 'dossier':
-                $doc['lead'] = $this->getData('lede');
-                $doc['content'] = $this->getData('history');
-                break;
-
-            case 'newswire':
-                $doc['lead'] = $this->getData('DataLead');
-                $doc['content'] = $this->getData('DataContent');
-                break;
-        }
-
-        return array_filter($doc);
-    }
-
-    /**
-     * Set image service
-     *
-     * @param Newscoop\Image\ImageService $imageService
-     * @return void
-     */
-    public function setImageService(\Newscoop\Image\ImageService $imageService)
-    {
-        $this->imageService = $imageService;
     }
 }

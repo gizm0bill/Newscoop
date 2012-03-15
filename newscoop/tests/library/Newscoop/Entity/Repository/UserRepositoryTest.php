@@ -33,27 +33,28 @@ class UserRepositoryTest extends \TestCase
     public function testInstance()
     {
         $this->assertInstanceOf('Newscoop\Entity\Repository\UserRepository', $this->repository);
-        $this->assertInstanceOf('Newscoop\Search\IndexableRepositoryInterface', $this->repository);
     }
 
-    public function testFindIndexable()
+    public function testSearchRepositoryInterface()
     {
-        $this->assertEmpty($this->repository->findIndexable());
+        $this->assertInstanceOf('Newscoop\Search\RepositoryInterface', $this->repository);
+        $this->assertEmpty($this->repository->getBatch());
 
         $user = new User('email');
+        $updated = new \ReflectionProperty($user, 'updated');
+        $updated->setAccessible(true);
+        $updated->setValue($user, date_create('-1 day')); // utc sqlite fix
         $this->orm->persist($user);
-        $this->orm->flush($user);
-
-        $this->assertNotEmpty($this->repository->findIndexable());
-
-        $user->setIndexed(new \DateTime('-1 min'));
         $this->orm->flush();
 
-        $this->assertNotEmpty($this->repository->findIndexable());
+        $this->assertNotEmpty($this->repository->getBatch());
 
-        $user->setIndexed(new \DateTime());
-        $this->orm->flush();
+        $this->repository->setIndexedNow(array($user));
 
-        $this->assertEmpty($this->repository->findIndexable());
+        $this->assertEmpty($this->repository->getBatch());
+
+        $this->repository->setIndexedNull();
+
+        $this->assertNotEmpty($this->repository->getBatch());
     }
 }

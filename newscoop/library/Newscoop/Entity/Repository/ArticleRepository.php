@@ -15,14 +15,14 @@ use DateTime,
 /**
  * Article repository
  */
-class ArticleRepository extends DatatableSource implements \Newscoop\Search\IndexableRepositoryInterface
+class ArticleRepository extends DatatableSource implements \Newscoop\Search\RepositoryInterface
 {
     /**
-     * Find indexable articles
+     * Get articles for indexing
      *
      * @return array
      */
-    public function findIndexable()
+    public function getBatch()
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.indexed IS NULL OR a.indexed < a.date')

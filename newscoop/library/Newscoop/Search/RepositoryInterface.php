@@ -8,27 +8,27 @@
 namespace Newscoop\Search;
 
 /**
- * Indexable Repository interface
+ * Repository interface
  */
-interface IndexableRepositoryInterface
+interface RepositoryInterface
 {
     /**
-     * Find indexable entities
+     * Get items to process
      *
      * @return array
      */
-    public function findIndexable();
+    public function getBatch();
 
     /**
-     * Set indexed to now for given entities
+     * Set indexed to now for given items
      *
-     * @param array $entities
+     * @param array $items
      * @return void
      */
-    public function setIndexedNow(array $entities);
+    public function setIndexedNow(array $items);
 
     /**
-     * Set indexed to null for all entities
+     * Set indexed to null for all items
      *
      * @return void
      */

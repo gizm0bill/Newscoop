@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityRepository,
 /**
  * User repository
  */
-class UserRepository extends EntityRepository implements \Newscoop\Search\IndexableRepositoryInterface
+class UserRepository extends EntityRepository implements \Newscoop\Search\RepositoryInterface
 {
     /** @var array */
     private $setters = array(
@@ -501,7 +501,7 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Indexa
      *
      * @return array
      */
-    public function findIndexable()
+    public function getBatch()
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.indexed IS NULL OR u.indexed < u.updated')

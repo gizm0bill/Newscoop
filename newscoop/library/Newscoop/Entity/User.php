@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection,
  *      })
  *  @HasLifecycleCallbacks
  */
-class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterface, \Newscoop\Image\SetImageServiceInterface
+class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\DocumentInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -810,53 +810,5 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\IndexableInterf
     public function getIndexed()
     {
         return $this->indexed;
-    }
-
-    /**
-     * Get document id
-     *
-     * @return string
-     */
-    public function getDocumentId()
-    {
-        return sprintf('user-%d', $this->id);
-    }
-
-    /**
-     * Test if user is indexable
-     *
-     * @param array $config
-     * @return bool
-     */
-    public function isIndexable(array $config = array())
-    {
-        return $this->isPublic() && $this->isActive();
-    }
-
-    /**
-     * Set image service
-     *
-     * @param Newscoop\Image\ImageService $imageService
-     * @return void
-     */
-    public function setImageService(\Newscoop\Image\ImageService $imageService)
-    {
-        $this->imageService = $imageService;
-    }
-
-    /**
-     * Get document
-     *
-     * @return array
-     */
-    public function getDocument()
-    {
-        return array(
-            'id' => $this->getDocumentId(),
-            'type' => 'user',
-            'user' => $this->getUsername(),
-            'bio' => $this->getAttribute('bio'),
-            'image' => $this->image !== null ? $this->imageService->getSrc($this->image, 65, 65, 'crop') : '',
-        );
     }
 }

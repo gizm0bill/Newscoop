@@ -16,7 +16,7 @@ use Newscoop\Entity\Comment\Commenter;
  * @table(name="comment")
  * @entity(repositoryClass="Newscoop\Entity\Repository\CommentRepository")
  */
-class Comment implements \Newscoop\Search\IndexableInterface
+class Comment implements \Newscoop\Search\DocumentInterface
 {
     private $allowedEmpty = array( 'br', 'input', 'image' );
 
@@ -769,38 +769,12 @@ class Comment implements \Newscoop\Search\IndexableInterface
     }
 
     /**
-     * Get document id
+     * Test if comment is approved
      *
-     * @return string
-     */
-    public function getDocumentId()
-    {
-        return sprintf('comment-%d', $this->id);
-    }
-
-    /**
-     * Test if comment is indexable
-     *
-     * @param array $config
      * @return bool
      */
-    public function isIndexable(array $config = array())
+    public function isApproved()
     {
         return $this->getStatus() === 'approved';
-    }
-
-    /**
-     * Get document
-     *
-     * @return array
-     */
-    public function getDocument()
-    {
-        return array(
-            'id' => $this->getDocumentId(),
-            'type' => 'comment',
-            'subject' => $this->getSubject(),
-            'message' => $this->getMessage(),
-        );
     }
 }

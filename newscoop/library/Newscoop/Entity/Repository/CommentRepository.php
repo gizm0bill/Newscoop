@@ -18,7 +18,7 @@ use Newscoop\Entity\User;
 /**
  * Comment repository
  */
-class CommentRepository extends DatatableSource implements \Newscoop\Search\IndexableRepositoryInterface
+class CommentRepository extends DatatableSource implements \Newscoop\Search\RepositoryInterface
 {
 
     /**
@@ -477,7 +477,7 @@ class CommentRepository extends DatatableSource implements \Newscoop\Search\Inde
      *
      * @return array
      */
-    public function findIndexable()
+    public function getBatch()
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.indexed IS NULL OR c.indexed < c.time_updated')
