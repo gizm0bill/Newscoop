@@ -33,7 +33,6 @@ class TageswocheQuickLinks extends Widget
     /* @var int */
     protected $current_issue = null;
 
-
     /**
      * @return array
      */
@@ -49,15 +48,14 @@ class TageswocheQuickLinks extends Widget
                 $item['issue'] = $this->getCurrentIssue($item['publication'], $item['language']);
             }
 
-            if (isset($item['base_link'])) {
-                $link = $item['base_link'];
+            $link = isset($item['base_link']) ? $item['base_link'] : self::BASE_LINK;
+
+            if ($item['override_params']) {
                 $params = array(
                     'Pub' => 'publication',
                     'Issue' => 'issue',
                     'Language' => 'language',
                 );
-            } else {
-                $link = self::BASE_LINK;
             }
 
             $params_query = array();
