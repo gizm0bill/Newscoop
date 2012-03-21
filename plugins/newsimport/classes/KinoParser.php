@@ -1218,6 +1218,10 @@ class KinoData_Parser_SimpleXML {
                     $one_movie_key = trim('' . $one_movie->filmkey); // connector to the movies data, but can be empty!
                     $one_movie_title = trim('' . $one_movie->filmtitle);
                     $one_movie_desc = trim('' . $one_movie->filmcig_d);
+                    $one_movie_desc_mini = trim('' . $one_movie->filmminitext);
+                    if (strlen($one_movie_desc_mini) > strlen($one_movie_desc)) {
+                        $one_movie_desc = $one_movie_desc_mini;
+                    }
                     $one_movie_other = array();
                     foreach ($other_desc_parts as $one_desc_part) {
                         $one_movie_oth_one = trim('' . $one_movie->$one_desc_part);
