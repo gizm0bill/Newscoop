@@ -1,0 +1,54 @@
+<?php
+/**
+ * @package Newscoop
+ * @copyright 2012 Sourcefabric o.p.s.
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt
+ */
+
+namespace Newscoop\Services;
+
+use Doctrine\ORM\EntityManager,
+    Newscoop\Entity\Article,
+    Newscoop\Entity\Language;
+
+/**
+ * Article service
+ */
+class ArticleService
+{
+    /** @var Doctrine\ORM\EntityManager */
+    private $em;
+
+
+    /**
+     * @param array $config
+     * @param Doctrine\ORM\EntityManager $em
+     */
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
+    /**
+     * Find an article
+     *
+     * @param int $number
+     * @return Newscoop\Entity\Article
+     */
+    public function findArticle($number)
+    {
+        $language = $this->em->getRepository('Newscoop\Entity\Language')->find(1);
+        return $this->getRepository()
+            ->find(array('language' => $language->getId(), 'number' => $number));
+    }
+
+    /**
+     * Get repository
+     *
+     * @return Doctrine\ORM\EntityRepository
+     */
+    private function getRepository()
+    {
+        return $this->em->getRepository('Newscoop\Entity\Article');
+    }
+}

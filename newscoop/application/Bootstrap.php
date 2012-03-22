@@ -71,6 +71,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('view');
         $container->setService('view', $this->getResource('view'));
 
+        $container->register('article', 'Newscoop\Services\ArticleService')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('section', 'Newscoop\Services\SectionService')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('publication', 'Newscoop\Services\PublicationService')
+            ->addArgument(new sfServiceReference('em'));
+
         $container->register('image', 'Newscoop\Image\ImageService')
             ->addArgument('%image%')
             ->addArgument(new sfServiceReference('em'));
