@@ -45,7 +45,6 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function listAction()
     {
-        /** @todo */
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
         
         $response = array();
@@ -57,25 +56,39 @@ class Api_BlogsController extends Zend_Controller_Action
         $publication = new Publication(self::PUBLICATION);
         $alias = new Alias($publication->getDefaultAliasId());
         
+        $rank = 1;
         foreach ($sections as $section) {
             $articles = $this->_helper->service('article')->findBy(array('section' => $section->getNumber(), 'type' => 'bloginfo'));
             if ($articles[0]) {
                 $blogInfo = new ArticleData('bloginfo', $articles[0]->getNumber(), self::LANGUAGE);
                 $posts = $this->_helper->service('article')->findBy(array('section' => $section->getNumber(), 'type' => 'blog'), array('published' => 'desc'));
                 $lastModified = '0000-00-00 00:00:00';
+                $articleImages = ArticleImage::GetImagesByArticleNumber($articles[0]->getNumber());
+                $imageUrl = $articleImages[0]->getImage()->getImageUrl();
+                
                 if ($posts[0]) {
                     $lastModified = $posts[0]->getPublishDate();
+                    $authors = $posts[0]->getAuthors();
+                    
+                    $authorList = array();
+                    foreach ($authors as $author) {
+                        $authorList[] = $author->getfullName();
+                    }
+                    
+                    $authorNames = implode(', ', $authorList);
                 }
                 
                 $response[] = array(
-                    'url' => $alias->getName().'', // todo
+                    'url' => $alias->getName().'/de/blogs/'.$section->getName().'/',
                     'short_name' => $blogInfo->getFieldValue('short_name'),
                     'motto' => $blogInfo->getFieldValue('motto'),
-                    'rank' => '',
-                    'image_url' => '',
-                    'author_names' => '',
+                    'rank' => $rank,
+                    'image_url' => $imageUrl,
+                    'author_names' => $authorNames,
                     'last_modified' => $lastModified
                 );
+                
+                $rank = $rank + 1;
             }
         }
         

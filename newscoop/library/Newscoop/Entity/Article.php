@@ -365,6 +365,16 @@ class Article
     {
         $this->authors->add($author);
     }
+    
+    /**
+     * Get authors
+     *
+     * @return Newscoop\Entity\User
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
+    }
 
     /**
      * Set status
