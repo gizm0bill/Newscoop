@@ -38,6 +38,20 @@ class PublicationService
         return $this->getRepository()
             ->find($id);
     }
+    
+    /**
+     * Find by given criteria
+     *
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return mixed
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
+    }
 
     /**
      * Get publication repository
