@@ -15,6 +15,8 @@ class Api_BlogsController extends Zend_Controller_Action
     
     /** @var Zend_Controller_Request_Http */
     private $request;
+    
+    private $url;
 
 
     /**
@@ -22,8 +24,11 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function init()
     {
+        global $Campsite;
+        
         $this->_helper->layout->disableLayout();
         $this->request = $this->getRequest();
+        $this->url = $Campsite['WEBSITE_URL'];
     }
 
     /**
@@ -46,13 +51,25 @@ class Api_BlogsController extends Zend_Controller_Action
         
         $response = array();
         
-        $sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'language' => self::LANGUAGE));
+        $sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION));
+        //$sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'language' => self::LANGUAGE));
         //$sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'issue' => self::ISSUE, 'language' => self::LANGUAGE));
         
         foreach ($sections as $section) {
-            $blogInfo = $this->_helper->service('article')->findBy(array('section' => $section->getId()));
-            // tidy bloginfo or whatever...
-            // $response[] = $blogInfo;
+            $articles = $this->_helper->service('article')->findBy(array('section' => $section->getNumber(), 'type' => 'bloginfo'));
+            if ($articles[0]) {
+                $blogInfo = $articles[0];
+                
+                $response[] = array(
+                    'url' => '',
+                    'short_name' => '',
+                    'motto' => '',
+                    'rank' => '',
+                    'image_url' => '',
+                    'author_names' => '',
+                    'last_modified' => ''
+                );
+            }
         }
         
         $this->_helper->json($response);
@@ -79,6 +96,11 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function postsListAction()
     {
+        $parameters = $this->request->getParams();
+        $blogId = $parameters['blog_id'];
+        
+        
+        
         echo('list');die;
     }
     
@@ -89,6 +111,11 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function postsItemAction()
     {
+        $parameters = $this->request->getParams();
+        $postId = $parameters['post_id'];
+        
+        
+        
         echo('item');die;
     }
 }

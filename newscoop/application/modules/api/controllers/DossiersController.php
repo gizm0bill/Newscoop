@@ -31,7 +31,7 @@ class Api_DossiersController extends Zend_Controller_Action
     }
 
     /**
-     * Return list of articles.
+     * Return list of dossiers.
      *
      * @return json
      */
@@ -47,6 +47,21 @@ class Api_DossiersController extends Zend_Controller_Action
         foreach ($articles as $article) {
             $response[] = $article->getId();
         }
+        
+        $this->_helper->json($response);
+    }
+    
+    /**
+     * Return list of articles in given dossier.
+     *
+     * @return json
+     */
+    public function articlesAction()
+    {
+        /** @todo */
+        $this->getHelper('contextSwitch')->addActionContext('articles', 'json')->initContext();
+        
+        $response = array();
         
         $this->_helper->json($response);
     }
