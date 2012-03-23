@@ -17,8 +17,7 @@ class Api_BlogsController extends Zend_Controller_Action
     private $request;
     
     private $url;
-
-
+    
     /**
      * Init controller.
      */
@@ -55,22 +54,32 @@ class Api_BlogsController extends Zend_Controller_Action
         //$sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'language' => self::LANGUAGE));
         //$sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'issue' => self::ISSUE, 'language' => self::LANGUAGE));
         
+        $publication = new Publication(self::PUBLICATION);
+        $alias = new Alias($publication->getDefaultAliasId());
+        
         foreach ($sections as $section) {
             $articles = $this->_helper->service('article')->findBy(array('section' => $section->getNumber(), 'type' => 'bloginfo'));
             if ($articles[0]) {
-                $blogInfo = $articles[0];
+                $blogInfo = new ArticleData('bloginfo', $articles[0]->getNumber(), self::LANGUAGE);
+                $posts = $this->_helper->service('article')->findBy(array('section' => $section->getNumber(), 'type' => 'blog'), array('published' => 'desc'));
+                $lastModified = '0000-00-00 00:00:00';
+                if ($posts[0]) {
+                    $lastModified = $posts[0]->getPublishDate();
+                }
                 
                 $response[] = array(
-                    'url' => '',
-                    'short_name' => '',
-                    'motto' => '',
+                    'url' => $alias->getName().'', // todo
+                    'short_name' => $blogInfo->getFieldValue('short_name'),
+                    'motto' => $blogInfo->getFieldValue('motto'),
                     'rank' => '',
                     'image_url' => '',
                     'author_names' => '',
-                    'last_modified' => ''
+                    'last_modified' => $lastModified
                 );
             }
         }
+        
+        //die;
         
         $this->_helper->json($response);
     }
