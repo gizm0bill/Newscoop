@@ -41,6 +41,20 @@ class ArticleService
         return $this->getRepository()
             ->find(array('language' => $language->getId(), 'number' => $number));
     }
+    
+    /**
+     * Find by given criteria
+     *
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return mixed
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
+    }
 
     /**
      * Get repository
