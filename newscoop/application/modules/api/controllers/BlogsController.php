@@ -119,9 +119,9 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function postsListAction()
     {
-        $response = array();
         $parameters = $this->request->getParams();
         $blogId = $parameters['blog_id'];
+        $response = array();
         
         $sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'number' => $blogId));
         if ($sections[0]) {
@@ -138,6 +138,7 @@ class Api_BlogsController extends Zend_Controller_Action
                     $imageUrl = '';
                 }
                 $response[] = array(
+                    'id' => $post->getNumber(),
                     'title' => $post->getTitle(),
                     'short_name' => $postData->getFieldValue('short_name'),
                     'lede' => $postData->getFieldValue('lede'),
@@ -159,9 +160,32 @@ class Api_BlogsController extends Zend_Controller_Action
     {
         $parameters = $this->request->getParams();
         $postId = $parameters['post_id'];
+        $response = array();
         
+        $posts = $this->_helper->service('article')->findBy(array('number' => $postId, 'type' => 'blog'));
+        if ($posts[0]) {
+            $post = $posts[0];
+            $postData = new ArticleData('blog', $post->getNumber(), self::LANGUAGE);
+            $postImages = ArticleImage::GetImagesByArticleNumber($post->getNumber());
+            if ($postImages[0]) {
+                $imageUrl = $postImages[0]->getImage()->getImageUrl();
+            }
+            else {
+                $imageUrl = '';
+            }
+            
+            $response = array(
+                'title' => $post->getTitle(),
+                'short_name' => $postData->getFieldValue('short_name'),
+                'lede' => $postData->getFieldValue('lede'),
+                'vimeo_url' => $postData->getFieldValue('vimeo_url'),
+                'youtube_shortcode' => $postData->getFieldValue('youtube_shortcode'),
+                'body' => $postData->getFieldValue('body'),
+                'image_url' => $imageUrl,
+                'last_modified' => $post->getPublishDate()
+            );
+        }
         
-        
-        echo('item');die;
+        $this->_helper->json($response);
     }
 }
