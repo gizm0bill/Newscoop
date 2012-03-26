@@ -80,7 +80,7 @@ class Api_BlogsController extends Zend_Controller_Action
                 
                 $response[] = array(
                     'id' => $section->getNumber(),
-                    'url' => $alias->getName().'/de/blogs/'.$section->getName().'/',
+                    'url' => $this->url.'/api/blogs/posts?blog_id='.$section->getNumber(),
                     'short_name' => $blogInfo->getFieldValue('short_name'),
                     'motto' => $blogInfo->getFieldValue('motto'),
                     'rank' => $rank,
@@ -137,7 +137,8 @@ class Api_BlogsController extends Zend_Controller_Action
                 else {
                     $imageUrl = '';
                 }
-                $response[] = array(
+                $response[] = array( // add url
+                    'url' => $this->url.'/api/blogs/posts?post_id='.$post->getNumber(),
                     'id' => $post->getNumber(),
                     'title' => $post->getTitle(),
                     'short_name' => $postData->getFieldValue('short_name'),
