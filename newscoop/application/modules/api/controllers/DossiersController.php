@@ -9,8 +9,13 @@
  */
 class Api_DossiersController extends Zend_Controller_Action
 {
+    const PUBLICATION = 5;
+    const LANGUAGE = 5;
+    
     /** @var Zend_Controller_Request_Http */
     private $request;
+    
+    private $url;
 
 
     /**
@@ -18,8 +23,11 @@ class Api_DossiersController extends Zend_Controller_Action
      */
     public function init()
     {
+        global $Campsite;
+        
         $this->_helper->layout->disableLayout();
         $this->request = $this->getRequest();
+        $this->url = $Campsite['WEBSITE_URL'];
     }
 
     /**
@@ -37,7 +45,6 @@ class Api_DossiersController extends Zend_Controller_Action
      */
     public function listAction()
     {
-        /** @todo */
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
         
         $articles = $this->_helper->service('article')->findBy(array('type' => 'dossier'));
@@ -45,7 +52,21 @@ class Api_DossiersController extends Zend_Controller_Action
         $response = array();
         
         foreach ($articles as $article) {
-            $response[] = $article->getId();
+            $articleData = new ArticleData('dossier', $article->getNumber(), self::LANGUAGE);
+            $articleImages = ArticleImage::GetImagesByArticleNumber($article->getNumber());
+            if ($articleImages[0]) {
+                $imageUrl = $articleImages[0]->getImage()->getImageUrl();
+            }
+            else {
+                $imageUrl = '';
+            }
+            $response[] = array(
+                'id' => $article->getNumber(),
+                'url' => $this->url.'/api/dossiers/articles?dossier_id='.$article->getNumber(),
+                'title' => $article->getTitle(),
+                'teaser' => $articleData->getFieldValue('lede'),
+                'image_url' => $imageUrl
+            );
         }
         
         $this->_helper->json($response);
@@ -58,10 +79,21 @@ class Api_DossiersController extends Zend_Controller_Action
      */
     public function articlesAction()
     {
-        /** @todo */
         $this->getHelper('contextSwitch')->addActionContext('articles', 'json')->initContext();
         
         $response = array();
+        $parameters = $this->request->getParams();
+        
+        if ($parameters['dossier_id']) {
+            $dossierId = $parameters['dossier_id'];
+        }
+        else {
+            $articles = $this->_helper->service('article')->findBy(array('type' => 'dossier'), array('published' => 'desc'));
+            $dossierId = $articles[0]->getNumber();
+        }
+        
+        $dossier = $this->_helper->service('article')->findBy(array('number' => $dossierId, 'language' => self::LANGUAGE));
+        var_dump($dossier);die;
         
         $this->_helper->json($response);
     }
