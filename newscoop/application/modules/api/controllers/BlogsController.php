@@ -79,6 +79,7 @@ class Api_BlogsController extends Zend_Controller_Action
                 }
                 
                 $response[] = array(
+                    'id' => $section->getNumber(),
                     'url' => $alias->getName().'/de/blogs/'.$section->getName().'/',
                     'short_name' => $blogInfo->getFieldValue('short_name'),
                     'motto' => $blogInfo->getFieldValue('motto'),
@@ -118,12 +119,35 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function postsListAction()
     {
+        $response = array();
         $parameters = $this->request->getParams();
         $blogId = $parameters['blog_id'];
         
-        
-        
-        echo('list');die;
+        $sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'number' => $blogId));
+        if ($sections[0]) {
+            $section = $sections[0];
+            $posts = $this->_helper->service('article')->findBy(array('section' => $section->getNumber(), 'type' => 'blog'), array('published' => 'desc'));
+            
+            foreach ($posts as $post) {
+                $postData = new ArticleData('blog', $post->getNumber(), self::LANGUAGE);
+                $postImages = ArticleImage::GetImagesByArticleNumber($post->getNumber());
+                if ($postImages[0]) {
+                    $imageUrl = $postImages[0]->getImage()->getImageUrl();
+                }
+                else {
+                    $imageUrl = '';
+                }
+                $response[] = array(
+                    'title' => $post->getTitle(),
+                    'short_name' => $postData->getFieldValue('short_name'),
+                    'lede' => $postData->getFieldValue('lede'),
+                    'image_url' => $imageUrl,
+                    'last_modified' => $post->getPublishDate()
+                );
+            }
+        }
+                        
+        $this->_helper->json($response);
     }
     
     /**
