@@ -93,7 +93,17 @@ class Api_DossiersController extends Zend_Controller_Action
         }
         
         $dossier = $this->_helper->service('article')->findBy(array('number' => $dossierId, 'language' => self::LANGUAGE));
-        var_dump($dossier);die;
+        $contextBox = new ContextBox(null, $dossierId);
+        $articleIds = $contextBox->getArticlesList();
+        
+        foreach ($articleIds as $articleId) {
+            $article = new Article(self::LANGUAGE, $articleId);
+            $response[] = array(
+                'id' => $article->getArticleNumber(),
+                'url' => $this->url.'/api/articles/item?article_id='.$article->getArticleNumber(),
+                'title' => $article->getTitle()
+            );
+        }
         
         $this->_helper->json($response);
     }
