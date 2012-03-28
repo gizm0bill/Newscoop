@@ -190,6 +190,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->addArgument(new sfServiceReference('em'))
             ->addArgument(new sfServiceReference('image'));
 
+        $container->register('package.search', 'Newscoop\Package\PackageSearchService')
+            ->addArgument(new sfServiceReference('em'));
+
         $container->register('solr.client.update', 'Zend_Http_Client')
             ->addArgument('http://localhost:8983/solr/update/json?commit=true');
 
