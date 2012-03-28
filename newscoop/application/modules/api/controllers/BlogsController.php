@@ -119,6 +119,8 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function postsListAction()
     {
+        $this->getHelper('contextSwitch')->addActionContext('posts-list', 'json')->initContext();
+        
         $parameters = $this->request->getParams();
         $blogId = $parameters['blog_id'];
         $response = array();
@@ -159,6 +161,8 @@ class Api_BlogsController extends Zend_Controller_Action
      */
     public function postsItemAction()
     {
+        $this->getHelper('contextSwitch')->addActionContext('posts-item', 'json')->initContext();
+        
         $parameters = $this->request->getParams();
         $postId = $parameters['post_id'];
         $response = array();
