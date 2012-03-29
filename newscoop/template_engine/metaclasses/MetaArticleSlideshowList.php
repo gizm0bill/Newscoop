@@ -39,7 +39,7 @@ final class MetaArticleSlideshowList implements Iterator
     public function rewind()
     {
         if ($this->slideshows === null) {
-            $this->slideshows = new ArrayIterator(Zend_Registry::get('container')->getService('package')->findByArticle($this->articleNumber)->toArray());
+            $this->slideshows = new ArrayIterator(Zend_Registry::get('container')->getService('package')->findByArticle($this->articleNumber));
         }
 
         $this->slideshows->rewind();
