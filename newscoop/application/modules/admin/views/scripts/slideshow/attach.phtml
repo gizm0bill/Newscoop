@@ -1,4 +1,4 @@
-<?php $this->placeholder('bodyId')->set('next'); ?>
+<?php $this->headScript()->appendFile($this->baseUrl('js/views/PaginatorView.js')); ?>
 
 <header>
     <h1><?php putGS('Attach slideshows'); ?></h1>
@@ -144,9 +144,15 @@
         }
     });
 
-<script>
-    $(function() {
-        $('#attach-slideshow-list').selectable();
+    /**
+     * Slideshow list view
+     */
+    var SlideshowListView = Backbone.View.extend({
+        initialize: function() {
+            this.collection = this.options.collection;
+            this.collection.bind('reset', this.render, this);
+            this.collection.reset(this.options.slideshows);
+        },
 
         render: function() {
             $('#slideshow-list').empty();
@@ -154,6 +160,9 @@
                 var view = new AddSlideshowView({model: slideshow});
                 $('#slideshow-list').append(view.render().el);
             });
+            return this;
+        }
+    });
 
     /**
      * Article slideshows view
@@ -210,4 +219,5 @@
         var slideshowView = new SlideshowListView({collection: slideshowCollection, slideshows: <?php echo json_encode($this->slideshowsJson($this->slideshows)); ?>});
         var articleSlideshowsView = new ArticleSlideshowsView({collection: article.get('slideshows'), el: $('#article-slideshows')});
     });
+})(jQuery);
 </script>

@@ -26,7 +26,10 @@ class PackageServiceTest extends \TestCase
     public function setUp()
     {
         $this->orm = $this->setUpOrm('Newscoop\Package\Package', 'Newscoop\Package\Item', 'Newscoop\Image\LocalImage', 'Newscoop\Image\Rendition', 'Newscoop\Package\Article');
-        $this->service = new PackageService($this->orm);
+        $this->imageService = $this->getMockBuilder('Newscoop\Image\ImageService')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->service = new PackageService($this->orm, $this->imageService);
     }
 
     public function tearDown()
@@ -219,8 +222,11 @@ class PackageServiceTest extends \TestCase
     public function testGetItemsCountInList()
     {
         $this->service->save(array('headline' => 'tic'));
-        $package = $this->service->save(array('headline' => 'toc'));
-        $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
+        $package = $this->service->save(array(
+            'headline' => 'toc',
+        ));
+
+        $this->service->addItem($package, new RemoteVideo('url'));
 
         $packages = $this->service->findBy(array(), array('headline' => 'asc'));
         $this->assertEquals(0, $packages[0]->getItemsCount());
@@ -251,12 +257,14 @@ class PackageServiceTest extends \TestCase
         ));
 
         $this->assertEquals(1, count($this->service->findByArticle(1)));
-        $this->assertEquals(1, count($this->service->findByArticle(2)));
 
-        $this->service->removeArticle($package, 1);
+        $this->service->saveArticle(array(
+            'id' => 1,
+            'slideshows' => array(),
+        ));
 
         $this->assertEquals(0, count($this->service->findByArticle(1)));
-        $this->assertEquals(1, count($this->service->findByArticle(2)));
+    }
 
     public function testDelete()
     {

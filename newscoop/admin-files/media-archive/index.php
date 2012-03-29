@@ -49,9 +49,6 @@ camp_html_content_top(getGS('Media Archive'), NULL);
 </div><!-- /#images -->
 
 <div id="slideshows">
-<<<<<<< HEAD
-    <?php echo $this->view->action('list-slideshows', 'media', 'admin'); ?>
-=======
 <?php
     $limit = 25;
     $paginator = Zend_Paginator::factory($this->_helper->service('package')->getCountBy(array()));
@@ -61,7 +58,6 @@ camp_html_content_top(getGS('Media Archive'), NULL);
         'slideshows' => $this->view->slideshowsJson($this->_helper->service('package')->findBy(array(), array('id' => 'desc'), $limit, 0)),
         'pages' => $paginator->count(),
     )); ?>
->>>>>>> wobs-devel
 </div>
 
 <div id="files">

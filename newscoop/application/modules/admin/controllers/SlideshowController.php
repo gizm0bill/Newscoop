@@ -23,6 +23,7 @@ class Admin_SlideshowController extends Zend_Controller_Action
             ->addActionContext('add-item', 'json')
             ->addActionContext('set-order', 'json')
             ->addActionContext('remove-item', 'json')
+            ->addActionContext('index', 'json')
             ->initContext();
 
         $this->view->previewWidth = 100;
@@ -33,9 +34,7 @@ class Admin_SlideshowController extends Zend_Controller_Action
 
     public function boxAction()
     {
-        $this->_helper->layout->disableLayout();
-        $this->view->articleNumber = $this->_getParam('article_number');
-        $this->view->slideshows = $this->_helper->service('package')->findByArticle($this->_getParam('article_number'));
+        $this->_helper->json($this->view->slideshowsJson($this->_helper->service('package')->findByArticle($this->_getParam('article_number'))));
     }
 
     public function createAction()
@@ -161,31 +160,6 @@ class Admin_SlideshowController extends Zend_Controller_Action
         $this->view->image = $item->getImage();
         $this->view->rendition = $item->isImage() ? $item->getRendition() : $slideshow->getRendition();
         $this->view->package = $slideshow;
-    }
-
-    public function attachAction()
-    {
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            foreach ($request->getPost('slideshows', array()) as $slideshowId) {
-                $slideshow = $this->_helper->service('package')->find($slideshowId);
-                $this->_helper->service('package')->addArticle($slideshow, $this->_getParam('article_number'));
-            }
-
-            $this->_helper->redirector('attach', 'slideshow', 'admin', array(
-                'article_number' => $this->_getParam('article_number'),
-            ));
-        }
-
-        $this->view->slideshows = $this->_helper->service('package')->findAvailableForArticle($this->_getParam('article_number'));
-    }
-
-    public function detachAction()
-    {
-        $slideshow = $this->_helper->service('package')->find($this->_getParam('slideshow'));
-        $this->_helper->service('package')->removeArticle($slideshow, $this->_getParam('article_number'));
-        $this->_helper->json((object) array(
-        ));
     }
 
     /**
