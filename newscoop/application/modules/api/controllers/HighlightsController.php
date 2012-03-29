@@ -59,9 +59,7 @@ class Api_HighlightsController extends Zend_Controller_Action
             $sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'number' => $sectionId));
             $section = $sections[0];
             
-            $response[$section->getName()] = array();
-            $response[$section->getName()]['section_id'] = $section->getNumber();
-            $response[$section->getName()]['section_url'] = $this->url.'/api/sections/item?section_id='.$section->getNumber();
+            $response[$sectionId] = array();
             
             $playlistRepository = $this->_helper->entity->getRepository('Newscoop\Entity\Playlist');
             $playlists = $playlistRepository->findBy(array('name' => $section->getName()));
@@ -71,7 +69,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                 foreach ($articleArray as $articleItem) {
                     $articles = $this->_helper->service('article')->findBy(array('number' => $articleItem['articleId']));
                     $article = $articles[0];
-                    $response[$section->getName()][] = array('id' => $article->getNumber(), 'title' => $article->getTitle());
+                    $response[$sectionId][] = array('id' => $article->getNumber(), 'title' => $article->getTitle(), 'section_url' => $this->url.'/api/sections/item?section_id='.$sectionId);
                 }
             }
         }
