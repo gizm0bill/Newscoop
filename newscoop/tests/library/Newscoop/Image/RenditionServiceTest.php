@@ -215,4 +215,26 @@ class RenditionServiceTest extends \TestCase
 
         $this->service->getArticleRenditions(self::ARTICLE_NUMBER);
     }
+
+    public function testGetArticleRenditionImage()
+    {
+        $this->orm->persist($rendition = new Rendition(200, 150, 'crop', 'thumbnail'));
+        $this->orm->persist($image = new LocalImage(self::PICTURE_LANDSCAPE));
+        $image->setDescription('imgalt');
+        $image->setPhotographer('john doe');
+        $this->orm->flush();
+
+        $this->service->setArticleRendition(self::ARTICLE_NUMBER, $rendition, $image);
+
+        $this->assertFalse($this->service->getArticleRenditionImage(self::ARTICLE_NUMBER * 10, 'thumbnail'), 'No image for article');
+        $this->assertFalse($this->service->getArticleRenditionImage(self::ARTICLE_NUMBER, 'thumbnail' . uniqid()), 'Unknown rendition');
+
+        $this->assertEquals(array(
+            'src' => $this->imageService->getSrc($image->getPath(), 100, 75, 'crop'),
+            'width' => 100,
+            'height' => 75,
+            'caption' => 'imgalt',
+            'photographer' => 'john doe',
+        ), $this->service->getArticleRenditionImage(self::ARTICLE_NUMBER, 'thumbnail', 100, 75));
+    }
 }

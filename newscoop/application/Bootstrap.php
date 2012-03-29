@@ -71,6 +71,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('view');
         $container->setService('view', $this->getResource('view'));
 
+        $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
+            ->addMethodCall('setListeners', array($container))
+            ->addMethodCall('setSubscribers', array($container));
+
         $container->register('image', 'Newscoop\Image\ImageService')
             ->addArgument('%image%')
             ->addArgument(new sfServiceReference('em'));
@@ -110,17 +114,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $container->register('audit.maintenance', 'Newscoop\Services\AuditMaintenanceService')
             ->addArgument(new sfServiceReference('em'));
-
-        $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
-            ->setConfigurator(function($service) use ($container) {
-                foreach ($container->getParameter('listener') as $listener) {
-                    $listenerService = $container->getService($listener);
-                    $listenerParams = $container->getParameter($listener);
-                    foreach ((array) $listenerParams['events'] as $event) {
-                        $service->connect($event, array($listenerService, 'update'));
-                    }
-                }
-            });
 
         $container->register('user.topic', 'Newscoop\Services\UserTopicService')
             ->addArgument(new sfServiceReference('em'))
@@ -184,6 +177,57 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->addArgument(new sfServiceReference('em'))
             ->addArgument(new sfServiceReference('image'));
 
+        $container->register('solr.client.update', 'Zend_Http_Client')
+            ->addArgument('http://localhost:8983/solr/update/json?commit=true');
+
+        $container->register('solr.client.select', 'Zend_Http_Client')
+            ->addArgument('http://localhost:8983/solr/select/');
+
+        $container->register('search.index', 'Newscoop\Search\Index')
+            ->addArgument(new sfServiceReference('solr.client.update'));
+
+        $container->register('article.search', 'Newscoop\Article\SearchService')
+            ->addArgument(new sfServiceReference('webcoder'))
+            ->addArgument(new sfServiceReference('image.rendition'))
+            ->addArgument($container['search']['article']);
+
+        $container->register('comment.search', 'Newscoop\Comment\SearchService');
+
+        $container->register('user.search', 'Newscoop\User\SearchService')
+            ->addArgument(new sfServiceReference('image'));
+
+        $container->register('twitter.search', 'Newscoop\Twitter\SearchService');
+
+        $container->register('twitter.client', 'Zend_Http_Client')
+            ->addArgument('https://api.twitter.com/1/favorites.json');
+
+        $container->register('tweet.repository', 'Newscoop\Twitter\TweetRepository')
+            ->addArgument(new sfServiceReference('twitter.client'))
+            ->addArgument(new sfServiceReference('solr.client.select'))
+            ->addArgument('%twitter%');
+
+        $container->register('search_indexer_article', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('article.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\Article'));
+
+        $container->register('search_indexer_comment', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('comment.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\Comment'));
+
+        $container->register('search_indexer_user', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('user.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\User'));
+
+        $container->register('search_indexer_twitter', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('twitter.search'))
+            ->addArgument(new sfServiceReference('tweet.repository'));
+
+        $container->register('webcoder', 'Newscoop\Webcode\Mapper');
+
         Zend_Registry::set('container', $container);
         return $container;
     }
@@ -199,9 +243,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         DatabaseObject::setEventDispatcher($container->getService('dispatcher'));
         DatabaseObject::setResourceNames($container->getParameter('resourceNames'));
 
-        $container->getService('em')
-            ->getEventManager()
-            ->addEventSubscriber(new DoctrineEventDispatcherProxy($container->getService('dispatcher')));
+        $eventManager = $container->getService('em')->getEventManager();
+        $eventManager->addEventSubscriber(new DoctrineEventDispatcherProxy($container->getService('dispatcher')));
+        $eventManager->addEventSubscriber($container->getService('image'));
     }
 
     protected function _initPlugins()

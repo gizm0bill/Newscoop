@@ -180,14 +180,7 @@ class RenditionService
     public function getRendition($name)
     {
         $renditions = $this->getRenditions();
-        $rendition = array_key_exists($name, $renditions) ? $renditions[$name] : null;
-        if ($rendition !== null) {
-            $rendition = $this->orm->getRepository('Newscoop\Image\Rendition')->find($rendition->getName());
-            $this->orm->persist($rendition);
-            $this->orm->flush($rendition);
-        }
-
-        return $rendition;
+        return array_key_exists($name, $renditions) ? $renditions[$name] : null;
     }
 
     /**
@@ -241,6 +234,44 @@ class RenditionService
 
         $this->orm->flush();
         $this->renditions = null;
+    }
+
+    /**
+     * Get article rendition image
+     *
+     * @param int $articleNumber
+     * @param string $renditionName
+     * @param int $width
+     * @param int $height
+     * @return array
+     */
+    public function getArticleRenditionImage($articleNumber, $renditionName, $width = null, $height = null)
+    {
+        $renditions = $this->getRenditions();
+        if (!array_key_exists($renditionName, $renditions)) {
+            return false;
+        }
+
+        $articleRenditions = $this->getArticleRenditions($articleNumber);
+        $rendition = $articleRenditions[$renditions[$renditionName]];
+        if ($rendition === null) {
+            return false;
+        }
+
+        if ($width !== null && $height !== null) {
+            $preview = $rendition->getRendition()->getPreview($width, $height);
+            $thumbnail = $preview->getThumbnail($rendition->getImage(), $this->imageService);
+        } else {
+            $thumbnail = $rendition->getRendition()->getThumbnail($rendition->getImage(), $this->imageService);
+        }
+
+        return array(
+            'src' => $thumbnail->src,
+            'width' => $thumbnail->width,
+            'height' => $thumbnail->height,
+            'caption' => $rendition->getImage()->getCaption(),
+            'photographer' => $rendition->getImage()->getPhotographer(),
+        );
     }
 
     /**

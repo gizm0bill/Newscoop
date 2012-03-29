@@ -34,6 +34,8 @@ $cli->addCommands(array(
     new \Newscoop\Tools\Console\Command\UpdateArticlePopularityMetricsCommand(),
     new \Newscoop\Tools\Console\Command\UpdateArticlePopularityRankingCommand(),
     new \Newscoop\Tools\Console\Command\LogMaintenanceCommand(),    
+    new \Newscoop\Tools\Console\Command\UpdateIndexCommand(),
+    new \Newscoop\Tools\Console\Command\ClearIndexCommand(),
 ));
 
 $cli->run();
