@@ -49,7 +49,12 @@ class Admin_SlideshowController extends Zend_Controller_Action
             $values['rendition'] = $this->_helper->service('image.rendition')->getRendition($values['rendition']);
             $slideshow = $this->_helper->service('package')->save($values);
             if ($this->_getParam('article_number', false)) {
-                $this->_helper->service('package')->addArticle($slideshow, $this->_getParam('article_number'));
+                $slideshows = $this->_helper->service('package')->findByArticle($this->_getParam('article_number'));
+                $slideshows[] = $slideshow;
+                $this->_helper->service('package')->saveArticle(array(
+                    'id' => $this->_getParam('article_number'),
+                    'slideshows' => array_map(function($slideshow) { return array('id' => $slideshow->getId()); }, $slideshows),
+                ));
             }
             $this->_helper->redirector('edit', 'slideshow', 'admin', array(
                 'article_number' => $this->_getParam('article_number'),
@@ -216,5 +221,40 @@ class Admin_SlideshowController extends Zend_Controller_Action
         } else {
             $form->rendition->setMultiOptions($renditions);
         }
+    }
+
+    public function attachAction()
+    {
+        $this->_helper->layout->setLayout('modal');
+
+        $limit = 25;
+        if ($this->_getParam('format') === 'json') {
+            $this->_helper->json($this->view->slideshowsJson($this->_helper->service('package')->findBy(array(), array('id' => 'desc'), $limit, ($this->_getParam('page', 1) - 1) * $limit)));
+        }
+
+        $paginator = Zend_Paginator::factory($this->_helper->service('package')->getCountBy(array()));
+        $paginator->setItemCountPerPage($limit);
+        $paginator->setCurrentPageNumber(1);
+
+        $this->view->q = '';
+        if ($this->_getParam('q', false)) {
+            $this->view->slideshows = $this->_helper->service('package.search')->find($this->_getParam('q'));
+            $this->view->q = $this->_getParam('q');
+        } else {
+            $this->view->slideshows = $this->_helper->service('package')->findBy(array(), array('id' => 'desc'), $limit, 0);
+        }
+        $this->view->pages = $paginator->count();
+
+        $this->view->article = array(
+            'id' => $this->_getParam('article_number'),
+            'slideshows' => $this->view->slideshowsJson($this->_helper->service('package')->findByArticle($this->_getParam('article_number'))),
+        );
+    }
+
+    public function articleAction()
+    {
+        $article = json_decode($this->getRequest()->getRawBody(), true);
+        $this->_helper->service('package')->saveArticle($article);
+        $this->_helper->json(array());
     }
 }

@@ -261,8 +261,10 @@ class PackageService
      */
     public function addArticle(Package $package, $articleNumber)
     {
-        $article = $this->getArticle($articleNumber);
-        if (!$article->getPackages()->contains($package)) {
+        $article = $this->getArticle($articleArray['id']);
+        $article->getPackages()->clear();
+        foreach ($articleArray['slideshows'] as $slideshow) {
+            $package = $this->orm->find('Newscoop\Package\Package', $slideshow['id']);
             $article->getPackages()->add($package);
             $this->orm->flush($article);
         }

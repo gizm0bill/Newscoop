@@ -245,8 +245,10 @@ class PackageServiceTest extends \TestCase
         $this->assertEquals(0, count($this->service->findByArticle(1)));
 
         $package = $this->service->save(array('headline' => 'tic'));
-        $this->service->addArticle($package, 1);
-        $this->service->addArticle($package, 2);
+        $this->service->saveArticle(array(
+            'id' => 1,
+            'slideshows' => array(array('id' => $package->getId())),
+        ));
 
         $this->assertEquals(1, count($this->service->findByArticle(1)));
         $this->assertEquals(1, count($this->service->findByArticle(2)));
@@ -256,8 +258,21 @@ class PackageServiceTest extends \TestCase
         $this->assertEquals(0, count($this->service->findByArticle(1)));
         $this->assertEquals(1, count($this->service->findByArticle(2)));
 
-        $this->assertEquals(1, count($this->service->findAvailableForArticle(1)));
-        $this->assertEquals(0, count($this->service->findAvailableForArticle(2)));
+    public function testDelete()
+    {
+        $package = $this->service->save(array('headline' => 'tic'));
+        $this->service->addItem($package, new LocalImage(self::PICTURE_LANDSCAPE));
+        $this->service->saveArticle(array(
+            'id' => 1,
+            'slideshows' => array(array('id' => $package->getId())),
+        ));
+
+        $this->service->delete($package->getId());
+        $this->orm->clear();
+
+        $this->assertEquals(0, count($this->service->findBy(array())));
+        $this->assertEquals(0, count($this->orm->getRepository('Newscoop\Package\Item')->findAll()));
+        $this->assertEquals(0, count($this->service->findByArticle(1)));
     }
 
     /**

@@ -183,6 +183,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('package', 'Newscoop\Package\PackageService')
             ->addArgument(new sfServiceReference('em'));
 
+        $container->register('package.search', 'Newscoop\Package\PackageSearchService')
+            ->addArgument(new sfServiceReference('em'));
+
         Zend_Registry::set('container', $container);
         return $container;
     }

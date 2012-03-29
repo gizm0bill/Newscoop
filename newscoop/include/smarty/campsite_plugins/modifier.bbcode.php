@@ -19,5 +19,5 @@ function smarty_modifier_bbcode($input)
         $bbcode = \Zend_Markup::factory('Bbcode');
     }
 
-    return $bbcode->render($input);
+    return empty($input) ? $input : $bbcode->render($input);
 }
