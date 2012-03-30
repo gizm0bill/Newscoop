@@ -5,12 +5,12 @@
     <h3>Suche eingrenzen</h3>
     <ul id="type-filter">
         <li class="main"><a href="#">Alle</a></li>
-        <li><a href="#news">Artikel</a></li>
-        <li><a href="#">Dossiers</a></li>
-        <li><span>Blogbeitrage</span></li>
-        <li><span>Kommentare</span></li>
-        <li><a href="#links">Links</a></li>
-        <li><a href="#">Veranstaltungen</a></li>
+        <li><a href="#article">Artikel</a></li>
+        <li><a href="#dossier">Dossiers</a></li>
+        <li><a href="#blog">Blogbeitrage</a></li>
+        <li><a href="#comment">Kommentare</a></li>
+        <li><a href="#link">Links</a></li>
+        <li><a href="#event">Veranstaltungen</a></li>
         <li><a href="#user">Nutzer</a></li>
     </ul>
 
@@ -19,8 +19,8 @@
         <li><a href="#24h">Letzte 24 Stunden</a></li>
         <li><a href="#7d">Letzte 7 Tage</a></li>
         <li><a href="#1y">Das Jahr</a></li>
-        <li><label>Von</label> <input type="text" value="TT.MM.JJ" /></li>
-        <li><label>Bis</label> <input type="text" value="TT.MM.JJ" /></li>
+        <li><label>Von</label> <input type="text" class="from" placeholder="TT.MM.JJ" /></li>
+        <li><label>Bis</label> <input type="text" class="to" placeholder="TT.MM.JJ" /></li>
         <li><input type="submit" value="Suchen" /></li>
     </ul>
 </aside>

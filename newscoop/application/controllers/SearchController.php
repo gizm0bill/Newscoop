@@ -92,7 +92,7 @@ class SearchController extends Zend_Controller_Action
      */
     private function buildSolrTypeParam()
     {
-        return $this->_getParam('type', false) ? sprintf('type:%s', $this->_getParam('type')) : null;
+        return $this->_getParam('type', false) || $this->_getParam('type') === 'undefined' ? sprintf('type:%s', $this->_getParam('type')) : null;
     }
 
     /**
@@ -103,11 +103,25 @@ class SearchController extends Zend_Controller_Action
     private function buildSolrDateParam()
     {
         $date = $this->_getParam('date', false);
-        if (!$date || !array_key_exists($date, self::$dates)) {
+        if (!$date) {
             return;
         }
 
-        return sprintf('published:%s', self::$dates[$date]);
+        if (array_key_exists($date, self::$dates)) {
+            return sprintf('published:%s', self::$dates[$date]);
+        }
+
+        try {
+            list($from, $to) = explode(',', $date, 2);
+            $fromDate = empty($from) ? null : new \DateTime($from);
+            $toDate = empty($to) ? null : new \DateTime($to);
+        } catch (\Exception $e) {
+            return;
+        }
+
+        return sprintf('published:[%s TO %s]',
+            $fromDate === null ? '*' : $fromDate->format('Y-m-d\TH:i:s\Z') . '/DAY',
+            $toDate === null ? '*' : $toDate->format('Y-m-d\TH:i:s\Z') . '/DAY');
     }
 
     /**

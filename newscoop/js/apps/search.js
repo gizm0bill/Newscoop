@@ -10,9 +10,9 @@ var Document = Backbone.Model.extend({
      * Get relative date
      */
     relDate: function(property) {
-        var published = new Date(this.get(property));
+        var date = new Date(this.get(property));
         var now = new Date();
-        var diff = Math.ceil(Math.abs(now.getTime() - published.getTime()) / 1000);
+        var diff = Math.ceil(Math.abs(now.getTime() - date.getTime()) / 1000);
 
         if (diff < 60) {
             return 'vor ' + diff + ' Sek.';
@@ -36,12 +36,7 @@ var Document = Backbone.Model.extend({
 var DocumentCollection = Backbone.Collection.extend({
     model: Document,
 
-    url: function() {
-        var params = {q: this.query, type: this.type, date: this.date, page: this.page, format: 'json'};
-        return '?' + jQuery.param(params);
-    },
-
-    nav: function() {
+    buildParams: function() {
         var params = {q: this.query};
 
         if (this.type) {
@@ -56,6 +51,17 @@ var DocumentCollection = Backbone.Collection.extend({
             params.page = this.page;
         }
 
+        return params;
+    },
+
+    url: function() {
+        var params = this.buildParams();
+        params.format = 'json';
+        return '?' + jQuery.param(params);
+    },
+
+    nav: function() {
+        var params = this.buildParams();
         return '?' + jQuery.param(params);
     },
 
@@ -102,8 +108,8 @@ var SearchFormView = Backbone.View.extend({
 
     search: function() {
         this.collection.query = $(this.el).find('input').val();
-        this.collection.type = '';
-        this.collection.date = '';
+        this.collection.type = null;
+        this.collection.date = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();
     }
@@ -149,12 +155,29 @@ var TypeFilterView = Backbone.View.extend({
  */
 DateFilterView = Backbone.View.extend({
     events: {
-        'click a': 'filter'
+        'click a': 'filter',
+        'click input[type=submit]': 'filterRange'
     },
 
     filter: function(e) {
         e.preventDefault();
         this.collection.date = e.target.hash.slice(1);
+        router.navigate(this.collection.nav());
+        this.collection.fetch();
+    },
+
+    filterRange: function(e) {
+        e.preventDefault();
+
+        var from = $(this.el).find('input.from').val() || '';
+        var to = $(this.el).find('input.to').val() || '';
+
+        if (from === '' && to === '') {
+            alert("Provide at least 1 date");
+            return;
+        }
+
+        this.collection.date = [from, to].join(',');
         router.navigate(this.collection.nav());
         this.collection.fetch();
     }
