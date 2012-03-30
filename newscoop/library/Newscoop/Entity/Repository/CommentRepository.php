@@ -18,7 +18,7 @@ use Newscoop\Entity\User;
 /**
  * Comment repository
  */
-class CommentRepository extends DatatableSource
+class CommentRepository extends DatatableSource implements \Newscoop\Search\RepositoryInterface
 {
 
     /**
@@ -489,5 +489,43 @@ class CommentRepository extends DatatableSource
             ->createQuery("SELECT COUNT(comment) FROM Newscoop\Entity\Comment comment WHERE comment.commenter IN (SELECT commenter.id FROM Newscoop\Entity\Comment\Commenter commenter WHERE commenter.user = :user)")
             ->setParameter('user', $user->getId())
             ->getSingleScalarResult();
+    }
+
+    /**
+     * Find comments for indexing
+     *
+     * @return array
+     */
+    public function getBatch()
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.indexed IS NULL OR c.indexed < c.time_updated')
+            ->getQuery()
+            ->setMaxResults(50)
+            ->getResult();
+    }
+
+    /**
+     * Set indexed now
+     *
+     * @param array $comments
+     * @return void
+     */
+    public function setIndexedNow(array $comments)
+    {
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Comment c SET c.indexed = CURRENT_TIMESTAMP() WHERE c.id IN (:comments)')
+            ->setParameter('comments', array_map(function($comment) { return $comment->getId(); }, $comments))
+            ->execute();
+    }
+
+    /**
+     * Set indexed null
+     *
+     * @return void
+     */
+    public function setIndexedNull()
+    {
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Comment c SET c.indexed = NULL')
+            ->execute();
     }
 }

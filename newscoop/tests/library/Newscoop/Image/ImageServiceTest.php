@@ -132,4 +132,26 @@ class ImageServiceTest extends \TestCase
         $this->assertEquals(2, count($this->service->findBy(array())));
         $this->assertEquals(2, $this->service->getCountBy(array()));
     }
+
+    public function testPostLoadInjection()
+    {
+        $this->assertInstanceOf('Doctrine\Common\EventSubscriber', $this->service);
+        $this->assertEquals(array(\Doctrine\ORM\Events::postLoad), $this->service->getSubscribedEvents());
+
+        $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $entity = $this->getMock('Newscoop\Image\SetImageServiceInterface');
+
+        $entity->expects($this->once())
+            ->method('setImageService')
+            ->with($this->equalTo($this->service));
+
+        $args->expects($this->any())
+            ->method('getEntity')
+            ->will($this->returnValue($entity));
+
+        $this->service->postLoad($args);
+    }
 }

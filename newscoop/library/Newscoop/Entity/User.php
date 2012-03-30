@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection,
  *      })
  *  @HasLifecycleCallbacks
  */
-class User implements \Zend_Acl_Role_Interface
+class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\DocumentInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -148,6 +148,12 @@ class User implements \Zend_Acl_Role_Interface
      * @var Newscoop\Entity\Author
      */
     private $author;
+
+    /**
+     * @Column(type="datetime", nullable=True)
+     * @var DateTime
+     */
+    private $indexed;
 
     /**
      * @param string $email
@@ -783,5 +789,26 @@ class User implements \Zend_Acl_Role_Interface
     public function preUpdate()
     {
         $this->updated = new \DateTime();
+    }
+
+    /**
+     * Set indexed
+     *
+     * @param DateTime $indexed
+     * @return void
+     */
+    public function setIndexed(\DateTime $indexed = null)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
     }
 }
