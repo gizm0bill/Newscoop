@@ -315,6 +315,9 @@ $('#attach-images').fancybox({
     width: 1300,
     height: 800,
     type: 'iframe',
+    onStart: function() { // check if there are any changes
+        return checkChanged();
+    },
     onClosed: function() {
 		window.location.reload();
 	}
