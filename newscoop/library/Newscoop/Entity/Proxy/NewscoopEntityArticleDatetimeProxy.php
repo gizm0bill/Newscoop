@@ -40,6 +40,12 @@ class NewscoopEntityArticleDatetimeProxy extends \Newscoop\Entity\ArticleDatetim
         return parent::getFieldName();
     }
 
+    public function getEventComment()
+    {
+        $this->__load();
+        return parent::getEventComment();
+    }
+
     public function getArticleType()
     {
         $this->__load();
@@ -76,16 +82,70 @@ class NewscoopEntityArticleDatetimeProxy extends \Newscoop\Entity\ArticleDatetim
         return parent::getRecurring();
     }
 
-    public function setValues($dateData, $article, $fieldName, $articleType = NULL)
+    public function setValues($dateData, $article, $fieldName, $articleType = NULL, $otherInfo = NULL)
     {
         $this->__load();
-        return parent::setValues($dateData, $article, $fieldName, $articleType);
+        return parent::setValues($dateData, $article, $fieldName, $articleType, $otherInfo);
     }
 
     public function __get($name)
     {
         $this->__load();
         return parent::__get($name);
+    }
+
+    public function setStartDate($startDate)
+    {
+        $this->__load();
+        return parent::setStartDate($startDate);
+    }
+
+    public function setStartTime($startTime)
+    {
+        $this->__load();
+        return parent::setStartTime($startTime);
+    }
+
+    public function setEndDate($endDate)
+    {
+        $this->__load();
+        return parent::setEndDate($endDate);
+    }
+
+    public function setEndTime($endTime)
+    {
+        $this->__load();
+        return parent::setEndTime($endTime);
+    }
+
+    public function setRecurring($recurring)
+    {
+        $this->__load();
+        return parent::setRecurring($recurring);
+    }
+
+    public function setArticleId($articleId)
+    {
+        $this->__load();
+        return parent::setArticleId($articleId);
+    }
+
+    public function setArticleType($articleType)
+    {
+        $this->__load();
+        return parent::setArticleType($articleType);
+    }
+
+    public function setFieldName($fieldName)
+    {
+        $this->__load();
+        return parent::setFieldName($fieldName);
+    }
+
+    public function setEventComment($eventComment)
+    {
+        $this->__load();
+        return parent::setEventComment($eventComment);
     }
 
     public function getId()
@@ -103,7 +163,7 @@ class NewscoopEntityArticleDatetimeProxy extends \Newscoop\Entity\ArticleDatetim
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'startDate', 'endDate', 'startTime', 'endTime', 'recurring', 'articleId', 'articleType', 'fieldName');
+        return array('__isInitialized__', 'id', 'startDate', 'endDate', 'startTime', 'endTime', 'recurring', 'articleId', 'articleType', 'fieldName', 'eventComment');
     }
 
     public function __clone()

@@ -106,10 +106,34 @@ class NewscoopEntityPublicationProxy extends \Newscoop\Entity\Publication implem
         return parent::getModeratorFrom();
     }
 
+    public function addAlias(\Newscoop\Entity\Alias $alias)
+    {
+        $this->__load();
+        return parent::addAlias($alias);
+    }
+
+    public function getAliasName()
+    {
+        $this->__load();
+        return parent::getAliasName();
+    }
+
+    public function setSeo(array $seo)
+    {
+        $this->__load();
+        return parent::setSeo($seo);
+    }
+
+    public function getSeo()
+    {
+        $this->__load();
+        return parent::getSeo();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'language', 'issues', 'public_enabled', 'moderator_to', 'moderator_from');
+        return array('__isInitialized__', 'id', 'name', 'language', 'issues', 'public_enabled', 'moderator_to', 'moderator_from', 'aliases', 'seo');
     }
 
     public function __clone()

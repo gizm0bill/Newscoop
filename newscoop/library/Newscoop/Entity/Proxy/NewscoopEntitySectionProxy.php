@@ -82,6 +82,18 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
         return parent::getId();
     }
 
+    public function setShortName($shortName)
+    {
+        $this->__load();
+        return parent::setShortName($shortName);
+    }
+
+    public function getShortName()
+    {
+        $this->__load();
+        return parent::getShortName();
+    }
+
     public function setId($id)
     {
         $this->__load();
@@ -91,7 +103,7 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'publication', 'issue', 'language', 'number', 'name', 'template', 'articleTemplate');
+        return array('__isInitialized__', 'id', 'publication', 'issue', 'language', 'number', 'name', 'template', 'articleTemplate', 'shortName');
     }
 
     public function __clone()

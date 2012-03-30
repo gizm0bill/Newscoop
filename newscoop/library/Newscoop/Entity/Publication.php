@@ -69,10 +69,23 @@ class Publication extends Entity
     private $moderator_from;
 
     /**
+     * @OneToMany(targetEntity="Newscoop\Entity\Alias", mappedBy="publication")
+     * @var Doctrine\Common\Collections\Collection
+     */
+    private $aliases;
+
+    /**
+     * @Column(nullable=True)
+     * @var string
+     */
+    private $seo;
+
+    /**
      */
     public function __construct()
     {
-        $this->issues = new ArrayCollection;
+        $this->issues = new ArrayCollection();
+        $this->aliases = new ArrayCollection();
     }
 
     /**
@@ -213,6 +226,53 @@ class Publication extends Entity
     public function getModeratorFrom()
     {
         return $this->moderator_from;
+    }
+
+    /**
+     * Add alias
+     *
+     * @param Newscoop\Entity\Alias $alias
+     * @return void
+     */
+    public function addAlias(Alias $alias)
+    {
+        $this->aliases->add($alias);
+        $alias->setPublication($this);
+    }
+
+    /**
+     * Get alias name
+     *
+     * @return string
+     */
+    public function getAliasName()
+    {
+        foreach ($this->aliases as $alias) {
+            return $alias->getName();
+        }
+
+        return null;
+    }
+
+    /**
+     * Set seo
+     *
+     * @param array $seo
+     * @return void
+     */
+    public function setSeo(array $seo)
+    {
+        $this->seo = serialize($seo);
+    }
+
+    /**
+     * Get seo
+     *
+     * @return array
+     */
+    public function getSeo()
+    {
+        return (array) unserialize($this->seo);
     }
 }
 

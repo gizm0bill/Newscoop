@@ -46,10 +46,22 @@ class NewscoopEntityTopicTreeProxy extends \Newscoop\Entity\TopicTree implements
         return parent::getRight();
     }
 
+    public function getName(\Newscoop\Entity\Language $language)
+    {
+        $this->__load();
+        return parent::getName($language);
+    }
+
+    public function addName($name, \Newscoop\Entity\Language $language)
+    {
+        $this->__load();
+        return parent::addName($name, $language);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'node_left', 'node_right');
+        return array('__isInitialized__', 'id', 'node_left', 'node_right', 'names');
     }
 
     public function __clone()

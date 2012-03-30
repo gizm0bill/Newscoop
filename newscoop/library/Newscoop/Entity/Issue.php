@@ -181,6 +181,17 @@ class Issue extends Entity
     }
 
     /**
+     * Set short name
+     *
+     * @param string $shortName
+     * @return void
+     */
+    public function setShortName($shortName)
+    {
+        $this->shortName = (string) $shortName;
+    }
+
+    /**
      * Get short name of the issue
      *
      * @return string

@@ -74,6 +74,12 @@ class Section extends Entity
     private $articleTemplate;
 
     /**
+     * @Column(name="ShortName", nullable=True)
+     * @var string
+     */
+    private $shortName;
+
+    /**
      * @param int $number
      * @param string $name
      */
@@ -175,5 +181,26 @@ class Section extends Entity
     public function getId()
     {
         return (int) $this->id;
+    }
+
+    /**
+     * Set short name
+     *
+     * @param string $shortName
+     * @return void
+     */
+    public function setShortName($shortName)
+    {
+        $this->shortName = (string) $shortName;
+    }
+
+    /**
+     * Get short name
+     *
+     * @return string
+     */
+    public function getShortName()
+    {
+        return $this->shortName;
     }
 }

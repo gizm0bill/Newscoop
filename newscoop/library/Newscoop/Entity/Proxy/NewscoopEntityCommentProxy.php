@@ -214,7 +214,7 @@ class NewscoopEntityCommentProxy extends \Newscoop\Entity\Comment implements \Do
         return parent::getLanguage();
     }
 
-    public function setParent(\Newscoop\Entity\Comment $p_parent)
+    public function setParent(\Newscoop\Entity\Comment $p_parent = NULL)
     {
         $this->__load();
         return parent::setParent($p_parent);
@@ -274,23 +274,10 @@ class NewscoopEntityCommentProxy extends \Newscoop\Entity\Comment implements \Do
         return parent::getIndexed();
     }
 
-    public function getDocumentId()
+    public function isApproved()
     {
         $this->__load();
-        return parent::getDocumentId();
-    }
-
-    public function isIndexable(array $config = array (
-))
-    {
-        $this->__load();
-        return parent::isIndexable($config);
-    }
-
-    public function getDocument()
-    {
-        $this->__load();
-        return parent::getDocument();
+        return parent::isApproved();
     }
 
 

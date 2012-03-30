@@ -33,6 +33,12 @@ class TopicTree
     private $node_right;
 
     /**
+     * @OneToMany(targetEntity="Newscoop\Entity\Topic", mappedBy="topic")
+     * @var Doctrine\Common\Collections\Collection
+     */
+    private $names;
+
+    /**
      * @param int $id
      * @param int $left
      */
@@ -41,6 +47,7 @@ class TopicTree
         $this->id = (int) $id;
         $this->node_left = (int) $left;
         $this->node_right = $this->node_left + 1;
+        $this->names = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -72,5 +79,37 @@ class TopicTree
     public function getRight()
     {
         return $this->node_right;
+    }
+
+    /**
+     * Get name
+     *
+     * @param Newscoop\Entity\Language $language
+     * @return string
+     */
+    public function getName(Language $language)
+    {
+        foreach ($this->names as $name) {
+            if ($name->getLanguageId() === $language->getId()) {
+                return (string) $name;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Add name
+     *
+     * @param string $name
+     * @param Newscoop\Entity\Language $language
+     * @return void
+     */
+    public function addName($name, Language $language)
+    {
+        $topicName = new Topic($this->id, $language, $name);
+        if (!$this->names->contains($topicName)) {
+            $this->names->add($topicName);
+        }
     }
 }

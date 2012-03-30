@@ -358,25 +358,6 @@ class NewscoopEntityUserSubscriberProxy extends \Newscoop\Entity\User\Subscriber
         return parent::getIndexed();
     }
 
-    public function getDocumentId()
-    {
-        $this->__load();
-        return parent::getDocumentId();
-    }
-
-    public function isIndexable(array $config = array (
-))
-    {
-        $this->__load();
-        return parent::isIndexable($config);
-    }
-
-    public function getDocument()
-    {
-        $this->__load();
-        return parent::getDocument();
-    }
-
 
     public function __sleep()
     {

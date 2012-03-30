@@ -84,23 +84,27 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             }, $article->getAuthors()),
             'webcode' => $this->webcoder->encode($article->getNumber()),
             'image' => $image ? $image['src'] : null,
+            'link' => $article->getLink(),
+            'section' => $article->getSectionNumber(),
+            'keyword' => explode(',', $article->getKeywords()),
+            'topic' => $article->getTopicNames(),
         );
 
         switch ($article->getType()) {
             case 'blog':
             case 'news':
-                $doc['lead'] = $article->getData('lede');
-                $doc['content'] = $article->getData('body');
+                $doc['lead'] = strip_tags($article->getData('lede'));
+                $doc['content'] = strip_tags($article->getData('body'));
                 break;
 
             case 'dossier':
-                $doc['lead'] = $article->getData('lede');
-                $doc['content'] = $article->getData('history');
+                $doc['lead'] = strip_tags($article->getData('lede'));
+                $doc['content'] = strip_tags($article->getData('history'));
                 break;
 
             case 'newswire':
-                $doc['lead'] = $article->getData('DataLead');
-                $doc['content'] = $article->getData('DataContent');
+                $doc['lead'] = strip_tags($article->getData('DataLead'));
+                $doc['content'] = strip_tags($article->getData('DataContent'));
                 break;
         }
 

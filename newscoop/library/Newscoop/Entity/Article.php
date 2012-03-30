@@ -123,10 +123,11 @@ class Article implements \Newscoop\Search\DocumentInterface
     private $authors;
 
     /**
-     * @ManyToMany(targetEntity="Newscoop\Entity\Topic")
+     * @ManyToMany(targetEntity="Newscoop\Entity\TopicTree")
      * @JoinTable(name="ArticleTopics",
-     *      joinColumns={@JoinColumn(name="fk_article_number", referencedColumnName="Number")}
-     *      )
+     *      joinColumns={@JoinColumn(name="NrArticle", referencedColumnName="Number")},
+     *      inverseJoinColumns={@JoinColumn(name="TopicId", referencedColumnName="id")}
+     *  )
      * @var Doctrine\Common\Collections\Collection
      */
     private $topics;
@@ -141,6 +142,12 @@ class Article implements \Newscoop\Search\DocumentInterface
      * @var array
      */
     private $data;
+
+    /**
+     * @Column(nullable=True, name="Keywords")
+     * @var string
+     */
+    private $keywords;
 
     /**
      * @param int $number
@@ -223,6 +230,17 @@ class Article implements \Newscoop\Search\DocumentInterface
     }
 
     /**
+     * Set section
+     *
+     * @param Newscoop\Entity\Section $section
+     * @return void
+     */
+    public function setSection(Section $section)
+    {
+        $this->section = $section;
+    }
+
+    /**
      * Get section
      *
      * @return Newscoop\Entity\Section
@@ -240,6 +258,37 @@ class Article implements \Newscoop\Search\DocumentInterface
     public function getSectionId()
     {
         return $this->sectionId;
+    }
+
+    /**
+     * Get section number
+     *
+     * @return int
+     */
+    public function getSectionNumber()
+    {
+        return $this->getSection() ? $this->getSection()->getNumber() : null;
+    }
+
+    /**
+     * Set issue
+     *
+     * @param Newscoop\Entity\Issue $issue
+     * @return void
+     */
+    public function setIssue(Issue $issue)
+    {
+        $this->issue = $issue;
+    }
+
+    /**
+     * Get issue
+     *
+     * @return Newscoop\Entity\Issue
+     */
+    public function getIssue()
+    {
+        return $this->issue;
     }
 
     /**
@@ -512,11 +561,101 @@ class Article implements \Newscoop\Search\DocumentInterface
      * @param ArticleTopic $topic
      * @return void
      */
-    public function addTopic(ArticleTopic $topic)
+    public function addTopic(TopicTree $topic)
     {
         if (!$this->topics->contains($topic)) {
             $this->topics->add($topic);
-            $topic->setArticle($this);
         }
+    }
+
+    /**
+     * Get topic names
+     *
+     * @return array
+     */
+    public function getTopicNames()
+    {
+        $names = array();
+        foreach ($this->topics as $topic) {
+            $names[] = $topic->getName($this->getLanguage());
+        }
+
+        return array_filter($names);
+    }
+
+    /**
+     * Get link
+     *
+     * @return string
+     */
+    public function getLink()
+    {
+        return implode('/', array(
+            trim($this->getPublication()->getAliasName(), '/'),
+            $this->getLanguage()->getCode(),
+            $this->getIssue()->getShortName(),
+            $this->getSection()->getShortName(),
+            $this->number,
+            $this->getSeoPath(),
+        ));
+    }
+
+    /**
+     * Get seo url path
+     *
+     * @return string
+     */
+    private function getSeoPath()
+    {
+    	$path = array();
+        foreach ($this->publication->getSeo() as $field => $value) {
+            switch ($field) {
+                case 'name':
+                    if (!empty($this->name)) {
+                        $path[] = $this->name;
+                    }
+
+                    break;
+
+                case 'keywords':
+                    if (!empty($this->keywords)) {
+                        $path[] = $this->keywords;
+                    }
+
+                    break;
+
+                case 'topics':
+                    foreach ($this->getTopics() as $topic) {
+                        $path[] = $topic->getName($this->getLanguageId());
+                    }
+
+                    break;
+    		}
+    	}
+
+        $path = implode('-', $path);
+        $path = preg_replace('/[\\\\,\/\.\?"\+&%:#]/', '', trim($path));
+    	return str_replace(' ', '-', $path) . '.htm';
+    }
+
+    /**
+     * Set keywords
+     *
+     * @param string $keywords
+     * @return void
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = (string) $keywords;
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return string
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
     }
 }

@@ -10,7 +10,12 @@ namespace Newscoop\Article;
 use Newscoop\Entity\Language,
     Newscoop\Entity\Article,
     Newscoop\Entity\Author,
-    Newscoop\Entity\ArticleTopic;
+    Newscoop\Entity\ArticleTopic,
+    Newscoop\Entity\Publication,
+    Newscoop\Entity\Alias,
+    Newscoop\Entity\Issue,
+    Newscoop\Entity\Section,
+    Newscoop\Entity\TopicTree;
 
 /**
  */
@@ -18,6 +23,7 @@ class SearchServiceTest extends \TestCase
 {
     const TYPE = 'news';
     const RENDITION = 'rend';
+    const SECTION = 123;
 
     public function setUp()
     {
@@ -50,6 +56,16 @@ class SearchServiceTest extends \TestCase
 
     public function testGetDocument()
     {
+        $publication = new Publication();
+        $publication->addAlias(new Alias('http://example.com'));
+        $publication->setSeo(array('name' => 'on'));
+
+        $issue = new Issue(1);
+        $issue->setShortName('2012_11');
+
+        $section = new Section(self::SECTION, 'Sport');
+        $section->setShortName('sport');
+
         $article = new Article(1, $this->language);
         $article->setPublished($published = new \DateTime());
         $article->setTitle('title');
@@ -60,6 +76,17 @@ class SearchServiceTest extends \TestCase
             'body' => 'body',
             'tic' => 'toc',
         ));
+
+        $article->setKeywords('key,words');
+
+        $article->setPublication($publication);
+        $article->setIssue($issue);
+        $article->setSection($section);
+        $this->language->setCode('de');
+
+        $topic = new TopicTree(1, 1);
+        $topic->addName('test', $this->language);
+        $article->addTopic($topic);
 
         $this->renditionService->expects($this->once())
             ->method('getArticleRenditionImage')
@@ -76,6 +103,10 @@ class SearchServiceTest extends \TestCase
             'lead' => 'lede',
             'content' => 'body',
             'image' => 'artimage',
+            'link' => 'http://example.com/de/2012_11/sport/1/title.htm',
+            'section' => self::SECTION,
+            'keyword' => array('key', 'words'),
+            'topic' => array('test'),
         ), $this->service->getDocument($article));
     }
 

@@ -64,6 +64,12 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getPublicationId();
     }
 
+    public function setSection(\Newscoop\Entity\Section $section)
+    {
+        $this->__load();
+        return parent::setSection($section);
+    }
+
     public function getSection()
     {
         $this->__load();
@@ -74,6 +80,24 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
     {
         $this->__load();
         return parent::getSectionId();
+    }
+
+    public function getSectionNumber()
+    {
+        $this->__load();
+        return parent::getSectionNumber();
+    }
+
+    public function setIssue(\Newscoop\Entity\Issue $issue)
+    {
+        $this->__load();
+        return parent::setIssue($issue);
+    }
+
+    public function getIssue()
+    {
+        $this->__load();
+        return parent::getIssue();
     }
 
     public function getIssueId()
@@ -214,41 +238,46 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getData($field);
     }
 
-    public function getDocumentId()
+    public function isPublished()
     {
         $this->__load();
-        return parent::getDocumentId();
+        return parent::isPublished();
     }
 
-    public function isIndexable(array $config = array (
-))
+    public function addTopic(\Newscoop\Entity\TopicTree $topic)
     {
         $this->__load();
-        return parent::isIndexable($config);
+        return parent::addTopic($topic);
     }
 
-    public function setWebcoder(\Newscoop\Webcode\Mapper $webcoder = NULL)
+    public function getTopicNames()
     {
         $this->__load();
-        return parent::setWebcoder($webcoder);
+        return parent::getTopicNames();
     }
 
-    public function getWebcode()
+    public function getLink()
     {
         $this->__load();
-        return parent::getWebcode();
+        return parent::getLink();
     }
 
-    public function getDocument()
+    public function setKeywords($keywords)
     {
         $this->__load();
-        return parent::getDocument();
+        return parent::setKeywords($keywords);
+    }
+
+    public function getKeywords()
+    {
+        $this->__load();
+        return parent::getKeywords();
     }
 
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'creator', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'authors', 'indexed');
+        return array('__isInitialized__', 'language', 'publication', 'issue', 'section', 'creator', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'authors', 'topics', 'indexed', 'keywords');
     }
 
     public function __clone()

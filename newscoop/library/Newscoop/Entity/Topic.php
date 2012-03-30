@@ -36,6 +36,13 @@ class Topic
     private $name;
 
     /**
+     * @ManyToOne(targetEntity="Newscoop\Entity\TopicTree", inversedBy="names")
+     * @JoinColumn(name="fk_topic_id", referencedColumnName="id")
+     * @var Newscoop\Entity\TopicTree
+     */
+    private $topic;
+
+    /**
      * @param int $id
      * @param int $language
      * @param int $name
@@ -43,7 +50,7 @@ class Topic
     public function __construct($id, $language, $name)
     {
         $this->id = (int) $id;
-        $this->language = (int) $language;
+        $this->language = is_numeric($language) ? (int) $language : $language->getId();
         $this->name = (string) $name;
     }
 
