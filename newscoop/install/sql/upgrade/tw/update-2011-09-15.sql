@@ -62,6 +62,14 @@ CREATE TABLE IF NOT EXISTS `user_token` (
   PRIMARY KEY (`user_id`,`action`,`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `user_topic`;
+CREATE TABLE `user_topic` (
+  `user_id` int(11) unsigned NOT NULL,
+  `topic_id` int(11) unsigned NOT NULL,
+  `topic_language` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`,`topic_id`,`topic_language`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `ingest_feed`;
 CREATE TABLE IF NOT EXISTS `ingest_feed` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
