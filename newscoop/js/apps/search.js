@@ -47,8 +47,8 @@ var DocumentCollection = Backbone.Collection.extend({
             params.date = this.date;
         }
 
-        if (this.page) {
-            params.page = this.page;
+        if (this.start) {
+            params.start = this.start;
         }
 
         return params;
@@ -66,8 +66,11 @@ var DocumentCollection = Backbone.Collection.extend({
     },
 
     parse: function(response) {
+        this.response = response;
         this.query = response.responseHeader.params.q;
-        this.numFound = response.response.numFound;
+        this.count = parseInt(response.response.numFound);
+        this.start = parseInt(response.response.start);
+        this.rows = parseInt(response.responseHeader.params.rows);
         return response.response.docs;
     }
 });
@@ -153,7 +156,7 @@ var TypeFilterView = Backbone.View.extend({
 /**
  * Date filter view
  */
-DateFilterView = Backbone.View.extend({
+var DateFilterView = Backbone.View.extend({
     events: {
         'click a': 'filter',
         'click input[type=submit]': 'filterRange'
@@ -183,6 +186,55 @@ DateFilterView = Backbone.View.extend({
     }
 });
 
+/**
+ * Pagination view
+ */
+var PaginationView = Backbone.View.extend({
+    events: {
+        'click .prev a': 'goTo',
+        'click .next a': 'goTo'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        console.log(this.collection);
+    },
+
+    render: function() {
+        $(this.el).find('.start').text(Math.floor(this.collection.start / this.collection.rows) + 1);
+        $(this.el).find('.end').text(Math.ceil(this.collection.count / this.collection.rows));
+
+        if (this.collection.start > 0) { // active prev
+        } else {
+        }
+
+        if (this.collection.count > this.collection.start + this.collection.rows) { // active next
+        } else {
+        }
+    },
+
+    goTo: function(e) {
+        e.preventDefault();
+
+        if ($(e.target).closest('li').hasClass('prev')) {
+            var start = Math.max(0, this.collection.start - this.collection.rows);
+        } else {
+            var start = Math.min(Math.ceil(this.collection.count / this.collection.rows) - 1, this.collection.start + this.collection.rows);
+        }
+
+        if (start == this.collection.start) {
+            return;
+        }
+
+        this.collection.start = start;
+        router.navigate(this.collection.nav());
+        this.collection.fetch();
+    }
+});
+
+/**
+ * Router
+ */
 var SearchRouter = Backbone.Router.extend({
     routes: {
         "?*params": "search"

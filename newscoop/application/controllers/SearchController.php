@@ -9,12 +9,28 @@
  */
 class SearchController extends Zend_Controller_Action
 {
-    const LIMIT = 10;
+    const LIMIT = 12;
 
-    static $dates = array(
+    /**
+     * @var array
+     */
+    private $dates = array(
         '24h' => '[NOW-1DAY/HOUR TO NOW]',
         '7d' => '[NOW-7DAY/DAY TO NOW]',
         '1y' => '[NOW-1YEAR/DAY TO NOW]',
+    );
+
+    /**
+     * @var array
+     */
+    private $types = array(
+        'article' => array('news', 'newswire'),
+        'dossier' => 'dossier',
+        'blog' => 'blog',
+        'comment' => 'comment',
+        'link' => 'link',
+        'event' => 'event',
+        'user' => 'user',
     );
 
     public function init()
@@ -62,7 +78,8 @@ class SearchController extends Zend_Controller_Action
         return array(
             'wt' => 'json',
             'q' => $this->buildSolrQuery(),
-            'start' => $this->_getParam('page', 0) * self::LIMIT,
+            'rows' => self::LIMIT,
+            'start' => max(0, (int) $this->_getParam('start')),
             'fq' => implode(' AND ', array_filter(array(
                 $this->buildSolrTypeParam(),
                 $this->buildSolrDateParam(),
@@ -92,7 +109,12 @@ class SearchController extends Zend_Controller_Action
      */
     private function buildSolrTypeParam()
     {
-        return $this->_getParam('type', false) || $this->_getParam('type') === 'undefined' ? sprintf('type:%s', $this->_getParam('type')) : null;
+        $type = $this->_getParam('type', false);
+        if (!$type || !array_key_exists($type, $this->types)) {
+            return;
+        }
+
+        return sprintf('type:(%s)', is_array($this->types[$type]) ? implode(' OR ', $this->types[$type]) : $this->types[$type]);
     }
 
     /**
@@ -107,8 +129,8 @@ class SearchController extends Zend_Controller_Action
             return;
         }
 
-        if (array_key_exists($date, self::$dates)) {
-            return sprintf('published:%s', self::$dates[$date]);
+        if (array_key_exists($date, $this->dates)) {
+            return sprintf('published:%s', $this->dates[$date]);
         }
 
         try {

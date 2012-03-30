@@ -41,10 +41,10 @@
     <ul id="results" class="filter-list">
     </ul>
 
-    <ul class="paging content-paging">
-        <li><a href="#" class="grey-button">&laquo;</a></li>
-        <li>1/12</li>
-        <li><a href="#" class="grey-button">&raquo;</a></li>
+    <ul id="search-pagination" class="paging content-paging">
+        <li class="prev"><a href="#" class="grey-button">&laquo;</a></li>
+        <li><span class="start">1</span>/<span class="end">12</span></li>
+        <li class="next"><a href="#" class="grey-button">&raquo;</a></li>
     </ul>
 </section>
     
@@ -78,6 +78,7 @@ $(function() {
     searchFormView = new SearchFormView({collection: documents, el: $('#search-form') });
     typeFilterView = new TypeFilterView({collection: documents, el: $('#type-filter') });
     dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
+    paginationView = new PaginationView({collection: documents, el: $('#search-pagination') });
 
     Backbone.history.start({pushState: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'search']), '/')) }} });
     documents.reset(documents.parse({{ json_encode($result) }}));
