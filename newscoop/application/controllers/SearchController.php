@@ -155,6 +155,8 @@ class SearchController extends Zend_Controller_Action
     {
         $decoded = json_decode($response->getBody(), true);
         $decoded['responseHeader']['params']['q'] = $this->_getParam('q'); // this might be modified, keep users query
+        $decoded['responseHeader']['params']['date'] = $this->_getParam('date');
+        $decoded['responseHeader']['params']['type'] = $this->_getParam('type');
         return $decoded;
     }
 }

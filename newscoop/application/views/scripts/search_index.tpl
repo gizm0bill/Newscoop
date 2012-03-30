@@ -48,7 +48,7 @@
     </ul>
 </section>
     
-<script type="text/template" id="document-news-template">
+<script type="text/template" id="document-article-template">
 <img src="<%= doc.get('image') %>" alt="" width="90" />
 <h3><a href="#"><%= doc.escape('title') %></a></h3>
 <p><%= doc.escape('lead') %></p>
@@ -63,6 +63,10 @@
 <script type="text/template" id="document-user-template">
 <h3><a href="#"><%= doc.escape('user') %></a></h3>
 <p><%= doc.escape('bio') %></p>
+</script>
+
+<script type="text/template" id="document-event-template">
+<h3><a href="#"><%= doc.escape('title') %></a></h3>
 </script>
 
 <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>

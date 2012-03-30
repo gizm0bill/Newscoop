@@ -6,8 +6,20 @@ var Document = Backbone.Model.extend({
     month: 3600 * 24 * 30,
     year: 3600 * 24 * 365,
 
+    types: {
+        'news': 'article',
+        'newswire': 'article',
+        'dossier': 'article',
+        'user': 'user',
+        'tweet': 'twitter',
+        'event': 'event'
+    },
+
     /**
      * Get relative date
+     *
+     * @param {string} property
+     * @return {string}
      */
     relDate: function(property) {
         var date = new Date(this.get(property));
@@ -27,6 +39,15 @@ var Document = Backbone.Model.extend({
         } else {
             return 'vor ' + (diff / this.year).toFixed() + ' Jahr';
         }
+    },
+
+    /**
+     * Get template type
+     *
+     * @return {string}
+     */
+    getTemplateType: function() {
+        return this.types[this.get('type')];
     }
 });
 
@@ -71,6 +92,8 @@ var DocumentCollection = Backbone.Collection.extend({
         this.count = parseInt(response.response.numFound);
         this.start = parseInt(response.response.start);
         this.rows = parseInt(response.responseHeader.params.rows);
+        this.type = response.responseHeader.params.type;
+        this.date = response.responseHeader.params.date;
         return response.response.docs;
     }
 });
@@ -83,11 +106,11 @@ var DocumentView = Backbone.View.extend({
     tagName: 'li',
 
     initialize: function() {
-        this.template = _.template($('#document-' + this.model.get('type') + '-template').html());
+        this.template = _.template($('#document-' + this.model.getTemplateType() + '-template').html());
     },
 
     render: function() {
-        $(this.el).html(this.template({doc: this.model})).addClass(this.model.get('type'));
+        $(this.el).html(this.template({doc: this.model})).addClass(this.model.getTemplateType());
         return this;
     }
 });
@@ -197,7 +220,6 @@ var PaginationView = Backbone.View.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        console.log(this.collection);
     },
 
     render: function() {
@@ -216,10 +238,11 @@ var PaginationView = Backbone.View.extend({
     goTo: function(e) {
         e.preventDefault();
 
+        var lastStart = (Math.ceil(this.collection.count / this.collection.rows) - 1) * this.collection.rows;
         if ($(e.target).closest('li').hasClass('prev')) {
             var start = Math.max(0, this.collection.start - this.collection.rows);
         } else {
-            var start = Math.min(Math.ceil(this.collection.count / this.collection.rows) - 1, this.collection.start + this.collection.rows);
+            var start = Math.min(lastStart, this.collection.start + this.collection.rows);
         }
 
         if (start == this.collection.start) {
