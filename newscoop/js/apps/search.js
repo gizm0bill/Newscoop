@@ -142,6 +142,7 @@ var SearchFormView = Backbone.View.extend({
         this.collection.query = $(this.el).find('input').val();
         this.collection.type = null;
         this.collection.date = null;
+        this.collection.start = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();
     }
@@ -177,6 +178,7 @@ var TypeFilterView = Backbone.View.extend({
     filter: function(e) {
         e.preventDefault();
         this.collection.type = e.target.hash.slice(1);
+        this.collection.start = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();
     }
@@ -194,6 +196,7 @@ var DateFilterView = Backbone.View.extend({
     filter: function(e) {
         e.preventDefault();
         this.collection.date = e.target.hash.slice(1);
+        this.collection.start = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();
     },
@@ -210,6 +213,7 @@ var DateFilterView = Backbone.View.extend({
         }
 
         this.collection.date = [from, to].join(',');
+        this.collection.start = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();
     }
