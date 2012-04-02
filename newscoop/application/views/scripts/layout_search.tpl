@@ -20,6 +20,51 @@
     <link rel="stylesheet" href="{{ $view->baseUrl('public/_css/tw2011/skin.css') }}">
     <link rel="stylesheet" href="{{ $view->baseUrl('public/_js/libs/fancybox/jquery.fancybox-1.3.4.css') }}">
     <script src="{{ $view->baseUrl('public/_js/libs/modernizr-2.0.6.js') }}"></script>
+    
+    <script type="text/template" id="document-article-template">
+    <% if (doc.get('image')) { %><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /><% } %>
+    <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
+    <p><%= doc.escape('lead') %></p>
+    <span class="time"><%= doc.relDate('published') %></span>
+    </script>
+
+    <script type="text/template" id="document-twitter-template">
+    <p><b><%= doc.escape('tweet_user_screen_name') %></b> <%= doc.escape('tweet') %></p>
+    <span class="time"><%= doc.relDate('published') %></span>
+    </script>
+
+    <script type="text/template" id="document-user-template">
+    <h3><a href="#"><%= doc.escape('user') %></a></h3>
+    <p><%= doc.escape('bio') %></p>
+    </script>
+
+    <script type="text/template" id="document-event-template">
+    <h3><a href="#"><%= doc.escape('title') %></a></h3>
+    </script>
+
+    <script type="text/template" id="document-omni-template">
+    <h3><a href="#"><%= doc.escape('subject') %></a></h3>
+    <p><%= doc.escape('message') %></p>
+    <span class="time"><%= doc.relDate('published') %></span>
+    </script>
+
+    <script type="text/template" id="document-link-template">
+    <p>Diesen Link halten wir für wertvoll, weshalb wir ihn an unsere Leser weitergeben: <a href="<%= doc.get('link_url') %>"><%= doc.escape('link_description') %></a></p>
+    <span class="time"><%= doc.relDate('published') %></span>
+    </script>
+
+    <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>
+    <script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
+    <script src="{{ $view->baseUrl('js/backbone.js') }}"></script>
+    <script src="{{ $view->baseUrl('js/apps/search.js') }}"></script>
+    <script>
+    $(function() {
+        window.documents = new DocumentCollection();
+        documentsView = new DocumentListView({collection: documents, el: $('#results')});
+        paginationView = new PaginationView({collection: documents, el: $('#search-pagination') });
+        documents.reset(documents.parse({{ json_encode($result) }}));
+    });
+    </script>
 </head>
 <body>
 
@@ -97,8 +142,22 @@
             
         </div>        
         <div class="content-box clearfix reverse-columns filter-content">
-            {{block content}}
+            <aside>
+            {{block aside}}{{/block}}
+            </aside>
+            <section>
+            {{block section}}
             {{/block}}
+
+            <ul id="results" class="filter-list">
+            </ul>
+
+            <ul id="search-pagination" class="paging content-paging">
+                <li class="prev"><a href="#" class="grey-button">&laquo;</a></li>
+                <li><span class="start">1</span>/<span class="end">12</span></li>
+                <li class="next"><a href="#" class="grey-button">&raquo;</a></li>
+            </ul>
+            </section>
         </div>
 
     	

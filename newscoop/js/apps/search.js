@@ -64,7 +64,11 @@ var DocumentCollection = Backbone.Collection.extend({
     model: Document,
 
     buildParams: function() {
-        var params = {q: this.query};
+        var params = {};
+
+        if (this.query) {
+            params.q = this.query;
+        }
 
         if (this.type) {
             params.type = this.type;

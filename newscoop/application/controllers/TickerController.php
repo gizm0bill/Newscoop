@@ -9,18 +9,8 @@ require_once __DIR__ . '/AbstractSolrController.php';
 
 /**
  */
-class SearchController extends AbstractSolrController
+class TickerController extends AbstractSolrController
 {
-    public function indexAction()
-    {
-        if (!$this->_getParam('q', false)) {
-            $this->render('blank');
-            return;
-        }
-
-        parent::indexAction();
-    }
-
     /**
      * Build solr params array
      *
@@ -29,27 +19,13 @@ class SearchController extends AbstractSolrController
     protected function buildSolrParams()
     {
         return array_merge(parent::buildSolrParams(), array(
-            'q' => $this->buildSolrQuery(),
+            'q' => '*:*',
             'fq' => implode(' AND ', array_filter(array(
-                $this->buildSolrTypeParam(),
-                $this->buildSolrDateParam(),
+                //$this->buildSolrTypeParam(),
+                //$this->buildSolrDateParam(),
             ))),
+            'sort' => 'published desc',
         ));
-    }
-
-    /**
-     * Build solr query
-     *
-     * @return string
-     */
-    private function buildSolrQuery()
-    {
-        $q = $this->_getParam('q');
-        if ($this->_helper->service('webcoder')->isWebcode($q)) {
-            return sprintf('webcode:\%s', $q);
-        }
-
-        return $q;
     }
 
     /**

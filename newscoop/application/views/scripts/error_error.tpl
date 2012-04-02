@@ -7,7 +7,7 @@
 
 {{ foreach $errors as $error }}
 {{ if !is_string($error) && is_a($error, 'Exception') }}
-<code>{{ $error->getMessage()|truncate }}</code>
+<code>{{ $error->getMessage() }}</code>
 {{ /if }}
 {{ /foreach }}
 
