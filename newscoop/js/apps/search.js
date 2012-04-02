@@ -13,7 +13,8 @@ var Document = Backbone.Model.extend({
         'user': 'user',
         'tweet': 'twitter',
         'event': 'event',
-        'comment': 'omni'
+        'comment': 'omni',
+        'link': 'link'
     },
 
     /**

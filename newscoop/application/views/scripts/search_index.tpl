@@ -75,6 +75,11 @@
 <span class="time"><%= doc.relDate('published') %></span>
 </script>
 
+<script type="text/template" id="document-link-template">
+<p>Diesen Link halten wir für wertvoll, weshalb wir ihn an unsere Leser weitergeben: <a href="<%= doc.get('link_url') %>"><%= doc.escape('link_description') %></a></p>
+<span class="time"><%= doc.relDate('published') %></span>
+</script>
+
 <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>
 <script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
 <script src="{{ $view->baseUrl('js/backbone.js') }}"></script>

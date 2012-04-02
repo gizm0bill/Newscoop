@@ -112,6 +112,11 @@ class SearchService implements \Newscoop\Search\ServiceInterface
                 $doc['lead'] = strip_tags($article->getData('DataLead'));
                 $doc['content'] = strip_tags($article->getData('DataContent'));
                 break;
+
+            case 'link':
+                $doc['link_url'] = $article->getData('link_url');
+                $doc['link_description'] = strip_tags($article->getData('link_description'));
+                break;
         }
 
         return array_filter($doc);
