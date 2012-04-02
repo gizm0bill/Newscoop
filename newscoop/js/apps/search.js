@@ -12,7 +12,8 @@ var Document = Backbone.Model.extend({
         'dossier': 'article',
         'user': 'user',
         'tweet': 'twitter',
-        'event': 'event'
+        'event': 'event',
+        'comment': 'omni'
     },
 
     /**
@@ -47,7 +48,11 @@ var Document = Backbone.Model.extend({
      * @return {string}
      */
     getTemplateType: function() {
-        return this.types[this.get('type')];
+        if (!this.get('type') in this.types) {
+            console.log(this.get('type'));
+        } else {
+            return this.types[this.get('type')];
+        }
     }
 });
 

@@ -32,15 +32,18 @@ class SearchServiceTest extends \TestCase
 
     public function testGetDocument()
     {
+        $created = new \DateTime();
         $comment = new Comment();
         $comment->setSubject('sub');
         $comment->setMessage('msg');
+        $comment->setTimeCreated($created);
 
         $this->assertEquals(array(
             'id' => 'comment-0',
             'type' => 'comment',
             'subject' => 'sub',
             'message' => 'msg',
+            'published' => gmdate('Y-m-d\TH:i:s\Z', $created->getTimestamp()),
         ), $this->service->getDocument($comment));
     }
 

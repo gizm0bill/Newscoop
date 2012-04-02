@@ -47,6 +47,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'type' => 'comment',
             'subject' => $comment->getSubject(),
             'message' => $comment->getMessage(),
+            'published' => gmdate('Y-m-d\TH:i:s\Z', $comment->getTimeCreated()->getTimestamp()),
         );
     }
 

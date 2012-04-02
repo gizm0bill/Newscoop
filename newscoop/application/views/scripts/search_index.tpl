@@ -69,6 +69,12 @@
 <h3><a href="#"><%= doc.escape('title') %></a></h3>
 </script>
 
+<script type="text/template" id="document-omni-template">
+<h3><a href="#"><%= doc.escape('subject') %></a></h3>
+<p><%= doc.escape('message') %></p>
+<span class="time"><%= doc.relDate('published') %></span>
+</script>
+
 <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>
 <script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
 <script src="{{ $view->baseUrl('js/backbone.js') }}"></script>
