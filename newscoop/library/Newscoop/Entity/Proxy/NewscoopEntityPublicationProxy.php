@@ -133,7 +133,7 @@ class NewscoopEntityPublicationProxy extends \Newscoop\Entity\Publication implem
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'language', 'issues', 'public_enabled', 'moderator_to', 'moderator_from', 'aliases', 'seo');
+        return array('__isInitialized__', 'id', 'name', 'language', 'issues', 'public_enabled', 'moderator_to', 'moderator_from', 'aliases', 'seo', 'defaultAliasId');
     }
 
     public function __clone()

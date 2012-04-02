@@ -81,6 +81,12 @@ class Publication extends Entity
     private $seo;
 
     /**
+     * @Column(type="integer", nullable=True, name="IdDefaultAlias")
+     * @var int
+     */
+    private $defaultAliasId;
+
+    /**
      */
     public function __construct()
     {
@@ -248,7 +254,10 @@ class Publication extends Entity
     public function getAliasName()
     {
         foreach ($this->aliases as $alias) {
-            return $alias->getName();
+            if (empty($this->defaultAliasId) ||
+                $this->defaultAliasId === $alias->getId()) {
+                return $alias->getName();
+            }
         }
 
         return null;
