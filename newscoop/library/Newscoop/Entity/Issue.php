@@ -22,7 +22,7 @@ class Issue extends Entity
     const NAME = __CLASS__;
 
     /**
-     * @ManyToOne(targetEntity="Newscoop\Entity\Publication")
+     * @ManyToOne(targetEntity="Newscoop\Entity\Publication", inversedBy="issues")
      * @JoinColumn(name="IdPublication", referencedColumnName="Id")
      * @var Newscoop\Entity\Publication
      */
@@ -96,6 +96,17 @@ class Issue extends Entity
     }
 
     /**
+     * Set language
+     *
+     * @param Newscoop\Entity\Language $language
+     * @return void
+     */
+    public function setLanguage(Language $language)
+    {
+        $this->language = $language;
+    }
+
+    /**
      * Get language
      *
      * @return Newscoop\Entity\Language
@@ -103,6 +114,17 @@ class Issue extends Entity
     public function getLanguage()
     {
         return $this->language;
+    }
+
+    /**
+     * Set publication
+     *
+     * @param Newscoop\Entity\Publication $publication
+     * @return void
+     */
+    public function setPublication(Publication $publication)
+    {
+        $this->publication = $publication;
     }
 
     /**
@@ -200,5 +222,14 @@ class Issue extends Entity
     {
         return $this->shortName;
     }
-}
 
+    /**
+     * Get number
+     *
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+}

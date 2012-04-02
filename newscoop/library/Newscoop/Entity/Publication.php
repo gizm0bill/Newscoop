@@ -69,7 +69,7 @@ class Publication extends Entity
     private $moderator_from;
 
     /**
-     * @OneToMany(targetEntity="Newscoop\Entity\Alias", mappedBy="publication")
+     * @OneToMany(targetEntity="Newscoop\Entity\Alias", mappedBy="publication", cascade={"persist", "remove"})
      * @var Doctrine\Common\Collections\Collection
      */
     private $aliases;

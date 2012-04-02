@@ -33,7 +33,7 @@ class TopicTree
     private $node_right;
 
     /**
-     * @OneToMany(targetEntity="Newscoop\Entity\Topic", mappedBy="topic")
+     * @OneToMany(targetEntity="Newscoop\Entity\Topic", mappedBy="topic", cascade={"persist", "remove"})
      * @var Doctrine\Common\Collections\Collection
      */
     private $names;

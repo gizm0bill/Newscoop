@@ -23,6 +23,11 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     private $renditionService;
 
     /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
      * @var array
      */
     private $config = array(
@@ -35,11 +40,12 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      * @param Newscoop\Image\RenditionService $renditionService
      * @param array $config
      */
-    public function __construct(\Newscoop\Webcode\Mapper $webcoder, \Newscoop\Image\RenditionService $renditionService, array $config)
+    public function __construct(\Newscoop\Webcode\Mapper $webcoder, \Newscoop\Image\RenditionService $renditionService, \Doctrine\ORM\EntityManager $em, array $config)
     {
         $this->webcoder = $webcoder;
         $this->renditionService = $renditionService;
         $this->config = array_merge($this->config, $config);
+        $this->em = $em;
     }
 
     /**
@@ -84,7 +90,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             }, $article->getAuthors()),
             'webcode' => $this->webcoder->encode($article->getNumber()),
             'image' => $image ? $image['src'] : null,
-            'link' => $article->getLink(),
+            'link' => $this->getLink($article),
             'section' => $article->getSectionNumber(),
             'keyword' => explode(',', $article->getKeywords()),
             'topic' => $article->getTopicNames(),
@@ -120,5 +126,60 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     public function getDocumentId($article)
     {
         return sprintf('article-%d-%d', $article->getNumber(), $article->getLanguageId());
+    }
+
+    /**
+     * Get link
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return string
+     */
+    private function getLink(\Newscoop\Entity\Article $article)
+    {
+        $link = implode('/', array(
+            trim($article->getPublication()->getAliasName(), '/'),
+            $article->getLanguage()->getCode(),
+            $this->getIssueShortName($article),
+            $this->getSectionShortName($article),
+            $article->getNumber(),
+            $article->getSeoPath(),
+        ));
+
+        return strpos($link, 'http') === 0 ? $link : 'http://' . $link;
+    }
+
+    /**
+     * Get issue short name
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return string
+     */
+    private function getIssueShortName(\Newscoop\Entity\Article $article)
+    {
+        $issue = $this->em->getRepository('Newscoop\Entity\Issue')->findOneBy(array(
+            'number' => $article->getIssueNumber(),
+            'publication' => $article->getPublicationId(),
+            'language' => $article->getLanguageId(),
+        ));
+
+        return $issue ? $issue->getShortName() : null;
+    }
+
+    /**
+     * Get section short name
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return string
+     */
+    private function getSectionShortName(\Newscoop\Entity\Article $article)
+    {
+        $section = $this->em->getRepository('Newscoop\Entity\Section')->findOneBy(array(
+            'number' => $article->getSectionNumber(),
+            'publication' => $article->getPublicationId(),
+            'language' => $article->getLanguageId(),
+            'issueNumber' => $article->getIssueNumber(),
+        ));
+
+        return $section ? $section->getShortName() : null;
     }
 }

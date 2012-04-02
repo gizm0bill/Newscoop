@@ -50,7 +50,7 @@
     
 <script type="text/template" id="document-article-template">
 <img src="<%= doc.get('image') %>" alt="" width="90" />
-<h3><a href="#"><%= doc.escape('title') %></a></h3>
+<h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
 <p><%= doc.escape('lead') %></p>
 <span class="time"><%= doc.relDate('published') %></span>
 </script>

@@ -238,6 +238,7 @@ class Article implements \Newscoop\Search\DocumentInterface
     public function setSection(Section $section)
     {
         $this->section = $section;
+        $this->sectionId = $section->getNumber();
     }
 
     /**
@@ -267,7 +268,7 @@ class Article implements \Newscoop\Search\DocumentInterface
      */
     public function getSectionNumber()
     {
-        return $this->getSection() ? $this->getSection()->getNumber() : null;
+        return $this->sectionId;
     }
 
     /**
@@ -279,6 +280,7 @@ class Article implements \Newscoop\Search\DocumentInterface
     public function setIssue(Issue $issue)
     {
         $this->issue = $issue;
+        $this->issueId = $issue->getNumber();
     }
 
     /**
@@ -297,6 +299,16 @@ class Article implements \Newscoop\Search\DocumentInterface
      * @return int
      */
     public function getIssueId()
+    {
+        return $this->issueId;
+    }
+
+    /**
+     * Get issue number
+     *
+     * @return int
+     */
+    public function getIssueNumber()
     {
         return $this->issueId;
     }
@@ -584,28 +596,11 @@ class Article implements \Newscoop\Search\DocumentInterface
     }
 
     /**
-     * Get link
-     *
-     * @return string
-     */
-    public function getLink()
-    {
-        return implode('/', array(
-            trim($this->getPublication()->getAliasName(), '/'),
-            $this->getLanguage()->getCode(),
-            $this->getIssue()->getShortName(),
-            $this->getSection()->getShortName(),
-            $this->number,
-            $this->getSeoPath(),
-        ));
-    }
-
-    /**
      * Get seo url path
      *
      * @return string
      */
-    private function getSeoPath()
+    public function getSeoPath()
     {
     	$path = array();
         foreach ($this->publication->getSeo() as $field => $value) {

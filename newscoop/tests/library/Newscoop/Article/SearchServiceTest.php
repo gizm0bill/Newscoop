@@ -27,13 +27,15 @@ class SearchServiceTest extends \TestCase
 
     public function setUp()
     {
+        $this->em = $this->setUpOrm('Newscoop\Entity\Article', 'Newscoop\Entity\Publication', 'Newscoop\Entity\Issue', 'Newscoop\Entity\Section', 'Newscoop\Entity\Language', 'Newscoop\Entity\Alias');
+
         $this->webcoder = new \Newscoop\Webcode\Mapper();
 
         $this->renditionService = $this->getMockBuilder('Newscoop\Image\RenditionService')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->service = new SearchService($this->webcoder, $this->renditionService, array(
+        $this->service = new SearchService($this->webcoder, $this->renditionService, $this->em, array(
             'type' => array(self::TYPE),
             'rendition' => self::RENDITION,
         ));
@@ -57,20 +59,36 @@ class SearchServiceTest extends \TestCase
     public function testGetDocument()
     {
         $publication = new Publication();
-        $publication->addAlias(new Alias('http://example.com'));
+        $publication->addAlias(new Alias('example.com'));
         $publication->setSeo(array('name' => 'on'));
+        $this->em->persist($publication);
+        $this->em->flush();
+
+        $language = $this->language;
+        $language->setCode('de');
+        $this->em->persist($language);
+        $this->em->flush();
 
         $issue = new Issue(1);
         $issue->setShortName('2012_11');
+        $issue->setPublication($publication);
+        $issue->setLanguage($language);
+        $this->em->persist($issue);
+        $this->em->flush();
 
         $section = new Section(self::SECTION, 'Sport');
         $section->setShortName('sport');
+        $section->setPublication($publication);
+        $section->setIssue($issue);
+        $section->setLanguage($language);
+        $this->em->persist($section);
+        $this->em->flush();
 
         $article = new Article(1, $this->language);
         $article->setPublished($published = new \DateTime());
         $article->setTitle('title');
         $article->setType('news');
-        $article->addAuthor(new Author('john', 'doe'));
+        $article->addAuthor($author = new Author('john', 'doe'));
         $article->setData(array(
             'lede' => 'lede',
             'body' => 'body',
@@ -82,7 +100,11 @@ class SearchServiceTest extends \TestCase
         $article->setPublication($publication);
         $article->setIssue($issue);
         $article->setSection($section);
-        $this->language->setCode('de');
+
+        $this->assertEquals($publication->getId(), $article->getPublicationId());
+        $this->assertEquals($issue->getNumber(), $article->getIssueNumber());
+        $this->assertEquals($section->getNumber(), $article->getSectionNumber());
+        $this->assertEquals($language->getId(), $article->getLanguageId());
 
         $topic = new TopicTree(1, 1);
         $topic->addName('test', $this->language);
@@ -94,7 +116,7 @@ class SearchServiceTest extends \TestCase
             ->will($this->returnValue(array('src' => 'artimage')));
 
         $this->assertEquals(array(
-            'id' => 'article-1-0',
+            'id' => 'article-1-1',
             'title' => 'title',
             'type' => 'news',
             'author' => array('john doe'),
