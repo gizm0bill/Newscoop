@@ -93,7 +93,7 @@ var datatableCallback = {
                     }, serverObj.security),
                     success: function (data) {
                         flashMessage(putGS('Comments status change to $1.', statusMap[status]));
-                        datatable.fnDraw(false);
+                        datatable.fnClearTable(true);
                     },
                     error: function (rq, status, error) {
                         if (status == 0 || status == -1) {
@@ -151,7 +151,7 @@ $(function () {
             if(!datatableCallback.loading) {
                 datatableCallback.loading = true;
                 datatableCallback.serverData[$(this).val()] = $(this).is(':checked');
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             } else
                 return false;
     }).end().find('label').click(function(evt){
@@ -174,7 +174,7 @@ $(function () {
             if(!datatableCallback.loading) {
                 datatableCallback.loading = true;
                 datatableCallback.serverData[$(this).val()] = $(this).is(':checked');
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             } else
                 return false;
     }).end().find('label').click(function(evt){
@@ -222,7 +222,7 @@ $(function () {
             success: function (data) {
                 if ('deleted' == status) flashMessage(putGS('Comment deleted.'));
                 else flashMessage(putGS('Comment status change to $1.', statusMap[status]));
-                datatable.fnDraw(false);
+                datatable.fnClearTable(true);
             },
             error: function (rq, status, error) {
                 if (status == 0 || status == -1) {
@@ -243,7 +243,7 @@ $(function () {
             url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function (data) {
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
                 flashMessage(putGS('Comment updated.'));
             },
             error: function (rq, status, error) {
@@ -295,7 +295,7 @@ $(function () {
             }, serverObj.security),
             success: function (data) {
                 flashMessage(putGS('Comment updated.'));
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             },
             error: function (rq, status, error) {
                 if (status == 0 || status == -1) {
@@ -318,7 +318,7 @@ $(function () {
             }, serverObj.security),
             success: function (data) {
                 flashMessage(putGS('Comment updated.'));
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             },
             error: function (rq, status, error) {
                 if (status == 0 || status == -1) {
@@ -340,7 +340,7 @@ $(function () {
             }, serverObj.security),
             success: function (data) {
                 flashMessage(putGS('Comment updated.'));
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             },
             error: function (rq, status, error) {
                 if (status == 0 || status == -1) {
