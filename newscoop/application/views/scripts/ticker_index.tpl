@@ -2,28 +2,28 @@
 
 {{block aside}}
 <h3>Quelle</h3>
-<ul>
-    <li><input type="checkbox"  /> <label>Alles</label></li>
-    <li><input type="checkbox"  /> <label class="omni">Tageswoche</label></li>
-    <li><input type="checkbox"  /> <label class="twitter">Twitter</label></li>
-    <li><input type="checkbox"  /> <label class="article">Agentur</label></li>
-    <li><input type="checkbox"  /> <label class="link">Link</label></li>
+<ul id="source-filter">
+    <li><input type="checkbox" id="source_all" /> <label for="source_all">Alles</label></li>
+    <li><input type="checkbox" id="source_1" value="tageswoche" /> <label for="source_1" class="omni">Tageswoche</label></li>
+    <li><input type="checkbox" id="source_2" value="twitter"  /> <label for="source_2" class="twitter">Twitter</label></li>
+    <li><input type="checkbox" id="source_3" value="sda" /> <label for="source_3" class="article">Agentur</label></li>
+    <li><input type="checkbox" id="source_4" value="link" /> <label for="source_4" class="link">Link</label></li>
 </ul>
 
 <h3>Rubriken</h3>
-<ul>
-    <li><input type="checkbox"  /> <label>Basel</label></li>
-    <li><input type="checkbox"  /> <label>Schweiz</label></li>
-    <li><input type="checkbox"  /> <label>International</label></li>
-    <li><input type="checkbox"  /> <label>Sport</label></li>
-    <li><input type="checkbox"  /> <label>Kultur</label></li>
-    <li><input type="checkbox"  /> <label>Leben</label></li>
-    <li><input type="checkbox"  /> <label>Dossiers</label></li>
-    <li><input type="checkbox"  /> <label>Blogs</label></li>
+<ul id="section-filter">
+    <li><input type="checkbox" id="section_1" value="basel" /> <label for="section_1">Basel</label></li>
+    <li><input type="checkbox" id="section_2" value="schweiz" /> <label for="section_2">Schweiz</label></li>
+    <li><input type="checkbox" id="section_3" value="international" /> <label for="section_3">International</label></li>
+    <li><input type="checkbox" id="section_4" value="sport" /> <label for="section_4">Sport</label></li>
+    <li><input type="checkbox" id="section_5" value="kultur" /> <label for="section_5">Kultur</label></li>
+    <li><input type="checkbox" id="section_6" value="leben"  /> <label for="section_6">Leben</label></li>
+    <li><input type="checkbox" id="section_7" value="dossier" /> <label for="section_7">Dossiers</label></li>
+    <li><input type="checkbox" id="section_8" value="blogs" /> <label for="section_8">Blogs</label></li>
 </ul>
 
 <h3>Datum</h3>
-<ul>
+<ul id="date-filter">
     <li><input type="checkbox"  /> <label>Heute</label></li>
     <li><input type="checkbox"  /> <label>Gestern</label></li>
     <li><input type="checkbox"  /> <label>Letzte 7 Tage</label></li>
@@ -33,7 +33,7 @@
 </ul>
 
 <h3>Autoren</h3>
-<ul>
+<ul id="author-filter">
     <li>
         <select>
             <option>Alle</option>
@@ -44,7 +44,7 @@
 </ul>
 
 <h3>Themen</h3>
-<ul>
+<ul id="topic-filter">
     <li>
         <select>
             <option>Alle</option>
@@ -57,9 +57,9 @@
 <script>
 $(function() {
     window.router = new SearchRouter();
-    searchFormView = new SearchFormView({collection: documents, el: $('#search-form') });
-    typeFilterView = new TypeFilterView({collection: documents, el: $('#type-filter') });
+    sourceFilterView = new SourceFilterView({collection: documents, el: $('#source-filter') });
     dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
+    sectionFilterView = new SectionFilterView({collection: documents, el: $('#section-filter') });
     Backbone.history.start({pushState: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'ticker']), '/')) }} });
 });
 </script>

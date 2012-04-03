@@ -12,6 +12,16 @@ require_once __DIR__ . '/AbstractSolrController.php';
 class TickerController extends AbstractSolrController
 {
     /**
+     * @var array
+     */
+    private $sources = array(
+        'tageswoche' => array('news', 'dossier'),
+        'twitter' => 'tweet',
+        'agentur' => 'newswire',
+        'link' => 'link',
+    );
+
+    /**
      * Build solr params array
      *
      * @return array
@@ -21,11 +31,31 @@ class TickerController extends AbstractSolrController
         return array_merge(parent::buildSolrParams(), array(
             'q' => '*:*',
             'fq' => implode(' AND ', array_filter(array(
+                $this->buildSolrSourceParam(),
                 //$this->buildSolrTypeParam(),
                 //$this->buildSolrDateParam(),
             ))),
             'sort' => 'published desc',
         ));
+    }
+
+    /**
+     * Build solr source filter
+     *
+     * @return string
+     */
+    private function buildSolrSourceParam()
+    {
+        $sources = array();
+        foreach (explode(',', $this->_getParam('source')) as $source) {
+            if (array_key_exists($source, $this->sources)) {
+                $sources = array_merge($sources, (array) $this->sources[$source]);
+            }
+        }
+
+        if (!empty($sources)) {
+            return sprintf('type:(%s)', implode(' OR ', $sources));
+        }
     }
 
     /**

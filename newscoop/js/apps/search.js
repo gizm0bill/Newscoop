@@ -82,6 +82,17 @@ var DocumentCollection = Backbone.Collection.extend({
             params.start = this.start;
         }
 
+        var sources = [];
+        for (source in this.sources) {
+            if (this.sources[source]) {
+                sources.push(source);
+            }
+        }
+
+        if (sources.length) {
+            params.source = sources.join();
+        }
+
         return params;
     },
 
@@ -104,7 +115,21 @@ var DocumentCollection = Backbone.Collection.extend({
         this.rows = parseInt(response.responseHeader.params.rows);
         this.type = response.responseHeader.params.type;
         this.date = response.responseHeader.params.date;
+        this.parseSources(response.responseHeader.params.source);
         return response.response.docs;
+    },
+
+    parseSources: function(source) {
+        this.sources = {};
+
+        if (!source) {
+            return;
+        }
+
+        var sources = source.split(',');
+        for (var i = 0; i < sources.length; i++) {
+            this.sources[sources[i]] = true;
+        }
     }
 });
 
@@ -267,6 +292,60 @@ var PaginationView = Backbone.View.extend({
         router.navigate(this.collection.nav());
         this.collection.fetch();
     }
+});
+
+/**
+ * Source filter view
+ */
+var SourceFilterView = Backbone.View.extend({
+    events: {
+        'change input#source_all': 'filterAll',
+        'change input:not(#source_all)': 'filter'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        this.render();
+    },
+
+    render: function() {
+        $(this.el).find('input').removeAttr('checked');
+
+        for (source in this.collection.sources) {
+            $(this.el).find('input[value=' + source + ']').attr('checked', 'checked');
+        }
+
+        if ($(this.el).find('input:checked').size() === 0) {
+            $(this.el).find('#source_all').attr('checked', 'checked');
+        }
+    },
+
+    filterAll: function(e) {
+        if (!e.target.checked) {
+            $(e.target).attr('checked', 'checked');
+            return;
+        }
+
+        this.collection.sources = {};
+        this.navigate();
+    },
+
+    filter: function(e) {
+        this.collection.sources[$(e.target).val()] = e.target.checked;
+        this.navigate();
+    },
+
+    navigate: function() {
+        this.collection.start = null;
+        router.navigate(this.collection.nav());
+        this.collection.fetch();
+    }
+});
+
+/**
+ * Section filter view
+ */
+var SectionFilterView = Backbone.View.extend({
 });
 
 /**

@@ -116,6 +116,7 @@ class AbstractSolrController extends Zend_Controller_Action
         $decoded['responseHeader']['params']['q'] = $this->_getParam('q'); // this might be modified, keep users query
         $decoded['responseHeader']['params']['date'] = $this->_getParam('date');
         $decoded['responseHeader']['params']['type'] = $this->_getParam('type');
+        $decoded['responseHeader']['params']['source'] = $this->_getParam('source');
         return $decoded;
     }
 }
