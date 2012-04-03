@@ -126,7 +126,7 @@ class SearchServiceTest extends \TestCase
             'content' => 'body',
             'image' => 'artimage',
             'link' => 'http://example.com/de/2012_11/sport/1/title.htm',
-            'section' => self::SECTION,
+            'section' => 'sport',
             'keyword' => array('key', 'words'),
             'topic' => array('test'),
         ), $this->service->getDocument($article));
