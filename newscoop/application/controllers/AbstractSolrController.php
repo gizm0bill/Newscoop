@@ -51,7 +51,7 @@ class AbstractSolrController extends Zend_Controller_Action
         }
 
         if (!$response->isSuccessful()) {
-            var_dump($response);
+            var_dump($this->buildSolrParams(), $response);
             exit;
         }
 
@@ -117,6 +117,7 @@ class AbstractSolrController extends Zend_Controller_Action
         $decoded['responseHeader']['params']['date'] = $this->_getParam('date');
         $decoded['responseHeader']['params']['type'] = $this->_getParam('type');
         $decoded['responseHeader']['params']['source'] = $this->_getParam('source');
+        $decoded['responseHeader']['params']['section'] = $this->_getParam('section');
         return $decoded;
     }
 }

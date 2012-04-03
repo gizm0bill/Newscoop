@@ -32,8 +32,8 @@ class TickerController extends AbstractSolrController
             'q' => '*:*',
             'fq' => implode(' AND ', array_filter(array(
                 $this->buildSolrSourceParam(),
-                //$this->buildSolrTypeParam(),
-                //$this->buildSolrDateParam(),
+                $this->buildSolrSectionParam(),
+                $this->buildSolrDateParam(),
             ))),
             'sort' => 'published desc',
         ));
@@ -59,17 +59,15 @@ class TickerController extends AbstractSolrController
     }
 
     /**
-     * Build solr type param
+     * Build solr section filter
      *
      * @return string
      */
-    private function buildSolrTypeParam()
+    private function buildSolrSectionParam()
     {
-        $type = $this->_getParam('type', false);
-        if (!$type || !array_key_exists($type, $this->types)) {
-            return;
+        $sections = explode(',', $this->_getParam('section'));
+        if (!empty($sections[0])) {
+            return sprintf('section:(%s)', implode(' OR ', $sections));
         }
-
-        return sprintf('type:(%s)', is_array($this->types[$type]) ? implode(' OR ', $this->types[$type]) : $this->types[$type]);
     }
 }

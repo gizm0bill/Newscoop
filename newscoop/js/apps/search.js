@@ -82,16 +82,8 @@ var DocumentCollection = Backbone.Collection.extend({
             params.start = this.start;
         }
 
-        var sources = [];
-        for (source in this.sources) {
-            if (this.sources[source]) {
-                sources.push(source);
-            }
-        }
-
-        if (sources.length) {
-            params.source = sources.join();
-        }
+        this.addList('source', params);
+        this.addList('section', params);
 
         return params;
     },
@@ -115,20 +107,48 @@ var DocumentCollection = Backbone.Collection.extend({
         this.rows = parseInt(response.responseHeader.params.rows);
         this.type = response.responseHeader.params.type;
         this.date = response.responseHeader.params.date;
-        this.parseSources(response.responseHeader.params.source);
+        this.source = this.parseList(response.responseHeader.params.source);
+        this.section = this.parseList(response.responseHeader.params.section);
         return response.response.docs;
     },
 
-    parseSources: function(source) {
-        this.sources = {};
-
-        if (!source) {
-            return;
+    /**
+     * Parse list in form "val1,val2" and returns object {val1: true, val2: true}
+     *
+     * @param {string} list
+     * @return {object}
+     */
+    parseList: function(list) {
+        var obj = {};
+        if (!list) {
+            return obj;
         }
 
-        var sources = source.split(',');
-        for (var i = 0; i < sources.length; i++) {
-            this.sources[sources[i]] = true;
+        var items = list.split(',');
+        for (var i = 0; i < items.length; i++) {
+            obj[items[i]] = true;
+        }
+
+        return obj;
+    },
+
+    /**
+     * Adds list to params if any
+     *
+     * @param {string} list name
+     * @param {object} params
+     * @return null
+     */
+    addList: function(listName, params) {
+        var items = [];
+        for (item in this[listName]) {
+            if (this[listName][item]) {
+                items.push(item);
+            }
+        }
+
+        if (items.length) {
+            params[listName] = items.join();
         }
     }
 });
@@ -311,7 +331,7 @@ var SourceFilterView = Backbone.View.extend({
     render: function() {
         $(this.el).find('input').removeAttr('checked');
 
-        for (source in this.collection.sources) {
+        for (source in this.collection.source) {
             $(this.el).find('input[value=' + source + ']').attr('checked', 'checked');
         }
 
@@ -326,12 +346,12 @@ var SourceFilterView = Backbone.View.extend({
             return;
         }
 
-        this.collection.sources = {};
+        this.collection.source = {};
         this.navigate();
     },
 
     filter: function(e) {
-        this.collection.sources[$(e.target).val()] = e.target.checked;
+        this.collection.source[$(e.target).val()] = e.target.checked;
         this.navigate();
     },
 
@@ -346,6 +366,28 @@ var SourceFilterView = Backbone.View.extend({
  * Section filter view
  */
 var SectionFilterView = Backbone.View.extend({
+    events: {
+        'change input': 'filter'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        this.render();
+    },
+
+    render: function() {
+        for (section in this.collection.section) {
+            var input = $(this.el).find('input[value=' + section + ']');
+            this.collection.section[section] ? input.attr('checked', 'checked') : input.removeAttr('checked');
+        }
+    },
+
+    filter: function(e) {
+        this.collection.section[$(e.target).val()] = e.target.checked;
+        this.collection.start = null;
+        router.navigate(this.collection.nav());
+        this.collection.fetch();
+    }
 });
 
 /**
