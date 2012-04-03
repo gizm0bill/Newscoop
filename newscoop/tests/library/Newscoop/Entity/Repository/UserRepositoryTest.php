@@ -57,4 +57,9 @@ class UserRepositoryTest extends \TestCase
 
         $this->assertNotEmpty($this->repository->getBatch());
     }
+
+    public function testIndexedNowEmpty()
+    {
+        $this->assertNull($this->repository->setIndexedNow(array()));
+    }
 }

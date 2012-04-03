@@ -513,6 +513,10 @@ class CommentRepository extends DatatableSource implements \Newscoop\Search\Repo
      */
     public function setIndexedNow(array $comments)
     {
+        if (empty($comments)) {
+            return;
+        }
+
         $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\Comment c SET c.indexed = CURRENT_TIMESTAMP() WHERE c.id IN (:comments)')
             ->setParameter('comments', array_map(function($comment) { return $comment->getId(); }, $comments))
             ->execute();

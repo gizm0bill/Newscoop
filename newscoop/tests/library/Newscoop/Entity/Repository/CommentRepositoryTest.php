@@ -66,4 +66,9 @@ class CommentRepositoryTest extends \TestCase
 
         $this->assertNotEmpty($this->repository->getBatch());
     }
+
+    public function testSetIndexedNowEmpty()
+    {
+        $this->assertNull($this->repository->setIndexedNow(array()));
+    }
 }

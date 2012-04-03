@@ -518,6 +518,10 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Reposi
      */
     public function setIndexedNow(array $users)
     {
+        if (empty($users)) {
+            return;
+        }
+
         $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\User u SET u.indexed = CURRENT_TIMESTAMP() WHERE u.id IN (:users)')
             ->setParameter('users', array_map(function($user) { return $user->getId(); }, $users))
             ->execute();

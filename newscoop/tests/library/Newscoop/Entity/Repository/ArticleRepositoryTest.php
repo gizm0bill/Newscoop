@@ -64,4 +64,9 @@ class ArticleRepositoryTest extends \TestCase
 
         $this->assertEquals(2, count($this->repository->getBatch()));
     }
+
+    public function testSetIndexedNowEmpty()
+    {
+        $this->assertNull($this->repository->setIndexedNow(array()));
+    }
 }
