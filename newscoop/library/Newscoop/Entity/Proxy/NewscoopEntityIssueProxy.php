@@ -28,10 +28,22 @@ class NewscoopEntityIssueProxy extends \Newscoop\Entity\Issue implements \Doctri
     }
     
     
+    public function setLanguage(\Newscoop\Entity\Language $language)
+    {
+        $this->__load();
+        return parent::setLanguage($language);
+    }
+
     public function getLanguage()
     {
         $this->__load();
         return parent::getLanguage();
+    }
+
+    public function setPublication(\Newscoop\Entity\Publication $publication)
+    {
+        $this->__load();
+        return parent::setPublication($publication);
     }
 
     public function getPublication()
@@ -86,6 +98,12 @@ class NewscoopEntityIssueProxy extends \Newscoop\Entity\Issue implements \Doctri
     {
         $this->__load();
         return parent::getShortName();
+    }
+
+    public function getNumber()
+    {
+        $this->__load();
+        return parent::getNumber();
     }
 
     public function getId()

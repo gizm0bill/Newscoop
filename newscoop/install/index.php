@@ -53,5 +53,5 @@ $install->render();
 
 if ($step == 'finish') {
 	$template = CampTemplate::singleton();
-	$template->clear_compiled_tpl();
+	$template->clearCompiledTemplate();
 }

@@ -32,7 +32,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }, 'ADO');
 
         $autoloader->pushAutoloader(function($class) {
-            require_once 'smarty3/sysplugins/' . strtolower($class) . '.php';
+            if ($class === 'Smarty') {
+                require_once APPLICATION_PATH . '/../library/smarty3/Smarty.class.php';
+            } else {
+                require_once APPLICATION_PATH . '/../library/smarty3/sysplugins/' . strtolower($class) . '.php';
+            }
         }, 'Smarty');
 
         $GLOBALS['g_campsiteDir'] = realpath(APPLICATION_PATH . '/../');
