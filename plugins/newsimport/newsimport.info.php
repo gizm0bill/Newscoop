@@ -343,6 +343,8 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             'movie_imdb' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'movie_suisa' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
 
+            'movie_rating_wv' => array('type' => 'numeric', 'params' => array('precision' => 0), 'hidden' => false), // movie rating by Werbeverlagsrating
+
             'movie_flag' => array('type' => 'numeric', 'params' => array('precision' => 0), 'hidden' => false), // some flag/spec info
 
             //'movie_title' => array('type' => 'text', 'params' => array(), 'hidden' => false), // movie title
