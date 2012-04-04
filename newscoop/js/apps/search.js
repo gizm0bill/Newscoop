@@ -182,6 +182,7 @@ var SearchFormView = Backbone.View.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
+        this.render();
     },
 
     render: function() {
