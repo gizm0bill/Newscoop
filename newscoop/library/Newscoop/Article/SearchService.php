@@ -91,7 +91,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'webcode' => $this->webcoder->encode($article->getNumber()),
             'image' => $image ? $image['src'] : null,
             'link' => $this->getLink($article),
-            'section' => $this->getSectionShortName($article),
+            'section' => $article->getType() === 'blog' ? 'blog' : $this->getSectionShortName($article),
             'keyword' => explode(',', $article->getKeywords()),
             'topic' => $article->getTopicNames(),
         );

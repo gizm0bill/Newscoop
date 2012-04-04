@@ -262,6 +262,7 @@ search.article.type[] = "newswire"
 search.article.type[] = "dossier"
 search.article.type[] = "event"
 search.article.type[] = "link"
+search.article.type[] = "blog"
 search.article.rendition = "artikel"
 
 twitter.id = "tageswoche"
