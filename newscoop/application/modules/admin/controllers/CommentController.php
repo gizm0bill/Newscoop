@@ -49,6 +49,8 @@ class Admin_CommentController extends Zend_Controller_Action
 
         $this->editForm = new Admin_Form_Comment_EditForm;
 
+        $this->view->comment_part = true;
+
         return $this;
     }
 
