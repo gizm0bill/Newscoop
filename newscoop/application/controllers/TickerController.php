@@ -53,9 +53,13 @@ class TickerController extends AbstractSolrController
             }
         }
 
-        if (!empty($sources)) {
-            return sprintf('type:(%s)', implode(' OR ', $sources));
+        if (empty($sources)) {
+            foreach ($this->sources as $types) {
+                $sources = array_merge($sources, (array) $types);
+            }
         }
+
+        return sprintf('type:(%s)', implode(' OR ', $sources));
     }
 
     /**
