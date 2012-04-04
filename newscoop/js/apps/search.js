@@ -14,7 +14,8 @@ var Document = Backbone.Model.extend({
         'tweet': 'twitter',
         'event': 'event',
         'comment': 'omni',
-        'link': 'link'
+        'link': 'link',
+        'blog': 'article'
     },
 
     /**
@@ -222,6 +223,20 @@ var DocumentListView = Backbone.View.extend({
 var TypeFilterView = Backbone.View.extend({
     events: {
         'click a': 'filter'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        this.render();
+    },
+
+    render: function() {
+        $(this.el).find('li').removeClass('main');
+        if (!this.collection.type) {
+            $(this.el).find('li').first().addClass('main');
+        } else {
+            $(this.el).find('a[href="#' + this.collection.type + '"]').closest('li').addClass('main');
+        }
     },
 
     filter: function(e) {
