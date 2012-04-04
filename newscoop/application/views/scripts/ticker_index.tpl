@@ -6,7 +6,7 @@
     <li><input type="checkbox" id="source_all" /> <label for="source_all">Alles</label></li>
     <li><input type="checkbox" id="source_1" value="tageswoche" /> <label for="source_1" class="omni">Tageswoche</label></li>
     <li><input type="checkbox" id="source_2" value="twitter"  /> <label for="source_2" class="twitter">Twitter</label></li>
-    <li><input type="checkbox" id="source_3" value="sda" /> <label for="source_3" class="article">Agentur</label></li>
+    <li><input type="checkbox" id="source_3" value="agentur" /> <label for="source_3" class="article">Agentur</label></li>
     <li><input type="checkbox" id="source_4" value="link" /> <label for="source_4" class="link">Link</label></li>
 </ul>
 
@@ -19,7 +19,7 @@
     <li><input type="checkbox" id="section_5" value="kultur" /> <label for="section_5">Kultur</label></li>
     <li><input type="checkbox" id="section_6" value="leben"  /> <label for="section_6">Leben</label></li>
     <li><input type="checkbox" id="section_7" value="dossier" /> <label for="section_7">Dossiers</label></li>
-    <li><input type="checkbox" id="section_8" value="blogs" /> <label for="section_8">Blogs</label></li>
+    <li><input type="checkbox" id="section_8" value="blog" /> <label for="section_8">Blogs</label></li>
 </ul>
 
 <h3>Datum</h3>

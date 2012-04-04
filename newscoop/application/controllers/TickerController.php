@@ -15,7 +15,7 @@ class TickerController extends AbstractSolrController
      * @var array
      */
     private $sources = array(
-        'tageswoche' => array('news', 'dossier'),
+        'tageswoche' => array('news', 'dossier', 'blog'),
         'twitter' => 'tweet',
         'agentur' => 'newswire',
         'link' => 'link',
