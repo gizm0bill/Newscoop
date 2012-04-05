@@ -44,7 +44,7 @@
 
     <script type="text/template" id="document-omni-template">
     <h3><a href="#"><%= doc.escape('subject') %></a></h3>
-    <p><%= doc.escape('message') %></p>
+    <p><%= doc.get('message').length > 200 ? doc.escape('message').substr(0, 199) + '...' : doc.escape('message') %> <a href="<%= doc.get('link') %>" title="Weiterlesen">Weiterlesen</a></p>
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
 
