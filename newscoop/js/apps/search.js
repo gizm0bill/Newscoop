@@ -177,7 +177,8 @@ var DocumentView = Backbone.View.extend({
 var SearchFormView = Backbone.View.extend({
     events: {
         'blur input': 'search',
-        'click button': 'search'
+        'click button': 'search',
+        'send': 'search'
     },
 
     initialize: function() {
@@ -189,7 +190,8 @@ var SearchFormView = Backbone.View.extend({
         $(this.el).find('input').val(this.collection.query);
     },
 
-    search: function() {
+    search: function(e) {
+        e.preventDefault();
         this.collection.query = $(this.el).find('input').val();
         this.collection.type = null;
         this.collection.date = null;
@@ -258,8 +260,37 @@ var DateFilterView = Backbone.View.extend({
         'click input[type=submit]': 'filterRange'
     },
 
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        this.render();
+    },
+
+    render: function() {
+        $(this.el).find('li').removeClass('main');
+        if (!this.collection.date) {
+            $(this.el).find('li').first().addClass('main');
+        } else {
+            if (this.collection.date.indexOf(",") === -1) {
+                $(this.el).find('a[href="#' + this.collection.date + '"]').closest('li').addClass('main');
+            } else {
+                var from = this.collection.date.split(",")[0];
+                var to = this.collection.date.split(",")[1];
+
+                if (from) {
+                    $(this.el).find('#range_from').val(from).closest('li').addClass('main');
+                }
+
+                if (to) {
+                    $(this.el).find('#range_to').val(to).closest('li').addClass('main');
+                }
+            }
+        }
+    },
+
     filter: function(e) {
         e.preventDefault();
+        $(this.el).find('#range_from').val(null);
+        $(this.el).find('#range_to').val(null);
         this.collection.date = e.target.hash.slice(1);
         this.collection.start = null;
         router.navigate(this.collection.nav());
@@ -268,16 +299,9 @@ var DateFilterView = Backbone.View.extend({
 
     filterRange: function(e) {
         e.preventDefault();
-
         var from = $(this.el).find('input.from').val() || '';
         var to = $(this.el).find('input.to').val() || '';
-
-        if (from === '' && to === '') {
-            alert("Provide at least 1 date");
-            return;
-        }
-
-        this.collection.date = [from, to].join(',');
+        this.collection.date = from || to ? [from, to].join(',') : null;
         this.collection.start = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();

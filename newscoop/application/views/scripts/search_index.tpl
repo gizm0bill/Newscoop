@@ -17,9 +17,9 @@
     <li class="main"><a href="#">Alle</a></li>
     <li><a href="#24h">Letzte 24 Stunden</a></li>
     <li><a href="#7d">Letzte 7 Tage</a></li>
-    <li><a href="#1y">Das Jahr</a></li>
-    <li><label>Von</label> <input type="text" class="from" placeholder="TT.MM.JJ" /></li>
-    <li><label>Bis</label> <input type="text" class="to" placeholder="TT.MM.JJ" /></li>
+    <li><a href="#1y">Dieses Jahr</a></li>
+    <li class="range"><label for="range_from">Von</label> <input type="text" id="range_from" class="from" placeholder="TT.MM.JJ" /></li>
+    <li class="range"><label for="range_to">Bis</label> <input type="text" id="range_to" class="to" placeholder="TT.MM.JJ" /></li>
     <li><input type="submit" value="Suchen" /></li>
 </ul>
 
@@ -37,11 +37,13 @@ $(function() {
 {{block section}}
 <ul class="top-filter">
     <li>
+        <form id="search-form">
         <label>Sucheresultate für</label>
-        <fieldset id="search-form">
+        <fieldset>
             <input type="text" value="" />
             <button>Go</button>
         </fieldset>
+        </form>
     </li>
     <li>Typ</li>
     <li>veröffentlicht</li>
