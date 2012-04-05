@@ -43,6 +43,7 @@ $(function() {
             <input type="text" value="" />
             <button>Go</button>
         </fieldset>
+        <small style="font-weight: normal;padding-left:3px" id="did-you-mean">Did you mean: <a href="#"></a>?</small>
         </form>
     </li>
     <li>Typ</li>

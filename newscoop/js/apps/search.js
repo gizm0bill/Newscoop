@@ -114,6 +114,24 @@ var DocumentCollection = Backbone.Collection.extend({
     },
 
     /**
+     * Test if there are suggestions for query
+     *
+     * @return {bool}
+     */
+    hasSuggestion: function() {
+        return this.response.spellcheck.suggestions.length !== 0;
+    },
+
+    /**
+     * Get suggestion for query
+     *
+     * @return {string}
+     */
+    getSuggestion: function() {
+        return this.response.spellcheck.suggestions[3];
+    },
+
+    /**
      * Parse list in form "val1,val2" and returns object {val1: true, val2: true}
      *
      * @param {string} list
@@ -178,7 +196,8 @@ var SearchFormView = Backbone.View.extend({
     events: {
         'blur input': 'search',
         'click button': 'search',
-        'send': 'search'
+        'send': 'search',
+        'click #did-you-mean > a': 'didYouMean'
     },
 
     initialize: function() {
@@ -188,6 +207,11 @@ var SearchFormView = Backbone.View.extend({
 
     render: function() {
         $(this.el).find('input').val(this.collection.query);
+        if (this.collection.hasSuggestion()) {
+            $(this.el).find('#did-you-mean').show().find('a').text(this.collection.getSuggestion());
+        } else {
+            $(this.el).find('#did-you-mean').hide();
+        }
     },
 
     search: function(e) {
@@ -198,6 +222,12 @@ var SearchFormView = Backbone.View.extend({
         this.collection.start = null;
         router.navigate(this.collection.nav());
         this.collection.fetch();
+    },
+
+    didYouMean: function(e) {
+        e.preventDefault();
+        $(this.el).find('input').val(this.collection.getSuggestion());
+        this.search(e);
     }
 });
 
