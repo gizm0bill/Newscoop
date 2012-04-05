@@ -98,13 +98,20 @@ class Comment implements \Newscoop\Search\DocumentInterface
 
     /**
      * @ManyToOne(targetEntity="Newscoop\Entity\Article")
+     * @JoinColumn(name="fk_thread_id", referencedColumnName="Number")
+     * @var Newscoop\Entity\Article
+     */
+    private $thread;
+
+    /**
+     * @ManyToOne(targetEntity="Newscoop\Entity\Article")
      * @JoinColumns({
      *      @JoinColumn(name="fk_thread_id", referencedColumnName="Number"),
      *      @JoinColumn(name="fk_language_id", referencedColumnName="IdLanguage")
      *      })
      * @var Newscoop\Entity\Article
      */
-    private $thread;
+    private $article;
 
     /**
      * @ManyToOne(targetEntity="Newscoop\Entity\Language")
@@ -779,5 +786,26 @@ class Comment implements \Newscoop\Search\DocumentInterface
     public function isApproved()
     {
         return $this->getStatus() === 'approved';
+    }
+
+    /**
+     * Set article
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return void
+     */
+    public function setArticle(Article $article)
+    {
+        $this->article = $article;
+    }
+
+    /**
+     * Get article
+     *
+     * @return Newscoop\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
     }
 }

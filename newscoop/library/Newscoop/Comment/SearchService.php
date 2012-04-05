@@ -61,7 +61,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'subject' => $comment->getSubject(),
             'message' => $comment->getMessage(),
             'published' => gmdate('Y-m-d\TH:i:s\Z', $comment->getTimeCreated()->getTimestamp()),
-            'link' => sprintf('%s#comment_%d', $this->articleLinkService->getLink($comment->getThread()), $comment->getId()),
+            'link' => sprintf('%s#comment_%d', $this->articleLinkService->getLink($comment->getArticle()), $comment->getId()),
         );
     }
 

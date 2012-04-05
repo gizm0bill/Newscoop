@@ -42,7 +42,7 @@ class SearchServiceTest extends \TestCase
         $comment->setSubject('sub');
         $comment->setMessage('msg');
         $comment->setTimeCreated($created);
-        $comment->setThread($article);
+        $comment->setArticle($article);
 
         $this->articleLinkService->expects($this->once())
             ->method('getLink')
