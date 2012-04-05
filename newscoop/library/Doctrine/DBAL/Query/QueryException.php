@@ -17,32 +17,24 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\ORM\Id;
+namespace Doctrine\DBAL\Query;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\DBALException;
 
-abstract class AbstractIdGenerator
+/**
+ * Driver interface.
+ * Interface that all DBAL drivers must implement.
+ *
+ * @since 2.1.4
+ */
+class QueryException extends DBALException
 {
-    /**
-     * Generates an identifier for an entity.
-     *
-     * @param \Doctrine\ORM\Entity $entity
-     * @return mixed
-     */
-    abstract public function generate(EntityManager $em, $entity);
-
-    /**
-     * Gets whether this generator is a post-insert generator which means that
-     * {@link generate()} must be called after the entity has been inserted
-     * into the database.
-     * 
-     * By default, this method returns FALSE. Generators that have this requirement
-     * must override this method and return TRUE.
-     *
-     * @return boolean
-     */
-    public function isPostInsertGenerator()
+    static public function unknownFromAlias($alias, $registeredAliases)
     {
-        return false;
+        return new self("The given alias '" . $alias . "' is not part of " .
+            "any FROM clause table. The currently registered FROM-clause " .
+            "aliases are: " . implode(", ", $registeredAliases) . ". Join clauses " .
+            "are bound to from clauses to provide support for mixing of multiple " .
+            "from and join clauses.");
     }
 }
