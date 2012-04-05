@@ -13,6 +13,19 @@ namespace Newscoop\Comment;
 class SearchService implements \Newscoop\Search\ServiceInterface
 {
     /**
+     * @var Newscoop\Article\LinkService
+     */
+    private $articleLinkService;
+
+    /**
+     * @param Newscoop\Article\LinkService $articleLinkService
+     */
+    public function __construct(\Newscoop\Article\LinkService $articleLinkService)
+    {
+        $this->articleLinkService = $articleLinkService;
+    }
+
+    /**
      * Test if comment is indexed
      *
      * @param Newscoop\Entity\Comment $comment
@@ -48,6 +61,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'subject' => $comment->getSubject(),
             'message' => $comment->getMessage(),
             'published' => gmdate('Y-m-d\TH:i:s\Z', $comment->getTimeCreated()->getTimestamp()),
+            'link' => sprintf('%s#comment_%d', $this->articleLinkService->getLink($comment->getThread()), $comment->getId()),
         );
     }
 

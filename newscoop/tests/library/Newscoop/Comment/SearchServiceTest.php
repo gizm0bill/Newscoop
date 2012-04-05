@@ -15,7 +15,11 @@ class SearchServiceTest extends \TestCase
 {
     public function setUp()
     {
-        $this->service = new SearchService();
+        $this->articleLinkService = $this->getMockBuilder('Newscoop\Article\LinkService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->service = new SearchService($this->articleLinkService);
     }
 
     public function testInstance()
@@ -32,11 +36,18 @@ class SearchServiceTest extends \TestCase
 
     public function testGetDocument()
     {
+        $article = new \Newscoop\Entity\Article(1, new \Newscoop\Entity\Language());
         $created = new \DateTime();
         $comment = new Comment();
         $comment->setSubject('sub');
         $comment->setMessage('msg');
         $comment->setTimeCreated($created);
+        $comment->setThread($article);
+
+        $this->articleLinkService->expects($this->once())
+            ->method('getLink')
+            ->with($this->equalTo($article))
+            ->will($this->returnValue('article-link'));
 
         $this->assertEquals(array(
             'id' => 'comment-0',
@@ -44,6 +55,7 @@ class SearchServiceTest extends \TestCase
             'subject' => 'sub',
             'message' => 'msg',
             'published' => gmdate('Y-m-d\TH:i:s\Z', $created->getTimestamp()),
+            'link' => 'article-link#comment_0',
         ), $this->service->getDocument($comment));
     }
 

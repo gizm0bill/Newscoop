@@ -98,7 +98,10 @@ class Comment implements \Newscoop\Search\DocumentInterface
 
     /**
      * @ManyToOne(targetEntity="Newscoop\Entity\Article")
-     * @JoinColumn(name="fk_thread_id", referencedColumnName="Number")
+     * @JoinColumns({
+     *      @JoinColumn(name="fk_thread_id", referencedColumnName="Number"),
+     *      @JoinColumn(name="fk_language_id", referencedColumnName="IdLanguage")
+     *      })
      * @var Newscoop\Entity\Article
      */
     private $thread;

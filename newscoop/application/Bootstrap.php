@@ -190,13 +190,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('search.index', 'Newscoop\Search\Index')
             ->addArgument(new sfServiceReference('solr.client.update'));
 
+        $container->register('article.link', 'Newscoop\Article\LinkService')
+            ->addArgument(new sfServiceReference('em'));
+
         $container->register('article.search', 'Newscoop\Article\SearchService')
             ->addArgument(new sfServiceReference('webcoder'))
             ->addArgument(new sfServiceReference('image.rendition'))
-            ->addArgument(new sfServiceReference('em'))
+            ->addArgument(new sfServiceReference('article.link'))
             ->addArgument($container['search']['article']);
 
-        $container->register('comment.search', 'Newscoop\Comment\SearchService');
+        $container->register('comment.search', 'Newscoop\Comment\SearchService')
+            ->addArgument(new sfServiceReference('article.link'));
 
         $container->register('user.search', 'Newscoop\User\SearchService')
             ->addArgument(new sfServiceReference('image'));
