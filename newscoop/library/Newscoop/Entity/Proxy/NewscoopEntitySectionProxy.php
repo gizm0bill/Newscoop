@@ -20,6 +20,14 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
     {
         if (!$this->__isInitialized__ && $this->_entityPersister) {
             $this->__isInitialized__ = true;
+
+            if (method_exists($this, "__wakeup")) {
+                // call this after __isInitialized__to avoid infinite recursion
+                // but before loading to emulate what ClassMetadata::newInstance()
+                // provides.
+                $this->__wakeup();
+            }
+
             if ($this->_entityPersister->load($this->_identifier, $this) === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
@@ -28,6 +36,12 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
     }
     
     
+    public function setLanguage(\Newscoop\Entity\Language $language)
+    {
+        $this->__load();
+        return parent::setLanguage($language);
+    }
+
     public function getLanguage()
     {
         $this->__load();
@@ -70,6 +84,12 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
         return parent::setArticleTemplate($template);
     }
 
+    public function setIssue(\Newscoop\Entity\Issue $issue)
+    {
+        $this->__load();
+        return parent::setIssue($issue);
+    }
+
     public function getIssue()
     {
         $this->__load();
@@ -94,6 +114,12 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
         return parent::getShortName();
     }
 
+    public function setPublication(\Newscoop\Entity\Publication $publication)
+    {
+        $this->__load();
+        return parent::setPublication($publication);
+    }
+
     public function setId($id)
     {
         $this->__load();
@@ -103,7 +129,7 @@ class NewscoopEntitySectionProxy extends \Newscoop\Entity\Section implements \Do
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'publication', 'issue', 'language', 'number', 'name', 'template', 'articleTemplate', 'shortName');
+        return array('__isInitialized__', 'id', 'publication', 'issue', 'issueNumber', 'language', 'number', 'name', 'template', 'articleTemplate', 'shortName');
     }
 
     public function __clone()

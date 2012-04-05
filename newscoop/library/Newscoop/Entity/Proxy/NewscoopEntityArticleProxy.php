@@ -20,6 +20,14 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
     {
         if (!$this->__isInitialized__ && $this->_entityPersister) {
             $this->__isInitialized__ = true;
+
+            if (method_exists($this, "__wakeup")) {
+                // call this after __isInitialized__to avoid infinite recursion
+                // but before loading to emulate what ClassMetadata::newInstance()
+                // provides.
+                $this->__wakeup();
+            }
+
             if ($this->_entityPersister->load($this->_identifier, $this) === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
@@ -104,6 +112,12 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
     {
         $this->__load();
         return parent::getIssueId();
+    }
+
+    public function getIssueNumber()
+    {
+        $this->__load();
+        return parent::getIssueNumber();
     }
 
     public function setLanguage(\Newscoop\Entity\Language $p_language)
@@ -256,10 +270,10 @@ class NewscoopEntityArticleProxy extends \Newscoop\Entity\Article implements \Do
         return parent::getTopicNames();
     }
 
-    public function getLink()
+    public function getSeoPath()
     {
         $this->__load();
-        return parent::getLink();
+        return parent::getSeoPath();
     }
 
     public function setKeywords($keywords)

@@ -20,6 +20,14 @@ class NewscoopEntityCommentProxy extends \Newscoop\Entity\Comment implements \Do
     {
         if (!$this->__isInitialized__ && $this->_entityPersister) {
             $this->__isInitialized__ = true;
+
+            if (method_exists($this, "__wakeup")) {
+                // call this after __isInitialized__to avoid infinite recursion
+                // but before loading to emulate what ClassMetadata::newInstance()
+                // provides.
+                $this->__wakeup();
+            }
+
             if ($this->_entityPersister->load($this->_identifier, $this) === null) {
                 throw new \Doctrine\ORM\EntityNotFoundException();
             }
@@ -280,10 +288,22 @@ class NewscoopEntityCommentProxy extends \Newscoop\Entity\Comment implements \Do
         return parent::isApproved();
     }
 
+    public function setArticle(\Newscoop\Entity\Article $article)
+    {
+        $this->__load();
+        return parent::setArticle($article);
+    }
+
+    public function getArticle()
+    {
+        $this->__load();
+        return parent::getArticle();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'commenter', 'forum', 'parent', 'article_num', 'thread', 'language', 'subject', 'message', 'thread_level', 'thread_order', 'status', 'ip', 'time_created', 'time_updated', 'likes', 'dislikes', 'recommended', 'indexed');
+        return array('__isInitialized__', 'id', 'commenter', 'forum', 'parent', 'article_num', 'thread', 'article', 'language', 'subject', 'message', 'thread_level', 'thread_order', 'status', 'ip', 'time_created', 'time_updated', 'likes', 'dislikes', 'recommended', 'indexed');
     }
 
     public function __clone()
