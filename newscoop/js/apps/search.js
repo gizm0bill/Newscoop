@@ -207,14 +207,21 @@ var SearchFormView = Backbone.View.extend({
 var DocumentListView = Backbone.View.extend({
     initialize: function() {
         this.collection.bind('reset', this.render, this);
+        this.emptyTemplate = _.template(this.options.emptyTemplate.html());
     },
 
     render: function() {
         var list = $(this.el).empty();
+        $('#search-pagination').show();
         this.collection.each(function(doc) {
             var view = new DocumentView({model: doc});
             list.append(view.render().el);
         });
+
+        if (this.collection.count === 0) {
+            $("<li />").html(this.emptyTemplate()).appendTo($(this.el));
+            $('#search-pagination').hide();
+        }
 
         return this;
     }

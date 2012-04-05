@@ -53,6 +53,10 @@
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
 
+    <script type="text/template" id="empty-search-list-template">
+    <p>Wir haben keine Resultate zu diesem Suchbegriff gefunden.<br />Bitte versuchen Sie einen anderen oder grenzen Sie Ihre Suche weniger stark ein.</p>
+    </script>
+
     <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>
     <script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
     <script src="{{ $view->baseUrl('js/backbone.js') }}"></script>
@@ -60,7 +64,7 @@
     <script>
     $(function() {
         window.documents = new DocumentCollection();
-        documentsView = new DocumentListView({collection: documents, el: $('#results')});
+        documentsView = new DocumentListView({collection: documents, el: $('#results'), emptyTemplate: $('#empty-search-list-template')});
         paginationView = new PaginationView({collection: documents, el: $('#search-pagination') });
         documents.reset(documents.parse({{ json_encode($result) }}));
     });
