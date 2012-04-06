@@ -78,6 +78,9 @@ class SearchServiceTest extends \TestCase
         $topic->addName('test', $this->language);
         $article->addTopic($topic);
 
+        $section = new \Newscoop\Entity\Section(self::SECTION, 'Sport');
+        $article->setSection($section);
+
         $this->renditionService->expects($this->once())
             ->method('getArticleRenditionImage')
             ->with($this->equalTo($article->getNumber()), $this->equalTo(self::RENDITION), $this->equalTo(200), $this->equalTo(150))
@@ -105,9 +108,32 @@ class SearchServiceTest extends \TestCase
             'image' => 'artimage',
             'link' => 'article-link',
             'section' => 'sport',
+            'section_name' => 'Sport',
             'keyword' => array('key', 'words'),
             'topic' => array('test'),
         ), $this->service->getDocument($article));
+    }
+
+    public function testGetDocumentDossier()
+    {
+        $article = new Article(1, $this->language);
+        $article->setType('dossier');
+        $article->setTitle('test');
+
+        $doc = $this->service->getDocument($article);
+        $this->assertEquals(array(
+            'value' => 'test',
+            'boost' => 1.5,
+        ), $doc['title']);
+    }
+
+    public function testGetDocumentBlog()
+    {
+        $article = new Article(1, $this->language);
+        $article->setType('blog');
+
+        $doc = $this->service->getDocument($article);
+        $this->assertEquals('blog', $doc['section']);
     }
 
     public function testIsIndexed()

@@ -93,6 +93,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'image' => $image ? $image['src'] : null,
             'link' => $this->linkService->getLink($article),
             'section' => $article->getType() === 'blog' ? 'blog' : $this->linkService->getSectionShortName($article),
+            'section_name' => $article->getType() === 'blog' ? 'Blog' : $article->getSectionName(),
             'keyword' => explode(',', $article->getKeywords()),
             'topic' => $article->getTopicNames(),
         );
@@ -107,6 +108,10 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             case 'dossier':
                 $doc['lead'] = strip_tags($article->getData('lede'));
                 $doc['content'] = strip_tags($article->getData('history'));
+                $doc['title'] = array(
+                    'value' => $doc['title'],
+                    'boost' => 1.5,
+                );
                 break;
 
             case 'newswire':

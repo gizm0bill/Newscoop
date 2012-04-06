@@ -272,6 +272,16 @@ class Article implements \Newscoop\Search\DocumentInterface
     }
 
     /**
+     * Get section name
+     *
+     * @return string
+     */
+    public function getSectionName()
+    {
+        return $this->section !== null ? $this->section->getName() : null;
+    }
+
+    /**
      * Set issue
      *
      * @param Newscoop\Entity\Issue $issue
