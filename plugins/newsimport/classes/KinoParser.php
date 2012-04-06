@@ -1230,6 +1230,7 @@ class KinoData_Parser_SimpleXML {
                         }
                     }
 
+                    $one_movie_rating_wv = trim('' . $one_movie->film20rate_d);
                     $one_movie_age = trim('' . $one_movie->movcatnam);
                     $one_movie_age_matches = array();
                     if (preg_match('/^([^\s]+)[\s]*J$/i', $one_movie_age, $one_movie_age_matches)) {
@@ -1292,6 +1293,7 @@ class KinoData_Parser_SimpleXML {
                         'other' => $one_movie_other,
                         'dates' => $one_screen_dates,
 
+                        'rating_wv' => $one_movie_rating_wv,
                         'allowed_age' => $one_movie_age,
                     );
                 }
@@ -1648,6 +1650,7 @@ hh.mm:langs:flags
                 $one_event['languages'] = '';
                 $one_event['prices'] = '';
                 $one_event['minimal_age'] = $one_screen['allowed_age'];
+                $one_event['rating_wv'] = $one_screen['rating_wv'];
 
                 $one_event['canceled'] = false;
                 $one_event['rated'] = $e_rated;

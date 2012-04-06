@@ -233,6 +233,7 @@ $(document).ready(function() {
             'bLengthChange': false,
             'bFilter': true,
             'bJQueryUI':true,
+            'bStateSave': true,
             'aoColumnDefs': [
                 { // not sortable
                     'bSortable': false,

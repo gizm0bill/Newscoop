@@ -49,6 +49,8 @@ class Admin_CommentController extends Zend_Controller_Action
 
         $this->editForm = new Admin_Form_Comment_EditForm;
 
+        $this->view->comment_part = true;
+
         return $this;
     }
 
@@ -153,6 +155,7 @@ class Admin_CommentController extends Zend_Controller_Action
                 ->setOption('fnServerData', 'datatableCallback.addServerData')
                 ->setOption('fnInitComplete', 'datatableCallback.init')
                 ->setOption('sDom','<"top">lf<"#actionExtender">rit<"bottom"ip>')
+                ->setOption('bStateSave', true)
                 ->setStripClasses()
                 ->toggleAutomaticWidth(false)
                 ->setDataProp(
