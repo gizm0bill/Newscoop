@@ -46,7 +46,7 @@ class Api_SectionsController extends Zend_Controller_Action
         foreach($sections as $section) {
             $list[] = array(
                 'name' => $section->getName(),
-                'url' => self::BASE_URL . 'item?id=' . $section->getId(), 
+                'url' => self::BASE_URL . 'item?id=' . $section->getId(),
             );
         }
         var_dump(Zend_Json::prettyPrint(Zend_Json::encode($list)));
