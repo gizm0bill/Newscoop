@@ -9,7 +9,7 @@ namespace Newscoop\Services;
 
 use Newscoop\Entity\User;
 
-class EmailServiceTest extends \RepositoryTestCase
+class EmailServiceTest extends \TestCase
 {
     const USER_EMAIL = 'foo@bar.com';
 
@@ -26,10 +26,11 @@ class EmailServiceTest extends \RepositoryTestCase
     {
         global $application;
 
-        parent::setUp('Newscoop\Entity\User', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\UserToken');
+        $this->em = $this->setUpOrm('Newscoop\Entity\User', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\UserToken');
 
         $this->service = \Zend_Registry::get('container')
             ->getService('email');
+
         \Zend_Mail::setDefaultTransport(new \Zend_Mail_Transport_File(array(
             'path' => '/tmp',
             'callback' => function($transport) {

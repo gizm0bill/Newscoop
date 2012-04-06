@@ -29,8 +29,8 @@ theme_path = APPLICATION_PATH "/../themes"
 ; doctrine resource
 resources.doctrine.cache = "Doctrine\Common\Cache\ArrayCache";
 resources.doctrine.entity.dir = APPLICATION_PATH "/../library/Newscoop/Entity"
-resources.doctrine.proxy.dir = APPLICATION_PATH "/../library/Newscoop/Entity/Proxy"
-resources.doctrine.proxy.namespace = "Newscoop\Entity\Proxy"
+resources.doctrine.proxy.dir = APPLICATION_PATH "/../library/Proxy"
+resources.doctrine.proxy.namespace = "Proxy"
 resources.doctrine.proxy.autogenerate = false
 resources.doctrine.functions.rand = "Newscoop\Query\MysqlRandom"
 resources.doctrine.functions.dayofweek = "Newscoop\Query\MysqlDayOfWeek"

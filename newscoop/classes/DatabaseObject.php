@@ -487,8 +487,8 @@ class DatabaseObject
         if ($this instanceof \Article) {
             $params['entity'] = \Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\Article')
                 ->find(array(
-                    'number' => $subject->getArticleNumber(),
-                    'language' => $subject->getLanguageId(),
+                    'number' => $this->getArticleNumber(),
+                    'language' => $this->getLanguageId(),
                 ));
         }
 

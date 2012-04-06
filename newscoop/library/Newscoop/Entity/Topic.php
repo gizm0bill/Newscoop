@@ -14,43 +14,34 @@ namespace Newscoop\Entity;
 class Topic
 {
     /**
-     * @Id
-     * @Column(type="integer", name="fk_topic_id")
-     * @var int
-     * @todo add reference to topic
-     */
-    private $id;
-
-    /**
-     * @Id
-     * @Column(type="integer", name="fk_language_id")
-     * @var int
-     * @todo add reference to language
-     */
-    private $language;
-
-    /**
-     * @Column(type="string", length="255")
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @ManyToOne(targetEntity="Newscoop\Entity\TopicTree", inversedBy="names")
+     * @Id @ManyToOne(targetEntity="Newscoop\Entity\TopicTree", inversedBy="names")
      * @JoinColumn(name="fk_topic_id", referencedColumnName="id")
      * @var Newscoop\Entity\TopicTree
      */
     private $topic;
 
     /**
-     * @param int $id
-     * @param int $language
-     * @param int $name
+     * @Id @ManyToOne(targetEntity="Newscoop\Entity\Language")
+     * @JoinColumn(name="fk_language_id", referencedColumnName="Id")
+     * @var Newscoop\Entity\Language
      */
-    public function __construct($id, $language, $name)
+    private $language;
+
+    /**
+     * @Column(type="string", length=255)
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param Newscoop\Entity\TopicTree $topic
+     * @param Newscoop\Entity\Language $language
+     * @param string $name
+     */
+    public function __construct(TopicTree $topic, Language $language, $name)
     {
-        $this->id = (int) $id;
-        $this->language = is_numeric($language) ? (int) $language : $language->getId();
+        $this->topic = $topic;
+        $this->language = $language;
         $this->name = (string) $name;
     }
 
@@ -61,7 +52,7 @@ class Topic
      */
     public function getTopicId()
     {
-        return $this->id;
+        return $this->topic->getId();
     }
 
     /**
@@ -71,7 +62,7 @@ class Topic
      */
     public function getLanguageId()
     {
-        return $this->language;
+        return $this->language->getId();
     }
 
     /**

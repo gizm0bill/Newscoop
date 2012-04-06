@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Issue entity
  * @Entity
- * @Table(name="Issues", {@UniqueConstraint(name="issues_unique",columns={"IdPublication", "Number", "Language"})})
+ * @Table(name="Issues", uniqueConstraints={@UniqueConstraint(name="issues_unique",columns={"IdPublication", "Number", "IdLanguage"})})
  */
 class Issue extends Entity
 {

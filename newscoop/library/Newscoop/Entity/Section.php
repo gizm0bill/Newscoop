@@ -41,7 +41,7 @@ class Section extends Entity
     private $issue;
 
     /**
-     * @Column(type="integer", name="NrIssue")
+     * @Column(type="integer", name="NrIssue", nullable=True)
      * @var int
      */
     private $issueNumber;

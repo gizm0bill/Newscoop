@@ -9,13 +9,12 @@ namespace Newscoop\Services;
 
 use Doctrine\Common\Persistence\ObjectManager,
     Newscoop\Entity\User,
-    Newscoop\Entity\UserAttribute,
-    Newscoop\Persistence\ObjectRepository;
+    Newscoop\Entity\UserAttribute;
 
 /**
  * User service
  */
-class UserService implements ObjectRepository
+class UserService
 {
     /** @var array */
     private $config = array();

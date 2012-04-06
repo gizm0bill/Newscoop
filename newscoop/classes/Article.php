@@ -670,14 +670,16 @@ class Article extends DatabaseObject {
         // Delete scheduled publishing
         ArticlePublish::OnArticleDelete($this->m_data['Number'], $this->m_data['IdLanguage']);
 
-        // Delete Article Comments
-        // @todo change this with DOCTRINE2 CASCADE DELETE
-        $em = Zend_Registry::get('container')->getService('em');
-        $repository = $em->getRepository('Newscoop\Entity\Comment');
-        $repository->deleteArticle($this->m_data['Number'], $this->m_data['IdLanguage']);
-        $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
-        $repository->deleteByArticle($this->m_data['Number']);
-        $em->flush();
+        if (!defined('IN_PHPUNIT')) {
+            // Delete Article Comments
+            // @todo change this with DOCTRINE2 CASCADE DELETE
+            $em = Zend_Registry::get('container')->getService('em');
+            $repository = $em->getRepository('Newscoop\Entity\Comment');
+            $repository->deleteArticle($this->m_data['Number'], $this->m_data['IdLanguage']);
+            $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+            $repository->deleteByArticle($this->m_data['Number']);
+            $em->flush();
+        }
 
         // is this the last translation?
         if (count($this->getLanguages()) <= 1) {

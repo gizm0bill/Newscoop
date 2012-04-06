@@ -21,7 +21,7 @@ class Alias
     private $id;
 
     /**
-     * @Column(type="string", length="80", name="Name")
+     * @Column(type="string", length=80, name="Name")
      * @var string
      */
     private $name;

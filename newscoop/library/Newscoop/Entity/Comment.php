@@ -91,7 +91,7 @@ class Comment implements \Newscoop\Search\DocumentInterface
     /**
      * TODO get rid of this when the composite key stuff is done.
      *
-     * @column(type="integer", name="fk_thread_id")
+     * @column(type="integer", name="fk_thread_id", nullable=True)
      * @var int
      */
     private $article_num;
@@ -474,6 +474,7 @@ class Comment implements \Newscoop\Search\DocumentInterface
     public function setThread(Article $p_thread)
     {
         $this->thread = $p_thread;
+        $this->article_num = $p_thread->getNumber();
         // return this for chaining mechanism
         return $this;
     }

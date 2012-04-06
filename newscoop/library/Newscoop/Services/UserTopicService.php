@@ -79,7 +79,7 @@ class UserTopicService
     {
         $topics = $this->em->getRepository('Newscoop\Entity\Topic')
             ->findBy(array(
-                'id' => $id,
+                'topic' => $id,
             ));
 
         if (empty($topics)) {
