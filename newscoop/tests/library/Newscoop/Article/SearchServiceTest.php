@@ -138,20 +138,20 @@ class SearchServiceTest extends \TestCase
 
     public function testDocumentEvent()
     {
-        $date = new \DateTime('2012-01-01 20:00');
         $article = new Article(1, $this->language);
         $article->setType('event');
         $article->setData(array(
             'organizer' => 'org',
             'town' => 'basel',
-            'date' => $date->format('Y-m-d'),
-            'time' => $date->format('H:i'),
+            'date' => '2012-12-01',
+            'time' => '05:20',
         ));
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('org', $doc['event_organizer']);
         $this->assertEquals('basel', $doc['event_town']);
-        $this->assertEquals(gmdate('Y-m-d\TH:i:s\Z', $date->getTimestamp()), $doc['event_date']);
+        $this->assertEquals('2012-12-01', $doc['event_date']);
+        $this->assertEquals('05:20', $doc['event_time']);
     }
 
     public function testIsIndexed()

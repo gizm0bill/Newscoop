@@ -127,8 +127,8 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             case 'event':
                 $doc['event_organizer'] = $article->getData('organizer');
                 $doc['event_town'] = $article->getData('town');
-                $date = date_create($article->getData('date') . ($article->getData('time') ? ' ' . $article->getData('time') : ''));
-                $doc['event_date'] = gmdate(self::DATE_FORMAT, $date->getTimestamp());
+                $doc['event_date'] = $article->getData('date');
+                $doc['event_time'] = $article->getData('time');
                 break;
         }
 
