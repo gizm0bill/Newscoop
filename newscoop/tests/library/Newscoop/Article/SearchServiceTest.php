@@ -23,7 +23,7 @@ class SearchServiceTest extends \TestCase
 
     public function setUp()
     {
-        $this->em = $this->setUpOrm('Newscoop\Entity\Article', 'Newscoop\Entity\Language');
+        $this->em = $this->setUpOrm();
 
         $this->webcoder = new \Newscoop\Webcode\Mapper();
 
@@ -134,6 +134,24 @@ class SearchServiceTest extends \TestCase
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('blog', $doc['section']);
+    }
+
+    public function testDocumentEvent()
+    {
+        $date = new \DateTime('2012-01-01 20:00');
+        $article = new Article(1, $this->language);
+        $article->setType('event');
+        $article->setData(array(
+            'organizer' => 'org',
+            'town' => 'basel',
+            'date' => $date->format('Y-m-d'),
+            'time' => $date->format('H:i'),
+        ));
+
+        $doc = $this->service->getDocument($article);
+        $this->assertEquals('org', $doc['event_organizer']);
+        $this->assertEquals('basel', $doc['event_town']);
+        $this->assertEquals(gmdate('Y-m-d\TH:i:s\Z', $date->getTimestamp()), $doc['event_date']);
     }
 
     public function testIsIndexed()

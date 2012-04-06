@@ -123,6 +123,13 @@ class SearchService implements \Newscoop\Search\ServiceInterface
                 $doc['link_url'] = $article->getData('link_url');
                 $doc['link_description'] = strip_tags($article->getData('link_description'));
                 break;
+
+            case 'event':
+                $doc['event_organizer'] = $article->getData('organizer');
+                $doc['event_town'] = $article->getData('town');
+                $date = date_create($article->getData('date') . ($article->getData('time') ? ' ' . $article->getData('time') : ''));
+                $doc['event_date'] = gmdate(self::DATE_FORMAT, $date->getTimestamp());
+                break;
         }
 
         return array_filter($doc);
