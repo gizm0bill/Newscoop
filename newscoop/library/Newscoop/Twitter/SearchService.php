@@ -46,7 +46,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'id' => $this->getDocumentId($tweet),
             'type' => 'tweet',
             'tweet_id' => $tweet['id_str'],
-            'published' => gmdate('Y-m-d\TH:i:s\Z', strtotime($tweet['created_at'])),
+            'published' => gmdate(self::DATE_FORMAT, strtotime($tweet['created_at'])),
             'tweet' => $tweet['text'],
             'tweet_user_name' => $tweet['user']['name'],
             'tweet_user_screen_name' => $tweet['user']['screen_name'],

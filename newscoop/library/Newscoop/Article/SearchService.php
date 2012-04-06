@@ -85,7 +85,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'id' => $this->getDocumentId($article),
             'title' => $article->getTitle(),
             'type' => $article->getType(),
-            'published' => gmdate('Y-m-d\TH:i:s\Z', date_create($article->getPublishDate())->getTimestamp()),
+            'published' => gmdate(self::DATE_FORMAT, date_create($article->getPublishDate())->getTimestamp()),
             'author' => array_map(function($author) {
                 return $author->getFullName();
             }, $article->getAuthors()),

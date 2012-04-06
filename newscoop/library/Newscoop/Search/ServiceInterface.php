@@ -12,6 +12,8 @@ namespace Newscoop\Search;
  */
 interface ServiceInterface
 {
+    const DATE_FORMAT = 'Y-m-d\TH:i:s\Z';
+
     /**
      * Test if item is indexed
      *

@@ -52,6 +52,7 @@ class SearchServiceTest extends \TestCase
             'user' => 'name',
             'bio' => 'abc',
             'image' => 'imagesrc',
+            'published' => gmdate('Y-m-d\TH:i:s\Z'),
         ), $this->service->getDocument($user));
     }
 
