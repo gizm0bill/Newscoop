@@ -83,6 +83,10 @@ var DocumentCollection = Backbone.Collection.extend({
             params.start = this.start;
         }
 
+        if (this.sortf) {
+            params.sort = this.sortf;
+        }
+
         this.addList('source', params);
         this.addList('section', params);
 
@@ -110,6 +114,7 @@ var DocumentCollection = Backbone.Collection.extend({
         this.date = response.responseHeader.params.date;
         this.source = this.parseList(response.responseHeader.params.source);
         this.section = this.parseList(response.responseHeader.params.section);
+        this.sortf = response.responseHeader.params.sort;
         return response.response.docs;
     },
 
@@ -220,8 +225,7 @@ var SearchFormView = Backbone.View.extend({
         this.collection.type = null;
         this.collection.date = null;
         this.collection.start = null;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
     },
 
     didYouMean: function(e) {
@@ -283,8 +287,7 @@ var TypeFilterView = Backbone.View.extend({
         e.preventDefault();
         this.collection.type = e.target.hash.slice(1);
         this.collection.start = null;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
     }
 });
 
@@ -330,8 +333,7 @@ var DateFilterView = Backbone.View.extend({
         $(this.el).find('#range_to').val(null);
         this.collection.date = e.target.hash.slice(1);
         this.collection.start = null;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
     },
 
     filterRange: function(e) {
@@ -340,8 +342,7 @@ var DateFilterView = Backbone.View.extend({
         var to = $(this.el).find('input.to').val() || '';
         this.collection.date = from || to ? [from, to].join(',') : null;
         this.collection.start = null;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
     }
 });
 
@@ -386,8 +387,7 @@ var PaginationView = Backbone.View.extend({
         }
 
         this.collection.start = start;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
     }
 });
 
@@ -434,8 +434,7 @@ var SourceFilterView = Backbone.View.extend({
 
     navigate: function() {
         this.collection.start = null;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
     }
 });
 
@@ -462,8 +461,35 @@ var SectionFilterView = Backbone.View.extend({
     filter: function(e) {
         this.collection.section[$(e.target).val()] = e.target.checked;
         this.collection.start = null;
-        router.navigate(this.collection.nav());
-        this.collection.fetch();
+        router.navigate(this.collection.nav(), {trigger: true});
+    }
+});
+
+/**
+ * Sort view
+ */
+var SortView = Backbone.View.extend({
+    events: {
+        'click': 'sort'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        this.render();
+    },
+
+    render: function() {
+        if (this.collection.sortf) {
+            $('<strong class="sort-dir">&darr;</strong>').appendTo($(this.el));
+        } else {
+            $(this.el).find('.sort-dir').detach();
+        }
+    },
+
+    sort: function() {
+        this.collection.sortf = this.collection.sortf ? null : 'latest';
+        this.collection.start = null;
+        router.navigate(this.collection.nav(), {trigger: true});
     }
 });
 
@@ -476,5 +502,6 @@ var SearchRouter = Backbone.Router.extend({
     },
 
     search: function(params) {
+        window.documents.fetch();
     }
 });

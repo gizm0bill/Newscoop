@@ -29,7 +29,8 @@ $(function() {
     searchFormView = new SearchFormView({collection: documents, el: $('#search-form') });
     typeFilterView = new TypeFilterView({collection: documents, el: $('#type-filter') });
     dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
-    Backbone.history.start({pushState: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'search']), '/')) }} });
+    sortView = new SortView({collection: documents, el: $('#sort-latest') });
+    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'search']), '/')) }} });
 });
 </script>
 {{/block}}
@@ -47,6 +48,6 @@ $(function() {
         </form>
     </li>
     <li>Typ</li>
-    <li>veröffentlicht</li>
+    <li id="sort-latest">veröffentlicht</li>
 </ul>
 {{/block}}

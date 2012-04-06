@@ -34,6 +34,7 @@ class SearchController extends AbstractSolrController
                 $this->buildSolrTypeParam(),
                 $this->buildSolrDateParam(),
             ))),
+            'sort' => $this->_getParam('sort') === 'latest' ? 'published desc' : 'score desc',
         ));
     }
 
