@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<theme name="TagesWoche mobile" designer="default" version="1.0" require="3.6">
+    <description>TagesWoche mobile</description>
+	<output name="Web">
+		<frontPage src="index.tpl"/>
+		<sectionPage src="index.tpl"/>
+		<articlePage src="index.tpl"/>
+		<errorPage src="404.tpl"/>
+	</output>
+</theme>
