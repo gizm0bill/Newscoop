@@ -82,7 +82,7 @@ and then all is compared according to a matrix.
         {{ if $gimme->article->comments_enabled && $gimme->article->content_accessible }}
         <small><a href="{{ uri options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></small>
         {{ /if }}
-        {{ include file="_tpl/article_info_box.tpl" }}   
+        <include file="_tpl/article_info_box.tpl" }}   
     </p>
   </header>
     <h2>

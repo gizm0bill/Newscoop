@@ -3,7 +3,14 @@
 {{ local }}
 {{ list_articles length="1" ignore_issue="true" ignore_section="true" constraints="section is 81 type is deb_moderator" }}
 {{ assign var="debissue" value=$gimme->issue->number }}{{* we have to find in which issue is last debate published - might happen it doesn't exist in current issue *}}
+{{ assign var="closedate" value=$gimme->article->date_closing }}
 {{ /list_articles }}
+
+{{ $todayminusthree=date_create("-72 hours") }}
+{{ $dateConstraint=$todayminusthree->format("Y-m-d") }}
+
+{{ if !($closedate lt $dateConstraint) }}{{* if last debatte is not closed more than three days ago, show frontpage teaser *}}
+
 {{ set_issue number=$debissue }}
 {{ set_section number="81" }}
 {{**************************************************
@@ -83,7 +90,7 @@ and then all is compared according to a matrix.
         {{ if $gimme->article->comments_enabled }}
         <small><a href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></small>
         {{ /if }}
-        {{ include file="_tpl/article_info_box.tpl" }}   
+        <include file="_tpl/article_info_box.tpl" }}   
     </p>
   </header>
     <h2>
@@ -138,5 +145,7 @@ and then all is compared according to a matrix.
   </div>
    
 {{ /if }}
+
+{{ /if }}{{* if last debatte is not closed more than three days ago, show frontpage teaser *}}
 {{ /local }}
 <!-- / _tpl/debate_front.tpl -->

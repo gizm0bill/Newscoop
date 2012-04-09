@@ -9,7 +9,7 @@
         </div>    
       </div>
       <p>
-        {{ if trim($gimme->article->image->description) }}{{ $gimme->article->image->description|jsencode }}&nbsp;&nbsp;{{ /if }}
+        {{ if trim($gimme->article->image->caption) }}{{ $gimme->article->image->caption|jsencode }}&nbsp;&nbsp;{{ /if }}
         {{ if trim($gimme->article->image->photographer) }}<small style="display: inline">(Bild: {{ $gimme->article->image->photographer|jsencode }})</small>{{ /if }}
       </p>
     </figure>

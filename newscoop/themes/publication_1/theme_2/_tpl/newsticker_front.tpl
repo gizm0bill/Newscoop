@@ -21,7 +21,7 @@
     </footer>
 
     {{ else }}
-    {{ if intval(date('H')) <= 7 }}{{* show news for latest 10h from 0am to 7am *}}
+    {{ if intval(date('H')) <= 7 OR date('Y-m-d') == '2012-04-06' OR date('Y-m-d') == '2012-04-09' }}{{* show news for latest 10h from 0am to 7am // or easter days *}}
     {{ $datetimeLimit=date_create("-10 hours") }}
     {{ else }}{{* show news for latest 6 hours from 7am to 12pm *}}
     {{ $datetimeLimit=date_create("-6 hours") }}
