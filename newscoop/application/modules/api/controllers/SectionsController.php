@@ -39,6 +39,10 @@ class Api_SectionsController extends Zend_Controller_Action
      */
     public function listAction()
     {
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+
+        $list = array();
+        /*
         $publication = $this->_helper->service('publication')
             ->find(2);
         $sections = $this->service->getByPublication($publication);
@@ -46,10 +50,13 @@ class Api_SectionsController extends Zend_Controller_Action
         foreach($sections as $section) {
             $list[] = array(
                 'name' => $section->getName(),
-                'url' => self::BASE_URL . 'item?id=' . $section->getId(),
+                'url' => self::BASE_URL . 'item?id=' . $section->getId(), 
             );
         }
-        var_dump(Zend_Json::prettyPrint(Zend_Json::encode($list)));
+        */
+
+
+        print Zend_Json::encode($list);
     }
 
     /**
@@ -59,12 +66,12 @@ class Api_SectionsController extends Zend_Controller_Action
      */
     public function itemAction()
     {
-        $id = $this->request->getParam('id');
+        $id = $this->request->getParam('section_id');
         $section = $this->service->find($id);
         $response = array(
-            'id' => $section->getId(),
+            'section_id' => $section->getId(),
             'name' => $section->getName(),
-            'articles' => '/articles/list?section=' . $section->getId(),
+            'articles' => '/articles/list?section_id=' . $section->getId(),
         );
 
         var_dump(Zend_Json::prettyPrint(Zend_Json::encode($response)));

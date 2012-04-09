@@ -29,15 +29,31 @@ class ArticleService
         $this->em = $em;
     }
 
+    public function getRelatedArticles(Article $article)
+    {
+        $contextBox = new \ContextBox(null, $article->getId());
+        $articleIds = $contextBox->getArticlesList();
+        foreach($articleIds as $articleId) {
+            $related[] = $this->find($article->getLanguage(), $articleId);
+        }
+
+        return $related;
+    }
+
+    public function getComments(Article $article, CommentService $commentService)
+    {
+        //return $this->commentServicecountBy
+    }
+
     /**
      * Find an article
      *
+     * @param Newscoop\Entity\Language
      * @param int $number
      * @return Newscoop\Entity\Article
      */
-    public function findArticle($number)
+    public function find(Language $language, $number)
     {
-        $language = $this->em->getRepository('Newscoop\Entity\Language')->find(1);
         return $this->getRepository()
             ->find(array('language' => $language->getId(), 'number' => $number));
     }

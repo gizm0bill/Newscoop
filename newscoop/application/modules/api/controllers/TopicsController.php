@@ -9,7 +9,9 @@
  */
 class Api_TopicsController extends Zend_Controller_Action
 {
-    const LANGUAGE = 5;
+    const LANGUAGE = 1;
+
+    const ARTICLE_TOPICS = 101;
     
     /** @var Zend_Controller_Request_Http */
     private $request;
@@ -58,9 +60,8 @@ class Api_TopicsController extends Zend_Controller_Action
                     $topics[] = new Topic($item->getTopicId());
                 }
             }
-        }
-        else {
-            $topics = Topic::GetTopics();
+        } else {
+            $topics = ArticleTopic::GetArticleTopics(self::ARTICLE_TOPICS);
         }
         
         foreach ($topics as $topic) {

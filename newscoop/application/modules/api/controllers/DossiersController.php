@@ -9,6 +9,7 @@
  */
 class Api_DossiersController extends Zend_Controller_Action
 {
+    const ARTICLE_TYPE = 'dossier';
     const PUBLICATION = 5;
     const LANGUAGE = 5;
     
@@ -47,19 +48,15 @@ class Api_DossiersController extends Zend_Controller_Action
     {
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
         
-        $articles = $this->_helper->service('article')->findBy(array('type' => 'dossier'));
+        $articles = $this->_helper->service('article')->findBy(array('type' => self::ARTICLE_TYPE));
         
         $response = array();
         
         foreach ($articles as $article) {
-            $articleData = new ArticleData('dossier', $article->getNumber(), self::LANGUAGE);
+            $articleData = new ArticleData(self::ARTICLE_TYPE, $article->getNumber(), self::LANGUAGE);
             $articleImages = ArticleImage::GetImagesByArticleNumber($article->getNumber());
-            if ($articleImages[0]) {
-                $imageUrl = $articleImages[0]->getImage()->getImageUrl();
-            }
-            else {
-                $imageUrl = '';
-            }
+            $imageUrl = isset($articleImages[0]) ? $articleImages[0]->getImage()->getImageUrl() : '';
+
             $response[] = array(
                 'id' => $article->getNumber(),
                 'url' => $this->url.'/api/dossiers/articles?dossier_id='.$article->getNumber(),
@@ -86,13 +83,14 @@ class Api_DossiersController extends Zend_Controller_Action
         
         if ($parameters['dossier_id']) {
             $dossierId = $parameters['dossier_id'];
-        }
-        else {
-            $articles = $this->_helper->service('article')->findBy(array('type' => 'dossier'), array('published' => 'desc'));
+        } else {
+            $articles = $this->_helper->service('article')
+                ->findBy(array('type' => self::ARTICLE_TYPE), array('published' => 'desc'));
             $dossierId = $articles[0]->getNumber();
         }
         
-        $dossier = $this->_helper->service('article')->findBy(array('number' => $dossierId, 'language' => self::LANGUAGE));
+        $dossier = $this->_helper->service('article')
+            ->findBy(array('number' => $dossierId, 'language' => self::LANGUAGE));
         $contextBox = new ContextBox(null, $dossierId);
         $articleIds = $contextBox->getArticlesList();
         
