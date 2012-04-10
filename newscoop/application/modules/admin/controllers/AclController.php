@@ -7,7 +7,8 @@
 
 use Newscoop\Entity\Acl\Role,
     Newscoop\Entity\Acl\Rule,
-    Newscoop\Entity\User;
+    Newscoop\Entity\User,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(ignore="1")

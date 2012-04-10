@@ -6,7 +6,8 @@
  */
 
 use Newscoop\Entity\Ingest\Feed,
-    Newscoop\Services\IngestService;
+    Newscoop\Services\IngestService,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="ingest", action="manage")

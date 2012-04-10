@@ -6,16 +6,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
+use Newscoop\Service\Implementation\ArticleTypeServiceDoctrine,
+    Newscoop\Utils\Exception,
+    Newscoop\Service\Implementation\var_hook,
+    Newscoop\Entity\Language,
+    Newscoop\Entity\Playlist,
+    Newscoop\Annotations\Acl;
+
 /**
  * PlaylistController
  * @Acl(resource="playlist", action="manage")
  */
-use Newscoop\Service\Implementation\ArticleTypeServiceDoctrine;
-use Newscoop\Utils\Exception;
-use Newscoop\Service\Implementation\var_hook;
-use Newscoop\Entity\Language;
-use Newscoop\Entity\Playlist;
-
 class Admin_PlaylistController extends Zend_Controller_Action
 {
     /**

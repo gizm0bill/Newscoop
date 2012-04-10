@@ -22,7 +22,7 @@
     <script src="{{ $view->baseUrl('public/_js/libs/modernizr-2.0.6.js') }}"></script>
     
     <script type="text/template" id="document-article-template">
-    <% if (doc.get('image')) { %><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /><% } %>
+    <% if (doc.get('image')) { %><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /></a><% } %>
     <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
     <p><%= doc.escape('lead') %></p>
     <span class="time"><%= doc.relDate('published') %></span>
@@ -39,7 +39,7 @@
     </script>
 
     <script type="text/template" id="document-event-template">
-    <h3><a href="#"><%= doc.escape('title') %></a></h3>
+    <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
     </script>
 
     <script type="text/template" id="document-omni-template">
@@ -49,7 +49,7 @@
     </script>
 
     <script type="text/template" id="document-link-template">
-    <p>Diesen Link halten wir für wertvoll, weshalb wir ihn an unsere Leser weitergeben: <a href="<%= doc.get('link_url') %>"><%= doc.escape('link_description') %></a></p>
+    <p><%= doc.escape('link_description') %>: <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('link_url') %></a></p>
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
 
