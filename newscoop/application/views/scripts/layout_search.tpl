@@ -34,7 +34,7 @@
     </script>
 
     <script type="text/template" id="document-user-template">
-    <h3><a href="#"><%= doc.escape('user') %></a></h3>
+    <h3><a href="{{ $view->url(['username' => ''], 'user') }}/<%= doc.escape('user') %>"><%= doc.escape('user') %></a></h3>
     <p><%= doc.escape('bio') %></p>
     </script>
 
@@ -43,7 +43,7 @@
     </script>
 
     <script type="text/template" id="document-omni-template">
-    <h3><a href="#"><%= doc.escape('subject') %></a></h3>
+    <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('subject') %>"><%= doc.escape('subject') %></a></h3>
     <p><%= doc.get('message').length > 200 ? doc.escape('message').substr(0, 199) + '...' : doc.escape('message') %> <a href="<%= doc.get('link') %>" title="Weiterlesen">Weiterlesen</a></p>
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
