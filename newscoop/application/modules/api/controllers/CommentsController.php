@@ -12,9 +12,6 @@ class Api_CommentsController extends Zend_Controller_Action
     /** @var Zend_Controller_Request_Http */
     private $request;
 
-    /** @var array */
-    private $response = array();
-
     /** @var Newscoop\Services\CommentService */
     private $service;
 
@@ -41,30 +38,38 @@ class Api_CommentsController extends Zend_Controller_Action
     {
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
 
+        $response = array();
+
         $id = $this->request->getParam('article_id');
         if (is_null($id)) {
-            print Zend_Json::encode($this->response);
+            $this->_helper->json($response);
             return;
         }
 
-        $comments = $this->service->findBy(array('thread' => $id));
+        $comments = $this->service->findBy(array('article_num' => $id));
         if (empty($comments)) {
-            print Zend_Json::encode($this->response);
+            $this->_helper->json($response);
             return;
         }
 
         foreach($comments as $comment) {
+            $created_time = $comment->getTimeCreated()->format('Y-m-d H:i:s');
+            $last_modified = $created_time;
+            if ($comment->getTimeUpdated()->getTimestamp() !== false && $comment->getTimeCreated()->getTimestamp() < $comment->getTimeUpdated()->getTimestamp()) {
+                $last_modified = $comment->getTimeUpdated()->format('Y-m-d H:i:s');
+            }
+
             $this->response[] = array(
                 'author_name' => $comment->getCommenterName(),
                 'author_id' => $comment->getCommenter()->getLoginName(),
                 'subject' => $comment->getSubject(),
                 'message'=> $comment->getMessage(),
                 'recommended' => $comment->getRecommended(),
-                'created_time' => $comment->getTimeCreated(),
-                'last_modified' => $comment->getTimeUpdated()
+                'created_time' => $created_time,
+                'last_modified' => $last_modified
             );
         }
 
-        print Zend_Json::encode($this->response);
+        $this->_helper->json($this->response);
     }
 }
