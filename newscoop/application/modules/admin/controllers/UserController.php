@@ -5,7 +5,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Newscoop\Entity\User;
+use Newscoop\Entity\User,
+    Newscoop\Annotations\Acl;
 
 /**
  * User controller

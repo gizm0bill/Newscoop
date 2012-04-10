@@ -9,7 +9,8 @@ use Newscoop\Service\IThemeManagementService;
 use Newscoop\Service\Template,
     Newscoop\Storage,
     Newscoop\Service\Resource\ResourceId,
-    Newscoop\Service\IThemeService;
+    Newscoop\Service\IThemeService,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="template", action="manage")

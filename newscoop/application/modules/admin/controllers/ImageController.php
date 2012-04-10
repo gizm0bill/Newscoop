@@ -5,7 +5,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Newscoop\Image\Rendition;
+use Newscoop\Image\Rendition,
+    Newscoop\Annotations\Acl;
 
 require_once($GLOBALS['g_campsiteDir']. '/classes/Plupload.php');
 require_once($GLOBALS['g_campsiteDir'].'/classes/ImageSearch.php');
