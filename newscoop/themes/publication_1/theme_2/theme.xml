@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<theme name="TagesWoche" designer="" version="1.0" require="3.6">
+    <description>This is an empty theme</description>
+    <presentation-img src="preview-front.jpg" name="Front page"/>
+    <presentation-img src="preview-section.jpg" name="Section page"/>
+    <presentation-img src="preview-article.jpg" name="Article page"/>
+	<output name="Web">
+		<frontPage src="front.tpl"/>
+		<sectionPage src="section.tpl"/>
+		<articlePage src="article.tpl"/>
+		<errorPage src="404.tpl"/>
+	</output>
+
+    <renditions>
+        <rendition name="artikel" width="555" height="370" specs="crop" />
+        <rendition name="topfront" width="640" height="280" specs="crop" />
+        <rendition name="rubrikenseite" width="300" height="200" specs="crop" />
+        <rendition name="naviteaser" width="120" height="53" specs="crop" />
+        <rendition name="dossierteaser" width="300" height="131" specs="crop" />
+        <rendition name="dossierbild" width="980" height="428" specs="crop" />
+    </renditions>
+</theme>

@@ -20,7 +20,7 @@ class Api_ArticlesController extends Zend_Controller_Action
     private $request;
 
     /** @var array */
-    private $response;
+    private $response = array();
 
     /**
      * Init controller
@@ -65,10 +65,13 @@ class Api_ArticlesController extends Zend_Controller_Action
             $criteria[] = new ComparisonOperation('topic', new Operator('is'), $params['topic_id']);
         }
 
-        $articles = \Article::GetList($criteria, null, 0, 0, $count = 0);
+        $start = isset($params['start']) ? (int) $params['start'] : 0;
+        $offset = isset($params['offset']) ? (int) $params['offset'] : 0;
+
+        $rank = 1;
+        $articles = \Article::GetList($criteria, null, $start, $offset, $count = 0, false, false);
         foreach ($articles as $item) {
-            $article = $this->articleService->find($this->language, $item->getArticleNumber());
-            unset($item);
+            $article = $this->articleService->find($this->language, $item['number']);
             $image = $this->getImage($article);
             $imageUrl = !empty($image) ? $image->src : null;
 
@@ -77,13 +80,19 @@ class Api_ArticlesController extends Zend_Controller_Action
                 'thread' => $article->getId(),
             ));
 
+            $articleData = new ArticleData($article->getType(), $article->getId(), self::LANGUAGE);
+
             $this->response[] = array(
                 'article_id' => $article->getId(),
                 'url' => self::ITEM_URI_PATH . '?article_id=' . $article->getId(),
                 'title' => $article->getTitle(),
-                'publish_date' => $article->getPublishDate(),
+                'dateline' => $articleData->getFieldValue('dateline'),
+                'short_name' => $articleData->getFieldValue('short_name'),
+                'teaser' => $articleData->getFieldValue('teaser'),
                 'image_url' => $imageUrl,
+                'publish_date' => $article->getPublishDate(),
                 'comment_count' => $comments,
+                'rank' => $rank++,
             );
         }
 
@@ -98,8 +107,12 @@ class Api_ArticlesController extends Zend_Controller_Action
         $this->getHelper('contextSwitch')->addActionContext('item', 'json')->initContext();
 
         $id = $this->request->getParam('article_id');
-        $article = $this->articleService->find($this->language, $this->request->getParam('article_id'));
+        if (is_null($id)) {
+            print Zend_Json::encode($this->response);
+            return;
+        }
 
+        $article = $this->articleService->find($this->language, $this->request->getParam('article_id'));
         if (empty($article)) {
             return $this->_helper->json($response);
         }
@@ -124,11 +137,10 @@ class Api_ArticlesController extends Zend_Controller_Action
             'title' => $article->getTitle(),
             'publish_date' => $article->getPublishDate(),
             'last_modified' => $article->getDate(),
-            'full_text' => $articleData->getFieldValue('full_text'),
+            'teaser' => $articleData->getFieldValue('teaser'),
+            'body' => $articleData->getFieldValue('body'),
             'image_url' => $imageUrl,
             'comment_count' => $comments,
-            //'teaser' => $articleData->getFieldValue('teaser'),
-            //'body' => $articleData->getFieldValue('body'),
         );
 
         print Zend_Json::encode($this->response);

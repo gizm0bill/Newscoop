@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<theme name="Empty" designer="default" version="1.0" require="3.6">
+    <description>This is an empty theme</description>
+    <presentation-img src="preview-front.jpg" name="Front page"/>
+    <presentation-img src="preview-section.jpg" name="Section page"/>
+    <presentation-img src="preview-article.jpg" name="Article page"/>
+	<output name="Web">
+		<frontPage src="front.tpl"/>
+		<sectionPage src="section.tpl"/>
+		<articlePage src="article.tpl"/>
+		<errorPage src="404.tpl"/>
+	</output>
+</theme>

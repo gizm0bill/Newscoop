@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<theme name="TagesWoche 2011"
+    designer=""
+    version="1.0"
+    require="3.6">
+
+    <description>Die TagesWoche ist die neue Stimme aus Basel. Sie redet mit und gibt zu reden, sie lässt Leserinnen und Leser mitreden. </description>
+
+    <!-- a list of images displayed as previews in the theme management list screen -->
+    <presentation-img
+        src="front.jpg"
+        name="Startseite"/>
+    <presentation-img src="section.jpg" name="Rubrikenseite"/>
+    <presentation-img src="article.jpg" name="Artikelseite"/>
+
+    <!-- the output settings, this is the medium the following settings will apply. Currently only Web is supported -->
+    <output name="Web">
+        <!-- page to template matching -->
+        <frontPage src="front.tpl"/>
+        <sectionPage src="section.tpl"/>
+        <articlePage src="article.tpl"/>
+        <errorPage src="404.tpl"/>
+    </output>
+
+</theme>
