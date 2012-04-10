@@ -68,6 +68,7 @@ class Api_ArticlesController extends Zend_Controller_Action
         $start = isset($params['start']) ? (int) $params['start'] : 0;
         $offset = isset($params['offset']) ? (int) $params['offset'] : 0;
 
+        $rank = 1;
         $articles = \Article::GetList($criteria, null, $start, $offset, $count = 0, false, false);
         foreach ($articles as $item) {
             $article = $this->articleService->find($this->language, $item['number']);
@@ -79,13 +80,19 @@ class Api_ArticlesController extends Zend_Controller_Action
                 'thread' => $article->getId(),
             ));
 
+            $articleData = new ArticleData($article->getType(), $article->getId(), self::LANGUAGE);
+
             $this->response[] = array(
                 'article_id' => $article->getId(),
                 'url' => self::ITEM_URI_PATH . '?article_id=' . $article->getId(),
                 'title' => $article->getTitle(),
-                'publish_date' => $article->getPublishDate(),
+                'dateline' => $articleData->getFieldValue('dateline'),
+                'short_name' => $articleData->getFieldValue('short_name'),
+                'teaser' => $articleData->getFieldValue('teaser'),
                 'image_url' => $imageUrl,
+                'publish_date' => $article->getPublishDate(),
                 'comment_count' => $comments,
+                'rank' => $rank++,
             );
         }
 

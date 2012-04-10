@@ -12,6 +12,9 @@ class Api_CommentsController extends Zend_Controller_Action
     /** @var Zend_Controller_Request_Http */
     private $request;
 
+    /** @var array */
+    private $response = array();
+
     /** @var Newscoop\Services\CommentService */
     private $service;
 
@@ -36,30 +39,32 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function listAction()
     {
-        $publication = $this->_helper->service('publication')
-            ->find(2);
-        $sections = $this->service->getByPublication($publication);
-        $list = array();
-        foreach($sections as $section) {
-            $list[] = array(
-                'name' => $section->getName(),
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+
+        $id = $this->request->getParam('article_id');
+        if (is_null($id)) {
+            print Zend_Json::encode($this->response);
+            return;
+        }
+
+        $comments = $this->service->findBy(array('thread' => $id));
+        if (empty($comments)) {
+            print Zend_Json::encode($this->response);
+            return;
+        }
+
+        foreach($comments as $comment) {
+            $this->response[] = array(
+                'author_name' => $comment->getCommenterName(),
+                'author_id' => $comment->getCommenter()->getLoginName(),
+                'subject' => $comment->getSubject(),
+                'message'=> $comment->getMessage(),
+                'recommended' => $comment->getRecommended(),
+                'created_time' => $comment->getTimeCreated(),
+                'last_modified' => $comment->getTimeUpdated()
             );
         }
-        var_dump(Zend_Json::prettyPrint(Zend_Json::encode($list)));
-    }
 
-    /**
-     * Send article info.
-     */
-    public function itemAction()
-    {
-        $id = $this->request->getParam('id');
-        $section = $this->service->find($id);
-        $response = array(
-            'id' => $section->getNumber(),
-            'name' => $section->getName(),
-        );
-
-        var_dump(Zend_Json::prettyPrint(Zend_Json::encode($response)));
+        print Zend_Json::encode($this->response);
     }
 }
