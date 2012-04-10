@@ -252,7 +252,7 @@ var DocumentListView = Backbone.View.extend({
             list.append(view.render().el);
         });
 
-        if (this.collection.count === 0) {
+        if (this.collection.count < 13) {
             $("<li />").html(this.emptyTemplate()).appendTo($(this.el));
             $('#search-pagination').hide();
         }
