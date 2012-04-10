@@ -21,8 +21,8 @@ use Newscoop\Service\IArticleTypeService,
     Newscoop\Entity\Theme\Loader\LocalLoader,
     Newscoop\Service\IOutputService,
     Newscoop\Service\Exception\DuplicateNameException,
-    Newscoop\Entity\Output
-    ;
+    Newscoop\Entity\Output,
+    Newscoop\Annotations\Acl;
 
 /**
  * Themes Controller

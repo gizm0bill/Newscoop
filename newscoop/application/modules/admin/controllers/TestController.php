@@ -27,6 +27,8 @@ use Newscoop\Service\Model\SearchLanguage;
 use Newscoop\Api\Publication as ResPublication;
 use Newscoop\Api\Resource as Res;
 
+use Newscoop\Annotations\Acl;
+
 /**
  * @Acl(resource="theme", action="manage")
  */

@@ -9,7 +9,8 @@
  */
 use Newscoop\Entity\Comment,
     Newscoop\Entity\Publication,
-    Newscoop\Entity\Notification;
+    Newscoop\Entity\Notification,
+    Newscoop\Annotations\Acl;
 
 /**
  */
