@@ -10,7 +10,7 @@ DEBRELEASE=$(head -n1 debian/changelog | cut -d ' ' -f 2 | sed 's/[()]*//g')
 DEBVERSION=$(echo $DEBRELEASE | sed 's/-.*$//g;s/~test[0-9]*//g')
 UPSTREAMVERSION=$(echo $DEBVERSION | sed 's/~/-/g')
 UPSTREAMDIST=$(echo $UPSTREAMVERSION | sed 's/^\([0-9]*\.[0-9]*\).*$/\1/')
-SFOCUSTOM="-RC3"
+SFOCUSTOM="-RC4"
 DEBPATH=`pwd`/debian # TODO check dirname $0
 MIRRORPATH=/tmp
 BUILDDEST=/tmp/newscoop-${DEBVERSION}/
@@ -67,10 +67,8 @@ rm newscoop/INSTALL.txt
 
 # Sourcefabric licenses covered by debian/copyright
 rm newscoop/COPYING.txt
-rm newscoop/themes/unassigned/set_zen/license.txt
 
 # third party licences covered by debian/copyright
-rm newscoop/themes/unassigned/set_zen/_tpl/player/LICENSE.txt
 rm newscoop/include/html2pdf/_tcpdf_5.0.002/LICENSE.TXT
 rm newscoop/js/domTT/LICENSE
 rm newscoop/js/flowplayer/LICENSE.txt
@@ -80,6 +78,8 @@ rm newscoop/js/tinymce/license.txt
 rm newscoop/library/Nette/license.txt
 rm newscoop/library/Symfony/Component/Console/LICENSE
 rm newscoop/library/Symfony/Component/Yaml/LICENSE
+rm newscoop/library/Doctrine/Symfony/Component/Console/LICENSE
+rm newscoop/library/Doctrine/Symfony/Component/Yaml/LICENSE
 rm newscoop/library/fabpot-dependency-injection-07ff9ba/LICENSE
 rm newscoop/library/fabpot-event-dispatcher-782a5ef/LICENSE
 rm newscoop/include/html2pdf/_tcpdf_5.0.002/fonts/dejavu-fonts-ttf-2.30/LICENSE
@@ -126,9 +126,13 @@ if test "${UPSTREAMVERSION}" == "3.5.1"; then
 	rm newscoop/javascript/tinymce/plugins/codehighlighting/img/Thumbs.db
 fi
 
-### fixes for 4.0.0-RC3 ###
+### fixes for 4.0.0-RC4 ###
 if test "${UPSTREAMVERSION}" == "4.0.0"; then
 	rm newscoop/js/editarea/edit_area/plugins/test/images/Thumbs.db
+        rm newscoop/install/sample_templates/the_new_custodian/templates/set_the_new_custodian/_img/.gitignore
+	rm newscoop/install/sample_templates/the_new_custodian/templates/set_the_new_custodian/_js/mylibs/.gitignore
+	rm newscoop/themes/unassigned/set_the_new_custodian/_img/.gitignore
+	rm newscoop/themes/unassigned/set_the_new_custodian/_js/mylibs/.gitignore
 
         chmod -x newscoop/install/templates/license.tpl
 	chmod -x newscoop/admin-files/libs/ContextList/do_action.php
@@ -145,9 +149,6 @@ if test "${UPSTREAMVERSION}" == "4.0.0"; then
 	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/flowers.jpg
 
 	rm -r newscoop/include/html2pdf/_tcpdf_5.0.002/fonts/utils/
-
-	rm newscoop/install/sample_templates/the_custodian/templates/set_the_custodian/_img/.gitignore
-	rm newscoop/install/sample_templates/the_custodian/templates/set_the_custodian/_js/mylibs/.gitignore
 fi
 
 ############################
