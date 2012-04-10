@@ -5,14 +5,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Newscoop\Entity\Article,
-    Newscoop\API\Response\Json;
+use Newscoop\Entity\Article;
 
 /**
  */
 class Api_ArticlesController extends Zend_Controller_Action
 {
-    const LANGUAGE = 1;
+    const LANGUAGE = 5;
     const ARTICLE_RENDITION = 'artikel';
     const LIST_URI_PATH = 'articles/list';
     const ITEM_URI_PATH = 'articles/item';
@@ -32,7 +31,6 @@ class Api_ArticlesController extends Zend_Controller_Action
         $this->request = $this->getRequest();
         $this->language = $this->_helper->entity->getRepository('Newscoop\Entity\Language')
             ->findOneBy(array('id' => self::LANGUAGE));
-        $this->apiService = $this->_helper->service('api');
         $this->articleService = $this->_helper->service('article');
     }
 
@@ -89,13 +87,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             );
         }
 
-        $output = new Json(array(
-            'code' => 201,
-            'data' => $this->response,
-            'headers' => array('Content-Type', 'text/html')
-        ));
-
-        print $output->execute();
+        print Zend_Json::encode($this->response);
     }
 
     /**
