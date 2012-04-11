@@ -6,11 +6,11 @@
     <li class="main"><a href="#">Alle</a></li>
     <li><a href="#article">Artikel</a></li>
     <li><a href="#dossier">Dossiers</a></li>
-    <li><a href="#blog">Blogbeitrage</a></li>
+    <li><a href="#blog">Blogbeiträge</a></li>
     <li><a href="#comment">Kommentare</a></li>
     <li><a href="#link">Links</a></li>
     <li><a href="#event">Veranstaltungen</a></li>
-    <li><a href="#user">Nutzer</a></li>
+    <li><a href="#user">Community</a></li>
 </ul>
 
 <ul id="date-filter">

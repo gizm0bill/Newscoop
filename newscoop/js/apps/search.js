@@ -55,6 +55,43 @@ var Document = Backbone.Model.extend({
         } else {
             return this.types[this.get('type')];
         }
+    },
+
+    /**
+     * Get tweet
+     *
+     * @return {string}
+     */
+    getTweet: function() {
+        var tweet = this.get('tweet');
+        if (!tweet) {
+            return tweet;
+        }
+
+        return tweet.replace(/(http:\/\/t.co\/[\w]+)/, '<a href="$1" rel="nofollow">$1</a>');
+    },
+
+    /**
+     * Get event date
+     *
+     * @return {string}
+     */
+    getEventDate: function() {
+        var date = new Date(this.get('event_date'));
+        if (isNaN(date.getDate())) {
+            return '';
+        }
+
+        return [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.');
+    },
+
+    /**
+     * Get event time
+     *
+     * @return {string}
+     */
+    getEventTime: function() {
+        return this.get('event_time') ? this.get('event_time') + ' Uhr' : '';
     }
 });
 
@@ -114,6 +151,7 @@ var DocumentCollection = Backbone.Collection.extend({
         this.date = response.responseHeader.params.date;
         this.source = this.parseList(response.responseHeader.params.source);
         this.section = this.parseList(response.responseHeader.params.section);
+        this.facets = this.parseFacetFields(response);
         this.sortf = response.responseHeader.params.sort;
         return response.response.docs;
     },
@@ -174,6 +212,24 @@ var DocumentCollection = Backbone.Collection.extend({
         if (items.length) {
             params[listName] = items.join();
         }
+    },
+
+    /**
+     * Parse facet fields
+     *
+     * @param {object} response
+     * @return {object}
+     */
+    parseFacetFields: function(response) {
+        var facets = {};
+        var fields = response.facet_counts.facet_fields.type;
+        for (var i = 0; i < fields.length; i += 2) {
+            facets[fields[i]] = fields[i + 1];
+        }
+
+        facets['article'] = facets['news'] + facets['newswire'];
+
+        return facets;
     }
 });
 
@@ -284,10 +340,26 @@ var TypeFilterView = Backbone.View.extend({
         } else {
             $(this.el).find('a[href="#' + this.collection.type + '"]').closest('li').addClass('main');
         }
+
+        var facets = this.collection.facets;
+        $(this.el).find('a').not(':first').each(function() {
+            var type = $(this).attr('href').slice(1);
+            console.log(facets[type]);
+            if (!facets[type]) {
+                $(this).closest('li').addClass('inactive');
+            } else {
+                $(this).closest('li').removeClass('inactive');
+            }
+        });
     },
 
     filter: function(e) {
         e.preventDefault();
+
+        if ($(e.target).closest('li').hasClass('inactive')) {
+            return;
+        }
+
         this.collection.type = e.target.hash.slice(1);
         this.collection.start = null;
         router.navigate(this.collection.nav(), {trigger: true});

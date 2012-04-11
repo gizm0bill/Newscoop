@@ -35,6 +35,11 @@ class SearchController extends AbstractSolrController
                 $this->buildSolrDateParam(),
             ))),
             'sort' => $this->_getParam('sort') === 'latest' ? 'published desc' : 'score desc',
+
+            'facet' => 'true',
+            'facet.field' => '{!ex=t}type',
+
+            'spellcheck' => 'true',
         ));
     }
 
@@ -65,6 +70,6 @@ class SearchController extends AbstractSolrController
             return;
         }
 
-        return sprintf('type:(%s)', is_array($this->types[$type]) ? implode(' OR ', $this->types[$type]) : $this->types[$type]);
+        return sprintf('{!tag=t}type:(%s)', is_array($this->types[$type]) ? implode(' OR ', $this->types[$type]) : $this->types[$type]);
     }
 }

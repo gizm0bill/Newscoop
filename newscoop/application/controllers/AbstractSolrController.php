@@ -89,7 +89,7 @@ class AbstractSolrController extends Zend_Controller_Action
         }
 
         if (array_key_exists($date, $this->dates)) {
-            return sprintf('published:%s', $this->dates[$date]);
+            return sprintf('{!tag=t}published:%s', $this->dates[$date]);
         }
 
         try {
@@ -100,7 +100,7 @@ class AbstractSolrController extends Zend_Controller_Action
             return;
         }
 
-        return sprintf('published:[%s TO %s]',
+        return sprintf('{!tag=t}published:[%s TO %s]',
             $fromDate === null ? '*' : $fromDate->format('Y-m-d\TH:i:s\Z') . '/DAY',
             $toDate === null ? '*' : $toDate->format('Y-m-d\TH:i:s\Z') . '/DAY');
     }

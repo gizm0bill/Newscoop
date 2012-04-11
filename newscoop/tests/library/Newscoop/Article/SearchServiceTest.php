@@ -119,6 +119,7 @@ class SearchServiceTest extends \TestCase
         $article = new Article(1, $this->language);
         $article->setType('dossier');
         $article->setTitle('test');
+        $article->setData(array());
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals(array(
@@ -131,12 +132,13 @@ class SearchServiceTest extends \TestCase
     {
         $article = new Article(1, $this->language);
         $article->setType('blog');
+        $article->setData(array());
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('blog', $doc['section']);
     }
 
-    public function testDocumentEvent()
+    public function testGetDocumentEvent()
     {
         $article = new Article(1, $this->language);
         $article->setType('event');
@@ -152,6 +154,22 @@ class SearchServiceTest extends \TestCase
         $this->assertEquals('basel', $doc['event_town']);
         $this->assertEquals('2012-12-01', $doc['event_date']);
         $this->assertEquals('05:20', $doc['event_time']);
+    }
+
+    public function testGetDocumentBloginfo()
+    {
+        $article = new Article(1, $this->language);
+        $article->setType('bloginfo');
+        $article->setData(array(
+            'motto' => 'motto',
+            'infolong' => 'info',
+        ));
+
+        $doc = $this->service->getDocument($article);
+        $this->assertEquals('blog', $doc['section']);
+        $this->assertEquals('blog', $doc['type']);
+        $this->assertEquals('motto', $doc['lead']);
+        $this->assertEquals('info', $doc['content']);
     }
 
     public function testIsIndexed()

@@ -32,28 +32,6 @@
     <li><input type="submit" value="Suchen" /></li>
 </ul>
 
-<h3>Autoren</h3>
-<ul id="author-filter">
-    <li>
-        <select>
-            <option>Alle</option>
-            <option>1</option>
-            <option>2</option>
-        </select>
-    </li>
-</ul>
-
-<h3>Themen</h3>
-<ul id="topic-filter">
-    <li>
-        <select>
-            <option>Alle</option>
-            <option>1</option>
-            <option>2</option>
-        </select>
-    </li>
-</ul>
-
 <script>
 $(function() {
     window.router = new SearchRouter();
