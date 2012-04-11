@@ -221,6 +221,10 @@ var DocumentCollection = Backbone.Collection.extend({
      * @return {object}
      */
     parseFacetFields: function(response) {
+        if (!response.facet_counts) {
+            return {};
+        }
+
         var facets = {};
         var fields = response.facet_counts.facet_fields.type;
         for (var i = 0; i < fields.length; i += 2) {
