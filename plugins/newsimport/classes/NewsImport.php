@@ -509,6 +509,9 @@ class NewsImport
                 $f_movie_key = (isset($one_event['movie_key']) && (!empty($one_event['movie_key']))) ? $one_event['movie_key'] : '';
                 $article_data->setProperty('Fmovie_key', $f_movie_key);
 
+                $f_rating_wv = (isset($one_event['rating_wv']) && (!empty($one_event['rating_wv']))) ? $one_event['rating_wv'] : 0;
+                $article_data->setProperty('Fmovie_rating_wv', 0 + $f_rating_wv);
+
                 $f_movie_trailer = (isset($one_event['movie_trailer']) && (!empty($one_event['movie_trailer']))) ? $one_event['movie_trailer'] : '';
                 $article_data->setProperty('Fmovie_trailer', $f_movie_trailer);
 
