@@ -52,7 +52,6 @@ class Api_CommentsController extends Zend_Controller_Action
                 array('time_created' => 'desc'));
         }
 
-        $comments = $this->service->findBy(array('article_num' => $id));
         if (empty($comments)) {
             $this->_helper->json($response);
             return;
