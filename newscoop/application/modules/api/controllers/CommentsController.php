@@ -42,8 +42,14 @@ class Api_CommentsController extends Zend_Controller_Action
 
         $id = $this->request->getParam('article_id');
         if (is_null($id)) {
-            $this->_helper->json($response);
-            return;
+            $comments = $this->service->findBy(
+                array('status' => 0),
+                array('time_created' => 'desc'),
+                20);
+        } else {
+            $comments = $this->service->findBy(
+                array('article_num' => $id, 'status' => 0),
+                array('time_created' => 'desc'));
         }
 
         $comments = $this->service->findBy(array('article_num' => $id));
