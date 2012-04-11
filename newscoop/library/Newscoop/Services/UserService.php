@@ -373,7 +373,7 @@ class UserService
     public function getActiveUsers($countOnly=false, $page=1, $limit=8)
     {
         $offset = ($page - 1) * $limit;
-        return $this->repository->findActiveUsers($countOnly, $offset, $limit, $this->config['editorRoles']);
+        return $this->repository->findActiveUsers($countOnly, $offset, $limit, $this->config['communityExcludedRoles']);
     }
 
     /**
