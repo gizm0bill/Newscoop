@@ -186,6 +186,7 @@ class SearchServiceTest extends \TestCase
     public function testIsIndexable()
     {
         $article = new Article(1, $this->language);
+        $section = new \Newscoop\Entity\Section(1, 'sport');
 
         $this->assertFalse($this->service->isIndexable($article));
 
@@ -194,6 +195,10 @@ class SearchServiceTest extends \TestCase
         $this->assertFalse($this->service->isIndexable($article));
 
         $article->setType(self::TYPE);
+
+        $this->assertFalse($this->service->isIndexable($article));
+
+        $article->setSection($section);
 
         $this->assertTrue($this->service->isIndexable($article));
 
