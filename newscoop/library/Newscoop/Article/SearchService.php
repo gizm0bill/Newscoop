@@ -69,7 +69,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      */
     public function isIndexable($article)
     {
-        return $article->isPublished() && in_array($article->getType(), $this->config['type']);
+        return $article->isPublished() && in_array($article->getType(), $this->config['type']) && $article->getSectionNumber() > 0;
     }
 
     /**

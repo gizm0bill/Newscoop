@@ -34,7 +34,7 @@
 
 {{ include file="_tpl/sidebar-community.tpl" }}
                 
-{{ include file="_tpl/sidebar-links.tpl" }}
+{{ include file="_tpl/sidebar-links.tpl" linksvar="Front" }}
                 
 {{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
                 
@@ -44,7 +44,7 @@
                 
 {{ include file="_tpl/sidebar-debatte.tpl" }}
                 
-{{ include file="_tpl/sidebar-blogs.tpl" }}
+{{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - front" }}
             
             </aside><!-- / Sidebar -->
             
