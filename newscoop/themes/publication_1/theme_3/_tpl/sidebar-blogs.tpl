@@ -2,7 +2,7 @@
                     <header>
                         <p>Blogs</p>
                     </header>
-                    <ul class="post-list">
+                    <ul class="post-list">                    
                         <li>
                         	<img src="{{ url static_file="pictures/post-image-1.png" }}" alt="" />
                             <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
