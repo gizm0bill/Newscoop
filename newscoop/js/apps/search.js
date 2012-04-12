@@ -353,7 +353,6 @@ var TypeFilterView = Backbone.View.extend({
         var facets = this.collection.facets;
         $(this.el).find('a').not(':first').each(function() {
             var type = $(this).attr('href').slice(1);
-            console.log(facets[type]);
             if (!facets[type]) {
                 $(this).closest('li').addClass('inactive');
             } else {

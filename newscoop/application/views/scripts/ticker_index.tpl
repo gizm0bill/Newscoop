@@ -22,21 +22,10 @@
     <li><input type="checkbox" id="section_8" value="blog" /> <label for="section_8">Blogs</label></li>
 </ul>
 
-<h3>Datum</h3>
-<ul id="date-filter">
-    <li><input type="checkbox"  /> <label>Heute</label></li>
-    <li><input type="checkbox"  /> <label>Gestern</label></li>
-    <li><input type="checkbox"  /> <label>Letzte 7 Tage</label></li>
-    <li><label>Von</label> <input type="text" value="TT.MM.JJ" /></li>
-    <li><label>Bis</label> <input type="text" value="TT.MM.JJ" /></li>
-    <li><input type="submit" value="Suchen" /></li>
-</ul>
-
 <script>
 $(function() {
     window.router = new SearchRouter();
     sourceFilterView = new SourceFilterView({collection: documents, el: $('#source-filter') });
-    dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
     sectionFilterView = new SectionFilterView({collection: documents, el: $('#section-filter') });
     Backbone.history.start({pushState: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'ticker']), '/')) }} });
 });
