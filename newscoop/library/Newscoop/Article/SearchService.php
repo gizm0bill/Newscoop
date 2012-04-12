@@ -128,8 +128,12 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             case 'event':
                 $doc['event_organizer'] = $article->getData('organizer');
                 $doc['event_town'] = $article->getData('town');
-                $doc['event_date'] = $article->getData('date');
-                $doc['event_time'] = $article->getData('time');
+
+                $date = $article->getDatetime('schedule');
+                if ($date !== null) {
+                    $doc['event_date'] = $date->getStartDate()->format('d.m.Y');
+                    $doc['event_time'] = $date->getStartTime()->format('H:i');
+                }
                 break;
 
             case 'bloginfo':

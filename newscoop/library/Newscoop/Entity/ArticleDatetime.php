@@ -81,6 +81,13 @@ class ArticleDatetime extends Entity
     protected $eventComment;
 
     /**
+     * @ManyToOne(targetEntity="Newscoop\Entity\Article", inversedBy="datetimes")
+     * @JoinColumn(name="article_id", referencedColumnName="Number")
+     * @var Newscoop\Entity\Article
+     */
+    protected $article;
+
+    /**
      * @return int
      */
     public function getArticleId()

@@ -145,15 +145,19 @@ class SearchServiceTest extends \TestCase
         $article->setData(array(
             'organizer' => 'org',
             'town' => 'basel',
-            'date' => '2012-12-01',
-            'time' => '05:20',
         ));
+
+        $datetime = new \Newscoop\Entity\ArticleDatetime();
+        $datetime->setFieldName('schedule');
+        $datetime->setStartDate(new \DateTime('2012-12-01'));
+        $datetime->setStartTime(new \DateTime('11:00'));
+        $article->addDatetime($datetime);
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('org', $doc['event_organizer']);
         $this->assertEquals('basel', $doc['event_town']);
-        $this->assertEquals('2012-12-01', $doc['event_date']);
-        $this->assertEquals('05:20', $doc['event_time']);
+        $this->assertEquals('01.12.2012', $doc['event_date']);
+        $this->assertEquals('11:00', $doc['event_time']);
     }
 
     public function testGetDocumentBloginfo()
