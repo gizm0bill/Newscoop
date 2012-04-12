@@ -77,12 +77,7 @@ var Document = Backbone.Model.extend({
      * @return {string}
      */
     getEventDate: function() {
-        var date = new Date(this.get('event_date'));
-        if (isNaN(date.getDate())) {
-            return '';
-        }
-
-        return [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.');
+        return this.get('event_date') ? this.get('event_date') : '';
     },
 
     /**
@@ -92,6 +87,16 @@ var Document = Backbone.Model.extend({
      */
     getEventTime: function() {
         return this.get('event_time') ? this.get('event_time') + ' Uhr' : '';
+    },
+
+    /**
+     * Get event title
+     *
+     * @return {string}
+     */
+    getEventTitle: function() {
+        var title = this.escape('title');
+        return title.replace(/ \([-0-9]+\)$/, '');
     }
 });
 

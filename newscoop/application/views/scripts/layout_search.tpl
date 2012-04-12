@@ -39,7 +39,7 @@
     </script>
 
     <script type="text/template" id="document-event-template">
-    <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
+    <h3><a href="<%= doc.get('link') %>" title="<%= doc.getEventTitle() %>"><%= doc.getEventTitle() %></a></h3>
     <p><%= doc.get('event_organizer') %> <%= doc.get('event_town') %>, <%= doc.getEventTime() %> <%= doc.getEventDate() %></p>
     </script>
 
