@@ -40,7 +40,7 @@
 
     <script type="text/template" id="document-event-template">
     <h3><a href="<%= doc.get('link') %>" title="<%= doc.getEventTitle() %>"><%= doc.getEventTitle() %></a></h3>
-    <p><%= doc.get('event_organizer') %> <%= doc.get('event_town') %>, <%= doc.getEventTime() %> <%= doc.getEventDate() %></p>
+    <p><%= doc.get('event_organizer') %> <%= doc.get('event_town') %>, <%= doc.getEventDate() %> <%= doc.getEventTime() %></p>
     </script>
 
     <script type="text/template" id="document-omni-template">
@@ -50,7 +50,7 @@
     </script>
 
     <script type="text/template" id="document-link-template">
-    <p><%= doc.escape('link_description') %>: <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('title') %></a></p>
+    <p><%= doc.escape('link_description') %> <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('title') %></a></p>
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
 
