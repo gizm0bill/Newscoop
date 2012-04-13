@@ -129,8 +129,13 @@ var DocumentCollection = Backbone.Collection.extend({
             params.sort = this.sortf;
         }
 
-        this.addList('source', params);
-        this.addList('section', params);
+        if (this.source) {
+            params.source = this.source;
+        }
+
+        if (this.section) {
+            params.section = this.section;
+        }
 
         return params;
     },
@@ -154,8 +159,8 @@ var DocumentCollection = Backbone.Collection.extend({
         this.rows = parseInt(response.responseHeader.params.rows);
         this.type = response.responseHeader.params.type;
         this.date = response.responseHeader.params.date;
-        this.source = this.parseList(response.responseHeader.params.source);
-        this.section = this.parseList(response.responseHeader.params.section);
+        this.source = response.responseHeader.params.source;
+        this.section = response.responseHeader.params.section;
         this.facets = this.parseFacetFields(response);
         this.sortf = response.responseHeader.params.sort;
         return response.response.docs;
@@ -180,46 +185,6 @@ var DocumentCollection = Backbone.Collection.extend({
     },
 
     /**
-     * Parse list in form "val1,val2" and returns object {val1: true, val2: true}
-     *
-     * @param {string} list
-     * @return {object}
-     */
-    parseList: function(list) {
-        var obj = {};
-        if (!list) {
-            return obj;
-        }
-
-        var items = list.split(',');
-        for (var i = 0; i < items.length; i++) {
-            obj[items[i]] = true;
-        }
-
-        return obj;
-    },
-
-    /**
-     * Adds list to params if any
-     *
-     * @param {string} list name
-     * @param {object} params
-     * @return null
-     */
-    addList: function(listName, params) {
-        var items = [];
-        for (item in this[listName]) {
-            if (this[listName][item]) {
-                items.push(item);
-            }
-        }
-
-        if (items.length) {
-            params[listName] = items.join();
-        }
-    },
-
-    /**
      * Parse facet fields
      *
      * @param {object} response
@@ -231,7 +196,7 @@ var DocumentCollection = Backbone.Collection.extend({
         }
 
         var facets = {};
-        var fields = response.facet_counts.facet_fields.type;
+        var fields = response.facet_counts.facet_fields.type ? response.facet_counts.facet_fields.type : response.facet_counts.facet_fields.section;
         for (var i = 0; i < fields.length; i += 2) {
             facets[fields[i]] = fields[i + 1];
         }
@@ -475,12 +440,11 @@ var PaginationView = Backbone.View.extend({
 });
 
 /**
- * Source filter view
+ * Base ticker filter view
  */
-var SourceFilterView = Backbone.View.extend({
+var TickerFilterView = Backbone.View.extend({
     events: {
-        'change input#source_all': 'filterAll',
-        'change input:not(#source_all)': 'filter'
+        'click a': 'filter'
     },
 
     initialize: function() {
@@ -488,63 +452,112 @@ var SourceFilterView = Backbone.View.extend({
         this.render();
     },
 
-    render: function() {
-        $(this.el).find('input').removeAttr('checked');
-
-        for (source in this.collection.source) {
-            $(this.el).find('input[value=' + source + ']').attr('checked', 'checked');
-        }
-
-        if ($(this.el).find('input:checked').size() === 0) {
-            $(this.el).find('#source_all').attr('checked', 'checked');
+    /**
+     * Set main class to selected/first li
+     *
+     * @param {string} selected
+     * @return {void}
+     */
+    setMain: function(selected) {
+        $(this.el).find('li').removeClass('main');
+        if (!selected) {
+            $(this.el).find('li').first().addClass('main');
+        } else {
+            $(this.el).find('a[href="#' + selected + '"]').closest('li').addClass('main');
         }
     },
 
-    filterAll: function(e) {
-        if (!e.target.checked) {
-            $(e.target).attr('checked', 'checked');
+    /**
+     * Set blacklisted options inactive
+     *
+     * @param {object} blacklist
+     * @param {string} selected
+     * @return {void}
+     */
+    setInactive: function(blacklist, selected) {
+        $(this.el).find('li').each(function() {
+            var value = $(this).find('a').first().attr('href').slice(1);
+            if (selected in blacklist && value in blacklist[selected]) {
+                $(this).addClass('inactive');
+            } else {
+                $(this).removeClass('inactive');
+            }
+        });
+    },
+
+    /**
+     * Filter collection
+     *
+     * @param {object} e
+     * @return {void}
+     */
+    filter: function(e) {
+        e.preventDefault();
+
+        if ($(e.target).closest('li').hasClass('inactive')) {
             return;
         }
 
-        this.collection.source = {};
-        this.navigate();
-    },
-
-    filter: function(e) {
-        this.collection.source[$(e.target).val()] = e.target.checked;
-        this.navigate();
-    },
-
-    navigate: function() {
+        var filter = $(e.target).attr('href').slice(1);
+        this.collection[this.param] = filter ? filter : null;
         this.collection.start = null;
         router.navigate(this.collection.nav(), {trigger: true});
     }
 });
 
 /**
- * Section filter view
+ * Source filter view
  */
-var SectionFilterView = Backbone.View.extend({
-    events: {
-        'change input': 'filter'
-    },
-
-    initialize: function() {
-        this.collection.bind('reset', this.render, this);
-        this.render();
-    },
-
-    render: function() {
-        for (section in this.collection.section) {
-            var input = $(this.el).find('input[value=' + section + ']');
-            this.collection.section[section] ? input.attr('checked', 'checked') : input.removeAttr('checked');
+var SourceFilterView = TickerFilterView.extend({
+    blacklist: {
+        basel: { twitter: true },
+        schweiz: { twitter: true },
+        international: { twitter: true },
+        sport: { twitter: true },
+        kultur: { twitter: true },
+        leben: { twitter: true },
+        blog: {
+            twitter: true,
+            agentur: true,
+            link: true
         }
     },
 
-    filter: function(e) {
-        this.collection.section[$(e.target).val()] = e.target.checked;
-        this.collection.start = null;
-        router.navigate(this.collection.nav(), {trigger: true});
+    param: 'source',
+
+    render: function() {
+        this.setMain(this.collection.source);
+        this.setInactive(this.blacklist, this.collection.section);
+    }
+});
+
+/**
+ * Section filter view
+ */
+var SectionFilterView = TickerFilterView.extend({
+    blacklist: {
+        twitter: {
+            basel: true,
+            schweiz: true,
+            international: true,
+            sport: true,
+            kultur: true,
+            leben: true,
+            blog: true
+        },
+        agentur: {
+            blog: true
+        },
+        link: {
+            blog: true
+        }
+    },
+
+    param: 'section',
+
+    render: function() {
+        this.setMain(this.collection.section);
+        this.setInactive(this.blacklist, this.collection.source);
     }
 });
 

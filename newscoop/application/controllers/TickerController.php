@@ -28,14 +28,16 @@ class TickerController extends AbstractSolrController
      */
     protected function buildSolrParams()
     {
+
         return array_merge(parent::buildSolrParams(), array(
             'q' => '*:*',
             'fq' => implode(' AND ', array_filter(array(
-                $this->buildSolrSourceParam(),
                 $this->buildSolrSectionParam(),
+                $this->buildSolrSourceParam(),
                 $this->buildSolrDateParam(),
             ))),
             'sort' => 'published desc',
+            'spellcheck' => 'false',
         ));
     }
 
@@ -46,14 +48,11 @@ class TickerController extends AbstractSolrController
      */
     private function buildSolrSourceParam()
     {
-        $sources = array();
-        foreach (explode(',', $this->_getParam('source')) as $source) {
-            if (array_key_exists($source, $this->sources)) {
-                $sources = array_merge($sources, (array) $this->sources[$source]);
-            }
-        }
-
-        if (empty($sources)) {
+        $source = $this->_getParam('source');
+        if (!empty($source) && array_key_exists($source, $this->sources)) {
+            $sources = (array) $this->sources[$source];
+        } else {
+            $sources = array();
             foreach ($this->sources as $types) {
                 $sources = array_merge($sources, (array) $types);
             }
@@ -69,9 +68,9 @@ class TickerController extends AbstractSolrController
      */
     private function buildSolrSectionParam()
     {
-        $sections = explode(',', $this->_getParam('section'));
-        if (!empty($sections[0])) {
-            return sprintf('section:(%s)', implode(' OR ', $sections));
+        $section = $this->_getParam('section');
+        if (!empty($section)) {
+            return sprintf('section:(%s)', $section);
         }
     }
 }

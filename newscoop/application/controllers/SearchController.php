@@ -40,7 +40,6 @@ class SearchController extends AbstractSolrController
             'facet' => 'true',
             'facet.field' => '{!ex=t}type',
             'spellcheck' => 'true',
-            'defType' => 'edismax',
         ));
     }
 
