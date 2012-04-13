@@ -264,7 +264,7 @@ search.article.type[] = "event"
 search.article.type[] = "link"
 search.article.type[] = "blog"
 search.article.type[] = "bloginfo"
-search.article.rendition = "artikel"
+search.article.rendition = "rubrikenseite"
 
 twitter.id = "tageswoche"
 
