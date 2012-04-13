@@ -12,93 +12,72 @@
             
             <section>
             
+{{ list_playlist_articles length="7" name=$gimme->section->name }}
+
+{{ if $gimme->current_list->index == 2 }}                 
+                <div class="mobile-list-view clearfix">
+{{ /if }}
+ 
+{{ if $gimme->current_list->index == 1 }}           
             	<article>
                     <figure>
-                    	<a href="#"><img src="pictures/top-img-1.jpg" rel="resizable" alt=""></a>
+                    	<a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a>
                     </figure>
                     <header>
                         <p><a href="#">Basel</a></p>
                     </header>
-                    <h2><a href="#">Xherdan Shaqiri: Jetzt müssen sich nur noch FCB und FCB einigen</a></h2>
-                    <p>Den obligatorischen Check hat Xherdan Shaqiri am Dienstag bereits hinter sich gebracht, die Bekanntgabe des Wechsels im Sommer von Basel zu Bayern München, über den seit geraumer Zeit gemutmasst wird, dürfte unmittelbar bevorstehen. Von Christoph Kieslich. <a href="#">Weiterlesen</a> <a href="#" class="comments">1 Kommentar</a></p>
+                    <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
+                    <p>{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
+{{ include file="_tpl/admin_frontpageedit.tpl" }}
+  {{ if $gimme->article->type_name == "news" }}
+    {{ $gimme->article->teaser|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }}
+  <a href="{{ url options="article" }}">Weiterlesen</a>
+  {{ elseif $gimme->article->type_name == "newswire" }}
+    {{ $gimme->article->DataLead|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }}
+  <a href="{{ url options="article" }}">Weiterlesen</a> 
+  {{ elseif $gimme->article->type_name == "blog" }}
+    {{ $gimme->article->lede|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }}
+  <a href="{{ url options="article" }}">Weiterlesen</a> 
+  {{ /if }}  
+{{ /strip }} <a href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
                 </article>
-                
-                <div class="mobile-list-view clearfix">
+
+{{ else }}
                     
                     <article>
                         <header>
                             <p><a href="#">International</a></p>
                         </header>
                         <figure class="left">
-                            <a href="#"><img src="pictures/small-img-4.jpg" rel="resizable" alt="" /></a>
+                            <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_170x115.tpl" }}</a>
                         </figure>
-                        <h2><a href="#">Niqab-Trägerin wehrt sich</a></h2>
-                        <p>Den obligatorischen Check hat Xherdan Shaqiri am Dienstag bereits hinter sich gebracht, die Bekanntgabe des Wechsels im Sommer von Basel zu Bayern München, über den seit geraumer Zeit gemutmasst wird, dürfte unmittelbar bevorstehen. Von Christoph Kieslich. <a href="#" class="comments">1 Kommentar</a></p>
+                        <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
+                        <p>{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
+{{ include file="_tpl/admin_frontpageedit.tpl" }}
+  {{ if $gimme->article->type_name == "news" }}
+    {{ $gimme->article->teaser|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }}
+  {{ elseif $gimme->article->type_name == "newswire" }}
+    {{ $gimme->article->DataLead|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} 
+  {{ elseif $gimme->article->type_name == "blog" }}
+    {{ $gimme->article->lede|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} 
+  {{ /if }}  
+{{ /strip }} <a href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
                     </article>
+{{ /if }}
                     
-                    <article>
-                        <header>
-                            <p><a href="#">Schweiz</a></p>
-                        </header>
-                        <figure class="left">
-                            <a href="#"><img src="pictures/small-img-5.jpg" rel="resizable" alt="" /></a>
-                        </figure>
-                        <h2><a href="#">Keine politischen Gegengeschäfte beim Kampfjet-Kauf erreicht</a></h2>
-                        <p>Der Bundesrat sieht keinen Grund, auf seinen Entscheid  zurückzukommen, den schwedischen Kampfjet Gripen zu kaufen. Dies erklärte Bundesratssprecher André Simonazzivor den Medien in Bern. Von sda <a href="#" class="comments">1 Kommentar</a></p>
-                    </article>
-                    
-                    <article>
-                        <header>
-                            <p><a href="#">International</a></p>
-                        </header>
-                        <figure class="left">
-                            <a href="#"><img src="pictures/small-img-4.jpg" rel="resizable" alt="" /></a>
-                        </figure>
-                        <h2><a href="#">Niqab-Trägerin wehrt sich</a></h2>
-                        <p>Den obligatorischen Check hat Xherdan Shaqiri am Dienstag bereits hinter sich gebracht, die Bekanntgabe des Wechsels im Sommer von Basel zu Bayern München, über den seit geraumer Zeit gemutmasst wird, dürfte unmittelbar bevorstehen. Von Christoph Kieslich. <a href="#" class="comments">1 Kommentar</a></p>
-                    </article>
-                    
-                    <article>
-                        <header>
-                            <p><a href="#">Schweiz</a></p>
-                        </header>
-                        <figure class="left">
-                            <a href="#"><img src="pictures/small-img-5.jpg" rel="resizable" alt="" /></a>
-                        </figure>
-                        <h2><a href="#">Keine politischen Gegengeschäfte beim Kampfjet-Kauf erreicht</a></h2>
-                        <p>Der Bundesrat sieht keinen Grund, auf seinen Entscheid  zurückzukommen, den schwedischen Kampfjet Gripen zu kaufen. Dies erklärte Bundesratssprecher André Simonazzivor den Medien in Bern. Von sda <a href="#" class="comments">1 Kommentar</a></p>
-                    </article>
-                    
-                    <article>
-                        <header>
-                            <p><a href="#">International</a></p>
-                        </header>
-                        <figure class="left">
-                            <a href="#"><img src="pictures/small-img-4.jpg" rel="resizable" alt="" /></a>
-                        </figure>
-                        <h2><a href="#">Niqab-Trägerin wehrt sich</a></h2>
-                        <p>Den obligatorischen Check hat Xherdan Shaqiri am Dienstag bereits hinter sich gebracht, die Bekanntgabe des Wechsels im Sommer von Basel zu Bayern München, über den seit geraumer Zeit gemutmasst wird, dürfte unmittelbar bevorstehen. Von Christoph Kieslich. <a href="#" class="comments">1 Kommentar</a></p>
-                    </article>
-                    
-                    <article>
-                        <header>
-                            <p><a href="#">Schweiz</a></p>
-                        </header>
-                        <figure class="left">
-                            <a href="#"><img src="pictures/small-img-5.jpg" rel="resizable" alt="" /></a>
-                        </figure>
-                        <h2><a href="#">Keine politischen Gegengeschäfte beim Kampfjet-Kauf erreicht</a></h2>
-                        <p>Der Bundesrat sieht keinen Grund, auf seinen Entscheid  zurückzukommen, den schwedischen Kampfjet Gripen zu kaufen. Dies erklärte Bundesratssprecher André Simonazzivor den Medien in Bern. Von sda <a href="#" class="comments">1 Kommentar</a></p>
-                    </article>
-                
+{{ if $gimme->current_list->at_end }}                 
                 </div>
+{{ /if }}                
+{{ /list_playlist_articles }}
                 
-                <article>
-                    <header>
-                        <p><em>Werbung</em></p>
-                    </header>
-                    <a href="#"><img src="pictures/werbung-content-1.png" alt="" rel="resizable" /></a>
-                </article>
+{{*** werbung ***}}   
+{{ include file="_werbung/section-maincol.tpl" }}
                 
                 <article>
                     <header>
@@ -130,405 +109,24 @@
             
             <aside>
             
-            	<article>
-                	<header>
-                    	<p>Aktuelle Nachrichten</p>
-                    </header>
-                    <section class="article">
-                    	<h3><a href="#">Titel einer superduper Eigenleistung</a></h3>
-                        <p>Teasertext der Eigenleistung, die eben in den Ticker gehört, weil im Ticker alles drin ist, ungefiltert. <em>Von Urs Buess, vor 3 Min.</em></p>
-                    </section>
-                    <section class="link">
-						<h3><a href="#">Titel der SDA-Meldung</a></h3>
-                        <p>Lead einer SDA-Meldung, die bei uns so über den Ticker läuft, ob wir's wollen oder nicht. <em>Von Urs Buess, vor 3 Min.</em></p>
-                    </section>
-                    <section class="tweet">
-                        <p>Lead einer SDA-Meldung, die bei uns so über den Ticker läuft, ob wir's wollen oder nicht. <em>Von Urs Buess, vor 3 Min.</em></p>
-                    </section>
-                	<footer>
-                    	<a href="#" class="more">Alle Nachrichten »</a>
-                    </footer>
-                </article>
+{{ include file="_tpl/sidebar-ticker.tpl" }}
                 
-                <article>
-                	<header>
-                    	<p>TagesWoche Partner</p>
-                    </header>
-                    <ul class="partner-list">
-                    	<li>
-                        	<a href="#"><img src="pictures/partner-logo-1.jpg" alt="" rel="resizable" /></a>
-                        </li>
-                    	<li>
-                        	<a href="#"><img src="pictures/partner-logo-2.jpg" alt="" rel="resizable" /></a>
-                        </li>
-                    	<li>
-                        	<a href="#"><img src="pictures/partner-logo-3.jpg" alt="" rel="resizable" /></a>
-                        </li>
-                    </ul>
-                </article>
+{{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
                 
-                <article>
-                    <header>
-                        <p>Blogs</p>
-                    </header>
-                    <ul class="post-list">
-                        <li>
-                        	<img src="pictures/post-image-1.png" alt="" />
-                            <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                            <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                            <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                        </li>
-                        <li>
-                            <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                            <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                            <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                        </li>
-                        <li>
-                            <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                            <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                            <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                        </li>
-                    </ul>
-                    <footer>
-                        <a href="#" class="more">Zur den Blogs»</a>
-                    </footer>
-                </article>
+{{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - {{ $gimme->section->name }}" }}
                 
-                <article>
-                	<header>
-                    	<p><em>Werbung</em></p>
-                    </header>
-                    <span class="werbung">
-                    	<img src="pictures/werbung-sidebar.jpg"  rel="resizable" alt="" />
-                    </span>
-                </article>
+{{*** werbung ***}}                
+{{ include file="_werbung/section-sidebar.tpl" }}
                 
-                <article>
-                	<header>
-                    	<p>Die TagesWoche empfielt</p>
-                    </header>
-                    <section class="recommend">
-                        <p>Bei Spox.com gibt es ein Video vom Eklat an der Pressekonferenz nach dem Boxkampf Klitschko vs. Chisora. <a href="#">Schlägerei! Riesen-Skandal nach Klitschko-Sieg</a></p>
-                    </section>
-                    <section class="recommend">
-                        <p>Bei Spox.com gibt es ein Video vom Eklat an der Pressekonferenz nach dem Boxkampf Klitschko vs. Chisora. <a href="#">Schlägerei! Riesen-Skandal nach Klitschko-Sieg</a></p>
-                    </section>
-                    <section class="recommend">
-                        <p>Bei Spox.com gibt es ein Video vom Eklat an der Pressekonferenz nach dem Boxkampf Klitschko vs. Chisora. <a href="#">Schlägerei! Riesen-Skandal nach Klitschko-Sieg</a></p>
-                    </section>
-                	<footer>
-                    	<a href="#" class="more">Link vorschlagen</a>
-                    </footer>
-                </article>
+{{ include file="_tpl/sidebar-links.tpl" linksvar=$gimme->section->name }}
                 
-                <article>
-                	<header>
-                    	<p>Aktuelle Ausgabe</p>
-                    </header>
-                    <div class="frontpage-holder">
-                    	<img src="pictures/frontpage.jpg"  rel="resizable" alt="" />
-                    </div>
-                    <a href="#" class="button">Jetzt abonnieren!</a>
-                </article>
+{{ include file="_tpl/sidebar-cover.tpl" }}
             
             </aside><!-- / Sidebar -->
             
         </div>
         
     </div><!-- / Wrapper -->
-    
-    <div id="footer">
-    
-    	<div class="thumb-calendar">
-        
-        	<div class="top">
-                <h4>Artikel des Tages</h4>
-                <h3>Januar 2012</h3>
-                <ul>
-                	<li><a href="#" class="grey-button">«Vorheriger Monat</a></li>
-                	<li><a href="#" class="grey-button">Nächster Monat »</a></li>
-                </ul>
-            </div>
-            
-            <ul class="calendar-list clearfix">
-            
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>25</span>
-                        <img src="pictures/calendar-img-1.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>26</span>
-                        <img src="pictures/calendar-img-2.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>27</span>
-                        <img src="pictures/calendar-img-3.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>28</span>
-                        <img src="pictures/calendar-img-4.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>29</span>
-                        <img src="pictures/calendar-img-5.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>30</span>
-                        <img src="pictures/calendar-img-6.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>1</span>
-                        <img src="pictures/calendar-img-7.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>2</span>
-                        <img src="pictures/calendar-img-9.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>3</span>
-                        <img src="pictures/calendar-img-10.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>4</span>
-                        <img src="pictures/calendar-img-11.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>5</span>
-                        <img src="pictures/calendar-img-12.jpg" alt="" />
-                    </a>
-                </li>
-                <li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>6</span>
-                        <img src="pictures/calendar-img-1.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>7</span>
-                        <img src="pictures/calendar-img-2.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>8</span>
-                        <img src="pictures/calendar-img-3.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>9</span>
-                        <img src="pictures/calendar-img-4.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>10</span>
-                        <img src="pictures/calendar-img-5.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>11</span>
-                        <img src="pictures/calendar-img-6.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>12</span>
-                        <img src="pictures/calendar-img-7.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>213</span>
-                        <img src="pictures/calendar-img-9.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>14</span>
-                        <img src="pictures/calendar-img-10.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>15</span>
-                        <img src="pictures/calendar-img-11.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>16</span>
-                        <img src="pictures/calendar-img-12.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>17</span>
-                        <img src="pictures/calendar-img-4.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>18</span>
-                        <img src="pictures/calendar-img-5.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>19</span>
-                        <img src="pictures/calendar-img-6.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>20</span>
-                        <img src="pictures/calendar-img-7.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>21</span>
-                        <img src="pictures/calendar-img-9.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>22</span>
-                        <img src="pictures/calendar-img-10.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>23</span>
-                        <img src="pictures/calendar-img-11.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>24</span>
-                        <img src="pictures/calendar-img-12.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>25</span>
-                        <img src="pictures/calendar-img-7.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>26</span>
-                        <img src="pictures/calendar-img-9.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>27</span>
-                        <img src="pictures/calendar-img-10.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>28</span>
-                        <img src="pictures/calendar-img-11.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>29</span>
-                        <img src="pictures/calendar-img-12.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>30</span>
-                        <img src="pictures/calendar-img-9.jpg" alt="" />
-                    </a>
-                </li>
-            	<li>
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>31</span>
-                        <img src="pictures/calendar-img-10.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>1</span>
-                        <img src="pictures/calendar-img-11.jpg" alt="" />
-                    </a>
-                </li>
-            	<li class="inactive">
-                	<a href="#">
-                    	<h5>Article title goes here</h5>
-                        <span>2</span>
-                        <img src="pictures/calendar-img-12.jpg" alt="" />
-                    </a>
-                </li>
-            
-            </ul>
-        
-        </div>
 
      <div id="footer">
     

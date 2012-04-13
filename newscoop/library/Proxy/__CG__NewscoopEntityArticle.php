@@ -303,10 +303,22 @@ class Article extends \Newscoop\Entity\Article implements \Doctrine\ORM\Proxy\Pr
         return parent::getKeywords();
     }
 
+    public function addDatetime(\Newscoop\Entity\ArticleDatetime $datetime)
+    {
+        $this->__load();
+        return parent::addDatetime($datetime);
+    }
+
+    public function getDatetime($name)
+    {
+        $this->__load();
+        return parent::getDatetime($name);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'indexed', 'keywords', 'language', 'publication', 'issue', 'section', 'creator', 'authors', 'topics');
+        return array('__isInitialized__', 'sectionId', 'issueId', 'number', 'name', 'date', 'comments_enabled', 'type', 'published', 'workflowStatus', 'indexed', 'keywords', 'language', 'publication', 'issue', 'section', 'creator', 'authors', 'topics', 'datetimes');
     }
 
     public function __clone()

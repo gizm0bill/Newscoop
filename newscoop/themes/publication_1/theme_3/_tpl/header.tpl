@@ -12,12 +12,15 @@
             <div id="main-nav" class="clearfix">
                 <nav>
                     <ul>
-                        <li><a href="#" class="active">Basel</a></li>
-                        <li><a href="#">Schweiz</a></li>
-                        <li><a href="#">International</a></li>
-                        <li><a href="#">Sport</a></li>
-                        <li><a href="#">Kultur</a></li>
-                        <li><a href="#">Leben</a></li>
+
+{{ local }}
+{{ set_publication identifier="1" }}
+{{ set_current_issue }}
+{{ list_sections constraints="number smaller_equal 60" }}                    
+                        <li><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
+{{ /list_sections }}
+{{ /local }}
+
                     </ul>
                     <ul>
                         <li><a href="#">Blogs</a></li>
