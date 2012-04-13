@@ -1,11 +1,4 @@
 $(document).ready(function() {
-    
-	// Sticky sidebar for omni box
-	/*$("#omnibox").stickySidebar({
-		timer: 100,
-		speed: 0,
-		constrain: true
-	});*/
 	
 	$('select').dropdownized({fixed:true});
 	
@@ -13,7 +6,9 @@ $(document).ready(function() {
 	$( ".datepicker" ).datepicker({
 		showOn: "button",
 		buttonImage: "_css/tw2011/img/calendar.png",
-		buttonImageOnly: true
+		buttonImageOnly: true,
+		nextText: '&raquo;',
+		prevText: '&laquo;'
 	});
 	$( "#agenda-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
@@ -22,6 +17,27 @@ $(document).ready(function() {
 		prevText: '&laquo;',
 		numberOfMonths: 3
 	});
+	
+	// Slideshow cycle
+	
+	$('.slides').each(function() {
+        var $this = $(this), $ss = $this.closest('.slideshow');
+        var prev = $ss.find('a.prev'), next = $ss.find('a.next'), cap = $ss.find('.caption');
+        $this.cycle({
+            prev: 		prev,
+            next: 		next,
+            fx: 		'scrollHorz',
+			fit:		true,
+			speed:		500,
+			timeout:	0,
+			rev:		true,
+			after:     	onAfter
+        });
+		function onAfter(curr,next,opts) {
+			var caption = (opts.currSlide + 1) + '/' + opts.slideCount;
+			$(cap).html(caption);
+		}
+    });
 	
 	// Tabs
 	$('.tabs').tabs();
@@ -37,7 +53,7 @@ $(document).ready(function() {
 		function(){
 			$('#omnibox').animate({
 				width: '319px',
-				height: '393px'
+				height: '460px'
 			},500);
 			$('.omnibox-content').show();
 			$('.overlay').fadeIn(500);
@@ -52,6 +68,27 @@ $(document).ready(function() {
 			$('.overlay').fadeOut(500);
 		}
 	);
+	
+	$('#omnibox a.comm-trigger').toggle(
+		function(){
+			$('#omnibox.omnibox-comments').animate({
+				width: '582px',
+				height: '390px'
+			},500);
+			$('.omnibox-content').show();
+			$('.overlay').fadeIn(500);
+			
+		},
+		function(){
+			$('#omnibox.omnibox-comments').animate({
+				width: '44px',
+				height: '54px'
+			},500);
+			$('.omnibox-content').fadeOut(500);
+			$('.overlay').fadeOut(500);
+		}
+	);
+	
 	$('.agenda-top a.trigger').toggle(
 		function(){
 			$(this).addClass('active');
@@ -65,68 +102,25 @@ $(document).ready(function() {
 		}
 	);
 	
-	// Main menu submenues
-	$('#main-nav ul li a').hover(
-		function(){
-			$(this).next('ul.left-items').show();
-		},
-		function(){
-			$(this).next('ul.left-items').hide();
-	});
-	$('#main-nav ul li').hover(
-		function(){
-			$(this).children('ul.right-items').show();
-		},
-		function(){
-			$(this).children('ul.right-items').hide();
-	});
-	
-	// Title info box
-	$('h2').hover(
-		function(){
-			$(this).children().children('div').fadeIn(200);
-		},
-		function(){
-			$(this).children().children('div').fadeOut(200);
-		}
-	);
-	
-	// Custom FIle Inputs
-	$('input[type=file]').change(function(e){
-	  $in=$(this);
-	  $in.prev().html($in.val());
-	});
-	
-	// Button fixes for article carousels
-	$('.jcarousel-skin-article').each(function(){
-		var imgHeight = $(this).find('img').height();
-		$(this).find('.jcarousel-prev').css('top',imgHeight/2);
-		$(this).find('.jcarousel-next').css('top',imgHeight/2);
-	});
-	$('.jcarousel-skin-article').each(function(){
-		var itemWidth = $(this).find('img').width();
-		$(this).find('li').css('width',itemWidth);
-	});
-	
 	// Article page side flip
 	$('a.article-view-rear').click(function(){$('#article-rear').show();$('#article-front').hide();return false;});
 	$('a.article-view-front').click(function(){$('#article-front').show();$('#article-rear').hide();return false;});
 	
 	
-	$('#pinwand-holder').masonry({
-		singleMode: false,
-		itemSelector: '.sticker-box',
-		columnWidth: 300,
-		gutterWidth: 40
+	$('#main-nav .start').click(function(){
+		$(this).toggleClass('active');
+		$('#main-nav nav').slideToggle();
+	});
+	$('#mobile-nav li a').click(function(){
+		$('#mobile-nav li').removeClass('active');
+		$(this).parent().toggleClass('active');
+		$(this).next('ul').slideToggle();
 	});
 	
-	// Fancybox
-	$('a.fancybox').fancybox({
-		'titlePosition'	: 'inside',
-		'padding'			:3,
-		'overlayColor'		:'#ffffff',
-		'overlayOpacity'	:0.3,
-		'showCloseButton'	:false
+	// Custom FIle Inputs
+	$('input[type=file]').change(function(e){
+	  $in=$(this);
+	  $in.prev().html($in.val());
 	});
 	
 	//last-child for MSIE

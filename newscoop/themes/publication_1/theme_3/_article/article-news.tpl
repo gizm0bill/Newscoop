@@ -18,27 +18,13 @@
                         <header>
                             <p><a href="#">Basel</a></p>
                         </header>
-                        <h2><a href="#">Xherdan Shaqiri: Jetzt müssen sich nur noch FCB und FCB einigen</a></h2>
-                        <span class="time">29.01.2012, 20:55 Uhr</span>
-                        <h3>Den obligatorischen Check hat Xherdan Shaqiri am Dienstag bereits hinter sich gebracht, die Bekanntgabe des Wechsels im Sommer von Basel zu Bayern München, über den seit geraumer Zeit gemutmasst wird, dürfte unmittelbar bevorstehen. Von Christoph Kieslich</h3>
-                        <figure>
-                            <a href="#"><img src="{{ url static_file="pictures/article-single-img.jpg" }}" rel="resizable" alt=""></a>
-                            <p>Frankreichs Präsident Nicolas Sarkozy verkündet sein Wahlprogramm am TV (Bild: Keystone)</p>
-                        </figure>
-                        <p>Seinen trainingsfreien Tag beim FC Basel hat Xherdan Shaqiri am Dienstag zu einer Stippvisite in München genutzt und zu einem Schritt, der in seiner noch jungen Karriere von Bedeutung ist. Wie aus seinem engsten Umfeld am Montagabend bestätigt wurde, absolvierte der 20-Jährige beim <a href="#">FC Bayern München</a> einen medizinischen Check. Und der fiel beim quietschfidelen Shaqiri so aus, dass der Bekanntgabe seines Wechsels im Sommer zum deutschen Rekordmeister nichts mehr im Wege steht.</p>
-                        <blockquote>Vorbehaltlich, dass sich die beiden Vereine auf einen Ablösebetrag aus dem bis 2014 laufenden Vertrag Shaqiris beim FC Basel einigen. Von den Summen, die herumgereicht werden, und den nachträglichen Zahlungen je nach Erfolg des FC Bayern mit Shaqiri, dürften die umgerechnet 13 bis 14 Millionen Franken durchaus realistisch sein. Die «Süddeutsche Zeitung» will ausserdem wissen, das sich Spieler und Verein auf einen Vier-Jahres-Vertrag bis 2016 verständigt haben.</blockquote>
-                        <p>Man darf davon ausgehen, dass FCB-Präsident Bernhard Heusler ein zäher Verhandlungspartner sein wird, genauso wie Karl-Heinz Rummenigge, der Vorstandsvorsitzender des FC Bayern. Den Kontakt und die vertrauensvolle Zusammenarbeit in der Europäischen Clubvereinigung ECA, die beide seit geraumer Zeit pflegen, werden sie wohl für diesen Deal kurz beiseiteschieben. Wenn man sich nicht schon längst auf einen Betrag geeinigt hat.</p>
-                        <h4>Shaqiri löst Müller ab</h4>
-                        <p>So oder so dürfte Shaqiri zum Fussballer mit dem höchsten Transferpreis werden, den je ein Schweizer Verein erzielt hat. Das überrascht nicht mehr angesichts des Talents, der Konstanz und des Leistungsnachweises mit drei Titeln, die er mit dem FC Basel bereits gewonnen hat, und 17 Länderspielen für die Schweiz.</p>
-                        <p>Als teuerster Transfer eines Schweizer Spielers von einem Schweizer Club ins Ausland gilt bis anhin Patrick Müller, der im Sommer 2000 für 12,5 Millionen Franken von den Grasshoppers zu Olympique Lyon ging. Den Wechsel von Nationalmannschaftscaptain Gökhan Inler von Udinese liess sich Neapel vor gut einem halben Jahr 21 Millionen Franken kosten.</p>
-                        <ul>
-                            <li>Lorem ipsum dolor sit amet, consetetur sadipscing elitr</li>
-                            <li>sed diam nonumy eirmod tempor invidunt ut labore et dolore magna </li>
-                            <li>aliquyam erat sed diam voluptua</li>
-                            <li>Duis autem vel eum iriure dolor in hendrerit in vulputate velit es molestie consequat</li>
-                        </ul>
-                        <p>So oder so dürfte Shaqiri zum Fussballer mit dem höchsten Transferpreis werden, den je ein Schweizer Verein erzielt hat. Das überrascht nicht mehr angesichts des Talents, der Konstanz und des Leistungsnachweises mit drei Titeln, die er mit dem FC Basel bereits gewonnen hat, und 17 Länderspielen für die Schweiz.</p>
-                        <p>Als teuerster Transfer eines Schweizer Spielers von einem Schweizer Club ins Ausland gilt bis anhin Patrick Müller, der im Sommer 2000 für 12,5 Millionen Franken von den Grasshoppers zu Olympique Lyon ging. Den Wechsel von Nationalmannschaftscaptain Gökhan Inler von Udinese liess sich Neapel vor gut einem halben Jahr 21 Millionen Franken kosten.</p>
+                        <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
+                        <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
+                        <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
+                        {{ include file="_tpl/article-figure.tpl" }}
+
+								{{ if $gimme->article->body }}{{ $gimme->article->body }}{{ else }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
+
                     </article>
                 
                 </section><!-- / Main Section -->
