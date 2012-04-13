@@ -56,7 +56,11 @@ class Admin_PlaylistController extends Zend_Controller_Action
     public function popupAction()
     {
         $this->_helper->layout->setLayout('iframe');
-        $playlist = $this->playlistRepository->find($this->_request->getParam('id', null));
+
+        $playlist = null;
+        if ($this->_getParam('id', false)) {
+            $playlist = $this->playlistRepository->find($this->_request->getParam('id', null));
+        }
 
         if ($playlist instanceof \Newscoop\Entity\Playlist)
         {

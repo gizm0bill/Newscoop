@@ -32,6 +32,16 @@ class Playlist extends Entity
     private $articles;
 
     /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Returns the name of the playlist
      */
     public function getName()
