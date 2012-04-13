@@ -28,13 +28,18 @@ class SearchController extends AbstractSolrController
      */
     protected function buildSolrParams()
     {
+        $fq = implode(' AND ', array_filter(array(
+            $this->buildSolrTypeParam(),
+            $this->buildSolrDateParam(),
+        )));
+
         return array_merge(parent::buildSolrParams(), array(
             'q' => $this->buildSolrQuery(),
-            'fq' => implode(' AND ', array_filter(array(
-                $this->buildSolrTypeParam(),
-                $this->buildSolrDateParam(),
-            ))),
+            'fq' => empty($fq) ? '' : "{!tag=t}$fq",
             'sort' => $this->_getParam('sort') === 'latest' ? 'published desc' : 'score desc',
+            'facet' => 'true',
+            'facet.field' => '{!ex=t}type',
+            'spellcheck' => 'true',
         ));
     }
 

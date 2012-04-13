@@ -7,7 +7,7 @@
                     <li><a href="#">Kontakt</a></li>
                     <li><a href="#">Login</a></li>
                 </ul>
-                <h1><a href="index.php">Tages Woche</a></h1>
+                <h1><a href="{{ local }}{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}">Tages Woche</a></h1>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
                 <nav>

@@ -29,7 +29,7 @@
     </script>
 
     <script type="text/template" id="document-twitter-template">
-    <p><b><%= doc.escape('tweet_user_screen_name') %></b> <%= doc.escape('tweet') %></p>
+    <p><b><%= doc.escape('tweet_user_screen_name') %></b> <%= doc.getTweet() %></p>
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
 
@@ -39,7 +39,8 @@
     </script>
 
     <script type="text/template" id="document-event-template">
-    <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
+    <h3><a href="<%= doc.get('link') %>" title="<%= doc.getEventTitle() %>"><%= doc.getEventTitle() %></a></h3>
+    <p><%= doc.get('event_organizer') %> <%= doc.get('event_town') %>, <%= doc.getEventTime() %> <%= doc.getEventDate() %></p>
     </script>
 
     <script type="text/template" id="document-omni-template">
@@ -49,7 +50,7 @@
     </script>
 
     <script type="text/template" id="document-link-template">
-    <p><%= doc.escape('link_description') %>: <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('link_url') %></a></p>
+    <p><%= doc.escape('link_description') %>: <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('title') %></a></p>
     <span class="time"><%= doc.relDate('published') %></span>
     </script>
 
@@ -67,6 +68,7 @@
         documentsView = new DocumentListView({collection: documents, el: $('#results'), emptyTemplate: $('#empty-search-list-template')});
         paginationView = new PaginationView({collection: documents, el: $('#search-pagination') });
         documents.reset(documents.parse({{ json_encode($result) }}));
+        dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
     });
     </script>
 </head>
@@ -148,6 +150,17 @@
         <div class="content-box clearfix reverse-columns filter-content">
             <aside>
             {{block aside}}{{/block}}
+
+            <ul id="date-filter">
+                <li class="main"><a href="#">Alle</a></li>
+                <li><a href="#24h">Letzte 24 Stunden</a></li>
+                <li><a href="#7d">Letzte 7 Tage</a></li>
+                <li><a href="#1y">Dieses Jahr</a></li>
+                <li class="range"><label for="range_from">Von</label> <input type="text" id="range_from" class="from" placeholder="TT.MM.JJ" /></li>
+                <li class="range"><label for="range_to">Bis</label> <input type="text" id="range_to" class="to" placeholder="TT.MM.JJ" /></li>
+                <li><input type="submit" value="Suchen" /></li>
+            </ul>
+
             </aside>
             <section>
             {{block section}}

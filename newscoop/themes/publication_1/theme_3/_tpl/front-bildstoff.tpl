@@ -1,14 +1,10 @@
-        	<article>
-            
-            	<header>
-                	<p>Bildstoff</p>
-                </header>
-                <ul class="flat-list">
-                	<li><a href="#"><img src="{{ url static_file="pictures/flat-list-img-1.jpg" }}" alt="" /></a></li>
-                	<li><a href="#"><img src="{{ url static_file="pictures/flat-list-img-2.jpg" }}" alt="" /></a></li>
-                	<li><a href="#"><img src="{{ url static_file="pictures/flat-list-img-3.jpg" }}" alt="" /></a></li>
-                	<li><a href="#"><img src="{{ url static_file="pictures/flat-list-img-4.jpg" }}" alt="" /></a></li>
-                	<li><a href="#"><img src="{{ url static_file="pictures/flat-list-img-5.jpg" }}" alt="" /></a></li>
-                </ul>
-            
-            </article>
+<article>
+  <header>
+      <p>Bildstoff</p>
+  </header>
+  <ul class="flat-list">
+  {{ list_articles length="5" ignore_publication="true" ignore_issue="true" ignore_section="true" order="byLastUpdate desc" constraints="type is blog issue is 3 section is 200" }}
+      <li><a href="{{ url options="article" }}"><img src="{{ url options="image 1 width 198 height 134 crop center" }}" rel="resizable" alt="" /></a></li>
+{{ /list_articles }}      
+  </ul>
+</article>            

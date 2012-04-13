@@ -762,6 +762,7 @@ ul.item-list li {
 					.filter-content aside ul li a:hover {text-decoration:underline;}
 				.filter-content aside ul li.main a {color:#008148;}
 				.filter-content aside ul li.main label {color:#008148;}
+				.filter-content aside ul li.inactive a {color:#ccc; text-decoration: none;}
 				.filter-content aside ul li span {color:#d4d4d4;}
 
 /*

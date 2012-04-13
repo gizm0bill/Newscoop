@@ -33,6 +33,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     private $config = array(
         'type' => array(),
         'rendition' => null,
+        'blogs' => array('blog', 'bloginfo'),
     );
 
     /**
@@ -68,7 +69,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      */
     public function isIndexable($article)
     {
-        return $article->isPublished() && in_array($article->getType(), $this->config['type']);
+        return $article->isPublished() && in_array($article->getType(), $this->config['type']) && $article->getSectionNumber() > 0;
     }
 
     /**
@@ -84,7 +85,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
         $doc = array(
             'id' => $this->getDocumentId($article),
             'title' => $article->getTitle(),
-            'type' => $article->getType(),
+            'type' => in_array($article->getType(), $this->config['blogs']) ? 'blog' : $article->getType(),
             'published' => gmdate(self::DATE_FORMAT, date_create($article->getPublishDate())->getTimestamp()),
             'author' => array_map(function($author) {
                 return $author->getFullName();
@@ -92,8 +93,8 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'webcode' => $this->webcoder->encode($article->getNumber()),
             'image' => $image ? $image['src'] : null,
             'link' => $this->linkService->getLink($article),
-            'section' => $article->getType() === 'blog' ? 'blog' : $this->linkService->getSectionShortName($article),
-            'section_name' => $article->getType() === 'blog' ? 'Blog' : $article->getSectionName(),
+            'section' => in_array($article->getType(), $this->config['blogs']) ? 'blog' : $this->linkService->getSectionShortName($article),
+            'section_name' => in_array($article->getType(), $this->config['blogs']) ? 'Blog' : $article->getSectionName(),
             'keyword' => explode(',', $article->getKeywords()),
             'topic' => $article->getTopicNames(),
         );
@@ -127,8 +128,17 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             case 'event':
                 $doc['event_organizer'] = $article->getData('organizer');
                 $doc['event_town'] = $article->getData('town');
-                $doc['event_date'] = $article->getData('date');
-                $doc['event_time'] = $article->getData('time');
+
+                $date = $article->getDatetime('schedule');
+                if ($date !== null) {
+                    $doc['event_date'] = $date->getStartDate()->format('d.m.Y');
+                    $doc['event_time'] = $date->getStartTime()->format('H:i');
+                }
+                break;
+
+            case 'bloginfo':
+                $doc['lead'] = strip_tags($article->getData('motto'));
+                $doc['content'] = strip_tags($article->getData('infolong'));
                 break;
         }
 

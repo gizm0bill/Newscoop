@@ -1,17 +1,18 @@
+{{ list_articles length="3" ignore_issue="true" ignore_section="true" order="bypublishdate desc" constraints="type is pinnwand" }}  
+{{ if $gimme->current_list->at_beginning }}
                 <article>
                 	<header>
                     	<p>Storyboard</p>
-                    </header>
-                    <section class="story">
-                        <p><a href="#">Ihre Fotografie</a></p>
-                    </section>
-                    <section class="story">
-                        <p><a href="#">Wo sind Ihre Winterbeizen?</a></p>
-                    </section>
-                    <section class="story">
-                        <p><a href="#">Hanf-Boom: Erinnerungsfotos gesucht</a></p>
-                    </section>
+                    </header>      
+{{ /if }}
+        <section class="story">
+          <p><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></p>
+        </section>
+
+{{ if $gimme->current_list->at_end }}
                 	<footer>
-                    	<a href="#" class="more">Zur Übersicht »</a>
+                    	<a href="{{ url options="article" }}" class="more">Zur Übersicht »</a>
                     </footer>
                 </article>
+{{ /if }} 
+{{ /list_articles }}            

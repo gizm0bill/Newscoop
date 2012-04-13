@@ -6,21 +6,11 @@
     <li class="main"><a href="#">Alle</a></li>
     <li><a href="#article">Artikel</a></li>
     <li><a href="#dossier">Dossiers</a></li>
-    <li><a href="#blog">Blogbeitrage</a></li>
+    <li><a href="#blog">Blogbeiträge</a></li>
     <li><a href="#comment">Kommentare</a></li>
     <li><a href="#link">Links</a></li>
     <li><a href="#event">Veranstaltungen</a></li>
-    <li><a href="#user">Nutzer</a></li>
-</ul>
-
-<ul id="date-filter">
-    <li class="main"><a href="#">Alle</a></li>
-    <li><a href="#24h">Letzte 24 Stunden</a></li>
-    <li><a href="#7d">Letzte 7 Tage</a></li>
-    <li><a href="#1y">Dieses Jahr</a></li>
-    <li class="range"><label for="range_from">Von</label> <input type="text" id="range_from" class="from" placeholder="TT.MM.JJ" /></li>
-    <li class="range"><label for="range_to">Bis</label> <input type="text" id="range_to" class="to" placeholder="TT.MM.JJ" /></li>
-    <li><input type="submit" value="Suchen" /></li>
+    <li><a href="#user">Community</a></li>
 </ul>
 
 <script>
@@ -28,7 +18,6 @@ $(function() {
     window.router = new SearchRouter();
     searchFormView = new SearchFormView({collection: documents, el: $('#search-form') });
     typeFilterView = new TypeFilterView({collection: documents, el: $('#type-filter') });
-    dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
     sortView = new SortView({collection: documents, el: $('#sort-latest') });
     Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'search']), '/')) }} });
 });

@@ -45,35 +45,40 @@ class Api_HighlightsController extends Zend_Controller_Action
     {
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
         $response = array();
-        
-        $parameters = $this->request->getParams();
-        
-        if ($parameters['section_id']) {
-            $sectionIdList = array($parameters['section_id']);
+
+        $params = $this->request->getParams();
+        if (isset($params['section_id'])) {
+            $sectionIds = array((int) $params['section_id']);
+        } else {
+            $sectionIds = array(6, 7, 8, 9, 10); // @todo config
         }
-        else {
-            $sectionIdList = array(10, 20, 30, 40, 50);
-        }
-        
-        foreach ($sectionIdList as $sectionId) {
-            $sections = $this->_helper->service('section')->findBy(array('publication' => self::PUBLICATION, 'number' => $sectionId));
-            $section = $sections[0];
-            
-            $response[$sectionId] = array();
-            
+
+        foreach ($sectionIds as $sectionId) {
             $playlistRepository = $this->_helper->entity->getRepository('Newscoop\Entity\Playlist');
-            $playlists = $playlistRepository->findBy(array('name' => $section->getName()));
-            $playlist = $playlists[0];
+            $playlist = $playlistRepository->findOneBy(array('id' => $sectionId));
             if ($playlist) {
                 $articleArray = $playlistRepository->articles($playlist);
                 foreach ($articleArray as $articleItem) {
                     $articles = $this->_helper->service('article')->findBy(array('number' => $articleItem['articleId']));
                     $article = $articles[0];
-                    $response[$sectionId][] = array('id' => $article->getNumber(), 'title' => $article->getTitle(), 'section_url' => $this->url.'/api/sections/item?section_id='.$sectionId);
+                    $articleData = new ArticleData($article->getType(), $article->getId(), $article->getLanguageId());
+                    $comments = Zend_Registry::get('container')->getService('comment')->countBy(array(
+                        'language' => $article->getLanguageId(),
+                        'thread' => $article->getId(),
+                    ));
+                    $response[] = array(
+                        'article_id' => $article->getNumber(),
+                        'url' => '/articles/item?article_id=' . $article->getNumber(),
+                        'title' => $article->getTitle(),
+                        'section_name' => $playlist->getName(),
+                        'section_url' => $this->url.'/api/sections/item?section_id=' . $sectionId,
+                        'publish_date' => $article->getPublishDate(),
+                        'comment_count' => $comments,
+                    );
                 }
             }
         }
-        
+
         $this->_helper->json($response);
     }
 }

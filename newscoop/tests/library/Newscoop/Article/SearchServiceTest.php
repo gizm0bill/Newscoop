@@ -119,6 +119,7 @@ class SearchServiceTest extends \TestCase
         $article = new Article(1, $this->language);
         $article->setType('dossier');
         $article->setTitle('test');
+        $article->setData(array());
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals(array(
@@ -131,27 +132,48 @@ class SearchServiceTest extends \TestCase
     {
         $article = new Article(1, $this->language);
         $article->setType('blog');
+        $article->setData(array());
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('blog', $doc['section']);
     }
 
-    public function testDocumentEvent()
+    public function testGetDocumentEvent()
     {
         $article = new Article(1, $this->language);
         $article->setType('event');
         $article->setData(array(
             'organizer' => 'org',
             'town' => 'basel',
-            'date' => '2012-12-01',
-            'time' => '05:20',
         ));
+
+        $datetime = new \Newscoop\Entity\ArticleDatetime();
+        $datetime->setFieldName('schedule');
+        $datetime->setStartDate(new \DateTime('2012-12-01'));
+        $datetime->setStartTime(new \DateTime('11:00'));
+        $article->addDatetime($datetime);
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('org', $doc['event_organizer']);
         $this->assertEquals('basel', $doc['event_town']);
-        $this->assertEquals('2012-12-01', $doc['event_date']);
-        $this->assertEquals('05:20', $doc['event_time']);
+        $this->assertEquals('01.12.2012', $doc['event_date']);
+        $this->assertEquals('11:00', $doc['event_time']);
+    }
+
+    public function testGetDocumentBloginfo()
+    {
+        $article = new Article(1, $this->language);
+        $article->setType('bloginfo');
+        $article->setData(array(
+            'motto' => 'motto',
+            'infolong' => 'info',
+        ));
+
+        $doc = $this->service->getDocument($article);
+        $this->assertEquals('blog', $doc['section']);
+        $this->assertEquals('blog', $doc['type']);
+        $this->assertEquals('motto', $doc['lead']);
+        $this->assertEquals('info', $doc['content']);
     }
 
     public function testIsIndexed()
@@ -168,6 +190,7 @@ class SearchServiceTest extends \TestCase
     public function testIsIndexable()
     {
         $article = new Article(1, $this->language);
+        $section = new \Newscoop\Entity\Section(1, 'sport');
 
         $this->assertFalse($this->service->isIndexable($article));
 
@@ -176,6 +199,10 @@ class SearchServiceTest extends \TestCase
         $this->assertFalse($this->service->isIndexable($article));
 
         $article->setType(self::TYPE);
+
+        $this->assertFalse($this->service->isIndexable($article));
+
+        $article->setSection($section);
 
         $this->assertTrue($this->service->isIndexable($article));
 
