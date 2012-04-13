@@ -36,11 +36,14 @@ var Document = Backbone.Model.extend({
         } else if (diff < this.day) {
             return 'vor ' + (diff / 3600).toFixed() + ' Std.';
         } else if (diff < this.month) {
-            return 'vor ' + (diff / this.day).toFixed() + ' Tag';
+            var days = (diff / this.day).toFixed();
+            return 'vor ' + days + ' ' + (days == 1 ? 'Tag' : 'Tagen');
         } else if (diff < this.year) {
-            return 'vor ' + (diff / this.month).toFixed() + ' Monat';
+            var months = (diff / this.month).toFixed();
+            return 'vor ' + months + ' ' + (months == 1 ? 'Monat' : 'Monaten');
         } else {
-            return 'vor ' + (diff / this.year).toFixed() + ' Jahr';
+            var years = (diff / this.year).toFixed();
+            return 'vor ' + years + ' ' + (years == 1 ? 'Jahr' : 'Jahren');
         }
     },
 
