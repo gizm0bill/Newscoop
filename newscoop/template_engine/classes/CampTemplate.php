@@ -48,9 +48,7 @@ final class CampTemplate extends Smarty
 
         // cache settings
         $cacheHandler = SystemPref::Get('TemplateCacheHandler');
-        global $application;
-        $user = $application->getBootstrap()->getResource('container')->getService('user')->getCurrentUser();
-        if ($cacheHandler && (!$user || !$user->isAdmin())) {
+        if ($cacheHandler) {
             $this->caching = 1;
             $this->caching_type = 'newscoop';
             CampTemplateCache::factory();
