@@ -153,9 +153,11 @@
 
             <ul id="date-filter">
                 <li class="main"><a href="#">Alle</a></li>
+                {{block datefilter}}
                 <li><a href="#24h">Letzte 24 Stunden</a></li>
                 <li><a href="#7d">Letzte 7 Tage</a></li>
                 <li><a href="#1y">Dieses Jahr</a></li>
+                {{/block}}
                 <li class="range"><label for="range_from">Von</label> <input type="text" id="range_from" class="from" placeholder="TT.MM.JJ" /></li>
                 <li class="range"><label for="range_to">Bis</label> <input type="text" id="range_to" class="to" placeholder="TT.MM.JJ" /></li>
                 <li><input type="submit" value="Suchen" /></li>
