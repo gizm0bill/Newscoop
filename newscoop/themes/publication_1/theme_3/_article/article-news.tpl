@@ -23,7 +23,7 @@
                         <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
                         {{ include file="_tpl/article-figure.tpl" }}
 
-								{{ if $gimme->article->body }}{{ $gimme->article->body }}{{ else }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
+								{{ if $gimme->article->body }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}{{ else }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
 
                     </article>
                 
@@ -32,28 +32,48 @@
                 <aside>
                 
                     <a href="#" class="grey-button article-switch article-view-rear"><span>Hintergrund zum Artikel</span></a>
-                
-                    <article>
+
+{{* ARTICLE TOPICS *}}
+{{ list_article_topics }}                
+{{ if $gimme->current_list->at_beginning }}
+                    <article>                                            
                         <header>
                             <p>Mehr zum Thema</p>
                         </header>
-                        <p><a href="#">Frankreich</a>, <a href="#">Finanzwirtschaft</a></p>
-                    </article>
-                    
+                        <p>
+{{ /if }}
+                        <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
+                        {{ if $gimme->current_list->at_end }}
+                        </p>
+                    </article>                        
+{{ /if }}   
+{{ /list_article_topics }}                    
+
+{{* RELATED ARTICLES *}}
+{{ list_related_articles }}
+{{ if $gimme->current_list->at_beginning }}  
                     <article>
                         <header>
                             <p>Verwandte Artikel</p>
                         </header>
-                        <p><strong>Gericht im Senegal erlaubt Wades Kandidatur</strong> Senegals Verfassungsgericht bestätigt umstrittene Kondidatenliste <a href="#" class="more">Weiterlesen</a></p>
-                        <p><strong>RBS-Chef verzichtet nach Kritik auf Bonus</strong> Chef der Royal Bank of Scotland lehnt umstrittenen Bonus ab <a href="#" class="more">Weiterlesen</a></p>
+{{ /if }}                        
+                        <p><strong>{{ if !($gimme->article->short_name == "") }}{{ $gimme->article->short_name }}{{ else }}{{ $gimme->article->name }}{{ /if }}</strong> <time>{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y" }}{{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</time> <a href="{{ url options="article" }}" class="more">Weiterlesen</a></p>
+{{ if $gimme->current_list->at_end }}
                     </article>
-                    
+{{ /if }}
+{{ /list_related_articles }}
+
+{{* MAP - display only if set *}}
+{{ if $gimme->article->has_map }}   
+{{ if $gimme->map->is_enabled }}                 
                     <article>
                         <figure>
-                            <?php /*?><div class="map-holder"><iframe width="304" height="180" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=basel&amp;sll=37.0625,-95.677068&amp;sspn=46.36116,112.412109&amp;t=m&amp;ie=UTF8&amp;hq=&amp;hnear=Basle,+Basel-Stadt,+Switzerland&amp;z=13&amp;ll=47.557421,7.592573&amp;output=embed"></iframe></div><?php */?>
-                            <p>Stadion St. Jakob</p>
+                        	{{ map show_locations_list="false" show_reset_link=false auto_focus=false width="100%" height="180" }}
+                        	{{ list_map_locations }}{{ if $gimme->current_list->at_beginning }}<p>{{ /if }}{{ $gimme->location->name }}{{ if $gimme->current_list->at_end }}</p>{{ else }}, {{ /if }}{{ /list_map_locations }}
                         </figure>
                     </article>
+{{ /if }}
+{{ /if }}                    
                     
                     <article>
                         <figure>

@@ -42,7 +42,7 @@
     {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }}
   <a href="{{ url options="article" }}">Weiterlesen</a> 
   {{ /if }}  
-{{ /strip }} <a href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
+{{ /strip }} <a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
                 </article>
 
 {{ else }}
@@ -67,7 +67,7 @@
     {{ $gimme->article->lede|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
     {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} 
   {{ /if }}  
-{{ /strip }} <a href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
+{{ /strip }} <a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
                     </article>
 {{ /if }}
                     
@@ -78,32 +78,23 @@
                 
 {{*** werbung ***}}   
 {{ include file="_werbung/section-maincol.tpl" }}
-                
+
+{{ list_playlist_articles length="10" name=$gimme->section->name }}
+{{ if $gimme->current_list->index > 7 }}                
                 <article>
                     <header>
                         <p><a href="#">Schweiz</a></p>
                     </header>
-                    <h2><a href="#">Keine politischen Gegengeschäfte beim Kampfjet-Kauf erreicht</a></h2>
+                    <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                 </article>
-                
-                <article>
-                    <header>
-                        <p><a href="#">International</a></p>
-                    </header>
-                    <h2><a href="#">Niqab-Trägerin wehrt sich</a></h2>
-                </article>
-                
-                <article>
-                    <header>
-                        <p><a href="#">Schweiz</a></p>
-                    </header>
-                    <h2><a href="#">Keine politischen Gegengeschäfte beim Kampfjet-Kauf erreicht</a></h2>
-                </article>
-                
+{{ /if }}                
+{{ if $gimme->current_list->at_end }}                
                 <ul class="paging content-paging">
                     <li>Weiterblattern</li>
                     <li><a class="grey-button" href="#">»</a></li>
                 </ul>
+{{ /if }}
+{{ /list_playlist_articles }}
             
             </section><!-- / Main Section -->
             

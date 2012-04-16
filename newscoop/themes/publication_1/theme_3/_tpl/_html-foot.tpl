@@ -1,5 +1,3 @@
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write("<script src='{{ url static_file="_js/libs/jquery.min.js" }}'>\x3C/script>")</script>   
     <script type="text/javascript" src="{{ url static_file="_js/libs/jquery.cycle.all.js" }}"></script>
     <!--[if (gte IE 6)&(lte IE 8)]>
       <script type="text/javascript" src="{{ url static_file="_js/libs/selectivizr-min.js" }}"></script>
