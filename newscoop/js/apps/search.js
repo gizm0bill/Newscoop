@@ -238,6 +238,8 @@ var SearchFormView = Backbone.View.extend({
         'click #did-you-mean > a': 'didYouMean'
     },
 
+    webcode: /^[\+\@][a-z]{5,6}$/i,
+
     initialize: function() {
         this.collection.bind('reset', this.render, this);
         this.render();
@@ -254,7 +256,12 @@ var SearchFormView = Backbone.View.extend({
 
     search: function(e) {
         e.preventDefault();
+
         this.collection.query = $(this.el).find('input').val();
+        if (this.collection.query.match(this.webcode)) {
+            window.location = window.location.origin + window.location.pathname.replace('search/', this.collection.query);
+        }
+
         this.collection.type = null;
         this.collection.date = null;
         this.collection.start = null;

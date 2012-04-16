@@ -11,6 +11,16 @@ require_once __DIR__ . '/AbstractSolrController.php';
  */
 class SearchController extends AbstractSolrController
 {
+    public function preDispatch()
+    {
+        if ($this->_helper->service('webcoder')->isWebcode($this->_getParam('q'))) {
+            $this->_helper->redirector->setCode(302);
+            $this->_helper->redirector->gotoRoute(array(
+                'webcode' => $this->_getParam('q'),
+            ), 'webcode', false, false);
+        }
+    }
+
     public function indexAction()
     {
         if (!$this->_getParam('q', false)) {
