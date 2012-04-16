@@ -15,9 +15,11 @@ class AbstractSolrController extends Zend_Controller_Action
      * @var array
      */
     protected $dates = array(
-        '24h' => '[NOW-1DAY/HOUR TO NOW]',
-        '7d' => '[NOW-7DAY/DAY TO NOW]',
-        '1y' => '[NOW-1YEAR/DAY TO NOW]',
+        '24h' => '[NOW-1DAY/HOUR TO *]',
+        '1d' => '[NOW/DAY TO *]',
+        '2d' => '[NOW-1DAY/DAY TO NOW/DAY]',
+        '7d' => '[NOW-7DAY/DAY TO *]',
+        '1y' => '[NOW-1YEAR/DAY TO *]',
     );
 
     /**

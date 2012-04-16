@@ -39,3 +39,9 @@ $(function() {
     <li>veröffentlicht</li>
 </ul>
 {{/block}}
+
+{{block datefilter}}
+<li><a href="#1d">Heute</a></li>
+<li><a href="#2d">Gestern</a></li>
+<li><a href="#7d">Letzte 7 Tage</a></li>
+{{/block}}
