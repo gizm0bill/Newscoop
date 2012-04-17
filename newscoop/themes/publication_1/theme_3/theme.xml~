@@ -13,7 +13,6 @@
 	</output>
 	
 	<renditions>
-   	<rendition name="dossierbildnew" width="990" height="330" specs="crop" />	
    	<rendition name="dossierbild" width="980" height="306" specs="crop" />
       <rendition name="topfront" width="640" height="280" specs="crop" />
       <rendition name="dossierteaser" width="300" height="131" specs="crop" />
