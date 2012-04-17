@@ -125,6 +125,7 @@ span span.title-box {
 <script type="text/javascript">
 window.list_spec = {
     type: '',
+    date: '',
     region: ''
 };
 
@@ -134,6 +135,7 @@ window.update_list_on_params = function(params) {
 
     var new_spec = {
         type: 'kino',
+        date: window.used_date('', true),
         region: 'kanton-basel-stadt'
     };
 
@@ -173,15 +175,24 @@ window.update_list_on_params = function(params) {
     }
 
     if ('' != new_spec['type']) {
-        $("#was").val(new_spec['type']);
+        //$("#was").val(new_spec['type']);
+        outline_genre(new_spec['type']);
     }
+//alert(new_spec['region']);
     if ('' != new_spec['region']) {
+//        var sel_region = new_spec['region'];
+//        sel_region = sel_region.replace(/%20/g, " ");
+//        $("#wo").val(sel_region);
         $("#wo").val(new_spec['region']);
+//        $('select').dropdownized({fixed:true});
+//        $("#wo").selectedIndex = 3;
+//        $("#wo").focus();
+//alert($("#wo").val());
     }
 
-    //if ('' != new_spec['date']) {
-    //    $(".datepicker").datepicker("setDate" , new Date(new_spec['date']));
-    //}
+    if ('' != new_spec['date']) {
+        $(".datepicker").datepicker("setDate" , new Date(new_spec['date']));
+    }
 
     //window.reload(new_spec['page']);
     window.reload();
@@ -196,11 +207,23 @@ $(document).ready(function() {
     $("#was").val('kino');
     $("#wo").val('kanton-basel-stadt');
 
+  // Datepicker
+  var dp = $( ".datepicker" ).datepicker({
+    showOn: "button",
+    buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
+    buttonImageOnly: true
+  });
+
+    $(".datepicker").datepicker("setDate" , new Date());
+    $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
+
     window.set_image_lists();
 });
 
 window.set_image_lists = function()
 {
+return;
+// TODO:
     $("a.movie_image_list").fancybox({
         type: 'image'
     });
@@ -261,9 +284,48 @@ window.set_title_boxes = function() {
     }
 };
 
+function outline_genre(genre) {
+    window.what_val = genre;
+    $('.li_genre').removeClass('active');
+    $('#li_' + genre).addClass('active');
+
+};
+
 function load_genre(genre) {
-    alert("not implemented");
+
+    outline_genre(genre);
+
+    window.reload();
+
+    //alert("not implemented: " + genre);
     return false;
+};
+
+function load_area(area) {
+    window.reload();
+
+    //var area_obj = $(area);
+    //alert("not implemented: " + area_obj.val());
+    return false;
+};
+
+function movie_set_lang(movie_id, lang, state) {
+    if (state) {
+        $("#" + movie_id).removeClass("has_not_" + lang);
+        $("#" + movie_id).addClass("has_" + lang);
+    }
+    else {
+        $("#" + movie_id).removeClass("has_" + lang);
+        $("#" + movie_id).addClass("has_not_" + lang);
+    }
+};
+function movie_set_recom(movie_id, state) {
+    if (state) {
+        $("#" + movie_id).addClass("stared");
+    }
+    else {
+        $("#" + movie_id).removeClass("stared");
+    }
 };
 </script>
 
@@ -284,23 +346,25 @@ function load_genre(genre) {
 
             <aside>
                 
+<!--
                 <h3>Sortieren nach</h3>
                 <ul class="categories">
                     <li><a href="#" onClick="alert('Not implemented.'); return false;">Bewertung</a></li>
                     <li><a href="#" onClick="alert('Not implemented.'); return false;">Besucherzahlen</a></li>
                     <li class="active"><a href="#" onClick="alert('Just this.'); return false;">alphabetisch</a></li>
                 </ul>
+-->
                 
                 <h3>Ort</h3>
                 <ul>
                     <li>
-                        <select id="wo" name="region" class="option_styled" onChange="alert('Not implemented'); return true;">
+                        <select id="wo" name="region" class="option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
                                     <option value="kanton-basel-landschaft">Basel-Landschaft</option>
                                     <option value="kanton-aargau">Aargau</option>
-                                    <option value="kanton-appenzell Ausserrhoden">Appenzell Ausserrhoden</option>
-                                    <option value="kanton-appenzell Innerrhoden">Appenzell Innerrhoden</option>
+                                    <option value="kanton-appenzell-ausserrhoden">Appenzell Ausserrhoden</option>
+                                    <option value="kanton-appenzell-innerrhoden">Appenzell Innerrhoden</option>
                                     <option value="kanton-bern">Bern</option>
                                     <option value="kanton-freiburg">Freiburg</option>
                                     <option value="kanton-genf">Genf</option>
@@ -328,32 +392,32 @@ function load_genre(genre) {
                 
                 <h3>Genre</h3>
                 <ul class="categories">
-                                    <li class="active" id="li_kino"><a href="#" onClick="load_genre("kino"); return false;">Alles</a></li>
-                                    <li id="li_abenteuer"><a href="#" onClick="load_genre("abenteuer"); return false;">Abenteuer</a></li>
-                                    <li id="li_action"><a href="#" onClick="load_genre("action"); return false;">Action</a></li>
-                                    <li id="li_adult"><a href="#" onClick="load_genre("adult"); return false;">Adult</a></li>
-                                    <li id="li_animation"><a href="#" onClick="load_genre("animation"); return false;">Animation</a></li>
-                                    <li id="li_biografie"><a href="#" onClick="load_genre("biografie"); return false;">Biografie</a></li>
-                                    <li id="li_crime"><a href="#" onClick="load_genre("crime"); return false;">Crime</a></li>
-                                    <li id="li_dokumentation"><a href="#" onClick="load_genre("dokumentation"); return false;">Dokumentation</a></li>
-                                    <li id="li_drama"><a href="#" onClick="load_genre("drama"); return false;">Drama</a></li>
-                                    <li id="li_familienfilm"><a href="#" onClick="load_genre("familienfilm"); return false;">Familienfilm</a></li>
-                                    <li id="li_fantasy"><a href="#" onClick="load_genre("fantasy"); return false;">Fantasy</a></li>
-                                    <li id="li_film-noir"><a href="#" onClick="load_genre("film-noir"); return false;">Film-Noir</a></li>
-                                    <li id="li_historischer"><a href="#" onClick="load_genre("historischer"); return false;">Historisch</a></li>
-                                    <li id="li_horror"><a href="#" onClick="load_genre("horror"); return false;">Horror</a></li>
-                                    <li id="li_komoedie"><a href="#" onClick="load_genre("komoedie"); return false;">Komödie</a></li>
-                                    <li id="li_kriegsfilm"><a href="#" onClick="load_genre("kriegsfilm"); return false;">Kriegsfilm</a></li>
-                                    <li id="li_kurzfilm"><a href="#" onClick="load_genre("kurzfilm"); return false;">Kurzfilm</a></li>
-                                    <li id="li_musical"><a href="#" onClick="load_genre("musical"); return false;">Musical</a></li>
-                                    <li id="li_musikfilm"><a href="#" onClick="load_genre("musikfilm"); return false;">Musikfilm</a></li>
-                                    <li id="li_mystery"><a href="#" onClick="load_genre("mystery"); return false;">Mystery</a></li>
-                                    <li id="li_romanze"><a href="#" onClick="load_genre("romanze"); return false;">Romanze</a></li>
-                                    <li id="li_sci-fi"><a href="#" onClick="load_genre("sci-fi"); return false;">Sci-Fi</a></li>
-                                    <li id="li_sport"><a href="#" onClick="load_genre("sport"); return false;">Sport</a></li>
-                                    <li id="li_thriller"><a href="#" onClick="load_genre("thriller"); return false;">Thriller</a></li>
-                                    <li id="li_western"><a href="#" onClick="load_genre("western"); return false;">Western</a></li>
-                                    <li id="li_andere"><a href="#" onClick="load_genre("andere"); return false;">Andere</a></li>
+                        <li class="active li_genre" id="li_kino"><a href="#" onClick="load_genre('kino'); return false;">Alles</a></li>
+                        <li class="li_genre" id="li_abenteuer"><a href="#" onClick="load_genre('abenteuer'); return false;">Abenteuer</a></li>
+                        <li class="li_genre" id="li_action"><a href="#" onClick="load_genre('action'); return false;">Action</a></li>
+                        <li class="li_genre" id="li_adult"><a href="#" onClick="load_genre('adult'); return false;">Adult</a></li>
+                        <li class="li_genre" id="li_animation"><a href="#" onClick="load_genre('animation'); return false;">Animation</a></li>
+                        <li class="li_genre" id="li_biografie"><a href="#" onClick="load_genre('biografie'); return false;">Biografie</a></li>
+                        <li class="li_genre" id="li_crime"><a href="#" onClick="load_genre('crime'); return false;">Crime</a></li>
+                        <li class="li_genre" id="li_dokumentation"><a href="#" onClick="load_genre('dokumentation'); return false;">Dokumentation</a></li>
+                        <li class="li_genre" id="li_drama"><a href="#" onClick="load_genre('drama'); return false;">Drama</a></li>
+                        <li class="li_genre" id="li_familienfilm"><a href="#" onClick="load_genre('familienfilm'); return false;">Familienfilm</a></li>
+                        <li class="li_genre" id="li_fantasy"><a href="#" onClick="load_genre('fantasy'); return false;">Fantasy</a></li>
+                        <li class="li_genre" id="li_film-noir"><a href="#" onClick="load_genre('film-noir'); return false;">Film-Noir</a></li>
+                        <li class="li_genre" id="li_historischer"><a href="#" onClick="load_genre('historischer'); return false;">Historisch</a></li>
+                        <li class="li_genre" id="li_horror"><a href="#" onClick="load_genre('horror'); return false;">Horror</a></li>
+                        <li class="li_genre" id="li_komoedie"><a href="#" onClick="load_genre('komoedie'); return false;">Komödie</a></li>
+                        <li class="li_genre" id="li_kriegsfilm"><a href="#" onClick="load_genre('kriegsfilm'); return false;">Kriegsfilm</a></li>
+                        <li class="li_genre" id="li_kurzfilm"><a href="#" onClick="load_genre('kurzfilm'); return false;">Kurzfilm</a></li>
+                        <li class="li_genre" id="li_musical"><a href="#" onClick="load_genre('musical'); return false;">Musical</a></li>
+                        <li class="li_genre" id="li_musikfilm"><a href="#" onClick="load_genre('musikfilm'); return false;">Musikfilm</a></li>
+                        <li class="li_genre" id="li_mystery"><a href="#" onClick="load_genre('mystery'); return false;">Mystery</a></li>
+                        <li class="li_genre" id="li_romanze"><a href="#" onClick="load_genre('romanze'); return false;">Romanze</a></li>
+                        <li class="li_genre" id="li_sci-fi"><a href="#" onClick="load_genre('sci-fi'); return false;">Sci-Fi</a></li>
+                        <li class="li_genre" id="li_sport"><a href="#" onClick="load_genre('sport'); return false;">Sport</a></li>
+                        <li class="li_genre" id="li_thriller"><a href="#" onClick="load_genre('thriller'); return false;">Thriller</a></li>
+                        <li class="li_genre" id="li_western"><a href="#" onClick="load_genre('western'); return false;">Western</a></li>
+                        <li class="li_genre" id="li_andere"><a href="#" onClick="load_genre('andere'); return false;">Andere</a></li>
                 </ul>
                 
 <!--
@@ -408,6 +472,19 @@ function load_genre(genre) {
     {{ if 1 eq $smarty.get.load }}
         {{ assign var="load_list" 1 }}
     {{ /if }}
+{{ /if }}
+
+{{* by default we gonna limit event list to those happening today *}} 
+{{ assign var="usedate" $smarty.now|camp_date_format:"%Y-%m-%d" }}
+{{ if !empty($smarty.get.date) }}
+    {{ assign var="usedate" $smarty.get.date|replace:" ":"\\ "|replace:'"':"" }}
+{{ /if }}
+
+{{ assign var="condate" ""}}
+{{ assign var="muldate" ""}}
+{{ if !empty($usedate) }}
+    {{ assign var="condate" "date is $usedate"}}
+    {{ assign var="muldate" "start_date: $usedate, end_date: $usedate"}}
 {{ /if }}
 
 {{ assign var="usetype" "" }}
@@ -576,6 +653,10 @@ function parse_date_text($date_time_text)
 
     $cur_date = null;
 
+    $gl_has_d = false;
+    $gl_has_f = false;
+    $gl_has_t = false;
+
     $date_time_text = strip_tags(str_replace(array('<'), array("\n<"), $date_time_text));
     foreach (explode("\n", $date_time_text) as $one_date_time_str) {
         $one_date_time_str = trim($one_date_time_str);
@@ -603,12 +684,38 @@ function parse_date_text($date_time_text)
         $lang_str = ((2 <= $time_info_size) ? $time_info[1] : '');
         $flag_str = ((3 <= $time_info_size) ? $time_info[2] : '');
 
-        $dates[$cur_date][] = array('time' => $time_str, 'lang' => $lang_str, 'flag' => $flag_str);
+        $has_d = false;
+        $has_f = false;
+        $has_t = false;
+//echo 'xxx ' . $lang_str . ' yyy';
+        if (0 < strlen($lang_str)) {
+            if (('D' == substr($lang_str,0,1)) && ('Di' != substr($lang_str,0,2))) {
+                $has_d = true;
+            }
+            if ('F' == substr($lang_str,0,1)) {
+                $has_f = true;
+            }
+            if (!$has_d) {
+                foreach(explode('/', $lang_str) as $lang_part) {
+                    if ('d' == $lang_part) {
+                        $has_t = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        $gl_has_d = $gl_has_d || $has_d;
+        $gl_has_f = $gl_has_f || $has_f;
+        $gl_has_t = $gl_has_t || $has_t;
+
+        $dates[$cur_date][] = array('time' => $time_str, 'lang' => $lang_str, 'flag' => $flag_str, 'has_d' => ($has_d ? 1 : 0), 'has_f' => ($has_f ? 1 : 0), 'has_t' => ($has_t ? 1 : 0));
 
     }
 
     ksort($dates);
-    return $dates;
+//print_r(array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0))));
+    return array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0)));
 }
 
 {{ /php }}
@@ -625,7 +732,7 @@ function parse_date_text($date_time_text)
 {{ assign var=today_date $smarty.now|date_format:"%Y-%m-%d" }}
 {{ assign var=condate "" }}
 {{ assign var=condate_real "publish_date is $today_date" }}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" }}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" movie_screening="$muldate" }}
     {{ if $lastmovname != $gimme->article->headline }}
         {{ if "" != $lastmovname }}
                       <script type="text/javascript">
@@ -635,8 +742,9 @@ function parse_date_text($date_time_text)
             {{ assign var="cur_article_number" $gimme->article->number }}
             {{ assign var="map_article_list" "$cur_article_number" }}
         {{ /if }}
-                      <article class="movie stared">
                           {{ assign var="movie_rank" $movie_rank+1 }}
+                          {{* TODO: search for recommended => set stared class *}}
+                      <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} has_not_d has_not_f has_not_t">
                           {{ assign var="movie_desc_len" $gimme->article->description|strip_tags|count_characters:true }}
                           {{ assign var="movie_other_len" $gimme->article->other|strip_tags|count_characters:true }}
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
@@ -658,11 +766,9 @@ function parse_date_text($date_time_text)
                                 {{ if $gimme->article->movie_cast ne "" }}
                                 <li><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
                                 {{ /if }}
-                                  {{ if "" != $gimme->article->minimal_age }}
-                                      ab {{ $gimme->article->minimal_age }} Jahre
-                                      &nbsp;|&nbsp;
-                                  {{ /if }}
-                                <li><span>Altersfreigabe:</span> ab 16</li>
+                                {{ if "" != $gimme->article->minimal_age }}
+                                    <li><span>Altersfreigabe:</span> ab {{ $gimme->article->minimal_age }}</li>
+                                {{ /if }}
                                 {{ if $gimme->article->movie_duration ne "" }}
                                 {{ if $gimme->article->movie_duration ne "0" }}
                                 {{ if $gimme->article->movie_duration ne 0 }}
@@ -673,20 +779,19 @@ function parse_date_text($date_time_text)
                                 <!--<li><span>Sprache:</span> E/d/f</li>-->
                             </ul>
 
-
+                          <p>
                           {{ if $movie_text_len <= $max_text_len }}
-                            <p>{{ $gimme->article->description }}</p>
+                            {{ $gimme->article->description }}
                             {{ assign var="film_other" $gimme->article->other|strip_tags }}
                             {{ if "" != $film_other }}
-                              <p>{{ $gimme->article->other }}</p>
+                              <br />{{ $gimme->article->other }}
                             {{ /if }}
                           {{ else }}
-                            <p id="movie_short_text_{{ $movie_rank }}">
+                            <span id="movie_short_text_{{ $movie_rank }}">
                                 {{ $gimme->article->description|strip_tags|truncate:$max_text_len:" [...]" }}
-                                &raquo; <a href="{{ url options="article" }}?region={{ $linkregion }}"> Weiterlesen</a>
-                            </p>
+                            </span>
                           {{ /if }}
-                          <p class="hier_link">Trailer, Bilder &amp; Filminfos &raquo; <a href="{{ url options="article" }}?region={{ $linkregion }}">hier</a></p>
+                          <a href="{{ url options="article" }}?region={{ $linkregion }}">Details, Trailer & Bilder</a></p>
 
 
         {{ assign var="lastmovname" $gimme->article->headline }}
@@ -697,64 +802,89 @@ function parse_date_text($date_time_text)
     {{ assign var="lastmovname" $gimme->article->headline }}
 
     {{ assign var="date_time_str" $gimme->article->date_time_text|replace:"&nbsp;":" " }}
+    {{ assign var="movie_lang_d" "0" }}
+    {{ assign var="movie_lang_f" "0" }}
+    {{ assign var="movie_lang_t" "0" }}
     {{ php }}
         $date_time_str = $template->get_template_vars('date_time_str');
         $date_time_arr = parse_date_text($date_time_str);
-        $template->assign('date_time_arr',$date_time_arr);
+        $template->assign('date_time_arr',$date_time_arr['dates']);
+        $template->assign('movie_lang_d',$date_time_arr['langs']['d']);
+        $template->assign('movie_lang_f',$date_time_arr['langs']['f']);
+        $template->assign('movie_lang_t',$date_time_arr['langs']['t']);
     {{ /php }}
+            <div class="movie-table{{ if 1 == $movie_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $movie_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $movie_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
+            <div class="data_movie data_movie_{{ $movie_rank }}" style="display:none;">
+                {{ if 1 == $movie_lang_d }}
+                <div>d_{{ $movie_rank }}</div>
+                {{ /if }}
+                {{ if 1 == $movie_lang_f }}
+                <div>f_{{ $movie_rank }}</div>
+                {{ /if }}
+                {{ if 1 == $movie_lang_t }}
+                <div>t_{{ $movie_rank }}</div>
+                {{ /if }}
 
-            <table cellpadding="0" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th class="cinema_name_list"><h3>{{ $gimme->article->organizer }}</h3></th>
+                {{ if $gimme->article->recommended }}
+                <div>r_{{ $movie_rank }}</div>
+                {{ /if }}
+            </div>
+                <ul>
+                        <li><h5>{{ $gimme->article->organizer }}</h5></li>
+                        <li>
+                            <p>{{ $gimme->article->street }}<br />
+                            {{ $gimme->article->zipcode }} {{ $gimme->article->town }}</p>
+                            <p><a href="#">Google Maps</a><br />
+                            {{ if  "" != $gimme->article->web }}
+                            <a href="{{ $gimme->article->web }}" target="_blank">{{ $gimme->article->web|replace:"http://":"" }}</a>
+                            {{ else }}
+                            &nbsp;
+                            {{ /if }}
+                            </p>
+                        </li>
+                        <li>
+                            {{ if  "" != $gimme->article->phone }}
+                            <p>Tel  {{ $gimme->article->phone }} <a href="#" class="info" onClick="alert('wtf here?'); return false;">i</a></p>
+                            {{ else }}
+                            <p>&nbsp;</p>
+                            {{ /if }}
+                        </li>
+                    </ul>
+
+                    <table cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr>
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                            <td class="cinema_screen_list">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <span>{{ $date_time_key|camp_date_format:"%e.%m" }}</span></td>
+                            <td class="cinema_screen_list">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
                         {{ /foreach }}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>
-                            <dl>
-                                <dt>
-                                    {{ if  "" != $gimme->article->web }}
-                                        <a href="{{ $gimme->article->web }}" target="_blank" >Zur Website</a><br />
-                                    {{ else }}
-                                        &nbsp;
-                                    {{ /if }}
-                                    <div id="cinemas_list_map_{{ $movie_rank }}" class="cinemas_list_map_hidden">
-                                        <a id="cinemas_list_map_lnk_{{ $movie_rank }}" href="#" rel="cinemas_list_map_group_{{ $movie_rank }}">Karte</a>
-                                    </div>
-                                    <br />
-                                    {{ if  "" != $gimme->article->phone }}
-                                        Tel: {{ $gimme->article->phone }}
-                                    {{ else }}
-                                        &nbsp;
-                                    {{ /if }}
-                                </dt>
-                                <dd>
-                                    {{ $gimme->article->street }}<br />
-                                    {{ $gimme->article->zipcode }} {{ $gimme->article->town }}<br />
-                                </dd>
-                            </dl>
-                        </th>
-                        {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                                        <td class="screen_time_list">
-                                            <ul>
-                                                {{ foreach from=$date_time_day item=date_time_day_parts }}
-                                                    <li><span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
-                                                    <div>
-                                                    <p>{{ $date_time_day_parts.time }}{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</p>
-                                                    </div>
-                                                    </span></span>
-                                                    </li>
-                                                {{ /foreach }}
-                                            </ul>
-                                        </td>
-                        {{ /foreach }}
-                    </tr>
-                </tbody>
-            </table>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                            {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
+                                    <td class="screen_time_list">
+                                        <!--<ul>-->
+                                                    {{ foreach from=$date_time_day item=date_time_day_parts }}
+                                                    {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
+                                                    {{ assign var="scr_lang_f" $date_time_day_parts.has_f }}
+                                                    {{ assign var="scr_lang_t" $date_time_day_parts.has_t }}
+                                                        <li class="{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
+                                                        <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
+<!--
+                                                        <div>
+                                                        <p>{{ $date_time_day_parts.time }}{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</p>
+                                                        </div>
+-->
+                                                        </span></span>
+                                                        </li>
+                                                    {{ /foreach }}
+                                        <!--</ul>-->
+                                    </td>
+                            {{ /foreach }}
+                            </tr>
+                        </tbody>
+                    </table>
 
 {{ /list_articles }}
         {{ if "" != $lastmovname }}
@@ -788,6 +918,53 @@ function parse_date_text($date_time_text)
             </section>
 
 <script type="text/javascript">
+window.used_date = function(separator, value_only) {
+    var when = "" + $("#wann").val();
+    when = escape(when.replace(/^\s+|\s+$/g, ""));
+
+    var evdate = "";
+    var evdateobj = null;
+    var evdate_day = "";
+    var evdate_month = "";
+    var evdate_year = "";
+
+    if ("" != when) {
+        if (!evdateobj) {
+            evdateobj = $(".datepicker").datepicker("getDate");
+        }
+    }
+
+    if (!evdateobj) {
+        evdateobj = new Date();
+    }
+    var has_get_date = false;
+    if ('getDate' in evdateobj) {
+        has_get_date = true;
+    }
+    if (!has_get_date) {
+        evdateobj = new Date();
+    }
+
+    evdate_day = evdateobj.getDate();
+    if (10 > evdate_day) {
+        evdate_day = "0" + evdate_day;
+    }
+    evdate_month = evdateobj.getMonth() + 1;
+    if (10 > evdate_month) {
+        evdate_month = "0" + evdate_month;
+    }
+    evdate_year = evdateobj.getFullYear();
+
+    $(".datepicker").datepicker("setDate" , evdateobj);
+
+    var date_value = evdate_year + "-" + evdate_month + "-" + evdate_day;
+    if (value_only) {
+        return date_value;
+    }
+
+    return separator + "date=" + date_value;
+};
+
 window.used_place = function(separator, value_only) {
     var where = "" + $("#wo").val();
     where = escape(where.replace(/^\s+|\s+$/g, ""));
@@ -809,15 +986,25 @@ window.used_place = function(separator, value_only) {
     return spec;
 };
 
+window.set_cufon_fonts = function() {
+    // TODO
+};
 
-window.set_list_content = function(data) {
-    var dom = $(data);
-    $('#event_movies_results').html($('#event_movies_results', dom).html());
+window.set_list_content = function(data, direct) {
+//alert(data);
+//alert($('#event_movies_results', dom).html());
+    if (direct) {
+        $('#event_movies_results').html(data);
+    }
+    else {
+        var dom = $(data);
+        $('#event_movies_results').html($('#event_movies_results', dom).html());
+    }
 
     window.set_image_lists();
 
     window.set_cufon_fonts();
-    Cufon.now();
+    //Cufon.now(); // TODO!!!
 
     window.set_title_boxes();
 };
@@ -825,6 +1012,8 @@ window.set_list_content = function(data) {
 window.get_basic_path = function() {
     return "{{ local }}{{ set_section number="72" }}{{ uri options="section" }}{{ /local }}" + "?load=1";
 };
+
+window.what_val = 'kino';
 
 window.reload = function(page) {
     if (undefined === page) {
@@ -837,7 +1026,8 @@ window.reload = function(page) {
     var path_spec = "";
     var separator = "&";
 
-    var what = "" + $("#was").val();
+    //var what = "" + $("#was").val();
+    var what = window.what_val;
     what = escape(what.replace(/^\s+|\s+$/g, ""));
 
     var what_val = "kino";
@@ -846,6 +1036,13 @@ window.reload = function(page) {
         path_spec += separator + "type=" + what;
         what_val = what;
     }
+
+    var evdate = window.used_date(separator);
+    if ("" != evdate) {
+        path += evdate;
+        path_spec += evdate;
+    }
+    var when_val = window.used_date('', true);
 
     var evplace = window.used_place(separator);
     if ("" != evplace) {
@@ -865,12 +1062,28 @@ window.reload = function(page) {
 
     $('#suchen').attr("disabled", true);
     $('#suchen').addClass('ui-state-disabled');
+
+    ini_data = "";
+    //ini_data += '<html><body><div id="event_movies_results" class="event-movies-results">' + "\n";
+    ini_data += '<figure class="loading_block_movies">' + "\n";
+    ini_data += '  <div class="loading_image_movies">' + "\n";
+    ini_data += '    <img src="{{ uri static_file='_css/tw2011/img/loading_big.gif' }}">' + "\n";
+    ini_data += '  </div>' + "\n";
+    ini_data += '  <div class="loading_text_movies">' + "\n";
+    ini_data += '    Das aktuelle Programm wird geladen.' + "\n";
+    ini_data += '  </div>' + "\n";
+    ini_data += '</figure>' + "\n";
+    //ini_data += '</div></body></html>' + "\n";
+
+    window.set_list_content(ini_data, true);
+
     $.get(path, {}, function (data, textStatus, jqXHR) {
         //if (path != window.last_search) {
         //    return;
         //}
 
         window.list_spec['type'] = what_val;
+        window.list_spec['date'] = when_val;
         window.list_spec['region'] = where_val;
 
         $.address.value(path_spec);
@@ -890,53 +1103,10 @@ $(document).ready(function() {
 });
 </script>
             
-            <aside>
-{{ local }}
-{{ set_current_issue }}
-{{ set_section number="50" }}            
-{{ list_articles length="5" constraints="type is news" }}
-{{ if $gimme->current_list->at_beginning }}               
-                <article>
-                  <header>
-                      <p> Aus der Rubrik Kultur</p>
-                    </header>
-                    <ul class="simple-list no-padding">
-{{ /if }}                    
-                        <li><a href="{{ uri options="article" }}">{{ $gimme->article->name }}</a></li>
-{{ if $gimme->current_list->at_end }}                        
-                    </ul>
-                </article>
-{{ /if }}
-{{ /list_articles }}
-{{ /local }}                
-
-{{* BLOG TEASERS *}}
-{{ include file="_tpl/sidebar_blog_teaser.tpl" blogpl="Blog teasers - Kino" }}
-
-{{* PARTNER BUTTONS *}}
-{{ include file="_tpl/sidebar_partner_buttons.tpl" }}
-
-{{* TEASER BOXES *}}
-{{ include file="_tpl/sidebar_teaser_boxes.tpl" }}
-                
-                <article>
-                    <header>
-                        <p>Werbung</p>
-                    </header>
-                    <span class="werbung">
-<!-- BEGIN ADITIONTAG -->
-<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
-<div id="adition_tag_460064"></div>
-<!-- END ADITIONTAG -->
-                    </span>
-                </article>
-                            
-            </aside>
-        
         </div>
 
 
-{{ include file="_tpl/footer.tpl" }}
+{{ include file="_tpl/_html-foot.tpl" }}
 
     </div><!-- / Wrapper -->   
 
