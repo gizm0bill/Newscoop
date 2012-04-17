@@ -74,15 +74,20 @@
                     </article>
 {{ /if }}
 {{ /if }}                    
-                    
+
+{{* IF ARTICLE IS PART OF A DOSSIER, SHOW IT *}}
+{{ list_related_articles role="child" }}    
+{{ if $gimme->article->type_name == "dossier" }}                
                     <article>
                         <figure>
                             <big>Dossier: <br />
-                            <b>Kulturwerk</b></big>
-                            <a href="#"><img src="{{ url static_file="pictures/small-img-1.jpg" }}" rel="resizable" alt="" /></a>
+                            <b>{{ $gimme->article->name|strip }} {{ $gimme->article->subtitle }}</b></big>
+                            <a href="{{ url options="article" }}">{{ include file="_tpl/img/img_300x200.tpl" }}</a>
                         </figure>
                     </article>
-                  
+{{ /if }} 
+{{ /list_related_articles }}                     
+                    
 {{*** WERBUNG ***}}
 {{ include file="_werbung/article-sidebar-1.tpl" }}                    
                     
@@ -115,50 +120,81 @@
                 
                     <article>
                         <header>
-                            <p><a href="#">Informationen zum Artikel</a></p>
+                            <p>Informationen zum Artikel</p>
                         </header>
-                        <h2>Xherdan Shaqiri: Jetzt müssen sich nur noch FCB und FCB einigen</h2>
+                        <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         
                         <ul class="article-info">
+								{{ list_article_topics }}
+                        {{ if $gimme->current_list->at_beginning }}                        
                         	<li>
                             	<h5>Themen</h5>
-                            	<p><a href="#">FC Basel</a>, <a href="#">Champions League</a></p>
-                            </li>
+                            	<p>
+                        {{ /if }}
+                            	<a href="{{ url options="template section_topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
+                        {{ if $gimme->current_list->at_end }}
+                            	</p>
+                            </li>                            	
+                        {{ /if }}
+                        {{ /list_article_topics }}
+                        
+                        {{ if $gimme->prev_list_empty }}
+                        <li><p>Keine Themen verknüpft</p></li>
+                        {{ /if }}
+        
                             <li>
                             	<h5>veröffentlicht</h5>
-                            	<p>3.2.2012 - 01:48</p>
+                            	<p>{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y - %H:%i" }}</p>
                             </li>
                             <li>
                             	<h5>zuletzt geändert</h5>
-                            	<p>3.2.2012 - 03:08</p>
+                            	<p>{{ $gimme->article->last_update|camp_date_format:"%e.%c.%Y - %H:%i" }}</p>
                             </li>
+                            {{ if $gimme->article->history != "" }}
                             <li>
                             	<h5>Artikelgeschichte</h5>
-                            	<p>Erschienen in der Printausgabe vom 24.2.2012. Erster Abschnitt nach Pressekonferenz des Bundesrats ergänzt.</p>
+                            	<p>{{ $gimme->article->history }}</p>
                             </li>
+                            {{ /if }}
                             
+                            {{ list_article_attachments }}
+									 {{ if $gimme->current_list->at_beginning }}
                             <li>
                             	<h5>Downloads</h5>
-                            	<p><a href="#">Klageschrift gegen Wegelin</a> (PDF, 4018kb)</p>
+                            {{ /if }}
+                            	<p><a href="{{ url options="articleattachment" }}">{{ $gimme->attachment->description }}</a> ({{ $gimme->attachment->extension|upper }}, {{ $gimme->attachment->size_kb }}kb)</p>
+									 {{ if $gimme->current_list->at_end }}
                             </li>
+                            {{ /if }}
+                            {{ /list_article_attachments }}                            
+                            
+                            {{ if $gimme->article->sources != "" }}
                             <li>
                             	<h5>Quellen</h5>
-                            	<p><a href="#">FCB Basel</a> (PDF, 4018kb)<br />
-                            	<a href="#">Website vom Fussball Club Basel</a><br />
-                            	<a href="#">Quellenangabe Nummer 3</a></p>
+                            	<p>{{ $gimme->article->sources }}</p>
                             </li>
+                            {{ /if }}
+
+{{* MAP - display only if set *}}
+{{ if $gimme->article->has_map }}                            
                             <li>
                             	<h5>Lokalisierung</h5>
-                                <?php /*?><div class="map-holder"><iframe width="511" height="180" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=basel&amp;sll=37.0625,-95.677068&amp;sspn=46.36116,112.412109&amp;t=m&amp;ie=UTF8&amp;hq=&amp;hnear=Basle,+Basel-Stadt,+Switzerland&amp;z=13&amp;ll=47.557421,7.592573&amp;output=embed"></iframe></div><?php */?>
+                                {{ map show_locations_list="false" show_reset_link=false auto_focus=false width="511" height="180" }}
                             </li>
+{{ /if }}
+                            
                         </ul>
+
+{{* ARTICLE AUTHORS *}}
+{{ list_article_authors }} 
                         
                         <div class="author-box">
                         	
-                            <h4><span>Text:</span> Christoph Kieslich</h4>
+                           <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
                         	<ul class="article-info">
                         		<li class="image">
-                            		<img src="{{ url static_file="pictures/author-img-1.jpg" }}" alt="" />
+                        			{{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
+
                             		<p>Redakteur bei der Badischen Zeitung, für die er zehn Jahre lang arbeitete, zuletzt als Sportredakteur. Nach viereinhalb Jahren bei der Neugründung Zeitung zum Sonntag in Freiburg, schlossen sich vier Jahre als freier Autor für deutsche und Schweizer Tageszeitungen an. Von April 2005 bis Oktober 2011 Sportredaktor bei der Basler Zeitung.</p>
                             	</li>
                                 <li>
@@ -173,226 +209,10 @@
                                 </li>
                             </ul>
                             
-                            <div class="tabs article-related-tabs">
-                            
-                            	<ul>
-                                	<li><a href="#author-1">Artikel</a></li>
-                                	<li><a href="#author-2">Blogbeiträge</a></li>
-                                	<li><a href="#author-3">Kommentare</a></li>
-                                </ul>
-                                
-                                <div id="author-1">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                                
-                                <div id="author-2">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                                
-                                <div id="author-3">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                            
-                            </div>
-                            
-                            <ul class="paging content-paging">
-                                <li><a href="#" class="grey-button">&laquo;</a></li>
-                                <li>1/12</li>
-                                <li><a href="#" class="grey-button">&raquo;</a></li>
-                            </ul>
+{{ include file="_tpl/user-content.tpl" }}
                         
-                        </div>
-                        
-                        <div class="author-box">
-                        	
-                            <h4><span>Bild:</span> Max Mustermann</h4>
-                        	<ul class="article-info">
-                        		<li class="image">
-                            		<img src="{{ url static_file="pictures/author-img-1.jpg" }}" alt="" />
-                            		<p>Redakteur bei der Badischen Zeitung, für die er zehn Jahre lang arbeitete, zuletzt als Sportredakteur. Nach viereinhalb Jahren bei der Neugründung Zeitung zum Sonntag in Freiburg, schlossen sich vier Jahre als freier Autor für deutsche und Schweizer Tageszeitungen an. Von April 2005 bis Oktober 2011 Sportredaktor bei der Basler Zeitung.</p>
-                            	</li>
-                                <li>
-                                	<h5>Beiträge</h5>
-                                    <p>106</p>
-                                </li>
-                                <li>
-                                	<h5>Social Networks</h5>
-                                    <p class="social">
-                                    	<a href="#" class="grey-button"><span class="fb">Subscribe</span></a> <a href="#" class="grey-button"><span class="tw">Follow</span></a>
-                                    </p>
-                                </li>
-                            </ul>
-                            
-                            <div class="tabs article-related-tabs">
-                            
-                            	<ul>
-                                	<li><a href="#bild-1">Artikel vom Autor</a></li>
-                                	<li><a href="#bild-2">Blogpostings vom Autor</a></li>
-                                	<li><a href="#bild-3">Kommentare vom Autor</a></li>
-                                </ul>
-                                
-                                <div id="bild-1">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                                
-                                <div id="bild-2">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                                
-                                <div id="bild-3">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                            
-                            </div>
-                            
-                            <ul class="paging content-paging">
-                                <li><a href="#" class="grey-button">&laquo;</a></li>
-                                <li>1/12</li>
-                                <li><a href="#" class="grey-button">&raquo;</a></li>
-                            </ul>
-                        
-                        </div>
-                        
-                        <div class="author-box">
-                        	
-                            <h4><span>Grafik:</span> Max Mustermann</h4>
-                        	<ul class="article-info">
-                        		<li class="image">
-                            		<img src="{{ url static_file="pictures/author-img-1.jpg" }}" alt="" />
-                            		<p>Redakteur bei der Badischen Zeitung, für die er zehn Jahre lang arbeitete, zuletzt als Sportredakteur. Nach viereinhalb Jahren bei der Neugründung Zeitung zum Sonntag in Freiburg, schlossen sich vier Jahre als freier Autor für deutsche und Schweizer Tageszeitungen an. Von April 2005 bis Oktober 2011 Sportredaktor bei der Basler Zeitung.</p>
-                            	</li>
-                                <li>
-                                	<h5>Beiträge</h5>
-                                    <p>106</p>
-                                </li>
-                                <li>
-                                	<h5>Social Networks</h5>
-                                    <p class="social">
-                                    	<a href="#" class="grey-button"><span class="fb">Subscribe</span></a> <a href="#" class="grey-button"><span class="tw">Follow</span></a>
-                                    </p>
-                                </li>
-                            </ul>
-                            
-                            <div class="tabs article-related-tabs">
-                            
-                            	<ul>
-                                	<li><a href="#grafik-1">Artikel vom Autor</a></li>
-                                	<li><a href="#grafik-2">Blogpostings vom Autor</a></li>
-                                	<li><a href="#grafik-3">Kommentare vom Autor</a></li>
-                                </ul>
-                                
-                                <div id="grafik-1">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                                
-                                <div id="grafik-2">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                                
-                                <div id="grafik-3">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
-                                
-                                </div>
-                            
-                            </div>
-                            
-                            <ul class="paging content-paging">
-                                <li><a href="#" class="grey-button">&laquo;</a></li>
-                                <li>1/12</li>
-                                <li><a href="#" class="grey-button">&raquo;</a></li>
-                            </ul>
-                        
-                        </div>
-                        
+{{ /list_article_authors }}                        
+                                                
                     </article>
                 
                 </section><!-- / Main Section -->
@@ -400,15 +220,20 @@
                 <aside>
                 
                     <a href="#" class="grey-button article-switch article-view-front"><span>Zurück zum Artikel</span></a>
-                    
+
+{{* RELATED ARTICLES *}}
+{{ list_related_articles }}
+{{ if $gimme->current_list->at_beginning }}                     
                     <article>
                         <header>
                             <p>Verwandte Artikel</p>
                         </header>
-                        <p><strong>Gericht im Senegal erlaubt Wades Kandidatur</strong> Senegals Verfassungsgericht bestätigt umstrittene Kondidatenliste <a href="#" class="more">Weiterlesen</a> <span class="time">23.01.2012</span></p>
-                        <p><strong>RBS-Chef verzichtet nach Kritik auf Bonus</strong> Chef der Royal Bank of Scotland lehnt umstrittenen Bonus ab <a href="#" class="more">Weiterlesen</a> <span class="time">23.01.2012</span></p>
-                        <p><strong>RBS-Chef verzichtet nach Kritik auf Bonus</strong> Chef der Royal Bank of Scotland lehnt umstrittenen Bonus ab <a href="#" class="more">Weiterlesen</a> <span class="time">23.01.2012</span></p>
+{{ /if }}                        
+                        <p><strong>{{ if !($gimme->article->short_name == "") }}{{ $gimme->article->short_name }}{{ else }}{{ $gimme->article->name }}{{ /if }}</strong> {{ $gimme->article->dateline }} <a href="{{ url options="article" }}" class="more">Weiterlesen</a> <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y" }}</span></p>
+{{ if $gimme->current_list->at_end }}                        
                     </article>
+{{ /if }}      
+{{ /list_related_articles }}              
                     
                     <article>
                         <header>
@@ -418,6 +243,7 @@
                     </article>
                     
                     <a href="#" class="grey-button reward-button"><span>Jetzt honorieren!</span></a>
+                    {{* pay_what_you_like *}}
 
 {{*** WERBUNG ***}}                    
 {{ include file="_werbung/article-sidebar-3-backpage.tpl" }}

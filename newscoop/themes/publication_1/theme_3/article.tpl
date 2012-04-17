@@ -1,3 +1,3 @@
-{{ if $gimme->article->type_name == "news" }}
+{{ if $gimme->article->type_name == "news" || $gimme->article->type_name == "newswire" }}
 {{ render file="_article/article-news.tpl" }}
 {{ /if }}
