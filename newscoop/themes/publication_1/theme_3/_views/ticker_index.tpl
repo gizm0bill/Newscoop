@@ -32,11 +32,12 @@ $(function() {
 </script>
 {{/block}}
 
-{{block section}}
+{{block top}}
 <ul class="top-filter">
-    <li>News</li>
-    <li>Quelle</li>
-    <li>veröffentlicht</li>
+    <li class="filter">Filter</li>
+    <li class="title">Ticker</li>
+    <li class="type">Quelle</li>
+    <li class="time">Veröffentlicht</li>
 </ul>
 {{/block}}
 

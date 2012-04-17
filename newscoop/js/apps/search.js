@@ -205,7 +205,6 @@ var DocumentCollection = Backbone.Collection.extend({
         }
 
         facets['article'] = facets['news'] + facets['newswire'];
-
         return facets;
     }
 });
@@ -305,9 +304,37 @@ var DocumentListView = Backbone.View.extend({
 });
 
 /**
+ * Base filter view
+ */
+var FilterView = Backbone.View.extend({
+    /**
+     * Disable filter for given item
+     *
+     * @param {object} li
+     * @return {void}
+     */
+    disableFilter: function(li) {
+        li.find('a').hide();
+        li.find('span').detach();
+        $('<span />').text(li.find('a').text()).appendTo(li);
+    },
+
+    /**
+     * Enable filter for given item
+     *
+     * @param {object} li
+     * @return {void}
+     */
+    enableFilter: function(li) {
+        li.find('span').detach();
+        li.find('a').show();
+    }
+});
+
+/**
  * Type filter view
  */
-var TypeFilterView = Backbone.View.extend({
+var TypeFilterView = FilterView.extend({
     events: {
         'click a': 'filter'
     },
@@ -326,23 +353,19 @@ var TypeFilterView = Backbone.View.extend({
         }
 
         var facets = this.collection.facets;
+        var view = this;
         $(this.el).find('a').not(':first').each(function() {
             var type = $(this).attr('href').slice(1);
             if (!facets[type]) {
-                $(this).closest('li').addClass('inactive');
+                view.disableFilter($(this).closest('li'));
             } else {
-                $(this).closest('li').removeClass('inactive');
+                view.enableFilter($(this).closest('li'));
             }
         });
     },
 
     filter: function(e) {
         e.preventDefault();
-
-        if ($(e.target).closest('li').hasClass('inactive')) {
-            return;
-        }
-
         this.collection.type = e.target.hash.slice(1);
         this.collection.start = null;
         router.navigate(this.collection.nav(), {trigger: true});
@@ -352,7 +375,7 @@ var TypeFilterView = Backbone.View.extend({
 /**
  * Date filter view
  */
-var DateFilterView = Backbone.View.extend({
+var DateFilterView = FilterView.extend({
     events: {
         'click a': 'filter',
         'click input[type=submit]': 'filterRange'
@@ -452,7 +475,7 @@ var PaginationView = Backbone.View.extend({
 /**
  * Base ticker filter view
  */
-var TickerFilterView = Backbone.View.extend({
+var TickerFilterView = FilterView.extend({
     events: {
         'click a': 'filter'
     },
@@ -485,12 +508,13 @@ var TickerFilterView = Backbone.View.extend({
      * @return {void}
      */
     setInactive: function(blacklist, selected) {
+        var view = this;
         $(this.el).find('li').each(function() {
             var value = $(this).find('a').first().attr('href').slice(1);
             if (selected in blacklist && value in blacklist[selected]) {
-                $(this).addClass('inactive');
+                view.disableFilter($(this));
             } else {
-                $(this).removeClass('inactive');
+                view.enableFilter($(this));
             }
         });
     },
@@ -503,11 +527,6 @@ var TickerFilterView = Backbone.View.extend({
      */
     filter: function(e) {
         e.preventDefault();
-
-        if ($(e.target).closest('li').hasClass('inactive')) {
-            return;
-        }
-
         var filter = $(e.target).attr('href').slice(1);
         this.collection[this.param] = filter ? filter : null;
         this.collection.start = null;

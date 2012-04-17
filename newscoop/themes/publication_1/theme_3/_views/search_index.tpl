@@ -24,9 +24,10 @@ $(function() {
 </script>
 {{/block}}
 
-{{block section}}
+{{block top}}
 <ul class="top-filter">
-    <li>
+    <li class="filter">Filter</li>
+    <li class="title">
         <form id="search-form">
         <label>Sucheresultate für</label>
         <fieldset>
@@ -36,7 +37,7 @@ $(function() {
         <small style="font-weight: normal;padding-left:3px" id="did-you-mean">Did you mean: <a href="#"></a>?</small>
         </form>
     </li>
-    <li>Typ</li>
-    <li id="sort-latest">veröffentlicht</li>
+    <li class="type">Typ</li>
+    <li id="sort-latest" class="time">veröffentlicht</li>
 </ul>
 {{/block}}

@@ -40,6 +40,7 @@ class Action_Helper_Smarty extends Zend_Controller_Action_Helper_Abstract
             ->addScriptPath(APPLICATION_PATH . '/views/scripts/')
             ->addScriptPath(APPLICATION_PATH . "/../themes/{$themePath}/_views");
 
+        $controller->view->addPath(APPLICATION_PATH . "/../themes/{$themePath}");
         $controller->view->addPath(APPLICATION_PATH . "/../themes/{$themePath}/_views");
 
         $controller->getHelper('viewRenderer')
