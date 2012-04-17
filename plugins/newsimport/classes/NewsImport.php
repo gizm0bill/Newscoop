@@ -506,6 +506,44 @@ class NewsImport
             $article_data->setProperty('Flocation_id', $one_event['location_id']);
 
             if ($scr_type == $art_type) {
+                // date_time_data => movie_screening
+                //$cur_screening_dates = array();
+                $em = Zend_Registry::get('container')->getService('em');
+                $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'movie_screening')) as $one_screening_entry) {
+                    //$cur_screening_dates[] = date_format($one_screening_entry->getStartDate(), 'Y-m-d');
+                    $cur_screening_date = date_format($one_screening_entry->getStartDate(), 'Y-m-d');
+                    //$one_scr_start_date = $em->getStartDate();
+                    //if ($one_screening_date >= $today_date_str) {
+                        $em->remove($one_screening_entry);
+                    //}
+                }
+
+                foreach ($one_event['date_time_data'] as $one_scr_date => $one_date_screenings) {
+                    if (empty($one_date_screenings)) {
+                        continue;
+                    }
+                    foreach ($one_date_screenings as $one_screening) {
+                        if (!isset($one_screening['time'])) {
+                            continue;
+                        }
+                        $one_scr_time = $one_screening['time'];
+                        $one_scr_lang = (isset($one_screening['lang'])) ? $one_screening['lang'] : '';
+                        $one_scr_flag = (isset($one_screening['flag'])) ? $one_screening['flag'] : '';
+                        $one_scr_comment = 'lang:' . $one_scr_lang . "\n" . 'flag:' . $one_scr_flag;
+
+                        $scr_datetime = new ArticleDatetime(
+                            array(
+                                'start_date' => $one_scr_date,
+                                'end_date' => $one_scr_date,
+                                'start_time' => $one_scr_time,
+                                'recurring' => false,
+                            )
+                        );
+                        $repository->add($scr_datetime, $article->getArticleNumber(), 'movie_screening', false, false, array('eventComment' => $one_scr_comment));
+                    }
+                }
+
                 $f_movie_key = (isset($one_event['movie_key']) && (!empty($one_event['movie_key']))) ? $one_event['movie_key'] : '';
                 $article_data->setProperty('Fmovie_key', $f_movie_key);
 
@@ -700,7 +738,7 @@ class NewsImport
                         $newest_date = $one_date['date'];
                     }
 
-                    //$use_datetime = new ArticleDatetimeHelper(
+                    //$use_datetime = new ArticleDatetimeHelper();
                     $use_datetime = new ArticleDatetime(
                         array(
                             'start_date' => $one_date['date'],
@@ -782,6 +820,7 @@ class NewsImport
             $article_data->setProperty('Flanguages', $one_event['languages']);
 
             $article_data->setProperty('Fminimal_age', $one_event['minimal_age']);
+            $article_data->setProperty('Fminimal_age_category', (isset($one_event['minimal_age_category'])) ? $one_event['minimal_age_category'] : '');
 
             if (!$uses_multidates) {
                 $article_data->setProperty('Fcanceled', ($one_event['canceled'] ? 'on' : 'off'));
@@ -1403,6 +1442,11 @@ class NewsImport
         );
 
         foreach ($p_eventSources as $one_source_name => $one_source) {
+            if (!array_key_exists($p_newsFeed, $p_eventSources)) {
+                echo $p_newsFeed.':none'."\n";
+                break;
+            }
+
             if ((!empty($p_newsFeed)) && ($one_source_name != $p_newsFeed)) {
                 continue;
             }
@@ -1442,9 +1486,11 @@ class NewsImport
                 $one_source['section_number'] = 0 + $sp_section_number;
             }
             if (0 >= $one_source['publication_id']) {
+                echo $one_source_name.':none'."\n";
                 continue;
             }
             if (0 >= $one_source['section_number']) {
+                echo $one_source_name.':none'."\n";
                 continue;
             }
             if (0 >= $one_source['issue_number']) {
