@@ -43,11 +43,17 @@
                 </nav>
 
 {{ /local }}
-                
+
+{{* SEARCH BOX *}}                
                 <fieldset>
-                    <input type="text" value="" />
-                    <button>Go</button>
+{{ search_form template="search.tpl" submit_button="&nbsp;" button_html_code="style=\"display: none\""  html_code="onclick=\"return asSubmit();\"" }}
+    {{ camp_edit object="search" attribute="keywords" html_code="id=\"search-field\" placeholder=\"Webcode, Stichworte\"" }}
+    <button>Go</button>
+    <input type="hidden" name="f_search_articles" />
+    <input type="hidden" name="f_search_level" value="0" />
+{{ /search_form }}                    
                 </fieldset>
+                
             </div><!-- / Main Nav -->
             
         </div>

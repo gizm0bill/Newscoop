@@ -73,7 +73,7 @@
 {{ include file="_werbung/front-blogs-sidebar.tpl" }}
 
 {{*** pay what you like ***}}   
-{{ include file="_tpl/sidebar-honorieren.tpl" }}                
+{{ include file="_werbung/sidebar-honorieren.tpl" }}                
             
             </aside><!-- / Sidebar -->
             
