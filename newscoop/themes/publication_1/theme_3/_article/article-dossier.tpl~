@@ -7,6 +7,8 @@
 {{ include file="_tpl/header-omnibox.tpl" }}
         
 {{ include file="_tpl/header.tpl" }}
+
+{{ assign var="curnum" value=$gimme->article->number }}
         
         <div class="content-box full-size clearfix">
             <section>
@@ -71,22 +73,25 @@
 
                 <div class="mobile-list-view">
 
-{{ list_related_articles }}                            
+{{ list_related_articles }}  
+{{ if $gimme->current_list->index lte "3" }}                          
                     <article>
                         <header>
                             <p><a href="#">Schweiz</a></p>
                         </header>
                         <figure class="left">
-                            <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a>
+                            <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
                         </figure>
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         <p>{{ include file="_tpl/admin_frontpageedit.tpl" }} 
   {{ if $gimme->article->type_name == "news" }}
-    {{ $gimme->article->teaser|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ $gimme->article->teaser|strip_tags }}
     {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }}
+  
   {{ elseif $gimme->article->type_name == "newswire" }}
-    {{ $gimme->article->DataLead|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
+    {{ $gimme->article->DataLead|strip_tags }}
     {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} 
+
   {{ elseif $gimme->article->type_name == "blog" }}
     {{ $gimme->article->lede|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
     {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} 
@@ -94,89 +99,100 @@
 <a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a>  
   								</p>
                     </article>
+{{ /if }}                    
 {{ /list_related_articles }}                    
                 
                 </div>
-                
-                <article>
-                    <header class="top-line">
-                        <p><em>Werbung</em></p>
-                    </header>
-                    <figure>
-                    	<a href="#"><img src="pictures/werbung-content-1.png" alt="" /></a>
-                    </figure>
-                </article>
-                
-            	<div class="top-line clearfix">
-                
+
+{{*** werbung ***}}   
+{{ include file="_werbung/article-dossier-maincol.tpl" }}
+
+{{ list_related_articles columns="3" }}
+{{ if $gimme->current_list->index gt "3" }}
+{{ if $gimme->current_list->index == "4" }}                
+            	<div class="top-line clearfix slideshow">
+               <div class="slides">            	
+{{ /if }}
+{{ if $gimme->current_list->column == "1" }}                                       
+                    <div class="slide-item">
+{{ /if }}                    
                     <article>
                         <header>
                             <p><a href="#">Schweiz</a></p>
                         </header>
-                        <h2><a href="#">Keine politischen Gegengeschäfte beim sdfsd Kauf erreicht</a></h2>
+                        <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                     </article>
                     
-                    <article>
-                        <header>
-                            <p><a href="#">Schweiz</a></p>
-                        </header>
-                        <h2><a href="#">Keine politischen Gegengeschäfte beim </a></h2>
-                    </article>
-                    
-                    <article>
-                        <header>
-                            <p><a href="#">Schweiz</a></p>
-                        </header>
-                        <h2><a href="#">Keine politischen</a></h2>
-                    </article>
-                    
+{{ if $gimme->current_list->column == "3" || $gimme->current_list->at_end }}
+                    </div><!-- /.slide-item -->
+{{ /if }}                    
+
+{{ if $gimme->current_list->at_end }}
+                </div><!-- /.slides -->
                     <ul class="paging content-paging">
-                        <li><a class="grey-button" href="#">«</a></li>
-                        <li>1/12</li>
-                        <li><a class="grey-button" href="#">»</a></li>
-                    </ul>
-                
+                        <li><a class="grey-button prev" href="#">«</a></li>
+                        <li class="caption"></li>
+                        <li><a class="grey-button next" href="#">»</a></li>
+                    </ul>                 
                 </div>
+{{ /if }}         
+{{ /if }}       
+{{ /list_related_articles }}
             
             </section>
             
             <aside>
-            
-            	<article>
+                
+ {{ if $gimme->article->has_map }}                
+                <article>
                     <figure>
-                        <div class="map-holder"><iframe width="304" height="180" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=basel&amp;sll=37.0625,-95.677068&amp;sspn=46.36116,112.412109&amp;t=m&amp;ie=UTF8&amp;hq=&amp;hnear=Basle,+Basel-Stadt,+Switzerland&amp;z=13&amp;ll=47.557421,7.592573&amp;output=embed"></iframe></div>
-                        <p>Stadion St. Jakob</p>
-                    	<iframe width="306" height="185" src="http://www.youtube.com/embed/yiIc0wee-HQ" frameborder="0" allowfullscreen></iframe>
-                    	<p>Video zum Dossier</p>
+                    		<div class="map-holder">
+                        {{ map show_locations_list="false" show_reset_link="false" width="300" height="250" auto_zoom=false }}
+                        </div>
                     </figure>
                 </article>
-            
-            	<article>
-                	<header>
-                    	<p><em>Werbung</em></p>
-                    </header>
-                    <span class="werbung">
-                    	<img src="pictures/werbung-sidebar.jpg"  rel="resizable" alt="" />
-                    </span>
+{{ /if }}                
+                
+{{ if !($gimme->article->youtube_shortcode == "") }}
+					 <article>                         
+                    	 <figure>
+                      <script type="text/javascript">
+var embedParts="{{ $gimme->article->youtube_shortcode }}".split("/");
+document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"229\" src=\"http://www.youtube.com/embed/"+embedParts[3]+"?wmode=opaque\" frameborder=\"0\" allowfullscreen></iframe>");
+</script>
+                        <p>{{ $gimme->article->youtube_video_description }}</p>
+                    </figure>
                 </article>
-            
+{{ /if }}       
+       
+{{*** werbung ***}}                
+{{ include file="_werbung/article-dossier-sidebar.tpl" }}
+
+
+{{*** recommended links ***}}
+{{ if !($gimme->article->linklist == "") }}            
             	<article>
                 	<header>
                     	<p>Interessante Links zum Thema</p>
                     </header>
+                    
+{{ $links=str_replace("<p>", "", explode("</p>", str_replace("<div>", "", str_replace("</div>", "", $gimme->article->linklist)))) }}
+{{ foreach $links as $link }}
+{{ $linkAry=explode("- ", $link, 2) }}
+{{ if count($linkAry) == 2 }}     
+               
                     <section class="recommend">
-                        <p>Bei Spox.com gibt es ein Video vom Eklat an der Pressekonferenz nach dem Boxkampf Klitschko vs. Chisora. <a href="#">Schlägerei! Riesen-Skandal nach Klitschko-Sieg</a></p>
+                        <p>{{ substr($linkAry[1], 0) }} {{ $linkAry[0] }}</p>
                     </section>
-                    <section class="recommend">
-                        <p>Bei Spox.com gibt es ein Video vom Eklat an der Pressekonferenz nach dem Boxkampf Klitschko vs. Chisora. <a href="#">Schlägerei! Riesen-Skandal nach Klitschko-Sieg</a></p>
-                    </section>
-                    <section class="recommend">
-                        <p>Bei Spox.com gibt es ein Video vom Eklat an der Pressekonferenz nach dem Boxkampf Klitschko vs. Chisora. <a href="#">Schlägerei! Riesen-Skandal nach Klitschko-Sieg</a></p>
-                    </section>
+
+{{ /if }}
+{{ /foreach }}                    
+
                 	<footer>
                     	<a href="#" class="more">Link vorschlagen</a>
                     </footer>
                 </article>
+{{ /if }}
             
             </aside>
         
@@ -187,6 +203,9 @@
             <h3 class="title">Weitere Dossiers</h3>
             
         	<div class="three-columns clearfix">
+        	
+{{ list_articles length="6" ignore_issue="true" ignore_section="true" constraints="type is dossier number not $curnum" order="bysection desc" }} 
+       	
                 <article>
                     <figure>
                         <a href="#"><img src="pictures/top-news-1.jpg" rel="resizable" alt="" /></a>
@@ -194,41 +213,9 @@
                         <b>Europa in der Krise</b></big>
                     </figure>
                 </article>
-                <article>
-                    <figure>
-                        <a href="#"><img src="pictures/top-news-1.jpg" rel="resizable" alt="" /></a>
-                        <big>Dossier:<br />
-                        <b>Europa in der Krise</b></big>
-                    </figure>
-                </article>
-                <article>
-                    <figure>
-                        <a href="#"><img src="pictures/top-news-1.jpg" rel="resizable" alt="" /></a>
-                        <big>Dossier:<br />
-                        <b>Europa in der Krise</b></big>
-                    </figure>
-                </article>
-                <article>
-                    <figure>
-                        <a href="#"><img src="pictures/top-news-1.jpg" rel="resizable" alt="" /></a>
-                        <big>Dossier:<br />
-                        <b>Europa in der Krise</b></big>
-                    </figure>
-                </article>
-                <article>
-                    <figure>
-                        <a href="#"><img src="pictures/top-news-1.jpg" rel="resizable" alt="" /></a>
-                        <big>Dossier:<br />
-                        <b>Europa in der Krise</b></big>
-                    </figure>
-                </article>
-                <article>
-                    <figure>
-                        <a href="#"><img src="pictures/top-news-1.jpg" rel="resizable" alt="" /></a>
-                        <big>Dossier:<br />
-                        <b>Europa in der Krise</b></big>
-                    </figure>
-                </article>
+
+{{ /list_articles }}
+
             </div>
         	
         </div>
