@@ -26,90 +26,87 @@
                 </article>
 {{ /list_articles }}
                 
-                <div class="mobile-list-view clearfix">
+                <div class="mobile-list-view clearfix slideshow">
 
-{{ list_articles length="3" constraints="type is blog" }}                 
+{{ list_articles columns="3" constraints="type is blog" }}
+{{ if $gimme->current_list->at_beginning }}
+						  <div class="slides">  
+{{ /if }}						  
+{{ if $gimme->current_list->column == "1" }} 
+						  <div class="slide-item">  
+{{ /if }}						               
                     <article>
                         <header>
-                            <p><a href="#">International</a></p>
+                            <p>{{ assign var="onedayback" value=$smarty.now-86400 }}
+                                {{ assign var="oneback" value=$onedayback|date_format:"%Y-%m-%d" }}
+                                {{ if $gimme->article->publish_date lt $oneback }}
+{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y" }}
+                                {{ else }}
+{{ $diff=date_diff(date_create('now'), date_create($gimme->article->publish_date)) }}
+Vor
+{{ if $diff->y }} {{ $diff->y }} {{ if $diff->y > 1 }}Jahre{{ else }}Jahr{{ /if }}{{ /if }}
+{{ if $diff->m }} {{ $diff->m }} {{ if $diff->m > 1 }}Monate{{ else }}Monat{{ /if }}{{ /if }}
+{{ if $diff->d }} {{ $diff->d }} {{ if $diff->d > 1 }}Tagen{{ else }}Tag{{ /if }}{{ /if }}
+{{ if $diff->h && (!$diff->d || empty($short)) }} {{ $diff->h }} Std.{{ /if }}
+{{ if !$diff->d && $diff->i && (empty($short) || !$diff->h) }} {{ $diff->i }} Min.{{ /if }}
+{{ if !$diff->d && !$diff->h && !$diff->i && $diff->s }} {{ $diff->s }} Sek.{{ /if }}
+                                {{ /if }}</p>
                         </header>
                         <figure class="left">
-                            <a href="{{ url options="article" }}"><img src="pictures/blog-img-1.jpg" rel="resizable" alt="" /></a>
+                            <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
                         </figure>
-                        <h2><a href="{{ url options="article" }}">Katalanischer Künstler Antoni Tàpies ist tot</a></h2>
-                        <p>Der spanische Maler Antoni Tàpies, einer der bedeutendsten abstrakten Künstler der Gegenwart, ist tot. Wie die Stadtverwaltung von Barcelona in der Nacht zim Alter von 88 Jahren. Von sda. <a href="#">Weiterlesen</a>  <a href="#" class="comments">1 Kommentar</a></p>
+                        <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
+                        <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if !($gimme->article->lede|strip_tags:false|strip == "") }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->body|strip_tags:false|strip|truncate:200 }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} <a href="{{ url options="article" }}">Weiterlesen</a>  <a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }} Kommentar(e)</a></p>
                     </article>
-{{ /list_articles }}                    
-                
+{{ if $gimme->current_list->column == "3" || $gimme->current_list->at_end }} 
+						  </div>  
+{{ /if }}                                        
+{{ if $gimme->current_list->at_end }} 
+                   </div><!-- /.slides -->               
                     <ul class="paging content-paging">
-                        <li><a class="grey-button" href="#">«</a></li>
-                        <li>1/12</li>
-                        <li><a class="grey-button" href="#">»</a></li>
+                        <li><a class="grey-button prev" href="#">«</a></li>
+                        <li class="caption"></li>
+                        <li><a class="grey-button next" href="#">»</a></li>
                     </ul>
-                
+{{ /if }}                    
+{{ /list_articles }}                
                 </div>
 
             </section><!-- / Main Section -->
             
             <aside>
                 
-                <article>
+{{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
+                
+{{ list_articles length="1" constraints="type is bloginfo" }} 
+{{ list_article_authors }}                
+                <article class="regular-box">                
                 	<header>
-                    	<p>Blog-Partner</p>
+                    	<p>Autor: {{ if $gimme->author->user->is_admin }}{{ $gimme->author->name }}{{ else }}{{ $gimme->author->user->uname }}{{ /if }}</p>
                     </header>
-                    <ul class="partner-list">
-                    	<li>
-                        	<a href="#"><img src="pictures/partner-logo-1.jpg" alt="" /></a>
-                        </li>
-                    </ul>
+                    {{ if $gimme->author->user->defined }}
+                    <img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" />
+                    {{ if !empty($gimme->author->user['bio']) }}
+                    <p>{{ $gimme->author->user['bio']|bbcode }}</p>
+                    {{ else }}
+                    <p>...</p>
+                    {{ /if }}
+                    {{ else }}
+                    <img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width="120" />
+                    <p>{{ $gimme->author->biography->text|bbcode }}</p>
+                    {{ /if }}
                 </article>
+{{ /list_article_authors }}
+{{ /list_articles }}
                 
-                <article class="regular-box">
-                	<header>
-                    	<p>Autor: David Bauer</p>
-                    </header>
-                    <img src="pictures/author-img-1.jpg" alt="" />
-                    <p>Redakteur bei der Badischen Zeitung, für die er zehn Jahre lang arbeitete, zuletzt als Sportredakteur. </p>
-                </article>
+{{ include file="_tpl/sidebar-blog-rss.tpl" }}                
                 
-                <article>
-                	<header>
-                    	<p>Abonnieren</p>
-                    </header>
-                    <p><a href="#" class="rss">Bohnenkult RSS-Feed</a></p>
-                </article>
+{{ include file="_tpl/sidebar-community.tpl" }}
+
+{{*** WERBUNG ***}}                    
+{{ include file="_werbung/section-blog-sidebar.tpl" }}                
                 
-                <article class="community omni-corner-box">
-                	<header>
-                    	<p>TagesWoche Community</p>
-                    </header>
-                    <ul class="item-list">
-                        <li class="comment"><a href="#">Reinhard Arens ist gerade Mitglied geworden</a></li>
-                        <li class="omni"><a href="#">Neuer Kommentar zu Barak Obama in Haft: «Hilfe nicht - Ein sehr widerlicher Gedanke, da [...]</a></li>
-                        <li class="comment"><a href="#">Manuel Bürger: Neuer Blogeintrag</a></li>
-                        <li class="comment"><a href="#">Um 17:00Uhr: Verlosung 20 Karten für Stones mit 50% Rabatt</a></li>
-                        <li class="omni"><a href="#">Andrea1980 ist gerade Mitglied geworden</a></li>
-                        <li class="omni"><a href="#">Maria Magdalena: Neuer Blogeintrag</a></li>
-                    </ul>
-                </article>
-                
-                <article>
-                	<header>
-                    	<p><em>Werbung</em></p>
-                    </header>
-                    <span class="werbung">
-                    	<img src="pictures/werbung-sidebar.jpg"  rel="resizable" alt="" />
-                    </span>
-                </article>
-                
-                <article class="regular-box">
-                    <header>
-                        <p>Tageswoche honorieren</p>
-                    </header>
-                    <p>Alle Artikel auf tageswoche.ch sind feri verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, können Sie uns freiwillig unterstützen. Sie entscheiden wieviel Sie bezahlen. Danke, dass Sie uns helfen, tageswoche.ch in Zukunft besser zu machen.</p>
-                </article>
-                
-                <a class="grey-button reward-button" href="#"><span>Jetzt honorieren!</span></a>
+{{ include file="_tpl/sidebar-honorieren.tpl" }}
             
             </aside><!-- / Sidebar -->
             
@@ -119,42 +116,23 @@
             
             <article>
             	<header class="link-back">
-                	<p><a href="#">Blogs</a></p>
+                	<p><a href="{{ url options="issue" }}">Blogs</a></p>
                 </header>
                 <ul class="post-list">
+{{ list_articles length="6" ignore_publication="true" ignore_issue="true" ignore_section="true" order="bypublishdate desc" constraints="type is blog" }}                
+
+{{ $bloginfo=$gimme->article->get_bloginfo() }}
+
                 	<li>
-                    	<h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                        <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                        <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
+                    	<h4><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></h4>
+                        <p>« {{$gimme->article->body|regex_replace:'#<div class="cs_img".*</div>#U':''|strip_tags|trim|truncate:100:" [...]"}} » <a href="{{ url options="article" }}">Lesen</a> | <a href="{{ url options="section" }}">zum Blog</a></p>
+                        <span class="meta">{{ if $bloginfo }}{{ if $gimme->article->get_bloginfo()->image(1)->imageurl }}<img src="{{ $gimme->article->get_bloginfo()->image(1)->imageurl }}" alt="{{ $gimme->section->name }}" width="60" />{{ /if }}{{ /if }} {{ include file="_tpl/relative-date.tpl" date=$gimme->article->publish_date }} auf {{ $gimme->section->name }}</span>
                     </li>
-                	<li>
-                    	<h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                        <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                        <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                    </li>
-                	<li>
-                    	<h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                        <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                        <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                    </li>
-                	<li>
-                    	<h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                        <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                        <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                    </li>
-                	<li>
-                    	<h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                        <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                        <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                    </li>
-                	<li>
-                    	<h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                        <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                        <span class="meta"><img src="pictures/tiny-thumb.jpg" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                    </li>
+
+{{ /list_articles }}
                 </ul>
                 <footer>
-                	<a href="#" class="more">Zur den Blogs»</a>
+                	<a href="{{ url options="issue" }}" class="more">Zur den Blogs»</a>
                 </footer>
             </article>
         	
