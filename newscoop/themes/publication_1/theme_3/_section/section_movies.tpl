@@ -27,6 +27,32 @@
     {{ /if }}
 {{ else }}
 
+
+{{ assign var="make_vimeo" 0 }}
+{{ assign var="req_vimeo_key" "" }}
+{{ if !empty($smarty.get.vimeo) }}
+    {{ assign var="make_vimeo" 1 }}
+    {{ assign var="req_vimeo_key" $smarty.get.vimeo|replace:" ":"\\ "|replace:'"':"" }}
+    {{* assign var="req_vimeo_key" 24936756 *}}
+{{ /if }}
+{{ if $make_vimeo }}
+    {{ assign var="vimeo_height" 310 }}
+    {{ assign var="vimeo_width" 550 }}
+    <html><body style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px">
+    <!--<div>-->
+        <div id="vimeo_trailer" class="vimeo_trailer_block" style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px">
+        <!--<iframe src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width_show }}" height="{{ $vimeo_height_show }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>-->
+        <iframe style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px" src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width }}" height="{{ $vimeo_height }}" frameborder="0">
+        </iframe>
+        </div>
+    <!--</div>-->
+    </body></html>
+{{ else }}
+
+
+
+
+
 {{ include file="_tpl/_html-head.tpl" }}
 
 <style type="text/css">
@@ -123,6 +149,28 @@ span span.title-box {
 </style>
 
 <script type="text/javascript">
+jQuery(function($){
+  $.datepicker.regional['de'] = {
+    closeText: 'schließen',
+    prevText: '&#x3c;zurück',
+    nextText: 'Vor&#x3e;',
+    currentText: 'heute',
+    monthNames: ['Januar','Februar','März','April','Mai','Juni',
+    'Juli','August','September','Oktober','November','Dezember'],
+    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+    'Jul','Aug','Sep','Okt','Nov','Dez'],
+    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+    weekHeader: 'Wo',
+    dateFormat: 'dd.mm.yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''};
+  $.datepicker.setDefaults($.datepicker.regional['de']);
+});
+
 window.list_spec = {
     type: '',
     date: '',
@@ -327,6 +375,72 @@ function movie_set_recom(movie_id, state) {
         $("#" + movie_id).removeClass("stared");
     }
 };
+
+var lang_seen_last = 'all';
+
+function show_lang(spec) {
+//return;
+    if ('last' == spec) {
+        spec = lang_seen_last;
+    }
+    else {
+        lang_seen_last = spec;
+    }
+
+    if ('all' == spec) {
+        $(".movie_lang").show();
+    }
+    if ('de' == spec) {
+        $(".has_not_d").hide();
+        $(".has_d").show();
+    }
+    if ('dial' == spec) {
+        $(".has_not_k").hide();
+        $(".has_k").show();
+    }
+    if ('fr' == spec) {
+        $(".has_not_f").hide();
+        $(".has_f").show();
+    }
+    if ('subt' == spec) {
+        $(".has_not_t").hide();
+        $(".has_t").show();
+    }
+
+    $('.movie_sel').removeClass('active');
+    $('#movie_sel_' + spec).addClass('active');
+};
+
+function show_trailer(vimeo_id) {
+return;
+
+    var vimeo_width = "" + 640;
+    var vimeo_height = "" + 344;
+
+    var vimeo_id_d = '24936756';
+
+    var trailer_content = '';
+    trailer_content += '<div id="vimeo_trailer_hidden_' + vimeo_id + '" style="display:none">';
+    trailer_content += '<a href="#vimeo_trailer" id="vimeo_trailer_link_inner_' + vimeo_id + '">Trailer</a>';
+    trailer_content += '</div>';
+    trailer_content += '<div id="vimeo_trailer_' + vimeo_id + '">';
+    trailer_content += '<iframe src="http://player.vimeo.com/video/' + vimeo_id_d + '?title=0&amp;byline=0&amp;portrait=0" width="' + vimeo_width + '" height="' + vimeo_height + '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>';
+    trailer_content += '</iframe>';
+    trailer_content += '</div>';
+
+    $("#vimeo_trailer_outer_" + vimeo_id).html("&nbsp;");
+    $("#vimeo_trailer_outer_" + vimeo_id).html(trailer_content);
+
+    $("#vimeo_trailer_link_inner_" + vimeo_id).fancybox({
+        type: 'iframe',
+        width: 640,
+        height: 400
+    });
+
+    $("#vimeo_trailer_outer_" + vimeo_id).show();
+
+    $("#vimeo_trailer_link_inner_" + vimeo_id).trigger('click');
+};
 </script>
 
 <body>
@@ -345,6 +459,13 @@ function movie_set_recom(movie_id, state) {
 
 
             <aside>
+
+                <ul style="display:none">
+                            <li>
+                              <label for="wann">Wann</label>
+                                <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
+                            </li>
+                </ul>
                 
 <!--
                 <h3>Sortieren nach</h3>
@@ -440,10 +561,11 @@ function movie_set_recom(movie_id, state) {
                 
                 <h3>Sprache</h3>
                 <ul class="categories">
-                    <li class="active"><a href="#">Alle</a></li>
-                    <li><a href="#" onClick="alert('Not implemented.'); return false;">Deutsch</a></li>
-                    <li><a href="#" onClick="alert('Not implemented.'); return false;">Französisch</a></li>
-                    <li><a href="#" onClick="alert('Not implemented.'); return false;">Original + Untertitel</a></li>
+                    <li id="movie_sel_all" class="active movie_sel movie_sel_all"><a href="#" onClick="show_lang('all'); return false;">Alle</a></li>
+                    <li id="movie_sel_de" class="movie_sel movie_sel_de"><a href="#" onClick="show_lang('de'); return false;">Deutsch</a></li>
+                    <li id="movie_sel_dial" class="movie_sel movie_sel_dial"><a href="#" onClick="show_lang('dial'); return false;">Dialekt</a></li>
+                    <li id="movie_sel_fr" class="movie_sel movie_sel_fr"><a href="#" onClick="show_lang('fr'); return false;">Französisch</a></li>
+                    <li id="movie_sel_subt" class="movie_sel movie_sel_subt"><a href="#" onClick="show_lang('subt'); return false;">Original + Untertitel</a></li>
                 </ul>
                 
 <!--
@@ -653,9 +775,10 @@ function parse_date_text($date_time_text)
 
     $cur_date = null;
 
-    $gl_has_d = false;
-    $gl_has_f = false;
-    $gl_has_t = false;
+    $gl_has_d = false; // de
+    $gl_has_k = false; // dialekt
+    $gl_has_f = false; // fr
+    $gl_has_t = false; // subtitles
 
     $date_time_text = strip_tags(str_replace(array('<'), array("\n<"), $date_time_text));
     foreach (explode("\n", $date_time_text) as $one_date_time_str) {
@@ -685,6 +808,7 @@ function parse_date_text($date_time_text)
         $flag_str = ((3 <= $time_info_size) ? $time_info[2] : '');
 
         $has_d = false;
+        $has_k = false;
         $has_f = false;
         $has_t = false;
 //echo 'xxx ' . $lang_str . ' yyy';
@@ -692,10 +816,13 @@ function parse_date_text($date_time_text)
             if (('D' == substr($lang_str,0,1)) && ('Di' != substr($lang_str,0,2))) {
                 $has_d = true;
             }
+            if ('dialekt' == strtolower($lang_str)) {
+                $has_k = true;
+            }
             if ('F' == substr($lang_str,0,1)) {
                 $has_f = true;
             }
-            if (!$has_d) {
+            if ((!$has_d) && (!$has_k)) {
                 foreach(explode('/', $lang_str) as $lang_part) {
                     if ('d' == $lang_part) {
                         $has_t = true;
@@ -706,16 +833,17 @@ function parse_date_text($date_time_text)
         }
 
         $gl_has_d = $gl_has_d || $has_d;
+        $gl_has_k = $gl_has_k || $has_k;
         $gl_has_f = $gl_has_f || $has_f;
         $gl_has_t = $gl_has_t || $has_t;
 
-        $dates[$cur_date][] = array('time' => $time_str, 'lang' => $lang_str, 'flag' => $flag_str, 'has_d' => ($has_d ? 1 : 0), 'has_f' => ($has_f ? 1 : 0), 'has_t' => ($has_t ? 1 : 0));
+        $dates[$cur_date][] = array('time' => $time_str, 'lang' => $lang_str, 'flag' => $flag_str, 'has_d' => ($has_d ? 1 : 0), 'has_k' => ($has_k ? 1 : 0), 'has_f' => ($has_f ? 1 : 0), 'has_t' => ($has_t ? 1 : 0));
 
     }
 
     ksort($dates);
 //print_r(array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0))));
-    return array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0)));
+    return array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'k' => ($gl_has_k ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0)));
 }
 
 {{ /php }}
@@ -732,7 +860,9 @@ function parse_date_text($date_time_text)
 {{ assign var=today_date $smarty.now|date_format:"%Y-%m-%d" }}
 {{ assign var=condate "" }}
 {{ assign var=condate_real "publish_date is $today_date" }}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" movie_screening="$muldate" }}
+{{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" movie_screening="$muldate" length=5 *}}
+{{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" length=5 *}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" }}
     {{ if $lastmovname != $gimme->article->headline }}
         {{ if "" != $lastmovname }}
                       <script type="text/javascript">
@@ -744,23 +874,30 @@ function parse_date_text($date_time_text)
         {{ /if }}
                           {{ assign var="movie_rank" $movie_rank+1 }}
                           {{* TODO: search for recommended => set stared class *}}
-                      <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} has_not_d has_not_f has_not_t">
+                      <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} movie_lang has_not_d has_not_k has_not_f has_not_t">
                           {{ assign var="movie_desc_len" $gimme->article->description|strip_tags|count_characters:true }}
                           {{ assign var="movie_other_len" $gimme->article->other|strip_tags|count_characters:true }}
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
                           {{ if $gimme->article->has_image(1) }}<figure class="movie_list_thumbnail"><a href="{{ url options="article" }}?region={{ $linkregion }}"><img src="{{ url options="image 1 width 100" }}" alt="{{ $gimme->article->image1->description }}" class="thumbnail" /></a>{{ /if }}
                           {{ if $gimme->article->has_image(1) }}</figure> {{ /if }}
-                          {{ if $gimme->article->movie_trailer_vimeo ne "" }}
-                            <a href="#" class="grey-button trailer-button" onClick="return false;"><span>Trailer anschauen</span></a>
+                            {{* <a href="#" class="grey-button trailer-button" onClick="show_trailer('{{ $gimme->article->movie_trailer_vimeo }}'); return false;"><span>Trailer anschauen</span></a> *}}
+                          {{ assign var="vimeo_trailer_id" $gimme->article->movie_trailer_vimeo }}
+                          {{* assign var="vimeo_trailer_id" 24936756 *}}
+                          {{ if $vimeo_trailer_id ne "" }}
+                            <a href="{{ uri options='section' }}?vimeo={{ $vimeo_trailer_id }}" class="grey-button trailer-button"; return false;"><span>Trailer anschauen</span></a>
                           {{ /if }}
                           {{ assign var="recommended" $gimme->article->recommended }}
                           <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}">{{ $gimme->article->headline }}</a> {{ if $recommended }}<small class="tw_recommended"></small>{{ /if }}</h3>
+                          {{ if $gimme->article->movie_trailer_vimeo ne "" }}
+                            <div style="display:none;" id="vimeo_trailer_outer_{{$gimme->article->movie_trailer_vimeo}}">&nbsp;
+                            </div><!-- vimeo_trailer_outer -->
+                          {{ /if }}
                             <ul class="top-list-details">
                                 {{ assign var="wvrank" $gimme->article->movie_rating_wv }}
                                 {{ if $movie_rating_wv ne "" }}
                                     {{ assign var="wvrank" 0+$wvrank }}
                                     {{ if $movie_rating_wv ne 0 }}
-                                        <li><span>WV Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
+                                        <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
                                 {{ /if }}
                                 {{ if $gimme->article->movie_cast ne "" }}
@@ -810,23 +947,27 @@ function parse_date_text($date_time_text)
         $date_time_arr = parse_date_text($date_time_str);
         $template->assign('date_time_arr',$date_time_arr['dates']);
         $template->assign('movie_lang_d',$date_time_arr['langs']['d']);
+        $template->assign('movie_lang_k',$date_time_arr['langs']['k']);
         $template->assign('movie_lang_f',$date_time_arr['langs']['f']);
         $template->assign('movie_lang_t',$date_time_arr['langs']['t']);
     {{ /php }}
-            <div class="movie-table{{ if 1 == $movie_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $movie_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $movie_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
+            <div class="movie-table movie_lang{{ if 1 == $movie_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $movie_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $movie_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $movie_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
             <div class="data_movie data_movie_{{ $movie_rank }}" style="display:none;">
                 {{ if 1 == $movie_lang_d }}
-                <div>d_{{ $movie_rank }}</div>
+                d_{{ $movie_rank }};
+                {{ /if }}
+                {{ if 1 == $movie_lang_k }}
+                k_{{ $movie_rank }};
                 {{ /if }}
                 {{ if 1 == $movie_lang_f }}
-                <div>f_{{ $movie_rank }}</div>
+                f_{{ $movie_rank }};
                 {{ /if }}
                 {{ if 1 == $movie_lang_t }}
-                <div>t_{{ $movie_rank }}</div>
+                t_{{ $movie_rank }};
                 {{ /if }}
 
                 {{ if $gimme->article->recommended }}
-                <div>r_{{ $movie_rank }}</div>
+                r_{{ $movie_rank }};
                 {{ /if }}
             </div>
                 <ul>
@@ -834,7 +975,10 @@ function parse_date_text($date_time_text)
                         <li>
                             <p>{{ $gimme->article->street }}<br />
                             {{ $gimme->article->zipcode }} {{ $gimme->article->town }}</p>
-                            <p><a href="#">Google Maps</a><br />
+                            <p>
+                            {{ list_article_locations length="1" }}
+                                <a href="http://maps.google.com/maps?t=k&z=15&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Google Maps</a><br />
+                            {{ /list_article_locations }}
                             {{ if  "" != $gimme->article->web }}
                             <a href="{{ $gimme->article->web }}" target="_blank">{{ $gimme->article->web|replace:"http://":"" }}</a>
                             {{ else }}
@@ -844,7 +988,7 @@ function parse_date_text($date_time_text)
                         </li>
                         <li>
                             {{ if  "" != $gimme->article->phone }}
-                            <p>Tel  {{ $gimme->article->phone }} <a href="#" class="info" onClick="alert('wtf here?'); return false;">i</a></p>
+                            <p>Tel  {{ $gimme->article->phone }}{{* <a href="#" class="info" onClick="alert('wtf here?'); return false;">i</a>*}}</p>
                             {{ else }}
                             <p>&nbsp;</p>
                             {{ /if }}
@@ -855,7 +999,7 @@ function parse_date_text($date_time_text)
                         <thead>
                             <tr>
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                            <td class="cinema_screen_list">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                            <td class="cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%e"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
                         {{ /foreach }}
                             </tr>
                         </thead>
@@ -863,13 +1007,14 @@ function parse_date_text($date_time_text)
                         <tbody>
                             <tr>
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                                    <td class="screen_time_list">
+                                    <td class="screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%e"}}">
                                         <!--<ul>-->
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
+                                                    {{ assign var="scr_lang_k" $date_time_day_parts.has_k }}
                                                     {{ assign var="scr_lang_f" $date_time_day_parts.has_f }}
                                                     {{ assign var="scr_lang_t" $date_time_day_parts.has_t }}
-                                                        <li class="{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
+                                                        <li class="movie_lang{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
                                                         <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
 <!--
                                                         <div>
@@ -885,7 +1030,7 @@ function parse_date_text($date_time_text)
                             </tr>
                         </tbody>
                     </table>
-
+            </div>
 {{ /list_articles }}
         {{ if "" != $lastmovname }}
                       <script type="text/javascript">
@@ -918,6 +1063,91 @@ function parse_date_text($date_time_text)
             </section>
 
 <script type="text/javascript">
+function update_movie_props() {
+//alert(1);
+    $(".data_movie").each(function(ind_elm, elm) {
+        var elm_cont = $(elm).html();
+//alert('ec: "' + elm_cont + '"');
+        var elm_cont_arr = elm_cont.split(';');
+        var elm_cont_len = elm_cont_arr.length;
+        for (var ec_ind = 0; ec_ind < elm_cont_len; ec_ind++) {
+            var cur_cont = elm_cont_arr[ec_ind];
+            cur_cont = cur_cont.replace(/\s/gm,'');
+//alert('cc: "' + cur_cont + '"');
+            if (0 == cur_cont.length) {
+                continue;
+            }
+            cur_cont_arr = cur_cont.split('_', 2);
+            if (2 != cur_cont_arr.length) {
+                continue;
+            }
+            cur_cont_key = cur_cont_arr[0];
+            cur_cont_val = cur_cont_arr[1];
+
+            {
+                var movie_prop = cur_cont_key;
+                var movie_id = "#movie_" + cur_cont_val;
+//alert(movie_prop);
+//alert(movie_id);
+                if ('d' == movie_prop) {
+                    $(movie_id).removeClass("has_not_d");
+                    $(movie_id).addClass("has_d");
+                }
+                if ('k' == movie_prop) {
+                    $(movie_id).removeClass("has_not_k");
+                    $(movie_id).addClass("has_k");
+                }
+                if ('f' == movie_prop) {
+                    $(movie_id).removeClass("has_not_f");
+                    $(movie_id).addClass("has_f");
+                }
+                if ('t' == movie_prop) {
+                    $(movie_id).removeClass("has_not_t");
+                    $(movie_id).addClass("has_t");
+                }
+                if ('r' == movie_prop) {
+                    $(movie_id).addClass("stared");
+                }
+            }
+
+        }
+
+/*
+alert($(elm).html());
+        var elm_chlds = $(elm).children();
+alert('l1: ' + elm_chlds.length);
+        $(elm).children(function(ind_chld, chld) {
+            var one_movie_add = $(chld).html();
+alert(one_movie_add);
+            var one_movie_add_arr = one_movie_add.split("_", 2);
+alert('l2: ' + one_movie_add_arr.length);
+            if (2 == one_movie_add_arr.length) {
+                var movie_prop = one_movie_add_arr[0];
+                var movie_id = "#movie_" + one_movie_add_arr[1];
+alert(movie_prop);
+alert(movie_id);
+                if ('d' == movie_prop) {
+                    $(movie_id).removeClass("has_not_d");
+                    $(movie_id).addClass("has_d");
+                }
+                if ('f' == movie_prop) {
+                    $(movie_id).removeClass("has_not_f");
+                    $(movie_id).addClass("has_f");
+                }
+                if ('t' == movie_prop) {
+                    $(movie_id).removeClass("has_not_t");
+                    $(movie_id).addClass("has_t");
+                }
+                if ('r' == movie_prop) {
+                    $(movie_id).addClass("stared");
+                }
+            }
+        });
+        //alert($(elm).html());
+*/
+    });
+};
+
 window.used_date = function(separator, value_only) {
     var when = "" + $("#wann").val();
     when = escape(when.replace(/^\s+|\s+$/g, ""));
@@ -990,6 +1220,13 @@ window.set_cufon_fonts = function() {
     // TODO
 };
 
+
+function show_highlight(date) {
+//alert(date);
+    $('.date_hl_all').removeClass('current');
+    $('.date_hl_' + date).addClass('current');
+};
+
 window.set_list_content = function(data, direct) {
 //alert(data);
 //alert($('#event_movies_results', dom).html());
@@ -1007,6 +1244,21 @@ window.set_list_content = function(data, direct) {
     //Cufon.now(); // TODO!!!
 
     window.set_title_boxes();
+
+    update_movie_props();
+
+    show_lang('last');
+
+    show_highlight(window.list_spec['date']);
+
+    $(".trailer-button").fancybox({
+        type: 'iframe',
+        width: 570,
+        height: 330,
+        modal: false,
+        showCloseButton: true,
+        hideOnContentClick: false
+    });
 };
 
 window.get_basic_path = function() {
@@ -1100,6 +1352,12 @@ $(document).ready(function() {
     $( "#suchen" ).click(function() {
         window.reload();
     });
+
+    $("#date_picker_button_new").hide();
+    $("#top-calendar").hide();
+
+    $(".nav_one").removeClass("active");
+    $("#nav_kino").addClass("active");
 });
 </script>
             
@@ -1111,10 +1369,12 @@ $(document).ready(function() {
     </div><!-- / Wrapper -->   
 
 {{* JAVASCRIPT FOOTER *}}
-{{ include file="_tpl/_footer_javascript.tpl" }}
+{{* include file="_tpl/_footer_javascript.tpl" *}}
 <link rel="stylesheet" href="{{ $view->baseUrl('js/jquery/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" media="screen" />
 <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.address.js' }}"></script>
+<script type="text/javascript" src="{{ uri static_file='_js/libs/fancybox/jquery.fancybox-1.3.4.pack.js' }}"></script>
 
 </body>
 </html>
+{{ /if }}
 {{ /if }}
