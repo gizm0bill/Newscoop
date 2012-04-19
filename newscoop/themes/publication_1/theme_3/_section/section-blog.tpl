@@ -13,7 +13,7 @@
             <section>
             
             	<header class="mobile-header">
-                	<p><a href="#">Blogs</a></p>
+                	<p><a href="{{ url options="issue" }}">Blogs</a></p>
                 </header>
 
 {{ list_articles length="1" constraints="type is bloginfo" }}            

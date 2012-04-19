@@ -40,6 +40,7 @@
     <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>
     <script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
     <script src="{{ $view->baseUrl('js/backbone.js') }}"></script>
+    <script src="{{ $view->baseUrl('js/models/search.js') }}"></script>
     <script src="{{ $view->baseUrl('js/apps/search.js') }}"></script>
     <script>
     $(function() {

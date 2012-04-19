@@ -28,15 +28,15 @@
                 
                 <div class="mobile-list-view clearfix">
 
-{{ list_articles columns="3" constraints="type is blog" }}                 
+{{ list_articles length="3" constraints="type is blog" }}                 
                     <article>
                         <header>
                             <p><a href="#">International</a></p>
                         </header>
                         <figure class="left">
-                            <a href="#"><img src="pictures/blog-img-1.jpg" rel="resizable" alt="" /></a>
+                            <a href="{{ url options="article" }}"><img src="pictures/blog-img-1.jpg" rel="resizable" alt="" /></a>
                         </figure>
-                        <h2><a href="#">Katalanischer Künstler Antoni Tàpies ist tot</a></h2>
+                        <h2><a href="{{ url options="article" }}">Katalanischer Künstler Antoni Tàpies ist tot</a></h2>
                         <p>Der spanische Maler Antoni Tàpies, einer der bedeutendsten abstrakten Künstler der Gegenwart, ist tot. Wie die Stadtverwaltung von Barcelona in der Nacht zim Alter von 88 Jahren. Von sda. <a href="#">Weiterlesen</a>  <a href="#" class="comments">1 Kommentar</a></p>
                     </article>
 {{ /list_articles }}                    
