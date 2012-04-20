@@ -1,4 +1,8 @@
-{{ if $gimme->issue->number == 1 }}
+{{ if $gimme->publication->identifier == 5 }} 
+	{{ if $gimme->issue->number == 3 }}
+		{{ render file="_section/section-blog.tpl" }}
+	{{ /if }}
+{{ elseif $gimme->issue->number == 1 }}
   {{ if $gimme->section->number == 5 }}
     {{ render file="_section/section-dossier.tpl" }}
   {{ /if }}  

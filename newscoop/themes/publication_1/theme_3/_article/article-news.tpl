@@ -234,16 +234,8 @@
                     </article>
 {{ /if }}      
 {{ /list_related_articles }}              
-                    
-                    <article>
-                        <header>
-                            <p>Tageswoche honorieren</p>
-                        </header>
-                        <p>Alle Artikel auf tageswoche.ch sind feri verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, können Sie uns freiwillig unterstützen. Sie entscheiden wieviel Sie bezahlen. Danke, dass Sie uns helfen, tageswoche.ch in Zukunft besser zu machen.</p>
-                    </article>
-                    
-                    <a href="#" class="grey-button reward-button"><span>Jetzt honorieren!</span></a>
-                    {{* pay_what_you_like *}}
+
+{{ include file="_tpl/sidebar-honorieren.tpl" }}
 
 {{*** WERBUNG ***}}                    
 {{ include file="_werbung/article-sidebar-3-backpage.tpl" }}

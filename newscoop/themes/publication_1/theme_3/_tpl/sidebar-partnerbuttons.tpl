@@ -7,7 +7,7 @@
 {{ if $gimme->current_list->at_beginning }}
                 <article>
                 	<header>
-                    	<p>TagesWoche Partner</p>
+                    	<p>{{ if $gimme->publication->identifier == 5 }}Blog-{{ else }}TagesWoche {{ /if }}Partner</p>
                     </header>
                     <ul class="partner-list">
 {{ /if }}                    

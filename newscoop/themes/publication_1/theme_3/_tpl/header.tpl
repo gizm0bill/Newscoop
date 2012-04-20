@@ -23,9 +23,14 @@
 
                     </ul>
                     <ul>
-                        <li><a href="#">Blogs</a></li>
+                    
+{{* BLOGS *}}                    
+{{ set_publication identifier="5" }} 
+{{ set_current_issue }}                   
+                        <li><a href="{{ url options="issue" }}"{{ if ($gimme->publication == $gimme->default_publication) && ($gimme->template->name != "search.tpl")  }} class="active"{{ /if }}>{{ $gimme->publication->name }}</a></li>
 
 {{* DOSSIERS *}}
+{{ set_publication identifier="1" }}
 {{ set_issue number="1" }}
 {{ set_section number="5" }}                        
                         <li><a href="{{ url options="section" }}"{{ if ($gimme->issue->number == 1) && ($gimme->section == $gimme->default_section) && ($gimme->template->name != "search.tpl")  }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
@@ -38,11 +43,14 @@
                 </nav>
 
 {{ /local }}
-                
+
+                {{* SEARCH BOX *}}                
+                <form method="get" action="{{ $view->url(['controller' => 'search', 'action' => null], 'default') }}">
                 <fieldset>
-                    <input type="text" value="" />
+                    <input type="text" value="" name="q" placeholder="Webcode, Stichworte" />
                     <button>Go</button>
                 </fieldset>
+                </form>
             </div><!-- / Main Nav -->
             
         </div>

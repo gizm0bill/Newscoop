@@ -4,3 +4,6 @@
 {{ if $gimme->article->type_name == "dossier" }}
 {{ render file="_article/article-dossier.tpl" }}
 {{ /if }}
+{{ if $gimme->article->type_name == "blog" }}
+{{ render file="_article/article-blog.tpl" }}
+{{ /if }}
