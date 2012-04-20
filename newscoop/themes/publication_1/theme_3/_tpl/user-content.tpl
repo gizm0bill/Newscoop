@@ -1,3 +1,5 @@
+                            {{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
+                            
                             <div class="tabs article-related-tabs">
                             
                             	<ul>
@@ -7,51 +9,34 @@
                                 </ul>
                                 
                                 <div id="author-1">
-                                	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
+                                    
+                                    {{ list_articles length="3" ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName type is news" order="bypublishdate desc"}}
+                                        <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%d.%m.%Y um %H:%i" }}</span>
+                                        <h5><a href="{{ $gimme->article->url }}{{ $gimme->article->seo_url_end }}" title="{{ $gimme->article->title }}">{{ $gimme->article->title }}</a></h5>
+                                        <p>{{ $gimme->article->teaser }}</p>
+                                    {{ /list_articles }}
                                 
                                 </div>
                                 
                                 <div id="author-2">
                                 	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
+                                    {{ list_articles length="3" ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName type is blog" order="bypublishdate desc"}}
+                                        <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%d.%m.%Y um %H:%i" }}</span>
+                                        <h5><a href="{{ $gimme->article->url }}{{ $gimme->article->seo_url_end }}" title="{{ $gimme->article->title }}">{{ $gimme->article->title }}</a></h5>
+                                        <p>{{ $gimme->article->teaser }}</p>
+                                    {{ /list_articles }}
                                 
                                 </div>
                                 
                                 <div id="author-3">
                                 	
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>
-                                    <span class="time">29.12.2011 um 15:14</span>
-                                	<h5>Halte durch, Basel, halte durch! </h5>
-                                    <p>Das 2:1 des FC Basel gegen Manchester United – eine Nacht, in der nicht nur Sporthistorie geschrieben wurde. Für einen Moment war Marco Streller auf Twitter in den Top Ten Topics – weltweit.</p>    
+                                    {{ list_user_comments user=$gimme->author->user->identifier length="3" order="bydate desc" }}
+                                        {{ $date=date_create($gimme->user_comment->submit_date) }}
+                                        <span class="time">{{ $date->format('d.m.Y \u\m H:i') }}</span>
+                                        <h5>{{ $gimme->user_comment->subject|escape }}</h5>Zum Artikel: <a href="{{ $gimme->user_comment->article->url }}">{{ $gimme->user_comment->article->name }}</a><br>
+                                        <p>{{ $gimme->user_comment->content|escape|truncate:255:"...":true }}</p>
+                                    {{ /list_user_comments }}
                                 
                                 </div>
                             
                             </div>
-                            
-                            <ul class="paging content-paging">
-                                <li><a href="#" class="grey-button">&laquo;</a></li>
-                                <li>1/12</li>
-                                <li><a href="#" class="grey-button">&raquo;</a></li>
-                            </ul>
