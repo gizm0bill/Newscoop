@@ -104,10 +104,11 @@ $(document).ready(function() {
 	
 	// Article page side flip
 	$('a.article-view-rear').click(function(){
-        document.location.hash = 'hintergrund';
+        document.location.hash = 'article-rear';
         $('#article-rear').show();
         $('#article-front').hide();
         // insert analytics code here
+        document.location = document.location;
         return false;
     });
 	$('a.article-view-front').click(function(){
@@ -117,7 +118,7 @@ $(document).ready(function() {
         return false;
     });
     
-    if (document.location.hash == '#hintergrund') {
+    if (document.location.hash == '#article-rear') {
         $('a.article-view-rear').trigger('click');
     }	
 	
