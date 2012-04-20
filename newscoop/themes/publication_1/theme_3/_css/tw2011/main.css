@@ -2897,3 +2897,10 @@ aside .gray-box{
   .jcarousel-item img {width:auto !important;}
   
 }
+
+span.icon-weather-sun {background:url(img/icon-weather-sun.png) 0 0 no-repeat; padding-left: 30px;}
+span.icon-weather-sun-clouds {background:url(img/icon-weather-sun-clouds.png) 0 0 no-repeat; padding-left: 30px;}
+span.icon-weather-clouds {background:url(img/icon-weather-clouds.png) 0 0 no-repeat; padding-left: 30px;}
+span.icon-weather-thunder {background:url(img/icon-weather-thunder.png) 0 0 no-repeat; padding-left: 30px;}
+span.icon-weather-rain {background:url(img/icon-weather-rain.png) 0 0 no-repeat; padding-left: 30px;}
+span.icon-weather-snow {background:url(img/icon-weather-snow.png) 0 0 no-repeat; padding-left: 30px;}
