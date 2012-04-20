@@ -36,6 +36,7 @@ $cli->addCommands(array(
     new \Newscoop\Tools\Console\Command\LogMaintenanceCommand(),    
     new \Newscoop\Tools\Console\Command\UpdateIndexCommand(),
     new \Newscoop\Tools\Console\Command\ClearIndexCommand(),
+    new \Newscoop\Tools\Console\Command\UpdateWeatherCommand(),
 ));
 
 $cli->run();
