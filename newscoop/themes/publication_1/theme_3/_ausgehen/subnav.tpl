@@ -25,11 +25,11 @@
             <ul class="nav">
                 <li id="nav_all" class="nav_one active"><a href="{{ uri options="issue" }}agenda/">Alles</a></li>
                 <li id="nav_kino" class="nav_one"><a href="{{ uri options="issue" }}kinos/">Kino</a></li>
-                <li id="nav_theater" class="nav_one"><a href="{{ uri options="issue" }}events/">Theater</a></li>
-                <li id="nav_konzerte" class="nav_one"><a href="{{ uri options="issue" }}events/">Konzerte</a></li>
-                <li id="nav_partys" class="nav_one"><a href="{{ uri options="issue" }}events/">Partys</a></li>
-                <li id="nav_ausstellungen" class="nav_one"><a href="{{ uri options="issue" }}events/">Ausstellungen</a></li>
-                <li id="nav_andere" class="nav_one"><a href="{{ uri options="issue" }}events/">Andere</a></li>
+                <li id="nav_theater" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:theater" onClick="return load_events('theater');">Theater</a></li>
+                <li id="nav_musik" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:musik" onClick="return load_events('musik');">Konzerte</a></li>
+                <li id="nav_party" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:party" onClick="return load_events('party');">Partys</a></li>
+                <li id="nav_ausstellung" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:ausstellung" onClick="return load_events('ausstellung');">Ausstellungen</a></li>
+                <li id="nav_andere" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:andere" onClick="return load_events('andere');">Andere</a></li>
                 <!--<li id="nav_restaurants" class="nav_one"><a href="{{ uri options="issue" }}restaurants/">Restaurants</a></li>-->
             </ul>
         

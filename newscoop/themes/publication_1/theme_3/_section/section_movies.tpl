@@ -580,7 +580,7 @@ return;
                 
                 <h3>Presenting Partner</h3>
                 <ul class="partner-list">
-                    <li><a href="#"><img src="pictures/partner-logo-small-3.jpg" alt="" /></a></li>
+                    <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-3.jpg" }}" alt="" /></a></li>
                 </ul>
             
             </aside>
@@ -1359,6 +1359,10 @@ $(document).ready(function() {
     $(".nav_one").removeClass("active");
     $("#nav_kino").addClass("active");
 });
+
+function load_events(ev_type) {
+    return true;
+};
 </script>
             
         </div>
