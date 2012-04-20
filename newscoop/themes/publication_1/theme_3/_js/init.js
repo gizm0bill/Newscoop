@@ -103,10 +103,24 @@ $(document).ready(function() {
 	);
 	
 	// Article page side flip
-	$('a.article-view-rear').click(function(){$('#article-rear').show();$('#article-front').hide();return false;});
-	$('a.article-view-front').click(function(){$('#article-front').show();$('#article-rear').hide();return false;});
-	
-	
+	$('a.article-view-rear').click(function(){
+        document.location.hash = 'article-rear';
+        $('#article-rear').show();
+        $('#article-front').hide();
+        // insert analytics code here
+        document.location = document.location;
+        return false;
+    });
+	$('a.article-view-front').click(function(){
+        document.location.hash = '';
+        $('#article-front').show();
+        $('#article-rear').hide();
+        return false;
+    });
+    
+    if (document.location.hash == '#article-rear') {
+        $('a.article-view-rear').trigger('click');
+    }
 	
 	// Mobile nav
 	$('#mobile-nav li a').click(function() {
