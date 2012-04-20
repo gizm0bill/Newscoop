@@ -4,7 +4,7 @@
             <div id="top" class="clearfix">
                 <ul>
                     <li>Freitag 13.02.2011</li>
-                    <li><img src="{{ url static_file="pictures/icon-weather-sunny.png" }}" alt=""> 5°C Basel</li>
+                    <li>{{ weather }}</li>
                     <li><a href="#">Kontakt</a></li>
                     <li><a href="#">Login</a></li>
                 </ul>
