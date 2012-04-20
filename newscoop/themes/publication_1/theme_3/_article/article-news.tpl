@@ -187,7 +187,11 @@
 
 {{* ARTICLE AUTHORS *}}
 {{ list_article_authors }} 
-                        
+{{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
+{{ $numArticles=0  }}
+{{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName"}}
+{{ $numArticles = $numArticles+1 }}
+{{ /list_articles }}
                         <div class="author-box">
                         	
                            <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
@@ -199,7 +203,7 @@
                             	</li>
                                 <li>
                                 	<h5>Beiträge</h5>
-                                    <p>106</p>
+                                    <p>{{ $numArticles }}</p>
                                 </li>
                                 <li>
                                 	<h5>Social Networks</h5>
@@ -234,8 +238,16 @@
                     </article>
 {{ /if }}      
 {{ /list_related_articles }}              
-
-{{ include file="_tpl/sidebar-honorieren.tpl" }}
+                    
+                    <article>
+                        <header>
+                            <p>Tageswoche honorieren</p>
+                        </header>
+                        <p>Alle Artikel auf tageswoche.ch sind feri verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, können Sie uns freiwillig unterstützen. Sie entscheiden wieviel Sie bezahlen. Danke, dass Sie uns helfen, tageswoche.ch in Zukunft besser zu machen.</p>
+                    </article>
+                    
+                    <a href="#" class="grey-button reward-button"><span>Jetzt honorieren!</span></a>
+                    {{* pay_what_you_like *}}
 
 {{*** WERBUNG ***}}                    
 {{ include file="_werbung/article-sidebar-3-backpage.tpl" }}

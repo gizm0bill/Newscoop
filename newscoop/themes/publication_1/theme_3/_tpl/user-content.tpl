@@ -1,5 +1,3 @@
-                            {{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
-                            
                             <div class="tabs article-related-tabs">
                             
                             	<ul>
