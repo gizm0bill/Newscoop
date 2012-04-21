@@ -14,7 +14,7 @@
 {{ $bloginfo=$gimme->article->get_bloginfo() }}                                
                         <li>
                        		{{ list_articles length="1" constraints="type is blog" order="bypublishdate desc" }}
-                        	{{ if $showtpic == 1 }}
+                        	{{ if $gimme->current_list->index == "1" }}
                         	{{ include file="_tpl/renditions/img_300x200.tpl" }}
                        		{{ /if }}                       		
                             <h4><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></h4>

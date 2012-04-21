@@ -13,7 +13,5 @@
     {{ render file="_section/section_events.tpl" }}
   {{ elseif $gimme->section->number == 72 }}
     {{ render file="_section/section_movies.tpl" }}
-  {{ elseif $gimme->section->number == 80 }}
-    {{ render file="_section/section-dialog.tpl" }}
   {{ /if }}
 {{ /if }}

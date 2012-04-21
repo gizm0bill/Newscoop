@@ -35,8 +35,12 @@
 {{ set_section number="5" }}                        
                         <li><a href="{{ url options="section" }}"{{ if ($gimme->issue->number == 1) && ($gimme->section == $gimme->default_section) && ($gimme->template->name != "search.tpl")  }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
 
-                        <li><a href="#">Dialog</a></li>
+{{* DIALOG *}}
+{{ set_current_issue }}
+{{ set_section number="80" }}
+                        <li><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
                     </ul>
+                    
                     <ul>
                         <li><a href="#">Ausgehen</a></li>
                     </ul>
