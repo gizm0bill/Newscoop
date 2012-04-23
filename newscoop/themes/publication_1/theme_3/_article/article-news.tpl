@@ -46,7 +46,7 @@
 {{* ARTICLE TOPICS *}}
 {{ list_article_topics }}                
 {{ if $gimme->current_list->at_beginning }}
-                    <article>                                            
+                    <article class="links-fix">                                            
                         <header>
                             <p>Mehr zum Thema</p>
                         </header>
@@ -54,6 +54,7 @@
 {{ /if }}
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
+                        <a href="#" class="theme-subscribe">Themen abonnieren</a>
                         </p>
                     </article>                        
 {{ /if }}   
