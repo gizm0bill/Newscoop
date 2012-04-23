@@ -1,6 +1,6 @@
         <div class="content-box full-width clearfix">
         
-            <h3 class="title">Top News</h3>
+            <h3 class="title">Aktuell</h3>
             
         	<div class="three-columns clearfix">
 {{ list_playlist_articles length="3" id="6"}}        	
@@ -42,7 +42,7 @@
   <a href="{{ url options="article" }}">Weiterlesen</a> 
   {{ /if }}  
 {{ /strip }}
-{{ if $gimme->article->comments_enabled }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar(e)</a>{{ /if }}</p>
+{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}</p>
                 </article>
 {{ /list_playlist_articles }}
             </div>
