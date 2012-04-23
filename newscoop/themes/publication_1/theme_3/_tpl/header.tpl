@@ -4,7 +4,7 @@
             <div id="top" class="clearfix">
                 <ul>
                     <li>Freitag 13.02.2011</li>
-                    <li><img src="{{ url static_file="pictures/icon-weather-sunny.png" }}" alt=""> 5°C Basel</li>
+                    <li>{{ weather }}</li>
                     <li><a href="#">Kontakt</a></li>
                     <li><a href="#">Login</a></li>
                 </ul>
@@ -35,8 +35,12 @@
 {{ set_section number="5" }}                        
                         <li><a href="{{ url options="section" }}"{{ if ($gimme->issue->number == 1) && ($gimme->section == $gimme->default_section) && ($gimme->template->name != "search.tpl")  }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
 
-                        <li><a href="#">Dialog</a></li>
+{{* DIALOG *}}
+{{ set_current_issue }}
+{{ set_section number="80" }}
+                        <li><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
                     </ul>
+                    
                     <ul>
                         <li><a href="#">Ausgehen</a></li>
                     </ul>
@@ -47,7 +51,7 @@
                 {{* SEARCH BOX *}}                
                 <form method="get" action="{{ $view->url(['controller' => 'search', 'action' => null], 'default') }}">
                 <fieldset>
-                    <input type="text" value="" name="q" placeholder="Webcode, Stichworte" />
+                    <input type="text" value="" name="q" placeholder="Suchbegriff, Webcode +awafa" />
                     <button>Go</button>
                 </fieldset>
                 </form>

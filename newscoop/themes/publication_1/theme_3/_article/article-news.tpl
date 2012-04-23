@@ -1,3 +1,4 @@
+<div id="hintergrund"></div>
 {{ include file="_tpl/_html-head.tpl" }}
 
 <body>
@@ -187,33 +188,34 @@
 
 {{* ARTICLE AUTHORS *}}
 {{ list_article_authors }} 
-{{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
-{{ $numArticles=0  }}
-{{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName"}}
-{{ $numArticles = $numArticles+1 }}
-{{ /list_articles }}
-                        <div class="author-box">
-                        	
-                           <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
-                        	<ul class="article-info">
-                        		<li class="image">
-                        			{{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
-
-                            		<p>Redakteur bei der Badischen Zeitung, für die er zehn Jahre lang arbeitete, zuletzt als Sportredakteur. Nach viereinhalb Jahren bei der Neugründung Zeitung zum Sonntag in Freiburg, schlossen sich vier Jahre als freier Autor für deutsche und Schweizer Tageszeitungen an. Von April 2005 bis Oktober 2011 Sportredaktor bei der Basler Zeitung.</p>
-                            	</li>
-                                <li>
-                                	<h5>Beiträge</h5>
-                                    <p>{{ $numArticles }}</p>
-                                </li>
-                                <li>
-                                	<h5>Social Networks</h5>
-                                    <p class="social">
-                                    	<a href="#" class="grey-button"><span class="fb">Subscribe</span></a> <a href="#" class="grey-button"><span class="tw">Follow</span></a>
-                                    </p>
-                                </li>
-                            </ul>
-                            
-{{ include file="_tpl/user-content.tpl" }}
+    {{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
+    {{ $numArticles=0  }}
+    
+    {{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName"}}
+        {{ $numArticles = $numArticles+1 }}
+    {{ /list_articles }}
+    
+    <div class="author-box">
+        <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
+        <ul class="article-info">
+            <li class="image">
+                {{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
+                <p>{{ $gimme->author->biography->text }}</p>
+            </li>
+            <li>
+                <h5>Beiträge</h5>
+                <p>{{ $numArticles }}</p>
+            </li>
+            <li>
+                <h5>Social Networks</h5>
+                <p class="social">
+                    <a href="#" class="grey-button"><span class="fb">Subscribe</span></a> <a href="#" class="grey-button"><span class="tw">Follow</span></a>
+                </p>
+            </li>
+        </ul>
+    </div>
+                                
+    {{ include file="_tpl/user-content.tpl" }}
                         
 {{ /list_article_authors }}                        
                                                 

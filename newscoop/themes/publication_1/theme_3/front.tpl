@@ -14,12 +14,12 @@
             
 {{ include file="_tpl/front-playlist-articles.tpl" }}
                 
+{{ include file="_tpl/front-debatte.tpl" }}                
+                
 {{ include file="_tpl/front-dossiers.tpl" }}
 
 {{*** werbung ***}}   
 {{ include file="_werbung/front-maincol.tpl" }}
-                
-{{ include file="_tpl/front-debatte.tpl" }}
             
             </section><!-- / Main Section -->
             

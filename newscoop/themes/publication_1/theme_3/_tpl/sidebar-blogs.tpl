@@ -1,26 +1,33 @@
+{{ list_playlist_articles length="3" name=$blogpl }}
+{{ if $gimme->current_list->at_beginning }}
                 <article>
                     <header>
                         <p>Blogs</p>
                     </header>
-                    <ul class="post-list">                    
+                    <ul class="post-list"> 
+{{ /if }}       
+{{ if $gimme->current_list->index == "1" }}
+{{ $showtpic=1 }}
+{{ else }}
+{{ $showtpic=0 }}
+{{ /if }}
+{{ $bloginfo=$gimme->article->get_bloginfo() }}                                
                         <li>
-                        	<img src="{{ url static_file="pictures/post-image-1.png" }}" alt="" />
-                            <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                            <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                            <span class="meta"><img src="{{ url static_file="pictures/tiny-thumb.jpg" }}" alt="" /> vor 7 Tagen auf Bildstoff</span>
+                       		{{ list_articles length="1" constraints="type is blog" order="bypublishdate desc" }}
+                        	{{ if $showtpic == 1 }}
+                        	{{ include file="_tpl/renditions/img_300x150.tpl" }}
+                       		{{ /if }}                       		
+                            <h4><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></h4>
+                            <p>«{{ $gimme->article->lede|strip_tags|truncate:100 }}» <a href="{{ url options="article" }}">Lesen</a> | <a href="{{ url options="section" }}">zum Blog</a></p>
+                            <span class="meta">{{ if $bloginfo }}{{ if $gimme->article->get_bloginfo()->image(1)->imageurl }}<img src="{{ $gimme->article->get_bloginfo()->image(1)->imageurl }}" alt="{{ $gimme->section->name }}" width="60" />{{ /if }}{{ /if }} {{ include file="_tpl/relative-date.tpl" date=$gimme->article->publish_date }} auf {{ $gimme->section->name }}</span>
+                            {{ /list_articles }}
                         </li>
-                        <li>
-                            <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                            <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                            <span class="meta"><img src="{{ url static_file="pictures/tiny-thumb.jpg" }}" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                        </li>
-                        <li>
-                            <h4><a href="#">Nur für echte Männer: Basler Magazin.</a></h4>
-                            <p>«Der Zielleser der BaZ erscheint mir nach der Lektüre der heutigen Sonntags- ausgabe immer [...] » <a href="#">Lesen</a> | <a href="#">zum Blog</a></p>
-                            <span class="meta"><img src="{{ url static_file="pictures/tiny-thumb.jpg" }}" alt="" /> vor 7 Tagen auf Bildstoff</span>
-                        </li>
+                        
+{{ if $gimme->current_list->at_end }}                        
                     </ul>
                     <footer>
-                        <a href="#" class="more">Zur den Blogs»</a>
+                        <a href="{{ url options="issue" }}" class="more">Zu den Blogs»</a>
                     </footer>
                 </article>
+{{ /if }}
+{{ /list_playlist_articles }}                

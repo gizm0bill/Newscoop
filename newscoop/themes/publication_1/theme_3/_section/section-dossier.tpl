@@ -25,7 +25,7 @@
                         <big>Dossier:<br />
                         <b>{{ $gimme->article->name|strip }}</b> {{ $gimme->article->subtitle }}</big>
                     </figure>
-                    <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->lede|strip_tags }} <a href="{{ url options="article" }}">Zum Dossier</a></p>
+                    <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if !($gimme->article->teaser == "") }}{{ $gimme->article->teaser|strip_tags }}{{ else }}{{ $gimme->article->lede|strip_tags }}{{ /if }} <a href="{{ url options="article" }}">Zum Dossier</a></p>
                 </article>
 {{ else }}            
                     <article>
@@ -33,7 +33,7 @@
                             <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
                         </figure>
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|strip }}</a></h2>
-                        <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->lede|strip_tags }}  <a href="{{ url options="article" }}">Zum Dossier</a></p>
+                        <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if !($gimme->article->teaser == "") }}{{ $gimme->article->teaser|strip_tags }}{{ else }}{{ $gimme->article->lede|strip_tags }}{{ /if }}  <a href="{{ url options="article" }}">Zum Dossier</a></p>
                     </article>
 {{ /if }}                    
 
@@ -45,45 +45,43 @@
             </section>
             
             <aside>
+      
+            	<article>
+                    <header>
+                        <p>Topics</p>
+                    </header>                    	
+                        <ul class="dossier-litem-list">    
+                        	<li><a href="">Hardcoded topic 1</a></li>
+                        	<li><a href="">Hardcoded topic 2</a></li>
+                        	<li><a href="">Hardcoded topic 3</a></li>
+                        	<li><a href="">Hardcoded topic 4</a></li>  	
+                        </ul>
+              </article>      
            
             	<article>
                     <header>
                         <p>Alle Dossiers</p>
                     </header>
-                    <div class="slideshow">
-								<div class="slides">
                     		
-{{ list_articles columns="5" ignore_issue="true" ignore_section="true" constraints="type is dossier active is off" }}
-{{ if $gimme->current_list->column == "1" }}                    	
+{{ list_articles ignore_issue="true" ignore_section="true" order="byname asc" constraints="type is dossier" }}
+{{ if $gimme->current_list->at_beginning == "1" }}                    	
 	
-                        <ul class="dossier-litem-list slide-item">
+                        <ul class="dossier-litem-list">
 {{ /if }}                        
 
                         	<li><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></li>
                         	
-{{ if $gimme->current_list->column == "5" || $gimme->current_list->at_end }}                        	
+{{ if $gimme->current_list->at_end }}                        	
                         </ul>
 {{ /if }}                
 {{ /list_articles }} 
-                        </div>
-                        <ul class="paging right">
-                           <li><a href="#" class="grey-button prev">&laquo;</a></li>
-                           <li class="caption"></li>
-                           <li><a href="#" class="grey-button next">&raquo;</a></li>
-                        </ul>
-                    </div>
+
                 </article>
                
 {{*** werbung ***}}                
 {{ include file="_werbung/section-dossier-sidebar.tpl" }}
                 
-                <article>
-                	<header>
-                    	<p>Tageswoche honorieren</p>
-                    </header>
-                    <p>Alle Artikel auf tageswoche.ch sind feri verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, können Sie uns freiwillig unterstützen. Sie entscheiden wieviel Sie bezahlen. Danke, dass Sie uns helfen, tageswoche.ch in Zukunft besser zu machen.</p>
-                    <a class="grey-button reward-button" href="#"><span>Jetzt honorieren!</span></a>
-                </article>
+{{ include file="_tpl/sidebar-honorieren.tpl" }}
             
             </aside>
         
