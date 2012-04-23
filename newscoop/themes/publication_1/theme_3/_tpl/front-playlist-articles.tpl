@@ -6,7 +6,7 @@
             	<article>
 						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}	
                     <header>
-                        <p><a href="#">Basel</a></p>
+                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}             	           	
             		{{ if $gimme->current_list->index == 1 }}<figure>{{ include file="_tpl/renditions/img_640x280.tpl" }}</figure>{{ /if }}
@@ -15,7 +15,7 @@
 
 						{{ if $gimme->current_list->index < 4 }}	
                     <header>
-                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{* $gimme->article->dateline *}}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
+                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}
 {{* for positions 2 and 3, show short_name - if exists, of course *}}
@@ -61,7 +61,7 @@
   <a href="{{ url options="article" }}">Weiterlesen</a> 
   {{ /if }}  
 {{ /strip }}
-{{ if $gimme->article->comments_enabled }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar(e)</a>{{ /if }}
+{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}
 </p>
                 </article>
 {{ if $gimme->current_list->index == 3 }}                
