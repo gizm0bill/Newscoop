@@ -1,3 +1,4 @@
+<div id="hintergrund"></div>
 {{ include file="_tpl/_html-head.tpl" }}
 
 <body>

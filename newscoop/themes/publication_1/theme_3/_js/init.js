@@ -104,11 +104,11 @@ $(document).ready(function() {
 	
 	// Article page side flip
 	$('a.article-view-rear').click(function(){
-        document.location.hash = 'article-rear';
+        document.location.hash = 'hintergrund';
         $('#article-rear').show();
         $('#article-front').hide();
         // insert analytics code here
-        document.location = document.location;
+        //document.location = document.location;
         return false;
     });
 	$('a.article-view-front').click(function(){
@@ -118,51 +118,19 @@ $(document).ready(function() {
         return false;
     });
     
-    if (document.location.hash == '#article-rear') {
+    if (document.location.hash == '#hintergrund') {
         $('a.article-view-rear').trigger('click');
-    }
+    }	
 	
-	// Mobile nav
-	$('#mobile-nav li a').click(function() {
-		if ($(this).parent().hasClass('active')) {
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav .start').removeClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$('#main-nav nav').slideUp();
-		} else {
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav .start').removeClass('active');
-			$(this).parent().addClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$(this).next('ul').slideDown();
-			$('#main-nav nav').slideUp();
-		}
-		return false;
+	$('#main-nav .start').click(function(){
+		$(this).toggleClass('active');
+		$('#main-nav nav').slideToggle();
 	});
-	
-	$('#main-nav .start').click(function() {
-		if ($(this).hasClass('active')) {
-			$('#mobile-nav li').removeClass('active');
-			$(this).removeClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$('#main-nav nav').slideUp();
-		} else {
-			$(this).addClass('active');
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav nav').slideDown();
-		}
-		return false;
+	$('#mobile-nav li a').click(function(){
+		$('#mobile-nav li').removeClass('active');
+		$(this).parent().toggleClass('active');
+		$(this).next('ul').slideToggle();
 	});
-	
-	// Info icon hover
-	$('.top-filter li a.info').hover(
-		function(){
-			$(this).children('span').fadeIn('fast');
-		},
-		function(){
-			$(this).children('span').fadeOut('fast');
-		}
-	);
 	
 	// Custom FIle Inputs
 	$('input[type=file]').change(function(e){
