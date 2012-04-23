@@ -92,7 +92,7 @@
 {{ /if }}                
 {{ if $gimme->current_list->at_end }}                
                 <ul class="paging content-paging">
-                    <li>Weiterblattern</li>
+                    <li>Weiterblättern</li>
                     <li><a class="grey-button" href="#">»</a></li>
                 </ul>
 {{ /if }}

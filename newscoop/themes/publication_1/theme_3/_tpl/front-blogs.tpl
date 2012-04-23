@@ -18,6 +18,6 @@
 
                 </ul>
                 <footer>
-                	<a href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}" class="more">Zur den Blogs»</a>
+                	<a href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}" class="more">Zu den Blogs »</a>
                 </footer>
             </article>

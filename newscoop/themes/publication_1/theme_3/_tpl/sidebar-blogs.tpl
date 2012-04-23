@@ -26,7 +26,7 @@
 {{ if $gimme->current_list->at_end }}                        
                     </ul>
                     <footer>
-                        <a href="{{ url options="issue" }}" class="more">Zu den Blogs»</a>
+                        <a href="{{ url options="issue" }}" class="more">Zu den Blogs »</a>
                     </footer>
                 </article>
 {{ /if }}

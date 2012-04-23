@@ -12,7 +12,7 @@
 
 {{ if $gimme->current_list->at_end }}                     
                 	<footer>
-                    	<a href="#" class="more" style="float: left">Link vorschlagen</a><a href="/ticker/?source=link" class="right more">Alle links»</a>
+                    	<a href="#" class="more" style="float: left">Link vorschlagen</a><a href="/ticker/?source=link" class="right more">Alle Links »</a>
                     </footer>
                 </article>
 {{ /if }}                 
