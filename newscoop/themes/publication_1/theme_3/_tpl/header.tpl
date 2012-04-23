@@ -51,7 +51,7 @@
                 {{* SEARCH BOX *}}                
                 <form method="get" action="{{ $view->url(['controller' => 'search', 'action' => null], 'default') }}">
                 <fieldset>
-                    <input type="text" value="" name="q" placeholder="Webcode, Stichworte" />
+                    <input type="text" value="" name="q" placeholder="Suchbegriff, Webcode +awafa" />
                     <button>Go</button>
                 </fieldset>
                 </form>
