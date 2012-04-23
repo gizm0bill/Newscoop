@@ -15,7 +15,7 @@
                         <li>
                        		{{ list_articles length="1" constraints="type is blog" order="bypublishdate desc" }}
                         	{{ if $showtpic == 1 }}
-                        	{{ include file="_tpl/renditions/img_300x200.tpl" }}
+                        	{{ include file="_tpl/renditions/img_300x150.tpl" }}
                        		{{ /if }}                       		
                             <h4><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></h4>
                             <p>«{{ $gimme->article->lede|strip_tags|truncate:100 }}» <a href="{{ url options="article" }}">Lesen</a> | <a href="{{ url options="section" }}">zum Blog</a></p>
