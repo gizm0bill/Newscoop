@@ -54,8 +54,8 @@
 {{ /if }}
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
-                        <a href="#" class="theme-subscribe">Themen abonnieren</a>
                         </p>
+                        <p><a href="#" class="theme-subscribe">Themen abonnieren</a></p>
                     </article>                        
 {{ /if }}   
 {{ /list_article_topics }}                    

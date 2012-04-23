@@ -14,7 +14,7 @@
                             <ol>                            
                             
                             {{ $recommendedEmpty=1 }}
-									 {{ list_article_comments order="bydate desc" recommended="true"  }}
+									 {{ list_article_comments order="bydate asc" recommended="true"  }}
                                 <li>
                                 		{{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<small class="redaktion">TagesWoche Redaktion</small>{{ /if }}
                                     {{ $user=$gimme->comment->user }}
@@ -37,7 +37,7 @@
                         <div id="alle-kommentare" class="comment-list">
                         
                             <ol>
-									 {{ list_article_comments order="bydate desc"  }}
+									 {{ list_article_comments order="bydate asc"  }}
                                 <li id="comment_{{ $gimme->comment->identifier }}">
                                 		{{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<small class="redaktion">TagesWoche Redaktion</small>{{ /if }}
                                     {{ $user=$gimme->comment->user }}
