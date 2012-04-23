@@ -36,5 +36,7 @@
                                     {{ /list_user_comments }}
                                 
                                 </div>
+                                
+                                <h4><a href="{{ $view->url(['username' => $gimme->author->user->uname], 'user') }}">Weitere Texte im Autorenprofil</a></h4>
                             
                             </div>
