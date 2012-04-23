@@ -101,8 +101,10 @@
             </section><!-- / Main Section -->
             
             <aside>
-            
+
+{{ if !($gimme->section->number == 60) }}             
 {{ include file="_tpl/sidebar-ticker.tpl" }}
+{{ /if }}
                 
 {{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
                 
