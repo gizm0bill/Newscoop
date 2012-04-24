@@ -395,12 +395,19 @@ function load_area(area) {
 {{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc byname asc" movie_screening="$muldate" }}
     {{ if $lastmovname != $gimme->article->headline }}
         {{ if "" != $lastmovname }}
+                    </ul>
                       </article>
         {{ /if }}
         {{ assign var="movie_rank" $movie_rank+1 }}
         {{ if 4 > $movie_rank }}
 
+                          {{* TODO: search for recommended => set stared class *}}
                       <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} movie_lang has_not_d has_not_k has_not_f has_not_t">
+
+                          {{ if $gimme->article->has_image(1) }}
+                          <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
+                          {{ /if }}
+
                           <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}">{{ $gimme->article->headline }}</a> {{ if $recommended }}<small class="tw_recommended"></small>{{ /if }}</h3>
                             <ul class="top-list-details">
                                 {{ assign var="movie_rating_wv" $gimme->article->movie_rating_wv }}
@@ -410,18 +417,37 @@ function load_area(area) {
                                         <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
                                 {{ /if }}
+                                {{ if $gimme->article->movie_director ne "" }}
+                                <li><span class="movie_info_key">Regisseur:</span> {{ $gimme->article->movie_director|replace:",":", " }}</li>
+                                {{ /if }}
+                                {{ if $gimme->article->movie_cast ne "" }}
+                                <li><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
+                                {{ /if }}
                             </ul>
+
+                            <p>
+                            {{ $gimme->article->description|strip_tags|truncate:300 }}
+                            <a href="{{ uri options="article" }}?region={{ $linkregion }}">Details, Trailer & Bilder</a>
+                            </p>
+                            <ul class="bottom-list-details clearfix">
         {{ /if }}
     {{ /if }}
     {{ assign var="lastmovname" $gimme->article->headline }}
         {{ if 4 > $movie_rank }}
-
-                        <li><h5>{{ $gimme->article->organizer }}</h5></li>
+                        <li>
+                        <h5>{{ $gimme->article->organizer }}</h5>
+                            <p>{{ $gimme->article->street }}, {{ $gimme->article->town }}<br />
+                            LANG TIME, LANG TIME, ...
+                            </p>
+                        </li>
         {{ /if }}
 {{ /list_articles }}
 
 {{ if $movie_rank eq 0 }}
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
+{{ else}}
+            </ul>
+              </article>
 {{ /if }}
 
 {{ local }}

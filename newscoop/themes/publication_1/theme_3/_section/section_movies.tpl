@@ -873,13 +873,15 @@ function parse_date_text($date_time_text)
             {{ assign var="map_article_list" "$cur_article_number" }}
         {{ /if }}
                           {{ assign var="movie_rank" $movie_rank+1 }}
-                          {{* TODO: search for recommended => set stared class *}}
                       <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} movie_lang has_not_d has_not_k has_not_f has_not_t">
                           {{ assign var="movie_desc_len" $gimme->article->description|strip_tags|count_characters:true }}
                           {{ assign var="movie_other_len" $gimme->article->other|strip_tags|count_characters:true }}
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
-                          {{ if $gimme->article->has_image(1) }}<figure class="movie_list_thumbnail"><a href="{{ url options="article" }}?region={{ $linkregion }}"><img src="{{ url options="image 1 width 100" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" /></a>{{ /if }}
-                          {{ if $gimme->article->has_image(1) }}</figure> {{ /if }}
+
+                          {{ if $gimme->article->has_image(1) }}
+                          <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
+                          {{ /if }}
+
                             {{* <a href="#" class="grey-button trailer-button" onClick="show_trailer('{{ $gimme->article->movie_trailer_vimeo }}'); return false;"><span>Trailer anschauen</span></a> *}}
                           {{ assign var="vimeo_trailer_id" $gimme->article->movie_trailer_vimeo }}
                           {{* assign var="vimeo_trailer_id" 24936756 *}}
@@ -1041,8 +1043,12 @@ function parse_date_text($date_time_text)
         {{ /if }}
 {{ if $movie_rank eq 0 }}
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
+{{ else}}
+              </article>
 {{ /if }}
+
 {{ else }}
+
 {{ list_articles length="1" }}{{* dummy list to have the list id *}}
     {{ $list_name=$gimme->current_list_id() }}
 {{ /list_articles }}
