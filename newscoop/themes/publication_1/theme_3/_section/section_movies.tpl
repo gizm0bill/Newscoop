@@ -479,7 +479,7 @@ return;
                 <h3>Ort</h3>
                 <ul>
                     <li>
-                        <select id="wo" name="region" class="option_styled" onChange="load_area(this); return true;">
+                        <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
                                     <option value="kanton-basel-landschaft">Basel-Landschaft</option>
@@ -878,7 +878,7 @@ function parse_date_text($date_time_text)
                           {{ assign var="movie_desc_len" $gimme->article->description|strip_tags|count_characters:true }}
                           {{ assign var="movie_other_len" $gimme->article->other|strip_tags|count_characters:true }}
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
-                          {{ if $gimme->article->has_image(1) }}<figure class="movie_list_thumbnail"><a href="{{ url options="article" }}?region={{ $linkregion }}"><img src="{{ url options="image 1 width 100" }}" alt="{{ $gimme->article->image1->description }}" class="thumbnail" /></a>{{ /if }}
+                          {{ if $gimme->article->has_image(1) }}<figure class="movie_list_thumbnail"><a href="{{ url options="article" }}?region={{ $linkregion }}"><img src="{{ url options="image 1 width 100" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" /></a>{{ /if }}
                           {{ if $gimme->article->has_image(1) }}</figure> {{ /if }}
                             {{* <a href="#" class="grey-button trailer-button" onClick="show_trailer('{{ $gimme->article->movie_trailer_vimeo }}'); return false;"><span>Trailer anschauen</span></a> *}}
                           {{ assign var="vimeo_trailer_id" $gimme->article->movie_trailer_vimeo }}
@@ -893,9 +893,9 @@ function parse_date_text($date_time_text)
                             </div><!-- vimeo_trailer_outer -->
                           {{ /if }}
                             <ul class="top-list-details">
-                                {{ assign var="wvrank" $gimme->article->movie_rating_wv }}
+                                {{ assign var="movie_rating_wv" $gimme->article->movie_rating_wv }}
                                 {{ if $movie_rating_wv ne "" }}
-                                    {{ assign var="wvrank" 0+$wvrank }}
+                                    {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                                     {{ if $movie_rating_wv ne 0 }}
                                         <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
@@ -1064,16 +1064,13 @@ function parse_date_text($date_time_text)
 
 <script type="text/javascript">
 function update_movie_props() {
-//alert(1);
     $(".data_movie").each(function(ind_elm, elm) {
         var elm_cont = $(elm).html();
-//alert('ec: "' + elm_cont + '"');
         var elm_cont_arr = elm_cont.split(';');
         var elm_cont_len = elm_cont_arr.length;
         for (var ec_ind = 0; ec_ind < elm_cont_len; ec_ind++) {
             var cur_cont = elm_cont_arr[ec_ind];
             cur_cont = cur_cont.replace(/\s/gm,'');
-//alert('cc: "' + cur_cont + '"');
             if (0 == cur_cont.length) {
                 continue;
             }
@@ -1087,8 +1084,6 @@ function update_movie_props() {
             {
                 var movie_prop = cur_cont_key;
                 var movie_id = "#movie_" + cur_cont_val;
-//alert(movie_prop);
-//alert(movie_id);
                 if ('d' == movie_prop) {
                     $(movie_id).removeClass("has_not_d");
                     $(movie_id).addClass("has_d");
@@ -1112,39 +1107,6 @@ function update_movie_props() {
 
         }
 
-/*
-alert($(elm).html());
-        var elm_chlds = $(elm).children();
-alert('l1: ' + elm_chlds.length);
-        $(elm).children(function(ind_chld, chld) {
-            var one_movie_add = $(chld).html();
-alert(one_movie_add);
-            var one_movie_add_arr = one_movie_add.split("_", 2);
-alert('l2: ' + one_movie_add_arr.length);
-            if (2 == one_movie_add_arr.length) {
-                var movie_prop = one_movie_add_arr[0];
-                var movie_id = "#movie_" + one_movie_add_arr[1];
-alert(movie_prop);
-alert(movie_id);
-                if ('d' == movie_prop) {
-                    $(movie_id).removeClass("has_not_d");
-                    $(movie_id).addClass("has_d");
-                }
-                if ('f' == movie_prop) {
-                    $(movie_id).removeClass("has_not_f");
-                    $(movie_id).addClass("has_f");
-                }
-                if ('t' == movie_prop) {
-                    $(movie_id).removeClass("has_not_t");
-                    $(movie_id).addClass("has_t");
-                }
-                if ('r' == movie_prop) {
-                    $(movie_id).addClass("stared");
-                }
-            }
-        });
-        //alert($(elm).html());
-*/
     });
 };
 
