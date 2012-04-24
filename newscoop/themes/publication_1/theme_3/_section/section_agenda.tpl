@@ -439,14 +439,48 @@ function load_area(area) {
 {{ assign var="topic_suffix" ":de"}}
 {{ assign var="contopic_type" "topic is $usetype$topic_suffix"}}
 {{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+    <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
-
-        <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ if $gimme->article->genre }}{{ $gimme->article->genre }}: {{ /if }}{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+        {{ if $gimme->article->has_image(1) }}
+            {{ if 250 < $gimme->article->image1->width }}
+                <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+            {{ else }}
+                <img src="{{ url options="image 1 " }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+            {{ /if }}
+        {{ /if }}
+        <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+        {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
+        <p>
+        {{ $gimme->article->description|truncate:300 }}
+        <a href="{{ uri options="article" }}?date={{$usedate}}">Details</a>
+        </p>
+    </article>
 {{ /list_articles }}
 
 {{ if $event_rank eq 0 }}
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
 {{ /if }}
+
+{{* here the tw staff event *}}
+{{ list_articles ignore_issue="true" constraints="type is news print is off" length=1 }}
+            <article class="featured">
+                <header>
+                    <p><a href="{{ uri options="article" }}">TagesWoche empfielt</a></p>
+                </header>
+                {{ if $gimme->article->has_image(1) }}
+                    {{ if 250 < $gimme->article->image1->width }}
+                        <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                    {{ else }}
+                        <img src="{{ url options="image 1 " }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                    {{ /if }}
+                {{ /if }}
+                <h3><a href="{{ uri options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h3>
+                <h6>{{ $gimme->article->lede }}</h6>
+                <p>{{ $gimme->article->body|strip_tags|truncate:300 }}
+                <a href="{{ uri options="article" }}">Details</a>
+                </p>
+            </article>
+{{ /list_articles }}
 
 {{ local }}
 {{ set_current_issue }}

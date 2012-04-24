@@ -878,7 +878,7 @@ function parse_date_text($date_time_text)
                           {{ assign var="movie_desc_len" $gimme->article->description|strip_tags|count_characters:true }}
                           {{ assign var="movie_other_len" $gimme->article->other|strip_tags|count_characters:true }}
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
-                          {{ if $gimme->article->has_image(1) }}<figure class="movie_list_thumbnail"><a href="{{ url options="article" }}?region={{ $linkregion }}"><img src="{{ url options="image 1 width 100" }}" alt="{{ $gimme->article->image1->description }}" class="thumbnail" /></a>{{ /if }}
+                          {{ if $gimme->article->has_image(1) }}<figure class="movie_list_thumbnail"><a href="{{ url options="article" }}?region={{ $linkregion }}"><img src="{{ url options="image 1 width 100" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" /></a>{{ /if }}
                           {{ if $gimme->article->has_image(1) }}</figure> {{ /if }}
                             {{* <a href="#" class="grey-button trailer-button" onClick="show_trailer('{{ $gimme->article->movie_trailer_vimeo }}'); return false;"><span>Trailer anschauen</span></a> *}}
                           {{ assign var="vimeo_trailer_id" $gimme->article->movie_trailer_vimeo }}

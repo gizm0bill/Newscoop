@@ -460,11 +460,19 @@ function get_time_text($multi_time_text, $req_date)
 {{ if 1 eq $load_list }}
 {{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate" }}
     {{ assign var="event_rank" $event_rank+1 }}
-    {{ if $gimme->current_list->column == "1" }}
-                    <ul class="event-search-results">
-    {{ /if }}
-                        <li class="{{ if $gimme->article->recommended }} stared{{ /if }}">
-                            <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ if $gimme->article->genre }}{{ $gimme->article->genre }}: {{ /if }}{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+    {{* if $gimme->current_list->column == "1" *}}
+{{*                    <ul class="event-search-results">*}}
+    {{* /if *}}
+                        <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
+                            {{ if $gimme->article->has_image(1) }}
+                                {{ if 250 < $gimme->article->image1->width }}
+                                    <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                                {{ else }}
+                                    <img src="{{ url options="image 1 " }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                                {{ /if }}
+                            {{ /if }}
+                            <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+                            {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
                             <p>{{ $gimme->article->description|truncate:140 }} <a href="{{ uri options="article" }}?date={{$usedate}}">Details</a></p>
 
 {{ assign var="one_time" "" }}
@@ -492,10 +500,10 @@ $template->assign('one_time', $one_time);
 {{ /if }}
 
                             <p>{{ if $gimme->article->organizer }}{{ $gimme->article->organizer|replace:'\\':'\'' }}, {{ /if }}{{ if $one_time }}{{ $one_time }} Uhr {{ /if }}{{ $usedate|camp_date_format:"%e.%m.%Y" }}</p>
-                        </li>
-    {{ if ($gimme->current_list->column == "$colcount") || $gimme->current_list->at_end }}
-                    </ul>
-    {{ /if }}
+                        </article>
+    {{* if ($gimme->current_list->column == "$colcount") || $gimme->current_list->at_end *}}
+{{*                    </ul>*}}
+    {{* /if *}}
     {{ $page_count=ceil($gimme->current_list->count/$colcount) }}
     {{ $page_offset=intval($gimme->url->get_parameter($gimme->current_list_id())) }}
     {{ $list_name=$gimme->current_list_id() }}
