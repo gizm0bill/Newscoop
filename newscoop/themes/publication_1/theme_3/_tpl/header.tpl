@@ -42,7 +42,10 @@
                     </ul>
                     
                     <ul>
-                        <li><a href="#">Ausgehen</a></li>
+{{* DIALOG *}}
+{{ set_current_issue }}
+{{ set_section number="70" }}
+                        <li><a href="{{ url options="section" }}"{{ if ((70 == $gimme->default_section->number) || (71 == $gimme->default_section->number) || (72 == $gimme->default_section->number)) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>Ausgehen</a></li>
                     </ul>
                 </nav>
 
