@@ -60,9 +60,14 @@ class SearchController extends AbstractSolrController
      */
     private function buildSolrQuery()
     {
-        $q = $this->_getParam('q');
+        $q = trim($this->_getParam('q'));
         if ($this->_helper->service('webcoder')->isWebcode($q)) {
             return sprintf('webcode:\%s', $q);
+        }
+
+        $matches = array();
+        if (preg_match('/^(author|topic):([^"]+)$/', $q, $matches)) {
+            $q = sprintf('%s:"%s"', $matches[1], $matches[2]);
         }
 
         return $q;

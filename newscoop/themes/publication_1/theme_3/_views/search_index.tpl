@@ -28,12 +28,12 @@ $(function() {
     <li class="filter">Suche eingrenzen</li>
     <li class="title">
         <form id="search-form">
-        <label for="search-query">Sucheresultate für</label>
+        <label for="search-query">Suchresultate für</label>
         <fieldset>
             <input id="search-query" type="text" value="" />
             <button>Go</button>
         </fieldset>
-        <a href="#" class="info">Info <span>Sie können folgende Operatoren verwenden:<br />"exacte wortkombination"<br />-nichtdieserbegriff<br />author:dani winter<br />topic:fc basel<br /></span></a>
+        <a href="#" class="info">Info <span>Sie können folgende Operatoren verwenden:<br />suchbegriff1 OR suchbegriff2<br />"exakte Wortkombination"<br />-nichtdieserbegriff<br />author:dani winter<br />topic:fc basel<br /></span></a>
         </form>
     </li>
     <li class="type">Typ</li>
