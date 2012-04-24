@@ -60,7 +60,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'type' => 'user',
             'user' => $user->getUsername(),
             'bio' => $user->getAttribute('bio'),
-            'image' => $user->getImage() !== null ? $this->imageService->getSrc($user->getImage(), 65, 65, 'crop') : '',
+            'image' => $user->getImage() !== null ? $this->imageService->getSrc('images/' . $user->getImage(), 65, 65, 'crop') : '',
             'published' => gmdate(self::DATE_FORMAT, $user->getCreated()->getTimestamp()),
         );
     }

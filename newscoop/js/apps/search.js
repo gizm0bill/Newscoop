@@ -21,8 +21,7 @@ var SearchFormView = Backbone.View.extend({
     events: {
         'blur input': 'search',
         'click button': 'search',
-        'send': 'search',
-        'click #did-you-mean > a': 'didYouMean'
+        'send': 'search'
     },
 
     webcode: /^[\+\@][a-z]{5,6}$/i,
@@ -34,11 +33,6 @@ var SearchFormView = Backbone.View.extend({
 
     render: function() {
         $(this.el).find('input').val(this.collection.query);
-        if (this.collection.hasSuggestion()) {
-            $(this.el).find('#did-you-mean').show().find('a').text(this.collection.getSuggestion());
-        } else {
-            $(this.el).find('#did-you-mean').hide();
-        }
     },
 
     search: function(e) {
@@ -53,12 +47,6 @@ var SearchFormView = Backbone.View.extend({
         this.collection.date = null;
         this.collection.start = null;
         router.navigate(this.collection.nav(), {trigger: true});
-    },
-
-    didYouMean: function(e) {
-        e.preventDefault();
-        $(this.el).find('input').val(this.collection.getSuggestion());
-        this.search(e);
     }
 });
 
@@ -66,6 +54,10 @@ var SearchFormView = Backbone.View.extend({
  * Document list view
  */
 var DocumentListView = Backbone.View.extend({
+    events: {
+        'click #did-you-mean': 'didYouMean'
+    },
+
     initialize: function() {
         this.collection.bind('reset', this.render, this);
         this.emptyTemplate = _.template(this.options.emptyTemplate.html());
@@ -87,7 +79,18 @@ var DocumentListView = Backbone.View.extend({
             $("<li />").html(this.emptyTemplate()).appendTo($(this.el));
         }
 
+        if (this.collection.hasSuggestion()) {
+            $('<li id="spellcheck">Meinten Sie: <a href="#"></a>?</li>').prependTo(list).find('a').text(this.collection.getSuggestion()).attr('id', 'did-you-mean');
+        } else {
+            $(this.el).find('#spellcheck').detach();
+        }
+
         return this;
+    },
+
+    didYouMean: function(e) {
+        e.preventDefault();
+        $('#search-query').val(this.collection.getSuggestion()).blur();
     }
 });
 
@@ -393,10 +396,12 @@ var SortView = Backbone.View.extend({
 
     render: function() {
         if (this.collection.sortf) {
-            $('<strong class="sort-dir">&darr;</strong>').appendTo($(this.el));
+            $(this.el).find('a').addClass('desc');
         } else {
-            $(this.el).find('.sort-dir').detach();
+            $(this.el).find('a').removeClass('desc');
         }
+
+        $(this.el).css('cursor', 'pointer');
     },
 
     sort: function() {

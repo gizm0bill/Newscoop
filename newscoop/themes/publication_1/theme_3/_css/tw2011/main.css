@@ -849,14 +849,15 @@ section article{padding-bottom:25px;}
 			
 			.top-filter li.filter {width:171px; overflow:hidden; text-align:left;}
 			.top-filter li.title {width:627px; text-align:left;}
-			.top-filter li.type {width:90px; text-align:center;}
-			.top-filter li.time {float:right; width:102px; text-align:center;}
+			.top-filter li.type {width:83px; text-align:center;}
+			.top-filter li.time {float:right; width:109px; text-align:center;}
 			
 			.top-filter li a.sort {
 				display:inline-block; zoom:1; *display:inline;
 				width:7px; height:33px;
 				text-indent:-9999px;
 				background:url(img/icons-sort.png) 0 13px no-repeat;
+                position: relative; top: -2px;
 				}
 				.top-filter li a.sort.asc {background-position:0 -17px;}
 				.top-filter li a.sort.desc {background-position:0 -47px;}

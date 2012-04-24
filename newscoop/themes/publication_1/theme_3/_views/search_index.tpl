@@ -1,7 +1,6 @@
 {{extends file="layout_search.tpl"}}
 
 {{block aside}}
-<h3>Suche eingrenzen</h3>
 <ul id="type-filter">
     <li class="main"><a href="#">Alle</a></li>
     <li><a href="#article">Artikel</a></li>
@@ -25,19 +24,19 @@ $(function() {
 {{/block}}
 
 {{block top}}
-<ul class="top-filter">
-    <li class="filter">Filter</li>
+<ul class="top-filter clearfix">
+    <li class="filter">Suche eingrenzen</li>
     <li class="title">
         <form id="search-form">
-        <label>Sucheresultate für</label>
+        <label for="search-query">Sucheresultate für</label>
         <fieldset>
-            <input type="text" value="" />
+            <input id="search-query" type="text" value="" />
             <button>Go</button>
         </fieldset>
-        <small style="font-weight: normal;padding-left:3px" id="did-you-mean">Did you mean: <a href="#"></a>?</small>
+        <a href="#" class="info">Info <span>Sie können folgende Operatoren verwenden:<br />"exacte wortkombination"<br />-nichtdieserbegriff<br />author:dani winter<br />topic:fc basel<br /></span></a>
         </form>
     </li>
     <li class="type">Typ</li>
-    <li id="sort-latest" class="time">veröffentlicht</li>
+    <li id="sort-latest" class="time">veröffentlicht <a class="sort" href="#">&nbsp;</a></li>
 </ul>
 {{/block}}

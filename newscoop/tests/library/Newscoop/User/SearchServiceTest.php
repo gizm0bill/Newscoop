@@ -43,7 +43,7 @@ class SearchServiceTest extends \TestCase
 
         $this->imageService->expects($this->once())
             ->method('getSrc')
-            ->with($this->equalTo('someimage.jpg'), $this->equalTo(65), $this->equalTo(65), $this->equalTo('crop'))
+            ->with($this->equalTo('images/someimage.jpg'), $this->equalTo(65), $this->equalTo(65), $this->equalTo('crop'))
             ->will($this->returnValue('imagesrc'));
 
         $this->assertEquals(array(
