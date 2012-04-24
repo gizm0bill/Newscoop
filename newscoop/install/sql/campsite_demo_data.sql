@@ -783,3 +783,8 @@ VALUES  ('comment_delivered','Published Comment'),
         ('comment_recommended','Recommended Comment'),
         ('image_published','Published Image');
 UNLOCK TABLES;
+
+-- tw upgrade 2012-04-04
+ALTER TABLE `Articles` ADD COLUMN `indexed` datetime;
+ALTER TABLE `liveuser_users` ADD COLUMN `indexed` datetime;
+ALTER TABLE `comment` ADD COLUMN `indexed` datetime;
