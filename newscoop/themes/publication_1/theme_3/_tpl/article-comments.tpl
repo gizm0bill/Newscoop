@@ -1,4 +1,4 @@
-{{ if $gimme->article->comments_enabled }}  
+{{ if $gimme->article->comments_enabled || $gimme->article->comments_locked  }}  
 
                 <section>
                 

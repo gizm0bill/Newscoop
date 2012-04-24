@@ -17,5 +17,7 @@
     {{ render file="_section/section_movies.tpl" }}
   {{ elseif $gimme->section->number == 80 }}
     {{ render file="_section/section-dialog.tpl" }}
+  {{ elseif $gimme->section->number == 81 }}
+    {{ render file="_section/section-debatte.tpl" }}    
   {{ /if }}
 {{ /if }}

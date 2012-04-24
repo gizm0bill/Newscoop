@@ -81,9 +81,8 @@ and then all is compared according to a matrix.
                         {{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}</a></li>
                      <li{{ if $wdphase == "3"}} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=3"><b>Schlussworte</b>
                         {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}</a></li>
-        {{* else *}} <li{{ else }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
+        					<li{{ else }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
                         {{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}</a></li>        
-        {{* /if *}}
                     </ul>
                     <h5>Zwischenstand</h5>
                     <ul class="votes">
