@@ -35,6 +35,7 @@
 
 								{{ if $gimme->article->body }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}{{ else }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
 
+                        <div id="social_bookmarks"></div>
                     </article>
                 
                 </section><!-- / Main Section -->
@@ -197,7 +198,6 @@
                         </ul>
 
 {{* ARTICLE AUTHORS *}}
-
 {{ list_article_authors }} 
     {{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
     {{ $numArticles=0  }}
@@ -239,7 +239,7 @@
 {{ /if }}
                         
 {{ /list_article_authors }}                        
-                                                
+
                     </article>
                 
                 </section><!-- / Main Section -->

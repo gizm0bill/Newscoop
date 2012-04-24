@@ -27,16 +27,18 @@
                                 </div>
                                 
                                 <div id="author-3">
-                                	
+                                    {{ if $gimme->author->user->defined }}
                                     {{ list_user_comments user=$gimme->author->user->identifier length="3" order="bydate desc" }}
                                         {{ $date=date_create($gimme->user_comment->submit_date) }}
                                         <span class="time">{{ $date->format('d.m.Y \u\m H:i') }}</span>
                                         <h5>{{ $gimme->user_comment->subject|escape }}</h5>Zum Artikel: <a href="{{ $gimme->user_comment->article->url }}#comment_{{ $gimme->user_comment->identifier }}">{{ $gimme->user_comment->article->name }}</a><br>
                                         <p>{{ $gimme->user_comment->content|escape|truncate:255:"...":true }}</p>
                                     {{ /list_user_comments }}
-                                
+                                    {{ /if }}
                                 </div>
                                 
+                                {{ if $gimme->author->user->defined }}
                                 <h4><a href="{{ $view->url(['username' => $gimme->author->user->uname], 'user') }}">Weitere Texte im Autorenprofil</a></h4>
+                                {{ /if }}
                             
                             </div>
