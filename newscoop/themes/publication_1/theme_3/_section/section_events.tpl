@@ -325,7 +325,7 @@ function get_time_text($multi_time_text, $req_date)
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-1.jpg" }}" alt="" /></a></li>
                 </ul>
                 
-                <p><a href="#">Melden Sie Ihre Veranstaltung!</a></p>
+                <p><a href="mailto:agenda@tageswoche.ch">Melden Sie Ihre Veranstaltung!</a></p>
             
             </aside>
 
@@ -527,10 +527,12 @@ function get_time_text($multi_time_text, $req_date)
 -->
 
 {{ assign var="colcount" 10 }}
+{{ assign var="event_rank" 0 }}
 
 <div id="newslist">
 {{ if 1 eq $load_list }}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate" }}
+    {{ assign var="event_rank" $event_rank+1 }}
     {{ if $gimme->current_list->column == "1" }}
                     <ul class="event-search-results">
     {{ /if }}
@@ -571,6 +573,11 @@ $template->assign('one_time', $one_time);
     {{ $page_offset=intval($gimme->url->get_parameter($gimme->current_list_id())) }}
     {{ $list_name=$gimme->current_list_id() }}
 {{ /list_articles }}
+
+{{ if $event_rank eq 0 }}
+    <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
+{{ /if }}
+
 {{ else }}
 {{ list_articles length="1" }}{{* dummy list to have the list id *}}
     {{ $list_name=$gimme->current_list_id() }}

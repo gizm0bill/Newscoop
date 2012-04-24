@@ -893,9 +893,9 @@ function parse_date_text($date_time_text)
                             </div><!-- vimeo_trailer_outer -->
                           {{ /if }}
                             <ul class="top-list-details">
-                                {{ assign var="wvrank" $gimme->article->movie_rating_wv }}
+                                {{ assign var="movie_rating_wv" $gimme->article->movie_rating_wv }}
                                 {{ if $movie_rating_wv ne "" }}
-                                    {{ assign var="wvrank" 0+$wvrank }}
+                                    {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                                     {{ if $movie_rating_wv ne 0 }}
                                         <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
