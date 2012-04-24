@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     {{ foreach $slideshow->items as $item name=insideslideshow }}
     {{ if $smarty.foreach.insideslideshow.first }}
-
+<div class="loader" style="height:431px">
 <ul id="article-single-carousel" class="jcarousel-skin-article-single">    
     {{ /if }}
     <li><figure>
@@ -26,14 +26,18 @@ $(document).ready(function() {
     </figure></li>
     {{ if $smarty.foreach.insideslideshow.last }}
 </ul>
-   
+<div class="loading" style="height:431px"></div></div>     
     {{ /if }}    
     {{ /foreach }}
 
 {{ foreachelse }}
 	<figure>
 {{ image rendition="artikel" }}
+{{ if $gimme->article->publish_date gt "2012-05-01 13:00:00" || $gimme->article->creation_date gt "2012-05-01 13:00:00"  }}
 <img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
+{{ else }}
+<img src="{{ $image->src }}" width="555" height="370" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
+{{ /if }}
         <p>{{ $image->caption }}&nbsp;{{ include file="_tpl/image-photographer.tpl" image=$image }}</p>
 {{ /image }}
     </figure>
@@ -97,7 +101,7 @@ $(document).ready(function() {
 {{ /if }}
                                 <figure>
 {{ assign var="youtubecode" value=$gimme->article->youtube_shortcode|replace:"http://youtu.be/":"" }}
-<iframe title="YouTube video player" width="647" height="431" src="http://www.youtube.com/embed/{{ $youtubecode }}?wmode=opaque" frameborder="0" allowfullscreen></iframe>
+<iframe title="YouTube video player" width="555" height="370" src="http://www.youtube.com/embed/{{ $youtubecode }}?wmode=opaque" frameborder="0" allowfullscreen></iframe>
                                 </figure>
 {{ if $slideshow gt 1 }}
                             </li>
@@ -127,7 +131,7 @@ $(document).ready(function() {
 {{ if ($gimme->image->article_index  gt 11) & ($gimme->image->article_index lt 100)}}                            
                             <li>
                                 <figure>
-                                        {{ if $bigslideshow == 1 }}<a href="{{ url options="image" }}" title="{{ $gimme->article->image->description }}" class="big_slideshow_list" rel="bigslideshow">{{ /if }}<img src="{{ url options="image width 647 height 431 crop center" }}" width="647" height="431" rel="resizable" alt="{{ $gimme->article->image->description }}" title="{{ $gimme->article->image->description }}">{{ if $bigslideshow == 1 }}<div class="zoomie"></div></a>{{ /if }}
+                                        {{ if $bigslideshow == 1 }}<a href="{{ url options="image" }}" title="{{ $gimme->article->image->description }}" class="big_slideshow_list" rel="bigslideshow">{{ /if }}<img src="{{ url options="image width 555 height 370 crop center" }}" width="555" height="370" rel="resizable" alt="{{ $gimme->article->image->description }}" title="{{ $gimme->article->image->description }}">{{ if $bigslideshow == 1 }}<div class="zoomie"></div></a>{{ /if }}
                                         <p>
 {{ if $gimme->article->image->description != "" }}
 {{ $gimme->article->image->description }} 
@@ -141,6 +145,7 @@ $(document).ready(function() {
 
 {{ if $slideshow gt 1 }}
 </ul>
+<div class="loading" style="height:431px"></div></div>
 {{ /if }}
 
 {{ /if }}
