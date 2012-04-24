@@ -23,14 +23,27 @@
             </div>
             
             <ul class="nav">
-                <li id="nav_all" class="nav_one active"><a href="{{ uri options="issue" }}agenda/">Alles</a></li>
-                <li id="nav_kino" class="nav_one"><a href="{{ uri options="issue" }}kinos/">Kino</a></li>
-                <li id="nav_theater" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:theater" onClick="return load_events('theater');">Theater</a></li>
-                <li id="nav_musik" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:musik" onClick="return load_events('musik');">Konzerte</a></li>
-                <li id="nav_party" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:party" onClick="return load_events('party');">Partys</a></li>
-                <li id="nav_ausstellung" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:ausstellung" onClick="return load_events('ausstellung');">Ausstellungen</a></li>
-                <li id="nav_andere" class="nav_one"><a href="{{ uri options="issue" }}events/#/;type:andere" onClick="return load_events('andere');">Andere</a></li>
-                <!--<li id="nav_restaurants" class="nav_one"><a href="{{ uri options="issue" }}restaurants/">Restaurants</a></li>-->
+{{ local }}
+{{* agenda *}}
+{{ set_current_issue }}
+{{ set_section number="70" }}
+                <li id="nav_all" class="nav_one active"><a href="{{ uri options="section" }}">Alles</a></li>
+{{* movies *}}
+{{ set_current_issue }}
+{{ set_section number="72" }}
+                <li id="nav_kino" class="nav_one"><a href="{{ uri options="section" }}">Kino</a></li>
+{{* events *}}
+{{ set_current_issue }}
+{{ set_section number="71" }}
+                <li id="nav_theater" class="nav_one"><a href="{{ uri options="section" }}#/;type:theater" onClick="return load_events('theater');">Theater</a></li>
+                <li id="nav_musik" class="nav_one"><a href="{{ uri options="section" }}#/;type:musik" onClick="return load_events('musik');">Konzerte</a></li>
+                <li id="nav_party" class="nav_one"><a href="{{ uri options="section" }}#/;type:party" onClick="return load_events('party');">Partys</a></li>
+                <li id="nav_ausstellung" class="nav_one"><a href="{{ uri options="section" }}#/;type:ausstellung" onClick="return load_events('ausstellung');">Ausstellungen</a></li>
+                <li id="nav_andere" class="nav_one"><a href="{{ uri options="section" }}#/;type:andere" onClick="return load_events('andere');">Andere</a></li>
+{{*
+                <!--<li id="nav_restaurants" class="nav_one"><a href="{{ uri options="section" }}restaurants/">Restaurants</a></li>-->
+*}}
             </ul>
+{{ /local }}
         
         </div>

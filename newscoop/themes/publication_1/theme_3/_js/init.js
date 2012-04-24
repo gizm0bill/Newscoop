@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	
-	$('select').dropdownized({fixed:true});
+// this makes problems for js-based select/options manipulations
+//	$('select').dropdownized({fixed:true});
 	
 	// Datepicker
 	$( ".datepicker" ).datepicker({
