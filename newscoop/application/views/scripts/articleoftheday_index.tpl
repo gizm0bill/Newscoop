@@ -1,7 +1,6 @@
-{{ $view->headLink() }}
 {{ $view->headScript() }}
 
-<div id="wobs_calendar_{{$rand_int}}" class="wobs-calendar wobs-calendar-full"></div>
+<div id="wobs_calendar_{{$rand_int}}" class="thumb-calendar"></div>
 
 <script>
 
