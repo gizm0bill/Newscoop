@@ -5,10 +5,10 @@
 
 Summary:        The open content management system for professional journalists
 Name:           newscoop
-Version:        3.5.1
+Version:        4.0.0
 Release:        1
 License:        GPL
-Packager:       Robin Gareus <robin@gareus.org>
+Packager:       Daniel James <daniel@64studio.com>
 
 # TODO: This group does not seem right.
 # but the closest found in /usr/share/doc/rpm-*/GROUPS 
@@ -58,10 +58,10 @@ cp -a newscoop %{buildroot}/var/lib/
 
 # TODO: create config-files - debian/ folder will not be present in tar-ball
 mkdir -p %{buildroot}/etc/newscoop/3.5/
-cp debian/etc/newscoop.ini %{buildroot}/etc/newscoop/3.5/
-cp debian/etc/apache.conf %{buildroot}/etc/newscoop/3.5/
-cp debian/etc/apache.vhost.tpl %{buildroot}/etc/newscoop/3.5/
-cp debian/etc/newscoop.cron.tpl %{buildroot}/etc/newscoop/3.5/
+cp debian/etc/newscoop.ini %{buildroot}/etc/newscoop/4.0/
+cp debian/etc/apache.conf %{buildroot}/etc/newscoop/4.0/
+cp debian/etc/apache.vhost.tpl %{buildroot}/etc/newscoop/4.0/
+cp debian/etc/newscoop.cron.tpl %{buildroot}/etc/newscoop/4.0/
 
 cd $RPM_BUILD_ROOT
 rm -f %{manifest}
@@ -79,14 +79,14 @@ rm -rf %{buildroot}
 %files -f %{manifest}
 %defattr(-,root,root)
 %doc ChangeLog  COPYING  CREDITS README  UPGRADE
-%config /etc/newscoop/3.5/apache.conf
-%config /etc/newscoop/3.5/newscoop.ini
-%config /etc/newscoop/3.5/apache.vhost.tpl
-%config /etc/newscoop/3.5/newscoop.cron.tpl
+%config /etc/newscoop/4.0/apache.conf
+%config /etc/newscoop/4.0/newscoop.ini
+%config /etc/newscoop/4.0/apache.vhost.tpl
+%config /etc/newscoop/4.0/newscoop.cron.tpl
 
 %post
 # symlink config files
-configdir="/etc/newscoop/3.5"
+configdir="/etc/newscoop/4.0"
 includefile="${configdir}/apache.conf"
 phpinifile="${configdir}/newscoop.ini"
 webserver="httpd"
@@ -146,8 +146,8 @@ if [ -L /etc/cron.d/newscoop ]; then
 fi
 # delete generated templates and user-installed plugins
 rm -rf /var/lib/newscoop || true
-rm -f /etc/newscoop/3.5/newscoop.cron || true
-rmdir /etc/newscoop/3.5 || true
+rm -f /etc/newscoop/4.0/newscoop.cron || true
+rmdir /etc/newscoop/4.0 || true
 rmdir /etc/newscoop/ || true
 		
 # XXX: restart apache - check if this is the recommended way
