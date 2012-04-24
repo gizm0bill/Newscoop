@@ -16,11 +16,7 @@ class ArticleofthedayController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/public/js/jquery.qtip.min.js'));
         $this->view->headScript()->appendFile($this->view->baseUrl('/public/js/jquery.wobscalendar.js'));
-
-        $this->view->headLink()->appendStylesheet($this->view->baseUrl('/public/css/jquery.qtip.css'));
-        $this->view->headLink()->appendStylesheet($this->view->baseUrl('/public/css/wobs_calendar.css'));
 
         $request = $this->getRequest();
 
@@ -88,7 +84,7 @@ class ArticleofthedayController extends Zend_Controller_Action
             $this->view->latestMonth = null;
         }
 
-        $imageWidth = $request->getParam('imageWidth', 128);
+        $imageWidth = $request->getParam('imageWidth', 140);
         if (!is_int($imageWidth)) {
             $imageWidth = 128;
         }
@@ -108,7 +104,7 @@ class ArticleofthedayController extends Zend_Controller_Action
         $start_date = $request->getParam('start');
         $end_date = $request->getParam('end');
 
-        $imageWidth = $request->getParam('image_width', 128);
+        $imageWidth = $request->getParam('image_width', 140);
 
         $articles = Article::GetArticlesOfTheDay($start_date, $end_date);
 
@@ -137,7 +133,7 @@ class ArticleofthedayController extends Zend_Controller_Action
             $YMD = explode("-", $date[0]);
 
             //month-1 is for js, months are 0-11.
-            $json['date'] = array("year"=>intval($YMD[0]), "month"=>intval($YMD[1]-1), "day"=>intval($YMD[2]));
+            $json['date'] = array("year"=>intval($YMD[0]), "month"=>intval($YMD[1]), "day"=>intval($YMD[2]));
 
             $json['url'] = ShortURL::GetURL($article->getPublicationId(), $article->getLanguageId(), null, null, $article_number);
 
