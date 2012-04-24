@@ -200,7 +200,7 @@ function load_area(area) {
                 <h3>Ort</h3>
                 <ul>
                     <li>
-                        <select id="wo" name="region" class="option_styled" onChange="load_area(this); return true;">
+                        <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
                                     <option value="kanton-basel-landschaft">Basel-Landschaft</option>

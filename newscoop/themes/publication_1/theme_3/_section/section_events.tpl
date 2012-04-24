@@ -278,7 +278,7 @@ function get_time_text($multi_time_text, $req_date)
                 <h3>Ort</h3>
                 <ul>
                     <li>
-                        <select id="wo" name="region" class="option_styled" onChange="load_area(this); return true;">
+                        <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
                                     <option value="kanton-basel-landschaft">Basel-Landschaft</option>
@@ -336,79 +336,6 @@ function get_time_text($multi_time_text, $req_date)
 <!--
                 <div class="event-finder">
 -->
-{{*
-                
-                  <article>
-                      <header>
-                            <p>Veranstaltungen suchen</p>
-                        </header>
-                    </article>
-                    
-                    <fieldset class="event-search">
-                      <ul class="clearfix">
-                          <li>
-                              <label for="was">Was</label>
-                                <span class="select-box">
-                                  <select id="was" name="was" class="option_styled">
-                                    <option value="alles" selected>Alles</option>
-                                    <option value="ausstellung">Ausstellung</option>
-                                    <option value="theater">Theater</option>
-<!--
-                                    <option value="konzert">Konzert</option>
--->
-                                    <option value="musik">Musik</option>
-                                    <option value="party">Party</option>
-<!--
-                                    <option value="zirkus">Zirkus</option>
--->
-                                    <option value="andere">Andere</option>
-                                  </select>
-                                </span>
-                            </li>
-                            <li>
-                              <label for="wann">Wann</label>
-                                <input type="text" value="" id="wann" class="datepicker" />
-                            </li>
-                            <li>
-                              <label for="wo">Wo</label>
-                                <span class="select-box">
-                                  <select id="wo" name="wo" class="option_styled">
-                                    <option value="region-basel" selected>Region Basel</option>
-                                    <option value="kanton-basel-stadt">Basel-Stadt</option>
-                                    <option value="kanton-basel-landschaft">Basel-Landschaft</option>
-                                    <option value="kanton-aargau">Aargau</option>
-                                    <option value="kanton-appenzell Ausserrhoden">Appenzell Ausserrhoden</option>
-                                    <option value="kanton-appenzell Innerrhoden">Appenzell Innerrhoden</option>
-                                    <option value="kanton-bern">Bern</option>
-                                    <option value="kanton-freiburg">Freiburg</option>
-                                    <option value="kanton-genf">Genf</option>
-                                    <option value="kanton-glarus">Glarus</option>
-                                    <option value="kanton-graubuenden">Graubünden</option>
-                                    <option value="kanton-jura">Jura</option>
-                                    <option value="kanton-luzern">Luzern</option>
-                                    <option value="kanton-neuenburg">Neuenburg</option>
-                                    <option value="kanton-nidwalden">Nidwalden</option>
-                                    <option value="kanton-obwalden">Obwalden</option>
-                                    <option value="kanton-schaffhausen">Schaffhausen</option>
-                                    <option value="kanton-schwyz">Schwyz</option>
-                                    <option value="kanton-solothurn">Solothurn</option>
-                                    <option value="kanton-st-gallen">St. Gallen</option>
-                                    <option value="kanton-tessin">Tessin</option>
-                                    <option value="kanton-thurgau">Thurgau</option>
-                                    <option value="kanton-uri">Uri</option>
-                                    <option value="kanton-waadt">Waadt</option>
-                                    <option value="kanton-wallis">Wallis</option>
-                                    <option value="kanton-zug">Zug</option>
-                                    <option value="kanton-zuerich">Zürich</option>
-                                  </select>
-                                </span>
-                            </li>
-                            <li class="right">
-                              <button class="button" id="suchen">SUCHEN</button>
-                            </li>
-                        </ul>
-                    </fieldset>                  
-*}}
 
 {{ assign var="load_list" 0 }}
 {{ if !empty($smarty.get.load) }}
