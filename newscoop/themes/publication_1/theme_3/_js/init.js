@@ -158,4 +158,14 @@ $(document).ready(function() {
 			$('blockquote').prepend('&laquo;');
 			$('blockquote').append('&raquo;');	
 		}
+
+	// Info icon hover
+	$('.top-filter li a.info').hover(
+		function(){
+			$(this).children('span').fadeIn('fast');
+		},
+		function(){
+			$(this).children('span').fadeOut('fast');
+		}
+	);
 });
