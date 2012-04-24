@@ -10,7 +10,7 @@ DEBRELEASE=$(head -n1 debian/changelog | cut -d ' ' -f 2 | sed 's/[()]*//g')
 DEBVERSION=$(echo $DEBRELEASE | sed 's/-.*$//g;s/~test[0-9]*//g')
 UPSTREAMVERSION=$(echo $DEBVERSION | sed 's/~/-/g')
 UPSTREAMDIST=$(echo $UPSTREAMVERSION | sed 's/^\([0-9]*\.[0-9]*\).*$/\1/')
-SFOCUSTOM="-RC4"
+SFOCUSTOM=""
 DEBPATH=`pwd`/debian # TODO check dirname $0
 MIRRORPATH=/tmp
 BUILDDEST=/tmp/newscoop-${DEBVERSION}/
@@ -126,7 +126,7 @@ if test "${UPSTREAMVERSION}" == "3.5.1"; then
 	rm newscoop/javascript/tinymce/plugins/codehighlighting/img/Thumbs.db
 fi
 
-### fixes for 4.0.0-RC4 ###
+### fixes for 4.0.0 ###
 if test "${UPSTREAMVERSION}" == "4.0.0"; then
 	rm newscoop/js/editarea/edit_area/plugins/test/images/Thumbs.db
         rm newscoop/install/sample_templates/the_new_custodian/templates/set_the_new_custodian/_img/.gitignore

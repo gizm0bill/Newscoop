@@ -1,6 +1,6 @@
 newscoop (4.0.0-1) unstable; urgency=low
 
-  * Upstream 4.0.0-RC4 release
+  * Upstream 4.0.0 release
   * Strip CAPTCHA fonts, depend on font package (CS-3997)
   * Suggest flite package for audio CAPTCHA
   * Change settings path to /etc/newscoop/4.0/
