@@ -424,7 +424,8 @@
         this.clear = clear;
         
         function buildLI() {
-            $li.append("<a><h5></h5><span></span><img></img></a>");
+            $li.removeClass()
+                .append("<a><h5></h5><span></span><img></img></a>");
         }
 
         function isCurrentMonth() {
