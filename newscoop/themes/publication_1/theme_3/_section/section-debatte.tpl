@@ -106,7 +106,7 @@ already at that stage in the proceedings *}}
 {{ if $wdphase >= $wdstage }}
   {{ include file="_tpl/debate_section-phase`$wdstage`.tpl" }}
 {{ else }}
-  {{ include file="_tpl/debate_section-phase0.tpl" }}
+  {{ include file="_tpl/debate_section-phase`$wdphase`.tpl" }}{{* used to be tpl/debate_section-phase0.tpl *}}
 {{ /if }}
  
 {{ list_articles length="1" constraints="type is deb_moderator" }}               

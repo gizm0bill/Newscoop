@@ -1,30 +1,21 @@
         <div class="top-line clearfix">
                 
-                	<h3>Repliken</h3>
+                	<h3>Standpunkte</h3>
                     
                     <div class="two-columns">
                     
+{{ list_articles length="2" constraints="type is deb_statement" }}                    
                     	<article>
-                        	
+{{ list_article_authors }}                       	
                             <figure>
-                            	<img src="pictures/author-img-1.jpg" alt="" class="left" />
-                                <h4>JA</h4>
-                            	<p>David Bauer, Redaktor der TagesWoche</p>
+                            	<img alt="Portrait {{ $gimme->author->name }}" src="{{ $gimme->author->picture->imageurl }}" width="120" class="left" />
+                                <h4>{{ if $gimme->article->contra }}NEIN{{ else }}JA{{ /if }}</h4>
+                            	<p>{{ $gimme->author->name }}, {{ $gimme->article->position }}</p>
                             </figure>
-                        	<p>Die Buchpreisbindung ist kein Wundermittel. Sie ist eine Stütze für eine wichtige Kultursparte. Die blabla bla «Die Buchpreisbindung ist kein Wundermittel. Sie ist eine Stütze für eine wichtige ltursparte. Die blabla bla «Die hpreisbindung ist kein Wundermittel.Sie ist eine Stütze für eine wichtige ltursparte. Die blabla bla «Die hpreisbindung ist kein Wundermittel. Sie ist ne Stütze für eine wichtige ltursparte.</p>
-                        
+{{ /list_article_authors }}
+                        	<p>{{ $gimme->article->opening }}</p>                        
                         </article>
-                        
-                    	<article>
-                        
-                        	<figure>
-                            	<img src="pictures/author-img-1.jpg" alt="" class="left" />
-                                <h4>NEIN</h4>
-                            	<p>Dani Winter, Redaktor der TagesWoche und Experte für Buchpreisfragen</p>
-                            </figure>
-                        	<p>Die Buchpreisbindung ist kein Wundermittel. Sie ist eine Stütze für eine wichtige Kultursparte. Die blabla bla «Die Buchpreisbindung ist kein Wundermittel. Sie ist eine Stütze für eine wichtige ltursparte. Die blabla bla «Die hpreisbindung ist kein Wundermittel. Sie ist eine Stütze für eine wichtige ltursparte. Die blabla bla «Die hpreisbindung ist kein Wundermittel. Sie ist ine Stütze für eine wichtige ltursparte. Die blabla bla «Die hpreisbindung ist kein Wundermittel ist eine Stütze für eine wichtige ltursparte. Die blabla bla «Die hpreisbindung ist kein Wundermittel. Sie ist eine Stütze für eine wichtige ltursparte. Die blabla bla hpreisbindung ist kein Wundermittel. Sie ist eine Stütze für</p>
-                        
-                        </article>
+{{ /list_articles }}                        
                     
                     </div>                
                 </div>
