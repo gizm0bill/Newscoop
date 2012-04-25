@@ -3,15 +3,6 @@
 
 <body>
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1&appId=204329636307540";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
 	<div id="wrapper">
         
 {{ include file="_tpl/header-omnibox.tpl" }}
@@ -26,7 +17,7 @@
                 
                     <article>
                         <header>
-                            <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
+                            <p><a href="#">Basel</a></p>
                         </header>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
@@ -35,8 +26,9 @@
 
 								{{ if $gimme->article->body }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}{{ else }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
 
-                        <div id="social_bookmarks"></div>
                     </article>
+                    
+                    <br><a class="button iframe" id="article-recommend-button" href="{{$view->baseUrl()}}/article-recommendation/?article_number={{$gimme->article->number}}">Recommend this article</a><br>
                 
                 </section><!-- / Main Section -->
                 
@@ -47,7 +39,7 @@
 {{* ARTICLE TOPICS *}}
 {{ list_article_topics }}                
 {{ if $gimme->current_list->at_beginning }}
-                    <article class="links-fix">                                            
+                    <article>                                            
                         <header>
                             <p>Mehr zum Thema</p>
                         </header>
@@ -56,7 +48,6 @@
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
                         </p>
-                        <p><a href="#" class="theme-subscribe">Themen abonnieren</a></p>
                     </article>                        
 {{ /if }}   
 {{ /list_article_topics }}                    
@@ -132,7 +123,7 @@
                 
                     <article>
                         <header>
-                            <p>Hintergrund zum Artikel</p>
+                            <p>Informationen zum Artikel</p>
                         </header>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         
@@ -201,12 +192,10 @@
 {{ list_article_authors }} 
     {{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
     {{ $numArticles=0  }}
-
-{{ if $gimme->article->type_name == "news" }}    
+    
     {{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName"}}
         {{ $numArticles = $numArticles+1 }}
     {{ /list_articles }}
-{{ /if }}
     
     <div class="author-box">
         <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
@@ -215,31 +204,23 @@
                 {{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
                 <p>{{ $gimme->author->biography->text }}</p>
             </li>
-
-{{ if $gimme->article->type_name == "news" }}            
             <li>
                 <h5>Beiträge</h5>
                 <p>{{ $numArticles }}</p>
             </li>
-{{ /if }}
-            
             <li>
                 <h5>Social Networks</h5>
                 <p class="social">
-                    <div class="fb-subscribe" data-href="https://www.facebook.com/davidbauer" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="130"></div> 
-                    <a href="https://twitter.com/davidbauer" class="twitter-follow-button" data-show-count="false" data-lang="de">@davidbauer folgen</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    <a href="#" class="grey-button"><span class="fb">Subscribe</span></a> <a href="#" class="grey-button"><span class="tw">Follow</span></a>
                 </p>
             </li>
         </ul>
     </div>
-
-{{ if $gimme->article->type_name == "news" }}                                
+                                
     {{ include file="_tpl/user-content.tpl" }}
-{{ /if }}
                         
-{{ /list_article_authors }}                        
-
+{{ /list_article_authors }}
+                                                
                     </article>
                 
                 </section><!-- / Main Section -->
@@ -262,7 +243,15 @@
 {{ /if }}      
 {{ /list_related_articles }}              
                     
-{{ include file="_tpl/sidebar-honorieren.tpl" }}
+                    <article>
+                        <header>
+                            <p>Tageswoche honorieren</p>
+                        </header>
+                        <p>Alle Artikel auf tageswoche.ch sind feri verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, können Sie uns freiwillig unterstützen. Sie entscheiden wieviel Sie bezahlen. Danke, dass Sie uns helfen, tageswoche.ch in Zukunft besser zu machen.</p>
+                    </article>
+                    
+                    <a href="#" class="grey-button reward-button"><span>Jetzt honorieren!</span></a>
+                    {{* pay_what_you_like *}}
 
 {{*** WERBUNG ***}}                    
 {{ include file="_werbung/article-sidebar-3-backpage.tpl" }}
