@@ -33,7 +33,7 @@ $(function() {
 {{/block}}
 
 {{block top}}
-<ul class="top-filter">
+<ul class="top-filter clearfix">
     <li class="filter">Filter</li>
     <li class="title">Ticker</li>
     <li class="type">Quelle</li>

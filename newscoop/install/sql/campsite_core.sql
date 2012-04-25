@@ -3190,3 +3190,8 @@ ALTER TABLE `package_article_package`
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2011-06-13 12:28:31
+
+-- tw upgrade 2012-04-04
+ALTER TABLE `Articles` ADD COLUMN `indexed` datetime;
+ALTER TABLE `liveuser_users` ADD COLUMN `indexed` datetime;
+ALTER TABLE `comment` ADD COLUMN `indexed` datetime;

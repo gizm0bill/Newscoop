@@ -12,7 +12,7 @@ use Newscoop\Entity\Article;
 class Api_ArticlesController extends Zend_Controller_Action
 {
     const LANGUAGE = 5;
-    const ARTICLE_RENDITION = 'artikel';
+    const ARTICLE_RENDITION = 'topfront';
     const LIST_URI_PATH = 'articles/list';
     const ITEM_URI_PATH = 'articles/item';
 
@@ -125,25 +125,36 @@ class Api_ArticlesController extends Zend_Controller_Action
         }
 
         $image = $this->getImage($article);
-        $imageUrl = !empty($image) ? $image->src : null;
+        $imageUrl = !empty($image) ? 'http://tw-reloaded.lab.sourcefabric.org/images/cache/' . $image->src : null;
 
         $comments = Zend_Registry::get('container')->getService('comment')->countBy(array(
             'language' => $this->language->getId(),
             'thread' => $article->getId(),
         ));
 
+        $teaserField = 'teaser';
+        $bodyField = 'body';
+        if ($article->getType() == 'newswire') {
+            $teaserField = 'DataLead';
+            $bodyField = 'DataContent';
+        }
+
         $this->response = array(
             'article_id' => $article->getId(),
             'title' => $article->getTitle(),
+            'dateline' => $articleData->getFieldValue('dateline'),
             'publish_date' => $article->getPublishDate(),
             'last_modified' => $article->getDate(),
-            'teaser' => $articleData->getFieldValue('teaser'),
-            'body' => $articleData->getFieldValue('body'),
+            'teaser' => $articleData->getFieldValue($teaserField),
+            'body' => $articleData->getFieldValue($bodyField),
             'image_url' => $imageUrl,
             'comment_count' => $comments,
         );
 
-        print Zend_Json::encode($this->response);
+        $smarty = CampTemplate::singleton();
+        $smarty->setTemplateDir('/var/www/tw-reloaded/application/modules/api/views');
+        $smarty->assign('data', $this->response);
+        $smarty->display('scripts/articles/article.phtml');
     }
 
     /**

@@ -7,15 +7,15 @@ var Document = Backbone.Model.extend({
     year: 3600 * 24 * 365,
 
     types: {
-        'news': 'article',
+        'news': 'omni',
         'newswire': 'article',
-        'dossier': 'article',
+        'dossier': 'dossier',
         'user': 'user',
         'tweet': 'twitter',
         'event': 'event',
-        'comment': 'omni',
+        'comment': 'comment',
         'link': 'link',
-        'blog': 'article'
+        'blog': 'omni'
     },
 
     /**
@@ -175,7 +175,7 @@ var DocumentCollection = Backbone.Collection.extend({
      * @return {bool}
      */
     hasSuggestion: function() {
-        return this.response.spellcheck.suggestions.length !== 0;
+        return this.response.spellcheck && this.response.spellcheck.suggestions.length !== 0;
     },
 
     /**

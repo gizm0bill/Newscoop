@@ -2,6 +2,12 @@ $(document).ready(function() {
 	
 // this makes problems for js-based select/options manipulations
 //	$('select').dropdownized({fixed:true});
+    $('select').each(function(ind_elm, elm) {
+        var jq_elm = $(elm);
+        if (!jq_elm.hasClass('omit_dropdown')) {
+            jq_elm.dropdownized({fixed:true});
+        }
+    });
 	
 	// Datepicker
 	$( ".datepicker" ).datepicker({
@@ -158,4 +164,14 @@ $(document).ready(function() {
 			$('blockquote').prepend('&laquo;');
 			$('blockquote').append('&raquo;');	
 		}
+
+	// Info icon hover
+	$('.top-filter li a.info').hover(
+		function(){
+			$(this).children('span').fadeIn('fast');
+		},
+		function(){
+			$(this).children('span').fadeOut('fast');
+		}
+	);
 });

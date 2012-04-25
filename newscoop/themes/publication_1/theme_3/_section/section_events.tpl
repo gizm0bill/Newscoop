@@ -2,10 +2,6 @@
 
 <style type="text/css">
 
-#wann {
-    width: 120px !important;
-}
-
 .loading_block_events {
     margin-top: 25px;
     margin-bottom: 100px;
@@ -52,29 +48,6 @@
 
 
 <script type="text/javascript">
-/* German initialisation for the jQuery UI date picker plugin. */
-/* Written by Milian Wolff (mail@milianw.de). */
-jQuery(function($){
-  $.datepicker.regional['de'] = {
-    closeText: 'schließen',
-    prevText: '&#x3c;zurück',
-    nextText: 'Vor&#x3e;',
-    currentText: 'heute',
-    monthNames: ['Januar','Februar','März','April','Mai','Juni',
-    'Juli','August','September','Oktober','November','Dezember'],
-    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-    'Jul','Aug','Sep','Okt','Nov','Dez'],
-    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    weekHeader: 'Wo',
-    dateFormat: 'dd.mm.yy',
-    firstDay: 1,
-    isRTL: false,
-    showMonthAfterYear: false,
-    yearSuffix: ''};
-  $.datepicker.setDefaults($.datepicker.regional['de']);
-});
 
 window.list_spec = {
     type: '',
@@ -152,22 +125,6 @@ $(document).ready(function() {
     //$("#was").val('alles');
     $("#was").val('theater');
     $("#wo").val('region-basel');
-
-  // Datepicker
-  var dp = $( ".datepicker" ).datepicker({
-    showOn: "button",
-    buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
-    buttonImageOnly: true
-  });
-
-    $("#wann").attr('disabled', true);
-
-    $(".datepicker").datepicker("setDate" , new Date());
-    $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
-
-    $("#wann").change( function() {
-        window.reload();
-    });
 
 });
 
@@ -267,18 +224,11 @@ function get_time_text($multi_time_text, $req_date)
         <div class="content-box clearfix reverse-columns agenda-content">
 
             <aside>
-
-                <ul id="datepicker_single_ul" style="display:none">
-                            <li>
-                              <label for="wann">Wann</label>
-                                <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
-                            </li>
-                </ul>
             
                 <h3>Ort</h3>
                 <ul>
                     <li>
-                        <select id="wo" name="region" class="option_styled" onChange="load_area(this); return true;">
+                        <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
                                     <option value="kanton-basel-landschaft">Basel-Landschaft</option>
@@ -325,7 +275,7 @@ function get_time_text($multi_time_text, $req_date)
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-1.jpg" }}" alt="" /></a></li>
                 </ul>
                 
-                <p><a href="#">Melden Sie Ihre Veranstaltung!</a></p>
+                <p><a href="mailto:agenda@tageswoche.ch">Melden Sie Ihre Veranstaltung!</a></p>
             
             </aside>
 
@@ -336,79 +286,6 @@ function get_time_text($multi_time_text, $req_date)
 <!--
                 <div class="event-finder">
 -->
-{{*
-                
-                  <article>
-                      <header>
-                            <p>Veranstaltungen suchen</p>
-                        </header>
-                    </article>
-                    
-                    <fieldset class="event-search">
-                      <ul class="clearfix">
-                          <li>
-                              <label for="was">Was</label>
-                                <span class="select-box">
-                                  <select id="was" name="was" class="option_styled">
-                                    <option value="alles" selected>Alles</option>
-                                    <option value="ausstellung">Ausstellung</option>
-                                    <option value="theater">Theater</option>
-<!--
-                                    <option value="konzert">Konzert</option>
--->
-                                    <option value="musik">Musik</option>
-                                    <option value="party">Party</option>
-<!--
-                                    <option value="zirkus">Zirkus</option>
--->
-                                    <option value="andere">Andere</option>
-                                  </select>
-                                </span>
-                            </li>
-                            <li>
-                              <label for="wann">Wann</label>
-                                <input type="text" value="" id="wann" class="datepicker" />
-                            </li>
-                            <li>
-                              <label for="wo">Wo</label>
-                                <span class="select-box">
-                                  <select id="wo" name="wo" class="option_styled">
-                                    <option value="region-basel" selected>Region Basel</option>
-                                    <option value="kanton-basel-stadt">Basel-Stadt</option>
-                                    <option value="kanton-basel-landschaft">Basel-Landschaft</option>
-                                    <option value="kanton-aargau">Aargau</option>
-                                    <option value="kanton-appenzell Ausserrhoden">Appenzell Ausserrhoden</option>
-                                    <option value="kanton-appenzell Innerrhoden">Appenzell Innerrhoden</option>
-                                    <option value="kanton-bern">Bern</option>
-                                    <option value="kanton-freiburg">Freiburg</option>
-                                    <option value="kanton-genf">Genf</option>
-                                    <option value="kanton-glarus">Glarus</option>
-                                    <option value="kanton-graubuenden">Graubünden</option>
-                                    <option value="kanton-jura">Jura</option>
-                                    <option value="kanton-luzern">Luzern</option>
-                                    <option value="kanton-neuenburg">Neuenburg</option>
-                                    <option value="kanton-nidwalden">Nidwalden</option>
-                                    <option value="kanton-obwalden">Obwalden</option>
-                                    <option value="kanton-schaffhausen">Schaffhausen</option>
-                                    <option value="kanton-schwyz">Schwyz</option>
-                                    <option value="kanton-solothurn">Solothurn</option>
-                                    <option value="kanton-st-gallen">St. Gallen</option>
-                                    <option value="kanton-tessin">Tessin</option>
-                                    <option value="kanton-thurgau">Thurgau</option>
-                                    <option value="kanton-uri">Uri</option>
-                                    <option value="kanton-waadt">Waadt</option>
-                                    <option value="kanton-wallis">Wallis</option>
-                                    <option value="kanton-zug">Zug</option>
-                                    <option value="kanton-zuerich">Zürich</option>
-                                  </select>
-                                </span>
-                            </li>
-                            <li class="right">
-                              <button class="button" id="suchen">SUCHEN</button>
-                            </li>
-                        </ul>
-                    </fieldset>                  
-*}}
 
 {{ assign var="load_list" 0 }}
 {{ if !empty($smarty.get.load) }}
@@ -527,15 +404,21 @@ function get_time_text($multi_time_text, $req_date)
 -->
 
 {{ assign var="colcount" 10 }}
+{{ assign var="event_rank" 0 }}
 
 <div id="newslist">
 {{ if 1 eq $load_list }}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
-    {{ if $gimme->current_list->column == "1" }}
-                    <ul class="event-search-results">
-    {{ /if }}
-                        <li class="{{ if $gimme->article->recommended }} stared{{ /if }}">
-                            <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ if $gimme->article->genre }}{{ $gimme->article->genre }}: {{ /if }}{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate" }}
+    {{ assign var="event_rank" $event_rank+1 }}
+    {{* if $gimme->current_list->column == "1" *}}
+{{*                    <ul class="event-search-results">*}}
+    {{* /if *}}
+                        <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
+                            {{ if $gimme->article->has_image(1) }}
+                                    <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                            {{ /if }}
+                            <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+                            {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
                             <p>{{ $gimme->article->description|truncate:140 }} <a href="{{ uri options="article" }}?date={{$usedate}}">Details</a></p>
 
 {{ assign var="one_time" "" }}
@@ -563,14 +446,19 @@ $template->assign('one_time', $one_time);
 {{ /if }}
 
                             <p>{{ if $gimme->article->organizer }}{{ $gimme->article->organizer|replace:'\\':'\'' }}, {{ /if }}{{ if $one_time }}{{ $one_time }} Uhr {{ /if }}{{ $usedate|camp_date_format:"%e.%m.%Y" }}</p>
-                        </li>
-    {{ if ($gimme->current_list->column == "$colcount") || $gimme->current_list->at_end }}
-                    </ul>
-    {{ /if }}
+                        </article>
+    {{* if ($gimme->current_list->column == "$colcount") || $gimme->current_list->at_end *}}
+{{*                    </ul>*}}
+    {{* /if *}}
     {{ $page_count=ceil($gimme->current_list->count/$colcount) }}
     {{ $page_offset=intval($gimme->url->get_parameter($gimme->current_list_id())) }}
     {{ $list_name=$gimme->current_list_id() }}
 {{ /list_articles }}
+
+{{ if $event_rank eq 0 }}
+    <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
+{{ /if }}
+
 {{ else }}
 {{ list_articles length="1" }}{{* dummy list to have the list id *}}
     {{ $list_name=$gimme->current_list_id() }}
