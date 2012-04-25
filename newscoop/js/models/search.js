@@ -71,7 +71,7 @@ var Document = Backbone.Model.extend({
             return tweet;
         }
 
-        return tweet.replace(/(http:\/\/t.co\/[\w]+)/, '<a href="$1" rel="nofollow">$1</a>');
+        return tweet.replace(/(http:\/\/t.co\/[\w]+)/, '<a href="$1" rel="nofollow" target="_blank">$1</a>');
     },
 
     /**

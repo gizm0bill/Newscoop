@@ -54,7 +54,7 @@
 </script>
 
 <script type="text/template" id="document-link-template">
-<p><%= doc.escape('link_description') %> <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('title') %></a></p>
+<p><%= doc.escape('link_description') %> <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>" target="_blank"><%= doc.escape('title') %></a></p>
 <span class="icon" title="Link">Link</span>
 <span class="info"><%= doc.relDate('published') %></span>
 </script>
