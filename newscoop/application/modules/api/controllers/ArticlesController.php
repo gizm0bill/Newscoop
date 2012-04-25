@@ -135,6 +135,7 @@ class Api_ArticlesController extends Zend_Controller_Action
         $this->response = array(
             'article_id' => $article->getId(),
             'title' => $article->getTitle(),
+            'dateline' => $articleData->getFieldValue('dateline'),
             'publish_date' => $article->getPublishDate(),
             'last_modified' => $article->getDate(),
             'teaser' => $articleData->getFieldValue('teaser'),
@@ -143,7 +144,10 @@ class Api_ArticlesController extends Zend_Controller_Action
             'comment_count' => $comments,
         );
 
-        print Zend_Json::encode($this->response);
+        $smarty = CampTemplate::singleton();
+        $smarty->setTemplateDir('/var/www/tw-reloaded/application/modules/api/views');
+        $smarty->assign('data', $this->response);
+        $smarty->display('scripts/articles/article.phtml');
     }
 
     /**
