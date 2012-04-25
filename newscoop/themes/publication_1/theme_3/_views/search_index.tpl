@@ -37,6 +37,6 @@ $(function() {
         </form>
     </li>
     <li class="type">Typ</li>
-    <li id="sort-latest" class="time">veröffentlicht <a class="sort" href="#">&nbsp;</a></li>
+    <li id="sort-latest" class="time"><a class="sort" href="#">Veröffentlicht</a></li>
 </ul>
 {{/block}}
