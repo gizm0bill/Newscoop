@@ -11,6 +11,24 @@
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
+            	<a href="/" class="start">Startseite</a>
+                <ul id="mobile-nav">
+                    <li class="search"><a href="#">Search</a>
+                    	<ul class="search-mobile">
+                        	<li>
+                            	<input type="text" value="">
+                                <input type="submit" value="Suchen" class="grey-button">
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="settings"><a href="#">Settings</a></li>
+                    <li class="login"><a href="#">Login</a>
+                    	<ul>
+                        	<li><a href="#">Profil bearbeiten</a></li>
+                        	<li><a href="#">Meine Themen</a></li>
+                        </ul>
+                    </li>
+                </ul>
                 <nav>
                     <ul>
 
