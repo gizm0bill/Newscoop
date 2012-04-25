@@ -243,6 +243,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ->addArgument(new sfServiceReference('search.index'))
             ->addArgument(new sfServiceReference('twitter.search'))
             ->addArgument(new sfServiceReference('tweet.repository'));
+        
+        $container->register('link', 'Newscoop\Article\LinkService')
+            ->addArgument(new sfServiceReference('em'));
 
         $container->register('webcoder', 'Newscoop\Webcode\Mapper');
 
