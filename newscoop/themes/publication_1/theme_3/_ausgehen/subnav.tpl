@@ -64,6 +64,43 @@ jQuery(function($){
     });
 
 });
+
+function update_subnav_links(link_date, link_region) {
+    var old_link = "";
+    var new_link = "";
+
+    var repl_links = [
+        "nav_all_link",
+        "nav_kino_link", 
+        "nav_theater_link",
+        "nav_musik_link",
+        "nav_party_link",
+        "nav_ausstellung_link",
+        "nav_andere_link"
+    ];
+    var repl_count = repl_links.length;
+
+    if (/^(\d){4}-(\d){2}-(\d){2}$/.test(link_date)) {
+        for (var dind = 0; dind < repl_count; dind++) {
+            var d_ident = "#" + repl_links[dind];
+
+            old_link = $(d_ident).attr("href");
+            new_link = old_link.replace(/;date:[\d-]+/i, ";date:"+link_date);
+            $(d_ident).attr("href", new_link);
+        }
+    }
+
+    if (/^[a-zA-Z-]+$/.test(link_region)) {
+        for (var rind = 0; rind < repl_count; rind++) {
+            var r_ident = "#" + repl_links[rind];
+
+            old_link = $(r_ident).attr("href");
+            new_link = old_link.replace(/;region:[a-zA-Z-]+/i, ";region:"+link_region);
+            $(r_ident).attr("href", new_link);
+        }
+    }
+
+}
 </script>
 
         <div class="content-box agenda-top">
@@ -100,19 +137,19 @@ jQuery(function($){
 {{* agenda *}}
 {{ set_current_issue }}
 {{ set_section number="70" }}
-                <li id="nav_all" class="nav_one active"><a href="{{ uri options="section" }}">Alles</a></li>
+                <li id="nav_all" class="nav_one active"><a id="nav_all_link" href="{{ uri options="section" }}#/;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt">Alles</a></li>
 {{* movies *}}
 {{ set_current_issue }}
 {{ set_section number="72" }}
-                <li id="nav_kino" class="nav_one"><a href="{{ uri options="section" }}">Kino</a></li>
+                <li id="nav_kino" class="nav_one"><a id="nav_kino_link" href="{{ uri options="section" }}#/;type:kino;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt">Kino</a></li>
 {{* events *}}
 {{ set_current_issue }}
 {{ set_section number="71" }}
-                <li id="nav_theater" class="nav_one"><a href="{{ uri options="section" }}#/;type:theater" onClick="return load_events('theater');">Theater</a></li>
-                <li id="nav_musik" class="nav_one"><a href="{{ uri options="section" }}#/;type:musik" onClick="return load_events('musik');">Konzerte</a></li>
-                <li id="nav_party" class="nav_one"><a href="{{ uri options="section" }}#/;type:party" onClick="return load_events('party');">Partys</a></li>
-                <li id="nav_ausstellung" class="nav_one"><a href="{{ uri options="section" }}#/;type:ausstellung" onClick="return load_events('ausstellung');">Ausstellungen</a></li>
-                <li id="nav_andere" class="nav_one"><a href="{{ uri options="section" }}#/;type:andere" onClick="return load_events('andere');">Andere</a></li>
+                <li id="nav_theater" class="nav_one"><a id="nav_theater_link" href="{{ uri options="section" }}#/;type:theater;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('theater');">Theater</a></li>
+                <li id="nav_musik" class="nav_one"><a id="nav_musik_link" href="{{ uri options="section" }}#/;type:musik;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('musik');">Konzerte</a></li>
+                <li id="nav_party" class="nav_one"><a id="nav_party_link" href="{{ uri options="section" }}#/;type:party;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('party');">Partys</a></li>
+                <li id="nav_ausstellung" class="nav_one"><a id="nav_ausstellung_link" href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('ausstellung');">Ausstellungen</a></li>
+                <li id="nav_andere" class="nav_one"><a id="nav_andere_link" href="{{ uri options="section" }}#/;type:andere;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('andere');">Andere</a></li>
 {{*
                 <!--<li id="nav_restaurants" class="nav_one"><a href="{{ uri options="section" }}restaurants/">Restaurants</a></li>-->
 *}}

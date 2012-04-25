@@ -586,12 +586,14 @@ window.set_list_content = function(data, direct) {
     if (direct) {
         $('#newslist').html(data);
         //$('#newslist_pagination').html('&nbsp;');
+        $('#newslist_pagination').hide();
         return;
     }
 
     var dom = $(data);
     $('#newslist').html($('#newslist', dom).html());
     $('#newslist_pagination').html($('#newslist_pagination', dom).html());
+    $('#newslist_pagination').show();
 
     //window.set_cufon_fonts();
     //Cufon.now();
@@ -619,6 +621,9 @@ window.paginate = function(page, listname, setcount) {
 
     $.get(path, {}, function (data, textStatus, jqXHR) {
         window.list_spec['page'] = page_value;
+
+        update_subnav_links(window.list_spec['date'], window.list_spec['region']);
+
         $.address.value(path_spec);
 
         window.set_list_content(data);
@@ -703,6 +708,8 @@ window.reload = function(page) {
         window.list_spec['date'] = when_val;
         window.list_spec['region'] = where_val;
         window.list_spec['page'] = 1;
+
+        update_subnav_links(window.list_spec['date'], window.list_spec['region']);
 
         $.address.value(path_spec);
         window.set_list_content(data);
