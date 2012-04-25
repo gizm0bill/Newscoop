@@ -412,7 +412,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                           <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
                           {{ /if }}
 
-                          <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}">{{ $gimme->article->headline }}</a> {{ if $recommended }}<small class="tw_recommended"></small>{{ /if }}</h3>
+                          <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">{{ $gimme->article->headline }}</a> {{ if $recommended }}<small class="tw_recommended"></small>{{ /if }}</h3>
                             <ul class="top-list-details">
                                 {{ assign var="movie_rating_wv" $gimme->article->movie_rating_wv }}
                                 {{ if $movie_rating_wv ne "" }}
@@ -431,7 +431,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
                             <p>
                             {{ $gimme->article->description|strip_tags|truncate:300 }}
-                            <a href="{{ uri options="article" }}?region={{ $linkregion }}">Details, Trailer & Bilder</a>
+                            <a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">Details, Trailer & Bilder</a>
                             </p>
                             <ul class="bottom-list-details clearfix">
         {{ /if }}

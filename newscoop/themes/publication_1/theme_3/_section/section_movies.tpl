@@ -560,8 +560,16 @@ return;
 
 {{* by default we gonna limit event list to those happening today *}} 
 {{ assign var="usedate" $smarty.now|camp_date_format:"%Y-%m-%d" }}
+{{ assign var="usedate_link" $usedate }}
 {{ if !empty($smarty.get.date) }}
     {{ assign var="usedate" $smarty.get.date|replace:" ":"\\ "|replace:'"':"" }}
+{{ /if }}
+
+{{ assign var="usedate_test" $usedate|regex_replace:"/(\d){4}-(\d){2}-(\d){2}/":"ok" }}
+{{ if "ok" != $usedate }}
+    {{ if "ok" == $usedate_test }}
+        {{ assign var="usedate_link" $usedate }}
+    {{ /if }}
 {{ /if }}
 
 {{ assign var="condate" ""}}
@@ -849,7 +857,7 @@ function parse_date_text($date_time_text)
                             <a href="{{ uri options='section' }}?vimeo={{ $vimeo_trailer_id }}" class="grey-button trailer-button"; return false;"><span>Trailer anschauen</span></a>
                           {{ /if }}
                           {{* assign var="recommended" $gimme->article->recommended *}}
-                          <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}">{{ $gimme->article->headline }}</a>{{* if $recommended *}}<small id="tw_recommended_{{ $movie_rank }}" class="tw_recommended" style="display:none"></small>{{* /if *}}</h3>
+                          <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">{{ $gimme->article->headline }}</a>{{* if $recommended *}}<small id="tw_recommended_{{ $movie_rank }}" class="tw_recommended" style="display:none"></small>{{* /if *}}</h3>
                           {{ if $gimme->article->movie_trailer_vimeo ne "" }}
                             <div style="display:none;" id="vimeo_trailer_outer_{{$gimme->article->movie_trailer_vimeo}}">&nbsp;
                             </div><!-- vimeo_trailer_outer -->
@@ -890,7 +898,7 @@ function parse_date_text($date_time_text)
                                 {{ $gimme->article->description|strip_tags|truncate:$max_text_len:" [...]" }}
                             </span>
                           {{ /if }}
-                          <a href="{{ url options="article" }}?region={{ $linkregion }}">Details, Trailer & Bilder</a></p>
+                          <a href="{{ url options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">Details, Trailer & Bilder</a></p>
 
 
         {{ assign var="lastmovname" $gimme->article->headline }}
