@@ -2,6 +2,24 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
 <body>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '204329636307540',
+      xfbml      : true  // parse XFBML
+    });
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+</script>
 
 	<div id="wrapper">
         
@@ -209,12 +227,22 @@
                 <h5>Beiträge</h5>
                 <p>{{ $numArticles }}</p>
             </li>
+            {{ if $gimme->author->user->defined && (isset($gimme->author->user['facebook']) || isset($gimme->author->user['twitter'])) }}
             <li>
                 <h5>Social Networks</h5>
                 <p class="social">
-                    <a href="#" class="grey-button"><span class="fb">Subscribe</span></a> <a href="#" class="grey-button"><span class="tw">Follow</span></a>
+                    {{ if isset($gimme->author->user['facebook']) }}
+                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ $gimme->author->user['facebook'] }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="90"></div>
+                    {{ /if }}
+                    {{ if isset($gimme->author->user['twitter']) }}
+                    <div class="tw-follow" style="display: inline-block; position: relative; top: 2px; left: 8px">
+                        <a href="http://twitter.com/{{ $gimme->author->user['twitter'] }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ $gimme->author->user['twitter'] }} folgen</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    </div>
+                    {{ /if }}
                 </p>
             </li>
+            {{ /if }}
         </ul>
     </div>
                                 

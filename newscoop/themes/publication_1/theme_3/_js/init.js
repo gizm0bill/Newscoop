@@ -128,6 +128,8 @@ $(document).ready(function() {
     if (document.location.hash == '#hintergrund') {
         $('a.article-view-rear').trigger('click');
     }	
+    
+    $('#article-recommend-button').fancybox({height: 460, padding: 4, margin: 0, scrolling: 0});
 	
 	$('#main-nav .start').click(function(){
 		$(this).toggleClass('active');
