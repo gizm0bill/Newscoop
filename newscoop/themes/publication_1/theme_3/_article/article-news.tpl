@@ -35,8 +35,9 @@
 
 								{{ if $gimme->article->body }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}{{ else }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
 
-                        <div id="social_bookmarks"></div>
                     </article>
+                    
+                    {{ include file="_tpl/social-bookmarks.tpl" }}
                 
                 </section><!-- / Main Section -->
                 
