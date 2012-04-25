@@ -1,6 +1,13 @@
 $(document).ready(function() {
 	
-	$('select').dropdownized({fixed:true});
+// this makes problems for js-based select/options manipulations
+//	$('select').dropdownized({fixed:true});
+    $('select').each(function(ind_elm, elm) {
+        var jq_elm = $(elm);
+        if (!jq_elm.hasClass('omit_dropdown')) {
+            jq_elm.dropdownized({fixed:true});
+        }
+    });
 	
 	// Datepicker
 	$( ".datepicker" ).datepicker({
