@@ -3,6 +3,7 @@
     width: 80px !important;
     margin-top: 0px;
     height: 12px;
+    background: #fafafa;
 }
 
 #wann_middle {

@@ -848,8 +848,8 @@ function parse_date_text($date_time_text)
                           {{ if $vimeo_trailer_id ne "" }}
                             <a href="{{ uri options='section' }}?vimeo={{ $vimeo_trailer_id }}" class="grey-button trailer-button"; return false;"><span>Trailer anschauen</span></a>
                           {{ /if }}
-                          {{ assign var="recommended" $gimme->article->recommended }}
-                          <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}">{{ $gimme->article->headline }}</a> {{ if $recommended }}<small class="tw_recommended"></small>{{ /if }}</h3>
+                          {{* assign var="recommended" $gimme->article->recommended *}}
+                          <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}">{{ $gimme->article->headline }}</a>{{* if $recommended *}}<small id="tw_recommended_{{ $movie_rank }}" class="tw_recommended" style="display:none"></small>{{* /if *}}</h3>
                           {{ if $gimme->article->movie_trailer_vimeo ne "" }}
                             <div style="display:none;" id="vimeo_trailer_outer_{{$gimme->article->movie_trailer_vimeo}}">&nbsp;
                             </div><!-- vimeo_trailer_outer -->

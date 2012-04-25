@@ -406,7 +406,6 @@ function prepare_lang_time($date_time_text, $chosen_date)
         {{ assign var="movie_rank" $movie_rank+1 }}
         {{ if 4 > $movie_rank }}
 
-                          {{* TODO: search for recommended => set stared class *}}
                       <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} movie_lang has_not_d has_not_k has_not_f has_not_t">
 
                           {{ if $gimme->article->has_image(1) }}
@@ -440,6 +439,11 @@ function prepare_lang_time($date_time_text, $chosen_date)
     {{ assign var="lastmovname" $gimme->article->headline }}
         {{ if 4 > $movie_rank }}
                         <li>
+                        <div class="data_movie data_movie_{{ $movie_rank }}" style="display:none;">
+                            {{ if $gimme->article->recommended }}
+                            r_{{ $movie_rank }};
+                            {{ /if }}
+                        </div>
                         <h5>{{ $gimme->article->organizer }}</h5>
                             <p>{{ $gimme->article->street }}, {{ $gimme->article->town }}<br />
                             {{ assign var="date_time_str" $gimme->article->date_time_text|replace:"&nbsp;":" " }}
@@ -613,6 +617,53 @@ function prepare_lang_time($date_time_text, $chosen_date)
             </section>
 
 <script type="text/javascript">
+function update_movie_props() {
+    $(".data_movie").each(function(ind_elm, elm) {
+        var elm_cont = $(elm).html();
+        var elm_cont_arr = elm_cont.split(';');
+        var elm_cont_len = elm_cont_arr.length;
+        for (var ec_ind = 0; ec_ind < elm_cont_len; ec_ind++) {
+            var cur_cont = elm_cont_arr[ec_ind];
+            cur_cont = cur_cont.replace(/\s/gm,'');
+            if (0 == cur_cont.length) {
+                continue;
+            }
+            cur_cont_arr = cur_cont.split('_', 2);
+            if (2 != cur_cont_arr.length) {
+                continue;
+            }
+            cur_cont_key = cur_cont_arr[0];
+            cur_cont_val = cur_cont_arr[1];
+
+            {
+                var movie_prop = cur_cont_key;
+                var movie_id = "#movie_" + cur_cont_val;
+                if ('d' == movie_prop) {
+                    $(movie_id).removeClass("has_not_d");
+                    $(movie_id).addClass("has_d");
+                }
+                if ('k' == movie_prop) {
+                    $(movie_id).removeClass("has_not_k");
+                    $(movie_id).addClass("has_k");
+                }
+                if ('f' == movie_prop) {
+                    $(movie_id).removeClass("has_not_f");
+                    $(movie_id).addClass("has_f");
+                }
+                if ('t' == movie_prop) {
+                    $(movie_id).removeClass("has_not_t");
+                    $(movie_id).addClass("has_t");
+                }
+                if ('r' == movie_prop) {
+                    $(movie_id).addClass("stared");
+                }
+            }
+
+        }
+
+    });
+};
+
 window.used_date = function(separator, value_only) {
     var when = "" + $("#wann").val();
     when = escape(when.replace(/^\s+|\s+$/g, ""));
@@ -685,13 +736,15 @@ window.set_list_content = function(data, direct) {
         $('#event_agenda_results').html(data);
         //$('#newslist').html(data);
         //$('#newslist_pagination').html('&nbsp;');
-        return;
+    }
+    else {
+        var dom = $(data);
+        $('#event_agenda_results').html($('#event_agenda_results', dom).html());
+        //$('#newslist').html($('#newslist', dom).html());
+        //$('#newslist_pagination').html($('#newslist_pagination', dom).html());
     }
 
-    var dom = $(data);
-    $('#event_agenda_results').html($('#event_agenda_results', dom).html());
-    //$('#newslist').html($('#newslist', dom).html());
-    //$('#newslist_pagination').html($('#newslist_pagination', dom).html());
+    update_movie_props();
 
     //window.set_cufon_fonts();
     //Cufon.now();
