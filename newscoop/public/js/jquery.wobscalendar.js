@@ -367,33 +367,21 @@
             
             //have reached the earliest month we should show.
             if (options.earliestMonth !== undefined && date.isSameMonth(options.earliestMonth)) {
-                deactivateButton('prev');
+                disableButton('prev');
             }
             else {
-                activateButton('prev');
                 enableButton('prev');
             }
             
             //have reached the latest month we should show.
             if (options.latestMonth !== undefined && date.isSameMonth(options.latestMonth)) {
-                deactivateButton('next');
+                disableButton('next');
             }
             else {
-                activateButton('next');
                 enableButton('next');
             }               
         }
         
-        function activateButton(buttonName) {
-            $ul.find('.'+ns+'button-'+buttonName)
-                .removeClass('disabled');
-        }   
-        
-        function deactivateButton(buttonName) {
-            $ul.find('.'+ns+'button-'+buttonName)
-                .addClass('disabled');
-        }
-            
         function disableButton(buttonName) {
             $ul.find('.'+ns+'button-'+buttonName)
                 .addClass(ns+'state-disabled');
