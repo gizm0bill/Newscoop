@@ -28,6 +28,7 @@
 
                     </article>
                     
+                    <br><a class="button iframe" id="article-recommend-button" href="{{$view->baseUrl()}}/article-recommendation/?article_number={{$gimme->article->number}}">Recommend this article</a><br>
                     {{ include file="_tpl/social-bookmarks.tpl" }}
                 
                 </section><!-- / Main Section -->
