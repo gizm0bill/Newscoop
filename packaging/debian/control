@@ -10,7 +10,6 @@ Package: newscoop
 Architecture: all
 Depends: apache2 | httpd,
  curl,
- default-mta | mail-transport-agent,
  graphicsmagick | imagemagick,
  libapache2-mod-php5 | php5,
  mysql-client | virtual-mysql-client,
@@ -21,7 +20,7 @@ Depends: apache2 | httpd,
  wwwconfig-common,
  ${misc:Depends}
 Recommends: php5-xcache
-Suggests: mysql-server | virtual-mysql-server, flite
+Suggests: mysql-server | virtual-mysql-server,  default-mta | mail-transport-agent, flite
 Description: The open content management system for professional journalists
  Features for the modern newsroom include multiple author management,
  issue-and-section based publishing, geolocation and multilingual content 
