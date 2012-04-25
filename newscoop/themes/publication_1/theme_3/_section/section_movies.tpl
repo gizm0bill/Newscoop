@@ -149,27 +149,6 @@ span span.title-box {
 </style>
 
 <script type="text/javascript">
-jQuery(function($){
-  $.datepicker.regional['de'] = {
-    closeText: 'schließen',
-    prevText: '&#x3c;zurück',
-    nextText: 'Vor&#x3e;',
-    currentText: 'heute',
-    monthNames: ['Januar','Februar','März','April','Mai','Juni',
-    'Juli','August','September','Oktober','November','Dezember'],
-    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-    'Jul','Aug','Sep','Okt','Nov','Dez'],
-    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    weekHeader: 'Wo',
-    dateFormat: 'dd.mm.yy',
-    firstDay: 1,
-    isRTL: false,
-    showMonthAfterYear: false,
-    yearSuffix: ''};
-  $.datepicker.setDefaults($.datepicker.regional['de']);
-});
 
 window.list_spec = {
     type: '',
@@ -254,16 +233,6 @@ $(document).ready(function() {
     });
     $("#was").val('kino');
     $("#wo").val('kanton-basel-stadt');
-
-  // Datepicker
-  var dp = $( ".datepicker" ).datepicker({
-    showOn: "button",
-    buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
-    buttonImageOnly: true
-  });
-
-    $(".datepicker").datepicker("setDate" , new Date());
-    $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
 
     window.set_image_lists();
 });
@@ -460,13 +429,6 @@ return;
 
             <aside>
 
-                <ul style="display:none">
-                            <li>
-                              <label for="wann">Wann</label>
-                                <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
-                            </li>
-                </ul>
-                
 <!--
                 <h3>Sortieren nach</h3>
                 <ul class="categories">
@@ -811,7 +773,6 @@ function parse_date_text($date_time_text)
         $has_k = false;
         $has_f = false;
         $has_t = false;
-//echo 'xxx ' . $lang_str . ' yyy';
         if (0 < strlen($lang_str)) {
             if (('D' == substr($lang_str,0,1)) && ('Di' != substr($lang_str,0,2))) {
                 $has_d = true;
@@ -842,7 +803,6 @@ function parse_date_text($date_time_text)
     }
 
     ksort($dates);
-//print_r(array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0))));
     return array('dates' => $dates, 'langs' => array('d' => ($gl_has_d ? 1 : 0), 'k' => ($gl_has_k ? 1 : 0), 'f' => ($gl_has_f ? 1 : 0), 't' => ($gl_has_t ? 1 : 0)));
 }
 

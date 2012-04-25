@@ -2,10 +2,6 @@
 
 <style type="text/css">
 
-#wann {
-    width: 120px !important;
-}
-
 .loading_block_events {
     margin-top: 25px;
     margin-bottom: 100px;
@@ -50,32 +46,7 @@
 
 </style>
 
-
 <script type="text/javascript">
-/* German initialisation for the jQuery UI date picker plugin. */
-/* Written by Milian Wolff (mail@milianw.de). */
-jQuery(function($){
-  $.datepicker.regional['de'] = {
-    closeText: 'schließen',
-    prevText: '&#x3c;zurück',
-    nextText: 'Vor&#x3e;',
-    currentText: 'heute',
-    monthNames: ['Januar','Februar','März','April','Mai','Juni',
-    'Juli','August','September','Oktober','November','Dezember'],
-    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-    'Jul','Aug','Sep','Okt','Nov','Dez'],
-    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    weekHeader: 'Wo',
-    dateFormat: 'dd.mm.yy',
-    firstDay: 1,
-    isRTL: false,
-    showMonthAfterYear: false,
-    yearSuffix: ''};
-  $.datepicker.setDefaults($.datepicker.regional['de']);
-});
-
 window.list_spec = {
     date: '',
     region: ''
@@ -135,22 +106,6 @@ $(document).ready(function() {
     //$("#was").val('theater');
     $("#wo").val('region-basel');
 
-  // Datepicker
-  var dp = $( ".datepicker" ).datepicker({
-    showOn: "button",
-    buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
-    buttonImageOnly: true
-  });
-
-    $("#wann").attr('disabled', true);
-
-    $(".datepicker").datepicker("setDate" , new Date());
-    $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
-
-    $("#wann").change( function() {
-        window.reload();
-    });
-
 });
 
 /*
@@ -189,13 +144,6 @@ function load_area(area) {
         <div class="content-box clearfix reverse-columns agenda-content">
 
             <aside>
-
-                <ul id="datepicker_single_ul" style="display:none">
-                            <li>
-                              <label for="wann">Wann</label>
-                                <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
-                            </li>
-                </ul>
 
                 <h3>Ort</h3>
                 <ul>
@@ -373,6 +321,63 @@ function load_area(area) {
     {{ assign var="contopic_region" "topic is $useregion$topic_suffix"}}
 {{ /if }}
 
+{{ php }}
+function prepare_lang_time($date_time_text, $chosen_date)
+{
+    $cur_date = null;
+    $is_chosen = false;
+
+    $taken_times = array();
+
+    $date_time_text = strip_tags(str_replace(array('<'), array("\n<"), $date_time_text));
+    foreach (explode("\n", $date_time_text) as $one_date_time_str) {
+        $one_date_time_str = trim($one_date_time_str);
+        if (empty($one_date_time_str)) {
+            continue;
+        }
+
+        $matches = array();
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $one_date_time_str, $matches)) {
+            // new date
+            $cur_date = $one_date_time_str;
+
+            if ($cur_date == $chosen_date) {
+                $is_chosen = true;
+            }
+            else {
+                $is_chosen = false;
+            }
+
+            continue;
+        }
+
+        if (null === $cur_date) {
+            continue; // this should not occur
+        }
+        if (!$is_chosen) {
+            continue; // ignoring other dates
+        }
+
+        $time_info = explode(':', $one_date_time_str);
+        $time_info_size = count($time_info);
+
+        $time_str = $time_info[0];
+        $lang_str = ((2 <= $time_info_size) ? $time_info[1] : '');
+        $flag_str = ((3 <= $time_info_size) ? $time_info[2] : '');
+
+        $taken_times[str_replace(".", ":", $time_str)] = trim($lang_str);
+    }
+
+    ksort($taken_times);
+
+    $output_times = array();
+    foreach ($taken_times as $one_time => $one_lang) {
+        $output_times[] = ((!empty($one_lang)) ? "$one_lang $one_time" : "$one_time");
+    }
+
+    return implode(", ", $output_times);
+}
+{{ /php }}
 
                     <div id="event_agenda_results" class="event-agenda-results">
 
@@ -437,7 +442,14 @@ function load_area(area) {
                         <li>
                         <h5>{{ $gimme->article->organizer }}</h5>
                             <p>{{ $gimme->article->street }}, {{ $gimme->article->town }}<br />
-                            LANG TIME, LANG TIME, ...
+                            {{ assign var="date_time_str" $gimme->article->date_time_text|replace:"&nbsp;":" " }}
+                            {{ php }}
+                                $date_time_str = $template->get_template_vars('date_time_str');
+                                $usedate_str = $template->get_template_vars('usedate');
+                                $time_lang_str = prepare_lang_time($date_time_str, $usedate_str);
+                                $template->assign('time_lang_str', $time_lang_str);
+                            {{ /php }}
+                            {{ $time_lang_str }}
                             </p>
                         </li>
         {{ /if }}
@@ -468,11 +480,7 @@ function load_area(area) {
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
-            {{ if 250 < $gimme->article->image1->width }}
                 <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
-            {{ else }}
-                <img src="{{ url options="image 1 " }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
-            {{ /if }}
         {{ /if }}
         <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
         {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
@@ -487,32 +495,108 @@ function load_area(area) {
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
 {{ /if }}
 
-{{* here the tw staff event *}}
-{{ list_articles ignore_issue="true" constraints="type is news print is off" length=1 }}
-            <article class="featured">
-                <header>
-                    <p><a href="{{ uri options="article" }}">TagesWoche empfielt</a></p>
-                </header>
-                {{ if $gimme->article->has_image(1) }}
-                    {{ if 250 < $gimme->article->image1->width }}
-                        <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
-                    {{ else }}
-                        <img src="{{ url options="image 1 " }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
-                    {{ /if }}
-                {{ /if }}
-                <h3><a href="{{ uri options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h3>
-                <h6>{{ $gimme->article->lede }}</h6>
-                <p>{{ $gimme->article->body|strip_tags|truncate:300 }}
-                <a href="{{ uri options="article" }}">Details</a>
-                </p>
-            </article>
-{{ /list_articles }}
-
 {{ local }}
 {{ set_current_issue }}
 {{ set_section number="71" }}
                 <a href="{{ uri options="section" }}#/;type:theater;date:{{ $usedate_link }};region:{{ $linkregion }};page:1" class="grey-button more-arrow"><span>Mehr Theater</span></a>
 {{ /local }}
+
+
+{{* here the tw staff event *}}
+{{ list_articles ignore_issue="true" ignore_section="true" constraints="type is news print is off section is 71" length=1 order="bypublishdate desc" }}
+            <article class="featured">
+                <header>
+                    <p><a href="{{ uri options="article" }}">TagesWoche empfielt</a></p>
+                </header>
+                {{ if $gimme->article->has_image(1) }}
+                        <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                {{ /if }}
+                <h3><a href="{{ uri options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h3>
+                {{ if "" != $gimme->article->dateline }}
+                    <h6>{{ $gimme->article->dateline }}</h6>
+                {{ /if }}
+                {{ if "" != $gimme->article->lede }}
+                    <p>{{ $gimme->article->lede|strip_tags|truncate:200 }}</p>
+                {{ else }}
+                    {{ if "" != $gimme->article->teaser }}
+                        <p>{{ $gimme->article->teaser|strip_tags|truncate:200 }}</p>
+                    {{ /if }}
+                {{ /if }}
+                <p>{{ $gimme->article->body|strip_tags|truncate:200 }}
+                <a href="{{ uri options="article" }}">Details</a>
+                </p>
+            </article>
+{{ /list_articles }}
+
+
+                <h2>Konzerte</h2>
+
+{{ assign var="colcount" 3 }}
+{{ assign var="event_rank" 0 }}
+
+{{ assign var="usetype" "Musik\\ Veranstaltung" }}
+{{ assign var="topic_suffix" ":de"}}
+{{ assign var="contopic_type" "topic is $usetype$topic_suffix"}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+    <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
+        {{ assign var="event_rank" $event_rank+1 }}
+        {{ if $gimme->article->has_image(1) }}
+                <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+        {{ /if }}
+        <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+        {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
+        <p>
+        {{ $gimme->article->description|truncate:300 }}
+        <a href="{{ uri options="article" }}?date={{$usedate}}">Details</a>
+        </p>
+    </article>
+{{ /list_articles }}
+
+{{ if $event_rank eq 0 }}
+    <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
+{{ /if }}
+
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="71" }}
+                <a href="{{ uri options="section" }}#/;type:musik;date:{{ $usedate_link }};region:{{ $linkregion }};page:1" class="grey-button more-arrow"><span>Mehr Konzerte</span></a>
+{{ /local }}
+
+
+                <h2>Ausstellungen</h2>
+
+{{ assign var="colcount" 3 }}
+{{ assign var="event_rank" 0 }}
+
+{{ assign var="usetype" "Ausstellung\\ Veranstaltung" }}
+{{ assign var="topic_suffix" ":de"}}
+{{ assign var="contopic_type" "topic is $usetype$topic_suffix"}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+    <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
+        {{ assign var="event_rank" $event_rank+1 }}
+        {{ if $gimme->article->has_image(1) }}
+                <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+        {{ /if }}
+        <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
+        {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
+        <p>
+        {{ $gimme->article->description|truncate:300 }}
+        <a href="{{ uri options="article" }}?date={{$usedate}}">Details</a>
+        </p>
+    </article>
+{{ /list_articles }}
+
+{{ if $event_rank eq 0 }}
+    <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
+{{ /if }}
+
+
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="71" }}
+                <a href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $usedate_link }};region:{{ $linkregion }};page:1" class="grey-button more-arrow"><span>Mehr Ausstellungen</span></a>
+{{ /local }}
+
 
 {{ else }}
 <figure class="loading_block_agenda">

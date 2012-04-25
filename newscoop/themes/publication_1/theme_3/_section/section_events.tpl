@@ -2,10 +2,6 @@
 
 <style type="text/css">
 
-#wann {
-    width: 120px !important;
-}
-
 .loading_block_events {
     margin-top: 25px;
     margin-bottom: 100px;
@@ -52,29 +48,6 @@
 
 
 <script type="text/javascript">
-/* German initialisation for the jQuery UI date picker plugin. */
-/* Written by Milian Wolff (mail@milianw.de). */
-jQuery(function($){
-  $.datepicker.regional['de'] = {
-    closeText: 'schließen',
-    prevText: '&#x3c;zurück',
-    nextText: 'Vor&#x3e;',
-    currentText: 'heute',
-    monthNames: ['Januar','Februar','März','April','Mai','Juni',
-    'Juli','August','September','Oktober','November','Dezember'],
-    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-    'Jul','Aug','Sep','Okt','Nov','Dez'],
-    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-    weekHeader: 'Wo',
-    dateFormat: 'dd.mm.yy',
-    firstDay: 1,
-    isRTL: false,
-    showMonthAfterYear: false,
-    yearSuffix: ''};
-  $.datepicker.setDefaults($.datepicker.regional['de']);
-});
 
 window.list_spec = {
     type: '',
@@ -152,22 +125,6 @@ $(document).ready(function() {
     //$("#was").val('alles');
     $("#was").val('theater');
     $("#wo").val('region-basel');
-
-  // Datepicker
-  var dp = $( ".datepicker" ).datepicker({
-    showOn: "button",
-    buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
-    buttonImageOnly: true
-  });
-
-    $("#wann").attr('disabled', true);
-
-    $(".datepicker").datepicker("setDate" , new Date());
-    $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
-
-    $("#wann").change( function() {
-        window.reload();
-    });
 
 });
 
@@ -267,13 +224,6 @@ function get_time_text($multi_time_text, $req_date)
         <div class="content-box clearfix reverse-columns agenda-content">
 
             <aside>
-
-                <ul id="datepicker_single_ul" style="display:none">
-                            <li>
-                              <label for="wann">Wann</label>
-                                <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
-                            </li>
-                </ul>
             
                 <h3>Ort</h3>
                 <ul>
@@ -465,11 +415,7 @@ function get_time_text($multi_time_text, $req_date)
     {{* /if *}}
                         <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
                             {{ if $gimme->article->has_image(1) }}
-                                {{ if 250 < $gimme->article->image1->width }}
                                     <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
-                                {{ else }}
-                                    <img src="{{ url options="image 1 " }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
-                                {{ /if }}
                             {{ /if }}
                             <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
                             {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
