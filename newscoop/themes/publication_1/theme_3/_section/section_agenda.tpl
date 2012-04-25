@@ -812,6 +812,8 @@ window.reload = function(page) {
         window.list_spec['date'] = when_val;
         window.list_spec['region'] = where_val;
 
+        update_subnav_links(window.list_spec['date'], window.list_spec['region']);
+
         $.address.value(path_spec);
         window.set_list_content(data);
         $('#suchen').attr("disabled", false);
