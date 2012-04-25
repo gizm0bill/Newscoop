@@ -4,21 +4,28 @@
     </header>
 
     <footer>
-        <a href="#" class="embed">Embed</a>
+        {{ $url = $view->url(['controller' => 'ticker', 'action' => null], 'default') }}
         {{ if $gimme->section->number }}
-        <a href="{{ $view->url(['controller' => 'ticker', 'action' => null], 'default') }}?section={{ $gimme->section->url_name }}" class="more">Alle Nachrichten »</a>
-        {{ else }}
-        <a href="{{ $view->url(['controller' => 'ticker', 'action' => null], 'default') }}" class="more">Alle Nachrichten »</a>
+            {{ $url = sprintf('%s?section=%s', $url, $gimme->section->url_name) }}
         {{ /if }}
+        <a href="{{ $url }}" class="grey-button full-button">Alle Nachrichten des Tages</a>
     </footer>
 </article>
 
 <script type="text/template" id="ticker-article-template">
+    <span title="Artikel" class="icon">Artikel</span>
     <h3><a href="<%= doc.get('link') %>"><%= doc.escape('title') %></a></h3>
-    <p><%= doc.escape('lead').length > 50 ? doc.escape('lead').substr(0, 49) + '...' : doc.escape('lead') %> <em>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></em></p>
+    <p><%= doc.escape('lead') %> <em>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></em></p>
 </script>
 
-<script type="text/template" id="ticker-twitter-template">
+<script type="text/template" id="ticker-omni-template">
+    <span title="Artikel" class="icon">Artikel</span>
+    <h3><a href="<%= doc.get('link') %>"><%= doc.escape('title') %></a></h3>
+    <p><%= doc.escape('lead') %> <em>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></em></p>
+</script>
+
+<script type="text/template" id="ticker-tweet-template">
+    <span title="Tweet" class="icon">Tweet</span>
     <p><%= doc.getTweet() %> <em>Von&nbsp;<%= doc.escape('tweet_user_screen_name') %>, <%= doc.relDate('published') %></em></p>
 </script>
 

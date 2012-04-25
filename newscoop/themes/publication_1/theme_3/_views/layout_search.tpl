@@ -5,50 +5,58 @@
 <% if (doc.get('image')) { %><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /></a><% } %>
 <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
 <p><%= doc.escape('lead') %></p>
-<span class="time" title="Artikel"><%= doc.relDate('published') %></span>
+<span class="icon" title="Artikel">Artikel</span>
+<span class="info"><%= doc.relDate('published') %><% if (doc.get('section_name')) { %><br /><%= doc.escape('section_name') %><% } %></span>
 </script>
 
 <script type="text/template" id="document-omni-template">
 <% if (doc.get('image')) { %><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /></a><% } %>
 <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
 <p><%= doc.escape('lead') %></p>
-<span class="time" title="<%= doc.get('type') == 'news' ? 'Artikel' : 'Blogbeitrag' %>"><%= doc.relDate('published') %></span>
+<span class="icon" title="<%= doc.get('type') == 'news' ? 'Artikel' : 'Blogbeitrag' %>"><%= doc.get('type') == 'news' ? 'Artikel' : 'Blogbeitrag' %></span>
+<span class="info"><%= doc.relDate('published') %><% if (doc.get('section_name')) { %><br /><%= doc.escape('section_name') %><% } %></span>
 </script>
 
 <script type="text/template" id="document-dossier-template">
 <% if (doc.get('image')) { %><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /></a><% } %>
 <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><%= doc.escape('title') %></a></h3>
 <p><%= doc.escape('lead') %></p>
-<span class="time" title="Dossier"><%= doc.relDate('published') %></span>
+<span class="icon" title="Dossier">Dossier</span>
+<span class="info"><%= doc.relDate('published') %></span>
 </script>
 
 <script type="text/template" id="document-twitter-template">
 <p><b><%= doc.escape('tweet_user_screen_name') %></b> <%= doc.getTweet() %></p>
-<span class="time" title="Tweet"><%= doc.relDate('published') %></span>
+<span class="icon" title="Twitter">Twitter</span>
+<span class="info"><%= doc.relDate('published') %></span>
 </script>
 
 <script type="text/template" id="document-user-template">
 <% if (doc.get('image')) { %><a href="{{ $view->url(['username' => ''], 'user') }}/<%= doc.escape('user') %>" title="<%= doc.escape('user') %>"><img src="{{ $view->baseUrl('images/cache/') }}<%= doc.get('image') %>" alt="" /></a><% } %>
 <h3><a href="{{ $view->url(['username' => ''], 'user') }}/<%= doc.escape('user') %>"><%= doc.escape('user') %></a></h3>
 <p><%= doc.escape('bio') %></p>
-<span class="time" title="Benutzer"><%= doc.relDate('published') %></span>
+<span class="icon" title="Benutzer">Benutzer</span>
+<span class="info"><%= doc.relDate('published') %></span>
 </script>
 
 <script type="text/template" id="document-event-template">
 <h3><a href="<%= doc.get('link') %>" title="<%= doc.getEventTitle() %>"><%= doc.getEventTitle() %></a></h3>
 <p><%= doc.get('event_organizer') %> <%= doc.get('event_town') %>, <%= doc.getEventDate() %> <%= doc.getEventTime() %></p>
-<span class="time" title="Veranstaltung"><%= doc.relDate('published') %></span>
+<span class="icon" title="Veranstaltung">Veranstaltung</span>
+<span class="info"><%= doc.relDate('published') %></span>
 </script>
 
 <script type="text/template" id="document-comment-template">
 <h3><a href="<%= doc.get('link') %>" title="<%= doc.escape('subject') %>"><%= doc.escape('subject') %></a></h3>
 <p><%= doc.get('message').length > 200 ? doc.escape('message').substr(0, 199) + '...' : doc.escape('message') %> <a href="<%= doc.get('link') %>" title="Weiterlesen">Weiterlesen</a></p>
-<span class="time" title="Kommentar"><%= doc.relDate('published') %></span>
+<span class="icon" title="Kommentar">Kommentar</span>
+<span class="info"><%= doc.relDate('published') %></span>
 </script>
 
 <script type="text/template" id="document-link-template">
 <p><%= doc.escape('link_description') %> <a href="<%= doc.get('link_url') %>" title="<%= doc.escape('link_description') %>"><%= doc.escape('title') %></a></p>
-<span class="time" title="Link"><%= doc.relDate('published') %></span>
+<span class="icon" title="Link">Link</span>
+<span class="info"><%= doc.relDate('published') %></span>
 </script>
 
 <script type="text/template" id="empty-search-list-template">

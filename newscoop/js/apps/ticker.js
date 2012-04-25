@@ -3,14 +3,21 @@
  */
 var TickerView = Backbone.View.extend({
     tagName: 'section',
+    types: {
+        'twitter': 'tweet'
+    },
 
     initialize: function() {
-        this.template = _.template($('#ticker-' + this.model.getTemplateType() + '-template').html());
+        this.template = _.template($('#ticker-' + this.getType(this.model) + '-template').html());
     },
 
     render: function() {
-        $(this.el).html(this.template({doc: this.model})).addClass(this.model.getTemplateType());
+        $(this.el).html(this.template({doc: this.model})).addClass(this.getType(this.model));
         return this;
+    },
+
+    getType: function(model) {
+        return this.model.getTemplateType() in this.types ? this.types[this.model.getTemplateType()] : this.model.getTemplateType();
     }
 });
 

@@ -955,6 +955,7 @@ section article{padding-bottom:25px;}
 					.filter-list li.user span.icon {background-image:url(img/icons_small/user.png);}
 					.filter-list li.movie span.icon {background-image:url(img/icons_small/movie.png);}
 					.filter-list li.event span.icon {background-image:url(img/icons_small/event.png);}
+					.filter-list li.comment span.icon {background-image:url(img/icons_small/comment.png);}
 					
 			
 			/* Community page fixes */
