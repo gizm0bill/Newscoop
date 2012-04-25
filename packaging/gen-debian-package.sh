@@ -60,7 +60,7 @@ else
 		| tar xzf - || exit
 fi
 
-mv ${MIRRORPATH}/newscoop-$UPSTREAMVERSION/newscoop-$UPSTREAMDIST$SFOCUSTOM/ ${MIRRORPATH}/newscoop-$UPSTREAMVERSION/newscoop/
+mv ${MIRRORPATH}/newscoop-$UPSTREAMVERSION/newscoop-$UPSTREAMVERSION/ ${MIRRORPATH}/newscoop-$UPSTREAMVERSION/newscoop/
 
 # done in README.Debian
 rm newscoop/INSTALL.txt
@@ -78,8 +78,6 @@ rm newscoop/js/tinymce/license.txt
 rm newscoop/library/Nette/license.txt
 rm newscoop/library/Symfony/Component/Console/LICENSE
 rm newscoop/library/Symfony/Component/Yaml/LICENSE
-rm newscoop/library/Doctrine/Symfony/Component/Console/LICENSE
-rm newscoop/library/Doctrine/Symfony/Component/Yaml/LICENSE
 rm newscoop/library/fabpot-dependency-injection-07ff9ba/LICENSE
 rm newscoop/library/fabpot-event-dispatcher-782a5ef/LICENSE
 rm newscoop/include/html2pdf/_tcpdf_5.0.002/fonts/dejavu-fonts-ttf-2.30/LICENSE
@@ -128,27 +126,32 @@ fi
 
 ### fixes for 4.0.0 ###
 if test "${UPSTREAMVERSION}" == "4.0.0"; then
-	rm newscoop/js/editarea/edit_area/plugins/test/images/Thumbs.db
-        rm newscoop/install/sample_templates/the_new_custodian/templates/set_the_new_custodian/_img/.gitignore
-	rm newscoop/install/sample_templates/the_new_custodian/templates/set_the_new_custodian/_js/mylibs/.gitignore
-	rm newscoop/themes/unassigned/set_the_new_custodian/_img/.gitignore
-	rm newscoop/themes/unassigned/set_the_new_custodian/_js/mylibs/.gitignore
 
-        chmod -x newscoop/install/templates/license.tpl
-	chmod -x newscoop/admin-files/libs/ContextList/do_action.php
-        chmod -x newscoop/admin-files/articles/context_box/popup.php
-        chmod -x newscoop/admin-files/libs/ContextList/do_data.php
-        chmod -x newscoop/install/include/js/install.js
-        chmod -x newscoop/admin-files/libs/ContextList/ContextList.php
-        chmod -x newscoop/admin-files/libs/ContextList/do_order.php
-        chmod -x newscoop/admin-files/libs/ContextList/table.php
-        chmod -x newscoop/admin-files/libs/ContextList/actions.php
-        chmod -x newscoop/admin-files/libs/ContextList/filters.php
-        chmod -x newscoop/admin-style/content.css
-	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/sago.jpg
-	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/flowers.jpg
+	rm newscoop/install/sample_templates/rockstar/templates/set_rockstar/assets/.DS_Store
+	rm newscoop/install/sample_templates/rockstar/templates/set_rockstar/assets/css/.DS_Store
+	rm newscoop/install/sample_templates/rockstar/templates/set_rockstar/assets/fonts/.DS_Store
+	rm newscoop/install/sample_templates/rockstar/templates/set_rockstar/assets/js/libs/.DS_Store
+	rm newscoop/install/sample_templates/rockstar/templates/set_rockstar/pictures/.DS_Store
+	rm newscoop/themes/unassigned/set_rockstar/assets/.DS_Store
+	rm newscoop/themes/unassigned/set_rockstar/assets/css/.DS_Store
+	rm newscoop/themes/unassigned/set_rockstar/assets/fonts/.DS_Store
+	rm newscoop/themes/unassigned/set_rockstar/assets/js/libs/.DS_Store
+	rm newscoop/themes/unassigned/set_rockstar/pictures/.DS_Store
 
-	rm -r newscoop/include/html2pdf/_tcpdf_5.0.002/fonts/utils/
+#        chmod -x newscoop/install/templates/license.tpl
+#	chmod -x newscoop/admin-files/libs/ContextList/do_action.php
+#        chmod -x newscoop/admin-files/articles/context_box/popup.php
+#        chmod -x newscoop/admin-files/libs/ContextList/do_data.php
+#        chmod -x newscoop/install/include/js/install.js
+#        chmod -x newscoop/admin-files/libs/ContextList/ContextList.php
+#        chmod -x newscoop/admin-files/libs/ContextList/do_order.php
+#        chmod -x newscoop/admin-files/libs/ContextList/table.php
+#        chmod -x newscoop/admin-files/libs/ContextList/actions.php
+#        chmod -x newscoop/admin-files/libs/ContextList/filters.php
+#        chmod -x newscoop/admin-style/content.css
+#	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/sago.jpg
+#	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/flowers.jpg
+
 fi
 
 ############################
