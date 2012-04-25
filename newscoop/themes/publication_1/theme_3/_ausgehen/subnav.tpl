@@ -2,6 +2,11 @@
 #wann {
     width: 80px !important;
     margin-top: 0px;
+    height: 12px;
+}
+
+#wann_middle {
+    margin-top: 6px;
 }
 
 .ui-datepicker-prev {
@@ -46,6 +51,9 @@ jQuery(function($){
   });
 
     $("#wann").attr('disabled', true);
+    $("#wann_middle").click( function () {
+        $(".datepicker").datepicker("show");
+    });
 
     $(".datepicker").datepicker("setDate" , new Date());
     $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
@@ -60,7 +68,7 @@ jQuery(function($){
         <div class="content-box agenda-top">
 
             <div id="datepicker_single_ul" style="display:none">
-                <div class="left">
+                <div id="wann_middle" class="left">
                         <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
                 </div>
             </div>
