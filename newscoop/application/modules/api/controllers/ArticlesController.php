@@ -132,14 +132,21 @@ class Api_ArticlesController extends Zend_Controller_Action
             'thread' => $article->getId(),
         ));
 
+        $teaserField = 'teaser';
+        $bodyField = 'body';
+        if ($article->getType() == 'newswire') {
+            $teaserField = 'DataLead';
+            $bodyField = 'DataContent';
+        }
+
         $this->response = array(
             'article_id' => $article->getId(),
             'title' => $article->getTitle(),
             'dateline' => $articleData->getFieldValue('dateline'),
             'publish_date' => $article->getPublishDate(),
             'last_modified' => $article->getDate(),
-            'teaser' => $articleData->getFieldValue('teaser'),
-            'body' => $articleData->getFieldValue('body'),
+            'teaser' => $articleData->getFieldValue($teaserField),
+            'body' => $articleData->getFieldValue($bodyField),
             'image_url' => $imageUrl,
             'comment_count' => $comments,
         );
