@@ -34,7 +34,7 @@
                     {{ $currentCharacter=null }}
                 {{ /if }}
                 {{ foreach range('a', 'z') as $character }}
-                <li><a href="{{ $view->url(['controller' => 'user', 'action' => 'filter', 'f' => $character], 'default', true) }}"{{ if $currentCharacter == $character }} class="active"{{ /if }}>{{ $character|upper }}</a></li>
+                <li{{ if $currentCharacter == $character }} class="active"{{ /if }}><a href="{{ $view->url(['controller' => 'user', 'action' => 'filter', 'f' => $character], 'default', true) }}">{{ $character|upper }}</a></li>
                 {{ /foreach }}
             </ul>
         </li>
