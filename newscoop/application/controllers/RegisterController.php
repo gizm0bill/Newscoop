@@ -11,6 +11,8 @@ use Newscoop\Entity\User;
  */
 class RegisterController extends Zend_Controller_Action
 {
+    const PLACEHOLDER_COUNT = 6;
+
     /** @var Newscoop\Services\UserService */
     private $service;
 
@@ -96,33 +98,21 @@ class RegisterController extends Zend_Controller_Action
 
         $form = new Application_Form_Confirm();
         $form->setMethod('POST');
+        $form->setDefaults(array(
+            'first_name' => $user->getFirstName() ?: null,
+            'last_name' => $user->getLastName() ?: null,
+        ));
         
-        $values = array();
-        if ($user->getFirstName()) {
-            $values['first_name'] = $user->getFirstName();
-        }
-        if ($user->getLastName()) {
-            $values['last_name'] = $user->getLastName();
-        }
-        $form->populate($values);
-        
-        $this->view->terms = false;
-        if ($user->getFirstName() || $user->getLastName()) {
-            $form->addElement('checkbox', 'terms_of_use', array(
-                'label' => 'Accepting terms of use',
-                'required' => true,
-                'validators' => array(
-                    array('greaterThan', true, array('min' => 0)),
-                ),
-                 'errorMessages' => array("Sie können sich nur registrieren, wenn Sie unseren Nutzungsbedingungen zustimmen. Dies geschieht zu Ihrer und unserer Sicherheit. Bitten setzen Sie im entsprechenden Feld ein Häkchen."),
-            ));
-            
-            $this->view->terms = true;
-        }
-
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
             try {
                 $values = $form->getValues();
+                if (!empty($values['image'])) {
+                    $imageInfo = array_pop($form->image->getFileInfo());
+                    $values['image'] = $this->_helper->service('image')->save($imageInfo);
+                } else {
+                    $values['image'] = $this->getUserImageFilename($user);
+                }
+
                 $this->_helper->service('user')->savePending($values, $user);
                 $this->_helper->service('user.token')->invalidateTokens($user, 'email.confirm');
                 $this->notifyDispatcher($user);
@@ -151,6 +141,7 @@ class RegisterController extends Zend_Controller_Action
         }
 
         $this->view->form = $form;
+        $this->view->img = $this->getUserImageSrc($user);
     }
 
     public function generateUsernameAction()
@@ -308,5 +299,30 @@ class RegisterController extends Zend_Controller_Action
         }
 
         return $token;
+    }
+
+    /**
+     * Get user image filename
+     *
+     * @param Newscoop\Entity\User $user
+     * @return string
+     */
+    private function getUserImageFilename(User $user)
+    {
+        $num = $user->getId() % self::PLACEHOLDER_COUNT;
+        return "user_placeholder_{$num}.png";
+    }
+
+    /**
+     * Get user image src
+     *
+     * @param Newscoop\Entity\User $user
+     * @return string
+     */
+    private function getUserImageSrc(User $user)
+    {
+        return $this->view->url(array(
+            'src' => $this->getHelper('service')->getService('image')->getSrc('images/' . $this->getUserImageFilename($user), 125, 125, 'fit'),
+        ), 'image', false, false);
     }
 }
