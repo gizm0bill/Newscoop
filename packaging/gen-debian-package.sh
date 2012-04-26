@@ -67,7 +67,7 @@ rm newscoop/INSTALL.txt
 
 # Sourcefabric licenses covered by debian/copyright
 rm newscoop/COPYING.txt
-rm LICENSE_3RD_PARTY.txt
+rm newscoop/LICENSE_3RD_PARTY.txt
 
 # third party licences covered by debian/copyright
 rm newscoop/include/html2pdf/_tcpdf_5.0.002/LICENSE.TXT
@@ -138,20 +138,6 @@ if test "${UPSTREAMVERSION}" == "4.0.0"; then
 	rm newscoop/themes/unassigned/set_rockstar/assets/fonts/.DS_Store
 	rm newscoop/themes/unassigned/set_rockstar/assets/js/libs/.DS_Store
 	rm newscoop/themes/unassigned/set_rockstar/pictures/.DS_Store
-
-#        chmod -x newscoop/install/templates/license.tpl
-#	chmod -x newscoop/admin-files/libs/ContextList/do_action.php
-#        chmod -x newscoop/admin-files/articles/context_box/popup.php
-#        chmod -x newscoop/admin-files/libs/ContextList/do_data.php
-#        chmod -x newscoop/install/include/js/install.js
-#        chmod -x newscoop/admin-files/libs/ContextList/ContextList.php
-#        chmod -x newscoop/admin-files/libs/ContextList/do_order.php
-#        chmod -x newscoop/admin-files/libs/ContextList/table.php
-#        chmod -x newscoop/admin-files/libs/ContextList/actions.php
-#        chmod -x newscoop/admin-files/libs/ContextList/filters.php
-#        chmod -x newscoop/admin-style/content.css
-#	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/sago.jpg
-#	chmod -x newscoop/js/tapmodo-Jcrop-5e58bc9/demos/demo_files/flowers.jpg
 
 fi
 
