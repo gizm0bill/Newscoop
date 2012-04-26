@@ -66,7 +66,7 @@
 {{ /if }}
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
-                        {{ include file="_tpl/follow_topics.tpl" view=$view user=$gimme->user }}
+                        {{* include file="_tpl/follow_topics.tpl" view=$view user=$gimme->user *}}
                         </p>
                     </article>                        
 {{ /if }}   
