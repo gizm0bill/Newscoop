@@ -86,7 +86,7 @@ phase 4 = currentdate > date_closing 12:00
         {{ $deadline=$closingdate->setTime(12, 0) }}
         {{ $diff=date_diff($deadline, date_create('now')) }}            
             <ul class="debatte-top-nav">                            
-                    	<li{{ if $wdstage== "0" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
+                    	<li{{ if $wdstage == "0" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
                         {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
                     	<li{{ if $wdphase == "2" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Entgegnung</b>
@@ -117,34 +117,52 @@ already at that stage in the proceedings *}}
             <aside>
             	
 {{ include file="_tpl/debate-voting.tpl" }}
-                
-                <small class="info">Noch 2 Tage, 7 Stunden, 47 Minuten</small>
-                
+
+{{ list_articles length="1" constraints="type is deb_moderator" }}    
+        {{ $closingdate=date_create($gimme->article->date_closing) }}
+        {{ $deadline=$closingdate->setTime(12, 0) }}
+        {{ $diff=date_diff($deadline, date_create('now')) }}
+        {{ if $deadline->getTimestamp() > time() }}
+        			 <small class="info">Noch {{ $diff->days }} Tage, {{ $diff->h }} Stunden, {{ $diff->i }} Minuten</p></small>
+        {{ else }}
+        			 <small class="info">Diskussion geschlossen am {{ $deadline->format('j.n.Y') }} um 12:00 Uhr</small>
+        {{ /if }}
+        {{ /list_articles }}
+
+{{ if !($wdstage == "0") }}                
             	<article>
                 	<header>
                     	<p>Thema der Debatte</p>
                     </header>
-                    <p>Jede Woche lädt die TagesWoche zum Thema der Woche zwei Debattanten ein. Eine Wochendebatte dauert jeweils vom Freitag bis am darauffolgenden Donnerstag und geht über drei Runden. Zum Auftakt, der auch in der Zeitung erscheint, legen beide Debattanten ihren Standpunkt dar. In der Replik gehen sie jeweils auf die Argumente des Gegenübers sowie Kommentare aus dem Publikum ein. Im Schlussplädoyer haben sie nochmals die Gelegenheit, das Publikum von ihrem Standpunkt zu überzeugen. Das Publikum kann während der gesamten Debatte mitdiskutieren, Fragen stellen und abstimmen, auf welche Seite es sich schlagen möchte.</p>
+{{ list_articles length="1" constraints="type is deb_moderator" }}                        
+                    <p>{{ $gimme->article->teaser }}</p>
+{{ /list_articles }}
                 </article>
+{{ /if }}
                 
-                <article>
+                <article>                
                 	<header>
                     	<p>So funktionieren Wochendebatten</p>
                     </header>
                     <p>Jede Woche lädt die TagesWoche zum Thema der Woche zwei Debattanten ein. Eine Wochendebatte dauert jeweils vom Freitag bis am darauffolgenden Donnerstag und geht über drei Runden. Zum Auftakt, der auch in der Zeitung erscheint, legen beide Debattanten ihren Standpunkt dar. In der Replik gehen sie jeweils auf die Argumente des Gegenübers sowie Kommentare aus dem Publikum ein. Im Schlussplädoyer haben sie nochmals die Gelegenheit, das Publikum von ihrem Standpunkt zu überzeugen. Das Publikum kann während der gesamten Debatte mitdiskutieren, Fragen stellen und abstimmen, auf welche Seite es sich schlagen möchte.</p>
                 </article>
-                
+
+{{ list_articles length="1" constraints="type is deb_moderator" }}      
+{{ assign var="curdeb" value=$gimme->article->number }}
+{{ /list_articles }}
+{{ list_articles length="5" ignore_issue="true" ignore_section="true" constraints="type is deb_moderator number not $curdeb" }}      
+{{ if $gimme->current_list->at_beginning }}          
                 <article>
                 	<header>
                     	<p>Abgeschlossene Debatten</p>
                     </header>
-                    <img src="pictures/side-sample-img.png" alt="" />
-                    <h3>Muslimischer Religions-unterricht an Basler Schulen?</h3>
-                    
-                    <img src="pictures/side-sample-img.png" alt="" />
-                    <h3>Wochendebatten – sinnvoll oder nicht?</h3>
+{{ /if }}                    
+                    <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x133.tpl" }}</a>
+                    <h3><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></h3>                    
+{{ if $gimme->current_list->at_end }}
                 </article>
-            
+{{ /if }}    
+{{ /list_articles }}        
             </aside>
         
         </div>

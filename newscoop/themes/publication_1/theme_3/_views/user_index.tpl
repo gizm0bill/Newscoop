@@ -13,6 +13,15 @@
             <button>Go</button>
         </fieldset>
         </form>
+        <a href="#" class="info">Info
+            <span>
+                Sie können folgende Operatoren verwenden:<br />
+                "exacte wortkombination"<br />
+                -nichtdieserbegriff<br />
+                author:dani winter<br />
+                topic:fc basel<br />
+            </span>
+        </a>
     </li>
     <li class="type">Mitglied seit</li>
     <li class="time">Beiträge</li>
