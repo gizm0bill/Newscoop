@@ -7,7 +7,7 @@ Summary:        The open content management system for professional journalists
 Name:           newscoop
 Version:        4.0.0
 Release:        1
-License:        GPL
+License:        GPLv3
 Packager:       Daniel James <daniel@64studio.com>
 
 # TODO: This group does not seem right.
@@ -53,11 +53,11 @@ and publishing system.
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/var/lib/
-cp -a newscoop %{buildroot}/var/lib/
+mkdir -p %{buildroot}/usr/share/
+cp -a newscoop %{buildroot}/usr/share/
 
 # TODO: create config-files - debian/ folder will not be present in tar-ball
-mkdir -p %{buildroot}/etc/newscoop/3.5/
+mkdir -p %{buildroot}/etc/newscoop/4.0/
 cp debian/etc/newscoop.ini %{buildroot}/etc/newscoop/4.0/
 cp debian/etc/apache.conf %{buildroot}/etc/newscoop/4.0/
 cp debian/etc/apache.vhost.tpl %{buildroot}/etc/newscoop/4.0/
@@ -65,11 +65,11 @@ cp debian/etc/newscoop.cron.tpl %{buildroot}/etc/newscoop/4.0/
 
 cd $RPM_BUILD_ROOT
 rm -f %{manifest}
-find ./var/ -type d \
+find ./usr/share/ -type d \
         | sed '1,2d;s,^\.,\%attr(-\,apache\,apache) \%dir ,' >> %{manifest}
-find ./var/ -type f \
+find ./usr/share/ -type f \
         | sed 's,^\.,\%attr(-\,apache\,apache) ,' >> %{manifest}
-find ./var/ -type l \
+find ./usr/share/ -type l \
         | sed 's,^\.,\%attr(-\,apache\,apache) ,' >> %{manifest}
 
 %clean
@@ -78,7 +78,7 @@ rm -rf %{buildroot}
 
 %files -f %{manifest}
 %defattr(-,root,root)
-%doc ChangeLog  COPYING  CREDITS README  UPGRADE
+%doc ChangeLog CREDITS README  UPGRADE
 %config /etc/newscoop/4.0/apache.conf
 %config /etc/newscoop/4.0/newscoop.ini
 %config /etc/newscoop/4.0/apache.vhost.tpl
