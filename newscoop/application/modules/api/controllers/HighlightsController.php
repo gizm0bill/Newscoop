@@ -63,7 +63,7 @@ class Api_HighlightsController extends Zend_Controller_Action
             $playlistRepository = $this->_helper->entity->getRepository('Newscoop\Entity\Playlist');
             $playlist = $playlistRepository->findOneBy(array('id' => $sectionId));
             if ($playlist) {
-                $articleArray = $playlistRepository->articles($playlist);
+                $articleArray = $playlistRepository->articles($playlist, null, false, 3);
                 $rank = 1;
                 foreach ($articleArray as $articleItem) {
                     $articles = $this->_helper->service('article')->findBy(array('number' => $articleItem['articleId']));
