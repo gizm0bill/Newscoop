@@ -92,5 +92,3 @@
             </ul>
             <p class="footer-text">All rights reserved</p>
         </div>
-        
-    </div><!-- / Footer -->
