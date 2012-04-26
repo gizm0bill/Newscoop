@@ -1,6 +1,6 @@
         <div class="top-line clearfix">
                 
-                	<h3>Entgegnung</h3>
+                	<h3>Repliken</h3>
                     
                     <div class="two-columns">
 
