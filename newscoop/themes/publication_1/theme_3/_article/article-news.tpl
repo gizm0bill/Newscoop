@@ -66,6 +66,7 @@
 {{ /if }}
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
+                        {{ include file="_tpl/follow_topics.tpl" view=$view user=$gimme->user }}
                         </p>
                     </article>                        
 {{ /if }}   
@@ -236,7 +237,7 @@
                     {{ /if }}
                     {{ if isset($gimme->author->user['twitter']) }}
                     <div class="tw-follow" style="display: inline-block; position: relative; top: 2px; left: 8px">
-                        <a href="http://twitter.com/{{ $gimme->author->user['twitter'] }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ $gimme->author->user['twitter'] }} folgen</a>
+                        <a href="http://twitter.com/{{ trim($gimme->author->user['twitter'], '@') }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ trim($gimme->author->user['twitter'], '@') }} folgen</a>
                         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                     </div>
                     {{ /if }}
