@@ -1311,18 +1311,14 @@ function load_events(ev_type) {
             
         </div>
 
-
-{{ include file="_tpl/_html-foot.tpl" }}
-
     </div><!-- / Wrapper -->   
 
-{{* JAVASCRIPT FOOTER *}}
-{{* include file="_tpl/_footer_javascript.tpl" *}}
-<link rel="stylesheet" href="{{ $view->baseUrl('js/jquery/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" media="screen" />
-<script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.address.js' }}"></script>
-<script type="text/javascript" src="{{ uri static_file='_js/libs/fancybox/jquery.fancybox-1.3.4.pack.js' }}"></script>
+    <div id="footer">
 
-</body>
-</html>
+{{ include file="_tpl/footer.tpl" }}
+
+    </div><!-- / Footer -->
+
+{{ include file="_tpl/_html-foot.tpl" }}
 {{ /if }}
 {{ /if }}

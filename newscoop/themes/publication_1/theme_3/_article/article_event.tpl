@@ -546,7 +546,7 @@ function load_events(ev_type) {
         </div>
         
     </div><!-- / Wrapper -->
-    
+
     <div id="footer">
 
 {{ include file="_tpl/footer.tpl" }}

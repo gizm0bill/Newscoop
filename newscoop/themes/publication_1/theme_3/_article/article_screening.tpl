@@ -230,7 +230,7 @@ function load_events(ev_type) {
                     {{ assign var="list_img_rank" 1 }}
                     {{ while $gimme->article->has_image($list_img_rank) }}
                         <div id="image-{{ $list_img_rank }}" class="img-content">
-                            <img src="{{ url options="image $list_img_rank width 188" }}" alt="" />
+                            <img src="{{ url options="image $list_img_rank height 400" }}" alt="" />
                             <p>{{ $gimme->article->image1->description }}</p>
                         </div>
                         {{ assign var="list_img_rank" $list_img_rank+1 }}
@@ -239,7 +239,7 @@ function load_events(ev_type) {
                     <ul class="slideshow-nav carousel jcarousel-skin-img-slider">
                     {{ assign var="list_img_rank" 1 }}
                     {{ while $gimme->article->has_image($list_img_rank) }}
-                        <li><a href="#image-{{ $list_img_rank }}"><img src="{{ url options="image $list_img_rank width 40" }}" alt="" /></a></li>
+                        <li><a href="#image-{{ $list_img_rank }}"><img src="{{ url options="image $list_img_rank width 95" }}" alt="" /></a></li>
                         {{ assign var="list_img_rank" $list_img_rank+1 }}
                     {{ /while }}
                     </ul>
@@ -783,7 +783,7 @@ function parse_date_text($date_time_text)
         </div>
         
     </div><!-- / Wrapper -->
-    
+
     <div id="footer">
 
 {{ include file="_tpl/footer.tpl" }}

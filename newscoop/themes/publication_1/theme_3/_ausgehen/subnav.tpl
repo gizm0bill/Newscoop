@@ -21,7 +21,7 @@
 <script type="text/javascript">
 /* German initialisation for the jQuery UI date picker plugin. */
 /* Written by Milian Wolff (mail@milianw.de). */
-jQuery(function($){
+$(document).ready(function() {
   $.datepicker.regional['de'] = {
     closeText: 'schließen',
     prevText: '&#x3c;&nbsp;zurück',
@@ -42,7 +42,6 @@ jQuery(function($){
     showMonthAfterYear: false,
     yearSuffix: ''};
   $.datepicker.setDefaults($.datepicker.regional['de']);
-
 
   // Datepicker
   var dp = $( ".datepicker" ).datepicker({
