@@ -47,6 +47,7 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
         $this->m_customProperties['is_author'] = 'isAuthor';
         $this->m_customProperties['is_active'] = 'isActive';
         $this->m_customProperties['is_blogger'] = 'isBlogger';
+        $this->m_customProperties['is_editor'] = 'isEditor';
         $this->m_customProperties['author'] = 'getAuthor';
 
         $this->m_skipFilter[] = "name";
@@ -178,6 +179,17 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
     {
         return (bool) \Zend_Registry::get('container')->getService('blog')
             ->isBlogger($this->m_dbObject);
+    }
+
+    /**
+     * Check if user is editor
+     *
+     * @return bool
+     */
+    public function isEditor()
+    {
+        return (bool) \Zend_Registry::get('container')->getService('user')
+            ->isEditor($this->m_dbObject);
     }
 
     /**

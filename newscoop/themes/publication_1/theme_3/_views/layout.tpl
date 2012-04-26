@@ -5,7 +5,7 @@
 	<div id="wrapper">
     {{ include file="_tpl/header-omnibox.tpl" }}
     {{ include file="_tpl/header.tpl" }}
-        <div class="content-box clearfix reverse-columns filter-content {{block content_classes}}{{/block}}">
+        <div class="content-box clearfix {{block content_classes}}reverse-columns filter-content{{/block}}">
         {{block content}}{{/block}}
         </div>
     </div><!-- / Wrapper -->
