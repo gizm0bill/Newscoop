@@ -9,6 +9,8 @@ class ArticleofthedayController extends Zend_Controller_Action
 {
     public function init()
     {
+        $this->_helper->viewRenderer->setViewSuffix('tpl');
+
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('article-of-the-day', 'json')
                     ->initContext();
