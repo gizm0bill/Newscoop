@@ -67,6 +67,7 @@ rm newscoop/INSTALL.txt
 
 # Sourcefabric licenses covered by debian/copyright
 rm newscoop/COPYING.txt
+rm LICENSE_3RD_PARTY.txt
 
 # third party licences covered by debian/copyright
 rm newscoop/include/html2pdf/_tcpdf_5.0.002/LICENSE.TXT
