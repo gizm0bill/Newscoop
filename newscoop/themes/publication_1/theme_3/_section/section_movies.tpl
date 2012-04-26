@@ -952,7 +952,7 @@ function parse_date_text($date_time_text)
                             {{ $gimme->article->zipcode }} {{ $gimme->article->town }}</p>
                             <p>
                             {{ list_article_locations length="1" }}
-                                <a href="http://maps.google.com/maps?t=k&z=15&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Google Maps</a><br />
+                                <a href="http://maps.google.com/maps?hl=de&t=k&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Google Maps</a><br />
                             {{ /list_article_locations }}
                             {{ if  "" != $gimme->article->web }}
                             <a href="{{ $gimme->article->web }}" target="_blank">{{ $gimme->article->web|replace:"http://":"" }}</a>

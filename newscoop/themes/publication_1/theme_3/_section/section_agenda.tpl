@@ -480,7 +480,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ assign var="usetype" "Theater\\ Veranstaltung" }}
 {{ assign var="topic_suffix" ":de"}}
 {{ assign var="contopic_type" "topic is $usetype$topic_suffix"}}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate" order="bycustom.num.recommended.0 desc" }}
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
@@ -541,7 +541,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ assign var="usetype" "Musik\\ Veranstaltung" }}
 {{ assign var="topic_suffix" ":de"}}
 {{ assign var="contopic_type" "topic is $usetype$topic_suffix"}}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate" order="bycustom.num.recommended.0 desc" }}
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
@@ -575,7 +575,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ assign var="usetype" "Ausstellung\\ Veranstaltung" }}
 {{ assign var="topic_suffix" ":de"}}
 {{ assign var="contopic_type" "topic is $usetype$topic_suffix"}}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate"}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$contopic_region $contopic_type section is 71 type is event matchalltopics " length="$colcount" schedule="$muldate" order="bycustom.num.recommended.0 desc" }}
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
