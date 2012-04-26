@@ -22,7 +22,7 @@
                             </figure>
 {{ /list_article_authors }}                            
 {{ /list_articles }}                            
-                            <a href="#" class="button mid-button">Jetzt einmischen!</a>
+                            <a href="" onClick="omnibox.showHide();" class="button mid-button">Jetzt einmischen!</a>
                             
                         </article>
                     
