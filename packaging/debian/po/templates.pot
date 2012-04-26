@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: newscoop@packages.debian.org\n"
-"POT-Creation-Date: 2012-02-08 11:05+0000\n"
+"POT-Creation-Date: 2012-04-26 16:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,29 +19,29 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "Create mysql database-account?"
+msgid "Create mySQL database account?"
 msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
-msgid "Automatically generate a local mysql-account for newscoop."
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../templates:1001
-msgid ""
-"This option allows to create a database-user and password for use by "
-"newscoop on localhost."
+msgid "Automatically generate a local mySQL account for Newscoop."
 msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../templates:1001
 msgid ""
-"If skipped, you will need database-admin access to create and account for "
-"newscoop."
+"This option creates a database user and password for use by Newscoop on the "
+"localhost."
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../templates:1001
+msgid ""
+"If skipped, you will need database admin access to create an account for "
+"Newscoop."
 msgstr ""
 
 #. Type: select
@@ -72,8 +72,8 @@ msgstr ""
 #. Description
 #: ../templates:2002
 msgid ""
-"This setup script can perform apache web-server configuration so that you "
-"can connect to newscoop directly after this installation."
+"This script can perform Apache web-server configuration so that you can "
+"connect to Newscoop directly after this installation."
 msgstr ""
 
 #. Type: select
@@ -81,18 +81,17 @@ msgstr ""
 #: ../templates:2002
 msgid ""
 "Production systems should choose \"dedicated v-host\". This option will ask "
-"for a Server host-name (FQDN) and will create a minimal apache vhost "
-"configuration that you can adapt."
+"for a fully qualified domain name (FQDN) and will create a minimal Apache "
+"virtual host configuration that you can adapt."
 msgstr ""
 
 #. Type: select
 #. Description
 #: ../templates:2002
 msgid ""
-"\"system-wide (all vhosts)\" apache-config configures http://all-apache-"
-"virtual-hosts/newscoop/ using /etc/apache/conf.d/ This is the recommended "
-"option if newscoop is the sole  web-service on this server and also for test-"
-"installations."
+"\"system-wide (all v-hosts)\" configures the server to respond to http://all-"
+"apache-virtual-hosts/newscoop/ using /etc/apache/conf.d/ This option may be "
+"useful for for test installations."
 msgstr ""
 
 #. Type: select
@@ -113,8 +112,8 @@ msgstr ""
 #. Description
 #: ../templates:3001
 msgid ""
-"Enter the main hostname of the web server.  The DNS of this name must "
-"resolve to the apache server running on this machine."
+"Enter the main hostname of the web server. The DNS of this name must resolve "
+"to the Apache server running on this machine."
 msgstr ""
 
 #. Type: string
@@ -127,40 +126,32 @@ msgstr ""
 #. Description
 #: ../templates:3001
 msgid ""
-"You can customize /etc/apache2/sites-enabled/newscoop.vhost afterwards and "
+"You can customize /etc/apache2/sites-enabled/newscoop.vhost afterwards to "
 "add ServerAliases and further custom configuration."
 msgstr ""
 
 #. Type: string
 #. Description
-#. Type: string
-#. Description
-#: ../templates:3001 ../templates:4001
-msgid "more info soon.."
+#: ../templates:4001
+msgid "Email address of the ServerAdmin:"
 msgstr ""
 
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "Email of the vhost-admin - ServerAdmin:"
-msgstr ""
-
-#. Type: string
-#. Description
-#: ../templates:4001
-msgid "required for dedicated vhost-setup."
+msgid "required for virtual host setup."
 msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../templates:5001
-msgid "install cron-job for newscoop?"
+msgid "Install cron-job for Newscoop?"
 msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../templates:5001
-msgid "Run periodic events for newscoop."
+msgid "Run periodic events for Newscoop."
 msgstr ""
 
 #. Type: boolean
