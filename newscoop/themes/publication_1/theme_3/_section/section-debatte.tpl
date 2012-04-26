@@ -117,15 +117,26 @@ already at that stage in the proceedings *}}
             <aside>
             	
 {{ include file="_tpl/debate-voting.tpl" }}
-                
-                <small class="info">Noch 2 Tage, 7 Stunden, 47 Minuten</small>
+
+{{ list_articles length="1" constraints="type is deb_moderator" }}    
+        {{ $closingdate=date_create($gimme->article->date_closing) }}
+        {{ $deadline=$closingdate->setTime(12, 0) }}
+        {{ $diff=date_diff($deadline, date_create('now')) }}
+        {{ if $deadline->getTimestamp() > time() }}
+        			 <small class="info">Noch {{ $diff->days }} Tage, {{ $diff->h }} Stunden, {{ $diff->i }} Minuten</p></small>
+        {{ else }}
+        			 <small class="info">Diskussion geschlossen am {{ $deadline->format('j.n.Y') }} um 12:00 Uhr</small>
+        {{ /if }}
+        {{ /list_articles }}
 
 {{ if !($wdstage == "0") }}                
             	<article>
                 	<header>
                     	<p>Thema der Debatte</p>
                     </header>
-                    <p>Jede Woche lädt die TagesWoche zum Thema der Woche zwei Debattanten ein. Eine Wochendebatte dauert jeweils vom Freitag bis am darauffolgenden Donnerstag und geht über drei Runden. Zum Auftakt, der auch in der Zeitung erscheint, legen beide Debattanten ihren Standpunkt dar. In der Replik gehen sie jeweils auf die Argumente des Gegenübers sowie Kommentare aus dem Publikum ein. Im Schlussplädoyer haben sie nochmals die Gelegenheit, das Publikum von ihrem Standpunkt zu überzeugen. Das Publikum kann während der gesamten Debatte mitdiskutieren, Fragen stellen und abstimmen, auf welche Seite es sich schlagen möchte.</p>
+{{ list_articles length="1" constraints="type is deb_moderator" }}                        
+                    <p>{{ $gimme->article->teaser }}</p>
+{{ /list_articles }}
                 </article>
 {{ /if }}
                 
