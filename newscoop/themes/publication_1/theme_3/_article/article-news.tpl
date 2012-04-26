@@ -66,6 +66,7 @@
 {{ /if }}
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
+                        {{* include file="_tpl/follow_topics.tpl" view=$view user=$gimme->user *}}
                         </p>
                     </article>                        
 {{ /if }}   
@@ -227,16 +228,16 @@
                 <h5>Beiträge</h5>
                 <p>{{ $numArticles }}</p>
             </li>
-            {{ if $gimme->author->user->defined && (isset($gimme->author->user['facebook']) || isset($gimme->author->user['twitter'])) }}
+            {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
             <li>
                 <h5>Social Networks</h5>
                 <p class="social">
-                    {{ if isset($gimme->author->user['facebook']) }}
-                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ $gimme->author->user['facebook'] }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="90"></div>
+                    {{ if !empty($gimme->author->user['facebook']) }}
+                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ trim($gimme->author->user['facebook']) }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="90" style="margin-right: 8px"></div>
                     {{ /if }}
-                    {{ if isset($gimme->author->user['twitter']) }}
-                    <div class="tw-follow" style="display: inline-block; position: relative; top: 2px; left: 8px">
-                        <a href="http://twitter.com/{{ $gimme->author->user['twitter'] }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ $gimme->author->user['twitter'] }} folgen</a>
+                    {{ if !empty($gimme->author->user['twitter']) }}
+                    <div class="tw-follow" style="display: inline-block; position: relative; top: 2px">
+                        <a href="http://twitter.com/{{ trim($gimme->author->user['twitter'], '@') }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ trim($gimme->author->user['twitter'], '@') }} folgen</a>
                         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                     </div>
                     {{ /if }}
