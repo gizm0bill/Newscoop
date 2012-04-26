@@ -12,7 +12,7 @@
             
             <section>
             
-{{ list_playlist_articles length="7" name=$gimme->section->name }}
+{{ list_playlist_articles length="10" name=$gimme->section->name }}
 
 {{ if $gimme->current_list->index == 2 }}                 
                 <div class="mobile-list-view clearfix">
@@ -81,8 +81,8 @@
 {{*** werbung ***}}   
 {{ include file="_werbung/section-maincol.tpl" }}
 
-{{ list_playlist_articles length="10" name=$gimme->section->name }}
-{{ if $gimme->current_list->index > 7 }}                
+{{ list_playlist_articles length="13" name=$gimme->section->name }}
+{{ if $gimme->current_list->index > 10 }}                
                 <article>
                     <header>
                         <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
