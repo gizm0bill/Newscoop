@@ -24,13 +24,6 @@ $(document).ready(function() {
 		prevText: '&laquo;',
 		numberOfMonths: 3
 	});
-	$( "#agenda-mobile-datepicker" ).datepicker({
-		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
-		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
-		nextText: '&raquo;',
-		prevText: '&laquo;',
-		numberOfMonths: 1
-	});
 	
 	// Slideshow cycle
 	
@@ -44,6 +37,7 @@ $(document).ready(function() {
 			fit:		true,
 			speed:		500,
 			timeout:	0,
+			rev:		true,
 			after:     	onAfter
         });
 		function onAfter(curr,next,opts) {
@@ -54,6 +48,11 @@ $(document).ready(function() {
 	
 	// Tabs
 	$('.tabs').tabs();
+	
+	// Carousel
+	$('.carousel').jcarousel({
+		scroll : 1
+	});
 	
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
@@ -110,24 +109,6 @@ $(document).ready(function() {
 		}
 	);
 	
-	
-	
-	$('.agenda-mobile-top ul li a').click(function() {
-		if ($(this).hasClass('active')) {
-			$('.agenda-mobile-top ul li a').removeClass('active');
-			$('.agenda-mobile-top ul li ul').slideUp();
-			$('.agenda-mobile-top ul li div.calendar').slideUp();
-			$(this).next().slideUp();
-		} else {
-			$('.agenda-mobile-top ul li a').removeClass('active');
-			$(this).addClass('active');
-			$('.agenda-mobile-top ul li ul').slideUp();
-			$('.agenda-mobile-top ul li div.calendar').slideUp();
-			$(this).next().slideDown();
-		}
-		return false;
-	});
-	
 	// Article page side flip
 	$('a.article-view-rear').click(function(){
         document.location.hash = 'hintergrund';
@@ -146,61 +127,18 @@ $(document).ready(function() {
     
     if (document.location.hash == '#hintergrund') {
         $('a.article-view-rear').trigger('click');
-    };
+    }	
     
-    $('#article-recommend-button').fancybox({height: 460, padding: 4, margin: 0, scrolling: 0});
+    $('#article-recommend-button').fancybox({height: 560, width: 600, padding: 4, margin: 0});
 	
-	
-	
-	// Mobile nav
-	$('#mobile-nav li a').click(function() {
-		if ($(this).parent().hasClass('active')) {
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav .start').removeClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$('#main-nav nav').slideUp();
-		} else {
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav .start').removeClass('active');
-			$(this).parent().addClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$(this).next('ul').slideDown();
-			$('#main-nav nav').slideUp();
-		}
-		return false;
+	$('#main-nav .start').click(function(){
+		$(this).toggleClass('active');
+		$('#main-nav nav').slideToggle();
 	});
-	
-	$('#main-nav .start').click(function() {
-		if ($(this).hasClass('active')) {
-			$('#mobile-nav li').removeClass('active');
-			$(this).removeClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$('#main-nav nav').slideUp();
-		} else {
-			$(this).addClass('active');
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav nav').slideDown();
-		}
-		return false;
-	});
-	
-	// Info icon hover
-	$('.top-filter li a.info').hover(
-		function(){
-			$(this).children('span').fadeIn('fast');
-		},
-		function(){
-			$(this).children('span').fadeOut('fast');
-		}
-	);
-	
-	// Fancybox
-	$('.email-trigger').fancybox({
-		helpers : {
-        	overlay : {
-            	opacity : 0.3
-        	}
-    	}
+	$('#mobile-nav li a').click(function(){
+		$('#mobile-nav li').removeClass('active');
+		$(this).parent().toggleClass('active');
+		$(this).next('ul').slideToggle();
 	});
 	
 	// Custom FIle Inputs
@@ -228,4 +166,14 @@ $(document).ready(function() {
 			$('blockquote').prepend('&laquo;');
 			$('blockquote').append('&raquo;');	
 		}
+
+	// Info icon hover
+	$('.top-filter li a.info').hover(
+		function(){
+			$(this).children('span').fadeIn('fast');
+		},
+		function(){
+			$(this).children('span').fadeOut('fast');
+		}
+	);
 });
