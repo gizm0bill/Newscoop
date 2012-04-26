@@ -1773,7 +1773,7 @@ class Article extends DatabaseObject
      * @return string
      * @deprecated
      */
-    public function getLegacySEOURLEnd(array $seoFields, $languageId)
+    private function getLegacySEOURLEnd(array $seoFields, $languageId)
     {
     	$urlEnd = '';
     	foreach ($seoFields as $field => $value) {
