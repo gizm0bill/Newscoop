@@ -436,6 +436,10 @@ $(document).ready(function() {
 
     highlight_agenda_type("{{ $event_type_link }}");
 });
+
+function load_events(ev_type) {
+    return true;
+};
 </script>
 
         <div class="content-box clearfix agenda-content agenda-single">

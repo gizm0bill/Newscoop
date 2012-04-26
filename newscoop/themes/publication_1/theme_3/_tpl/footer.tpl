@@ -39,11 +39,32 @@
                     </ul>
                 </li>
                 <li>
-                    <h4>Ausgehen</h4>
+{{ local }}
+{{* agenda *}}
+{{ set_current_issue }}
+{{ set_section number="70" }}
+                    <h4><a href="{{ uri options="section" }}#/;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt">Ausgehen</a></h4>
                     <ul>
+{{*
                         <li><a href="#">Veranstaltungen</a></li>
-                        <li><a href="#">Kino</a></li>
+*}}
+{{* movies *}}
+{{ set_current_issue }}
+{{ set_section number="72" }}
+                        <li><a href="{{ uri options="section" }}#/;type:kino;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt">Kino</a></li>
+{{* events *}}
+{{ set_current_issue }}
+{{ set_section number="71" }}
+                        <li><a href="{{ uri options="section" }}#/;type:theater;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1">Theater</a></li>
+                        <li><a href="{{ uri options="section" }}#/;type:musik;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1">Konzerte</a></li>
+                        <li><a href="{{ uri options="section" }}#/;type:party;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1">Partys</a></li>
+                        <li><a href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1">Ausstellungen</a></li>
+                        <li><a href="{{ uri options="section" }}#/;type:andere;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1">Andere</a></li>
+{{*
+                <!--<li id="nav_restaurants" class="nav_one"><a href="{{ uri options="section" }}restaurants/">Restaurants</a></li>-->
+*}}
                     </ul>
+{{ /local }}
                 </li>
                 <li>
                     <h4>Blogs</h4>
