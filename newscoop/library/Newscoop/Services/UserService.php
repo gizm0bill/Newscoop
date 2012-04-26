@@ -349,6 +349,23 @@ class UserService
     }
 
     /**
+     * Check if user is an editor
+     *
+     * @param MetaUser $user
+     * @return bool
+     */
+    public function isEditor($user)
+    {
+        foreach ($this->findEditors() as $editor) {
+            if ($user->getId() == $editor->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * List active users
      *
      * @return array
