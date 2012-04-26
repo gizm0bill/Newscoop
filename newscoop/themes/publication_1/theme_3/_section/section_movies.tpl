@@ -422,22 +422,19 @@ return;
         
 {{ include file="_ausgehen/subnav.tpl" }}
 
-        
         <div class="content-box clearfix reverse-columns agenda-content movies-list">
-
-
 
             <aside>
 
-<!--
+{{*
                 <h3>Sortieren nach</h3>
                 <ul class="categories">
                     <li><a href="#" onClick="alert('Not implemented.'); return false;">Bewertung</a></li>
                     <li><a href="#" onClick="alert('Not implemented.'); return false;">Besucherzahlen</a></li>
                     <li class="active"><a href="#" onClick="alert('Just this.'); return false;">alphabetisch</a></li>
                 </ul>
--->
-                
+*}}
+
                 <h3>Ort</h3>
                 <ul>
                     <li>
@@ -503,7 +500,7 @@ return;
                         <li class="li_genre" id="li_andere"><a href="#" onClick="load_genre('andere'); return false;">Andere</a></li>
                 </ul>
                 
-<!--
+{{*
                 <h3>Kino</h3>
                 <ul class="categories">
                     <li class="active"><a href="#">Alle</a></li>
@@ -519,7 +516,7 @@ return;
                     <li><a href="#">Pathe Plaza</a></li>
                     <li><a href="#">Neues Kino</a></li>
                 </ul>
--->
+*}}
                 
                 <h3>Sprache</h3>
                 <ul class="categories">
@@ -530,7 +527,7 @@ return;
                     <li id="movie_sel_subt" class="movie_sel movie_sel_subt"><a href="#" onClick="show_lang('subt'); return false;">Original + Untertitel</a></li>
                 </ul>
                 
-<!--
+{{*
                 <h3>Altersfreigabe</h3>
                 <ul class="categories">
                     <li class="active"><a href="#">Alle</a></li>
@@ -538,7 +535,7 @@ return;
                     <li><a href="#">ab 12</a></li>
                     <li><a href="#">ab 6</a></li>
                 </ul>
--->
+*}}
                 
                 <h3>Presenting Partner</h3>
                 <ul class="partner-list">
@@ -883,7 +880,9 @@ function parse_date_text($date_time_text)
                                 {{ /if }}
                                 {{ /if }}
                                 {{ /if }}
+{{*
                                 <!--<li><span>Sprache:</span> E/d/f</li>-->
+*}}
                             </ul>
 
                           <p>
@@ -910,6 +909,7 @@ function parse_date_text($date_time_text)
 
     {{ assign var="date_time_str" $gimme->article->date_time_text|replace:"&nbsp;":" " }}
     {{ assign var="movie_lang_d" "0" }}
+    {{ assign var="movie_lang_k" "0" }}
     {{ assign var="movie_lang_f" "0" }}
     {{ assign var="movie_lang_t" "0" }}
     {{ php }}
