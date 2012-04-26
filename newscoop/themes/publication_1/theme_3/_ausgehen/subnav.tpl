@@ -100,7 +100,13 @@ function update_subnav_links(link_date, link_region) {
         }
     }
 
-}
+};
+
+function highlight_agenda_type(ag_type) {
+    $(".nav_one").removeClass("active");
+
+    $("#nav_" + ag_type).addClass("active");
+};
 </script>
 
         <div class="content-box agenda-top">
