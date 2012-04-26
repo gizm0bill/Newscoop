@@ -1,6 +1,6 @@
 {{extends file="layout.tpl"}}
 
-{{block content_classes}}filter-community{{/block}}
+{{block content_classes}}reverse-columns filter-content filter-community{{/block}}
 
 {{block content}}
 <ul class="top-filter">

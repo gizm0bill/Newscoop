@@ -1,5 +1,7 @@
 {{extends file="layout.tpl"}}
 
+{{block content_classes}}reverse-columns filter-content{{/block}}
+
 {{block head}}
 <script type="text/template" id="document-article-template">
 <% if (doc.get('image')) { %><a href="<%= doc.get('link') %>" title="<%= doc.escape('title') %>"><img src="/images/cache/<%= doc.get('image') %>" alt="" width="90" /></a><% } %>
