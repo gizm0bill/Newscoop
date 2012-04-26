@@ -102,12 +102,24 @@ class Api_HighlightsController extends Zend_Controller_Action
                         );
                     }
 
+                    $bodyField = 'body';
+                    $teaserField = 'teaser';
+                    switch($article->getType()) {
+                        case 'newswire':
+                            $bodyField = 'DataContent';
+                            $teaserField = 'DataLead';
+                            break;
+                        case 'blog':
+                            $teaserField = 'lede';
+                            break;
+                    }
+
                     $response[] = array(
                         'article_id' => $article->getNumber(),
                         'url' => $this->url . '/api/articles/item?article_id=' . $article->getNumber(),
                         'dateline' => $dateline,
                         'short_name' => empty($short_name) ? $article->getTitle() : $short_name,
-                        'publish_date' => $article->getPublishDate(),
+                        'teaser' => $articleData->getFieldValue($teaserField),
                         'image_url' => $imageUrl,
                         'website_url' => $this->_helper->service('article.link')->getLink($article),
                         'comment_count' => $comments,
