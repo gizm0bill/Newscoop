@@ -68,12 +68,12 @@ and then all is compared according to a matrix.
                 <div class="debate-box omni-corner-box">
   {{ list_articles length="1" constraints="type is deb_moderator" }}
                   
-        {{ $closingdate=date_create($gimme->article->date_closing) }}
-        {{ $deadline=$closingdate->setTime(12, 0) }}
-        {{ $diff=date_diff($deadline, date_create('now')) }}                
+        {{ assign var="closingdate" value=date_create($gimme->article->date_closing) }}
+        {{ assign var="deadline" value=$closingdate->setTime(12, 0) }}
+        {{ assign var="diff" value=date_diff($deadline, date_create('now')) }} 
+               
                 	<h3>Die Wochendebatte: {{ $gimme->article->subject }}</h3>
-                    <ul class="nav">
-        {{ if $deadline->getTimestamp() > time() }}                    
+                    <ul class="nav">                    
                     	<li><b>Übersicht</b></li>
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
                         {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
@@ -81,7 +81,7 @@ and then all is compared according to a matrix.
                         {{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}</a></li>
                      <li{{ if $wdphase == "3"}} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=3"><b>Schlussworte</b>
                         {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}</a></li>
-        					<li{{ else }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
+        					<li{{ if $wdphase == "4" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
                         {{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}</a></li>        
                     </ul>
                     <h5>Zwischenstand</h5>
