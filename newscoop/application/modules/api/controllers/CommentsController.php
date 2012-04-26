@@ -57,6 +57,7 @@ class Api_CommentsController extends Zend_Controller_Action
             return;
         }
 
+        $rank = 1;
         foreach($comments as $comment) {
             $created_time = $comment->getTimeCreated()->format('Y-m-d H:i:s');
             $last_modified = $created_time;
@@ -71,7 +72,8 @@ class Api_CommentsController extends Zend_Controller_Action
                 'message'=> $comment->getMessage(),
                 'recommended' => $comment->getRecommended(),
                 'created_time' => $created_time,
-                'last_modified' => $last_modified
+                'last_modified' => $last_modified,
+                'rank' => $rank++,
             );
         }
 
