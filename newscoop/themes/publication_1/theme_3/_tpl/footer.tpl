@@ -69,4 +69,21 @@
                     </ul>
                 </li>
             </ul>
+            <p class="footer-text">All rights reserved</p>
         </div>
+        
+    </div><!-- / Footer -->
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write("<script src='{{ uri static_file='_js/libs/jquery.min.js' }}'>\x3C/script>")</script>
+    <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.cycle.all.js' }}"></script>
+    <script type="text/javascript" src="{{ uri static_file='_js/libs/fancybox/jquery.fancybox-1.3.4.pack.js' }}"></script>
+    
+    <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery-ui-1.8.16.custom.min.js' }}"></script>
+    <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.jcarousel.min.js' }}"></script>
+    <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.dropdownized.min.js' }}"></script>
+    
+    <script type="text/javascript" src="{{ uri static_file='_js/init.js' }}"></script>
+
+</body>
+</html>
