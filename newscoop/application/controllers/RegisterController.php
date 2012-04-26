@@ -102,43 +102,8 @@ class RegisterController extends Zend_Controller_Action
             'first_name' => $user->getFirstName() ?: null,
             'last_name' => $user->getLastName() ?: null,
         ));
-        
-        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
-            try {
-                $values = $form->getValues();
-                if (!empty($values['image'])) {
-                    $imageInfo = array_pop($form->image->getFileInfo());
-                    $values['image'] = $this->_helper->service('image')->save($imageInfo);
-                } else {
-                    $values['image'] = $this->getUserImageFilename($user);
-                }
 
-                $this->_helper->service('user')->savePending($values, $user);
-                $this->_helper->service('user.token')->invalidateTokens($user, 'email.confirm');
-                $this->notifyDispatcher($user);
-
-                $auth = \Zend_Auth::getInstance();
-                if ($auth->hasIdentity()) { // show index
-                    $this->_helper->flashMessenger('User registered successfully.');
-                    $this->_helper->redirector('index', 'index', 'default');
-                } else {
-                    $adapter = $this->_helper->service('auth.adapter');
-                    $adapter->setEmail($user->getEmail())->setPassword($values['password']);
-                    $result = $auth->authenticate($adapter);
-                    $this->_helper->redirector('index', 'dashboard', 'default', array('first' => 1));
-                }
-            } catch (\Exception $e) {
-                switch ($e->getMessage()) {
-                    case 'username_conflict':
-                        $form->username->addError('Username is used. Please use another one.');
-                        break;
-
-                    default:
-                        var_dump($e);
-                        exit;
-                }
-            }
-        }
+        $this->handleConfirmForm($form, $user);
 
         $this->view->form = $form;
         $this->view->img = $this->getUserImageSrc($user);
@@ -181,19 +146,9 @@ class RegisterController extends Zend_Controller_Action
 
     public function socialAction()
     {
-        $form = new Application_Form_Social();
-        $form->setMethod('POST');
-
         $userData = $this->_getParam('userData');
-        $form->setDefaults(array(
-            'first_name' => $userData->firstName,
-            'last_name' => $userData->lastName,
-            'username' => $this->_helper->service('user')->generateUsername($userData->firstName, $userData->lastName),
-            'email' => $userData->email,
-        ));
-
         if (!empty($userData->email)) { // try to find user by email
-            $user = $this->_helper->service('user')->findBy(array('email' => $userData->email));
+            $user = $this->_helper->service('user')->findOneBy(array('email' => $userData->email));
             if (!empty($user)) { // we have user for given email, add him login
                 $user = array_pop($user);
                 $this->authSocial($user, $userData);
@@ -201,31 +156,26 @@ class RegisterController extends Zend_Controller_Action
             }
         }
 
-        $request = $this->getRequest();
-        if ($request->isPost() && $form->isValid($request->getPost())) {
-            $user = $this->_helper->service('user')->save($form->getValues() + array('is_public' => 1));
-            $this->_helper->service('user')->setActive($user);
-            $this->authSocial($user, $userData);
-            $this->_helper->redirector('index', 'dashboard');
+        $dummyEmail = sha1($userData->email);
+        $user = $this->_helper->service('user')->findOneBy(array('email' => $dummyEmail));
+        if (empty($user)) {
+            $user = $this->_helper->service('user')->createPending($dummyEmail);
         }
 
-        $this->view->name = $userData->displayName;
-        $this->view->form = $form;
-    }
+        $form = new Application_Form_Confirm();
+        $form->setMethod('POST');
+        $form->setDefaults(array(
+            'first_name' => $userData->firstName,
+            'last_name' => $userData->lastName,
+            'username' => $this->_helper->service('user')->generateUsername($userData->firstName, $userData->lastName),
+            'email' => $userData->email,
+        ));
 
-    /**
-     * Auth via social adapter
-     *
-     * @param Newscoop\Entity\User $user
-     * @param object $userData
-     * @return void
-     */
-    private function authSocial($user, $userData)
-    {
-        $this->_helper->service('auth.adapter.social')->addIdentity($user, $this->_getParam('provider'), $userData->identifier);
-        $adapter = $this->_helper->service('auth.adapter.social');
-        $adapter->setProvider($this->_getParam('provider'))->setProviderUserId($userData->identifier);
-        Zend_Auth::getInstance()->authenticate($adapter);
+        $this->handleConfirmForm($form, $user, $userData);
+
+        $this->view->form = $form;
+        $this->view->img = $this->getUserImageSrc($user);
+        $this->render('confirm');
     }
     
     public function pendingAction()
@@ -324,5 +274,72 @@ class RegisterController extends Zend_Controller_Action
         return $this->view->url(array(
             'src' => $this->getHelper('service')->getService('image')->getSrc('images/' . $this->getUserImageFilename($user), 125, 125, 'fit'),
         ), 'image', false, false);
+    }
+
+    /**
+     * Handle confirm form
+     *
+     * @param Application_Form_Confirm $form
+     * @param Newscoop\Entity\User $user
+     * @param object $userData
+     * @return void
+     */
+    private function handleConfirmForm(Application_Form_Confirm $form, User $user, $userData = null)
+    {
+        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
+            try {
+                $values = $form->getValues();
+                if (!empty($values['image'])) {
+                    $imageInfo = array_pop($form->image->getFileInfo());
+                    $values['image'] = $this->_helper->service('image')->save($imageInfo);
+                } else {
+                    $values['image'] = $this->getUserImageFilename($user);
+                }
+
+                $this->_helper->service('user')->savePending($values, $user);
+                $this->_helper->service('user.token')->invalidateTokens($user, 'email.confirm');
+                $this->notifyDispatcher($user);
+
+                if ($userData !== null) {
+                    $this->authSocial($user, $userData);
+                }
+
+                $auth = \Zend_Auth::getInstance();
+                if ($auth->hasIdentity()) { // show index
+                    $this->_helper->flashMessenger('User registered successfully.');
+                    $this->_helper->redirector('index', 'index', 'default');
+                } else {
+                    $adapter = $this->_helper->service('auth.adapter');
+                    $adapter->setEmail($user->getEmail())->setPassword($values['password']);
+                    $result = $auth->authenticate($adapter);
+                    $this->_helper->redirector('index', 'dashboard', 'default', array('first' => 1));
+                }
+            } catch (\Exception $e) {
+                switch ($e->getMessage()) {
+                    case 'username_conflict':
+                        $form->username->addError('Username is used. Please use another one.');
+                        break;
+
+                    default:
+                        var_dump($e);
+                        exit;
+                }
+            }
+        }
+    }
+
+    /**
+     * Auth via social adapter
+     *
+     * @param Newscoop\Entity\User $user
+     * @param object $userData
+     * @return void
+     */
+    private function authSocial($user, $userData)
+    {
+        $this->_helper->service('auth.adapter.social')->addIdentity($user, $this->_getParam('provider'), $userData->identifier);
+        $adapter = $this->_helper->service('auth.adapter.social');
+        $adapter->setProvider($this->_getParam('provider'))->setProviderUserId($userData->identifier);
+        Zend_Auth::getInstance()->authenticate($adapter);
     }
 }
