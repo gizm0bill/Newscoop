@@ -219,6 +219,55 @@ var DateFilterView = FilterView.extend({
 });
 
 /**
+ * Topic filter view
+ */
+var TopicFilterView = FilterView.extend({
+    events: {
+        'click a': 'filter',
+        'click em': 'remove'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+        this.render();
+    },
+
+    render: function() {
+        $(this.el).find('li').removeClass('main');
+
+        for (var i = 0; i < this.collection.topics.length; i++) {
+            $(this.el).find('a[href="#' + this.collection.topics[i] + '"]').closest('li').addClass('main');
+        }
+
+        if (this.collection.topics.length === 0) {
+            $(this.el).find('li:first').addClass('main');
+        }
+    },
+
+    filter: function(e) {
+        e.preventDefault();
+        var topic = e.target.hash.slice(1);
+        if (topic != '') {
+            this.collection.toggleTopic(topic);
+        } else {
+            this.collection.topics = [];
+        }
+        this.collection.start = null;
+        router.navigate(this.collection.nav(), {trigger: true});
+    },
+
+    remove: function(e) {
+        var elem = e.target;
+        var id = parseInt($(elem).attr('id').split('-')[1]);
+        var topics = {};
+        topics[id] = 'false';
+        $.post(this.options.url, {'topics': topics, 'format': 'json'}, function(data, textStatus, jqXHR) {
+            $(elem).closest('li').detach();
+        }, 'json');
+    }
+});
+
+/**
  * Pagination view
  */
 var PaginationView = Backbone.View.extend({

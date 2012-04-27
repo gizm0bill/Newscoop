@@ -121,6 +121,7 @@ class AbstractSolrController extends Zend_Controller_Action
         $decoded['responseHeader']['params']['source'] = $this->_getParam('source');
         $decoded['responseHeader']['params']['section'] = $this->_getParam('section');
         $decoded['responseHeader']['params']['sort'] = $this->_getParam('sort');
+        $decoded['responseHeader']['params']['topic'] = array_filter(explode(',', $this->_getParam('topic', '')));
         return $decoded;
     }
 }

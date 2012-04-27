@@ -109,6 +109,8 @@ var Document = Backbone.Model.extend({
 var DocumentCollection = Backbone.Collection.extend({
     model: Document,
 
+    topics: {},
+
     buildParams: function() {
         var params = {};
 
@@ -140,6 +142,10 @@ var DocumentCollection = Backbone.Collection.extend({
             params.section = this.section;
         }
 
+        if (this.topics.length) {
+            params.topic = this.topics.join();
+        }
+
         return params;
     },
 
@@ -166,6 +172,7 @@ var DocumentCollection = Backbone.Collection.extend({
         this.section = response.responseHeader.params.section;
         this.facets = this.parseFacetFields(response);
         this.sortf = response.responseHeader.params.sort;
+        this.topics = response.responseHeader.params.topic;
         return response.response.docs;
     },
 
@@ -206,5 +213,20 @@ var DocumentCollection = Backbone.Collection.extend({
 
         facets['article'] = facets['news'] + facets['newswire'];
         return facets;
+    },
+
+    /**
+     * Toggle topic
+     *
+     * @param {string} topic
+     * @return {void}
+     */
+    toggleTopic: function(topic) {
+        var index = _.indexOf(this.topics, topic);
+        if (index !== -1) {
+            this.topics.splice(index, 1);
+        } else {
+            this.topics.push(topic);
+        }
     }
 });

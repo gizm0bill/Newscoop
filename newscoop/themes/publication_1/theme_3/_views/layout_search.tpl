@@ -61,9 +61,11 @@
 <span class="info"><%= doc.relDate('published') %></span>
 </script>
 
+{{block no_results}}
 <script type="text/template" id="empty-search-list-template">
 <p>Wir haben keine Resultate zu diesem Suchbegriff gefunden.<br />Bitte versuchen Sie einen anderen oder grenzen Sie Ihre Suche weniger stark ein.</p>
 </script>
+{{/block}}
 
 <script src="{{ $view->baseUrl('js/jquery/jquery-1.6.4.min.js') }}"></script>
 <script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
@@ -75,8 +77,8 @@ $(function() {
     window.documents = new DocumentCollection();
     documentsView = new DocumentListView({collection: documents, el: $('#results'), emptyTemplate: $('#empty-search-list-template')});
     paginationView = new PaginationView({collection: documents, el: $('#search-pagination') });
-    documents.reset(documents.parse({{ json_encode($result) }}));
-    dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });
+    {{ dynamic }}documents.reset(documents.parse({{ json_encode($result) }}));{{ /dynamic }}
+    {{block datefilter_script}}dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });{{/block}}
 });
 </script>
 {{/block}}
@@ -85,7 +87,7 @@ $(function() {
 {{block top}}{{/block}}
 <aside class="mobile-hide"><div class="filter-aside">
     {{block aside}}{{/block}}
-
+    {{block datefilter_wrap}}
     <ul id="date-filter">
         <li class="main"><a href="#">Alle</a></li>
         {{block datefilter}}
@@ -97,7 +99,7 @@ $(function() {
         <li class="range"><label for="range_to">Bis</label> <input type="text" id="range_to" class="to" placeholder="TT.MM.JJ" /></li>
         <li><input type="submit" value="Suchen" /></li>
     </ul>
-
+    {{/block}}
 </div></aside>
 <section>
     {{block section}}{{/block}}
