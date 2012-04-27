@@ -2,56 +2,37 @@
 
 {{ if $gimme->article->publish_date gt "2012-05-07 13:00:00" || $gimme->article->creation_date gt "2012-05-07 13:00:00"  }}{{* solution for slideshows that comes with redesign *}}
 
+{{ assign var="i" value=0 }}
 {{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
+{{ foreach $slideshow->items as $item name=insideslideshow }}
+{{ if $smarty.foreach.insideslideshow.first }}
 <div class="image-slideshow tabs">
                     
                     	<h4>{{ $slideshow->headline }}</h4>
-                        
-                        <div id="image-1" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-1.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
+{{ /if }}   
+{{ assign var="i" value=i+1 }}          
+{{ if $item->is_image }}           
+                        <div id="image-{{ $i }}" class="img-content">
+                        	><img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" />
+                            <p>{{ $item->caption }}</p>
                         </div>
-                        <div id="image-2" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-2.jpg" }}" alt="" />
-                            <p>Another image caption</p>
-                        </div>
-                        <div id="image-3" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-1.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
-                        </div>
-                        <div id="image-4" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-2.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
-                        </div>
-                        <div id="image-5" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-1.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
-                        </div>
-                        <div id="image-6" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-2.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
-                        </div>
-                        <div id="image-7" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-1.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
-                        </div>
-                        <div id="image-8" class="img-content">
-                        	<img src="{{ url static_file="pictures/slideshow-img-2.jpg" }}" alt="" />
-                            <p>Still of Meryl Streep and Anthony Head in The Iron Lady (Bild: Dani Winter)</p>
-                        </div>
-                        
+{{ else }}
+								{{ video_player video=$item->video }}
+{{ /if }}
+{{ /foreach }} 
+
+{{ assign var="i" value=0 }}
+{{ foreach $slideshow->items as $item name=insideslideshow }}
+{{ if $smarty.foreach.insideslideshow.first }}                       
                         <ul class="slideshow-nav carousel jcarousel-skin-img-slider">
-                        	<li><a href="#image-1"><img src="{{ url static_file="pictures/slideshow-thumb-1.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-2"><img src="{{ url static_file="pictures/slideshow-thumb-2.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-3"><img src="{{ url static_file="pictures/slideshow-thumb-3.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-4"><img src="{{ url static_file="pictures/slideshow-thumb-4.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-5"><img src="{{ url static_file="pictures/slideshow-thumb-1.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-6"><img src="{{ url static_file="pictures/slideshow-thumb-2.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-7"><img src="{{ url static_file="pictures/slideshow-thumb-3.jpg" }}" alt="" /></a></li>
-                        	<li><a href="#image-8"><img src="{{ url static_file="pictures/slideshow-thumb-4.jpg" }}" alt="" /></a></li>
-                        </ul>  
-                    
+{{ /if }}
+{{ assign var="i" value=i+1 }}                        
+                        	<li><a href="#image-{{ $i }}"><img src="{{ $item->image->src }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
+{{ if $smarty.foreach.insideslideshow.last }}
+                        </ul>                      
                     </div>
+{{ /if }}
+{{ /foreach }}                    
 
 {{ foreachelse }}{{* if no slideshow is attached to articles published after launch or redesigned site, show only image *}}
 
