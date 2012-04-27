@@ -35,7 +35,7 @@
                 
                     <article>
                         <header>
-                            <p><a href="#">Basel</a></p>
+                            <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
@@ -86,15 +86,13 @@
 {{ /list_related_articles }}
 
 {{* MAP - display only if set *}}
-{{ if $gimme->article->has_map }}   
-{{ if $gimme->map->is_enabled }}                 
+{{ if $gimme->article->has_map }}                   
                     <article>
                         <figure>
                         	{{ map show_locations_list="false" show_reset_link=false auto_focus=false width="100%" height="180" }}
                         	{{ list_map_locations }}{{ if $gimme->current_list->at_beginning }}<p>{{ /if }}{{ $gimme->location->name }}{{ if $gimme->current_list->at_end }}</p>{{ else }}, {{ /if }}{{ /list_map_locations }}
                         </figure>
                     </article>
-{{ /if }}
 {{ /if }}                    
 
 {{* IF ARTICLE IS PART OF A DOSSIER, SHOW IT *}}
