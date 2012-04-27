@@ -1356,7 +1356,7 @@ section article{padding-bottom:25px;}
 				margin-bottom:5px;
 				font-size:13px;
 				}
-		
+		ul.slideshow-nav {list-style: none;}
 		ul.slideshow-nav li {background:#000;}
 			ul.slideshow-nav li img {display:block;}
 				ul.slideshow-nav li.ui-tabs-selected img {-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: alpha(opacity=50); -moz-opacity: 0.5; -khtml-opacity: 0.5; opacity:0.5;}
