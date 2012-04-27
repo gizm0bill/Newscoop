@@ -333,13 +333,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'action' => 'confirm',
             )));
 
-        $router->addRoute(
-            'user',
-            new Zend_Controller_Router_Route('user/profile/:username/:action', array(
-                'module' => 'default',
-                'controller' => 'user',
-                'action' => 'profile',
-            )));
+        $router->addRoute('user', new Zend_Controller_Router_Route('user/profile/:username/:action', array(
+            'module' => 'default',
+            'controller' => 'user',
+            'action' => 'profile',
+        )));
+
+        $router->addRoute('topic', new Zend_Controller_Router_Route('topic/:topic', array(
+            'module' => 'default',
+            'controller' => 'topic',
+            'action' => 'index',
+        )));
 
         $router->addRoute('image',
             new Zend_Controller_Router_Route_Regex($options['image']['cache_url'] . '/(.*)', array(
