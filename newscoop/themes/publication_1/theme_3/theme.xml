@@ -18,7 +18,8 @@
       <rendition name="topfront" width="640" height="280" specs="crop" />
       <rendition name="dossierteaser" width="300" height="131" specs="crop" />
       <rendition name="blogsidebar" width="300" height="150" specs="crop" />
-      <rendition name="artikel" width="647" height="431" specs="crop" />
+      <rendition name="artikel" width="555" height="370" specs="crop" />
+      <rendition name="artikelnew" width="647" height="431" specs="crop" />
       <rendition name="rubrikenseite" width="300" height="200" specs="crop" />
       <rendition name="naviteaser" width="120" height="53" specs="crop" />
     </renditions>

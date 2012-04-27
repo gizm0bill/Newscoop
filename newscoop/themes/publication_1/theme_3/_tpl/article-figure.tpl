@@ -1,6 +1,48 @@
 {{ if !($gimme->article->Disable_Article_Image) }}
 
-{{ if $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"  }}
+{{ if $gimme->article->publish_date gt "2012-05-07 13:00:00" || $gimme->article->creation_date gt "2012-05-07 13:00:00"  }}{{* solution for slideshows that comes with redesign *}}
+
+{{ assign var="i" value=0 }}
+{{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
+{{ foreach $slideshow->items as $item name=insideslideshow }}
+{{ if $smarty.foreach.insideslideshow.first }}
+<div class="image-slideshow tabs">
+                    
+                    	<h4>{{ $slideshow->headline }}</h4>
+{{ /if }}   
+{{ assign var="i" value=i+1 }}          
+{{ if $item->is_image }}           
+                        <div id="image-{{ $i }}" class="img-content">
+                        	><img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" />
+                            <p>{{ $item->caption }}</p>
+                        </div>
+{{ else }}
+								{{ video_player video=$item->video }}
+{{ /if }}
+{{ /foreach }} 
+
+{{ assign var="i" value=0 }}
+{{ foreach $slideshow->items as $item name=insideslideshow }}
+{{ if $smarty.foreach.insideslideshow.first }}                       
+                        <ul class="slideshow-nav carousel jcarousel-skin-img-slider">
+{{ /if }}
+{{ assign var="i" value=i+1 }}                        
+                        	<li><a href="#image-{{ $i }}"><img src="{{ $item->image->src }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
+{{ if $smarty.foreach.insideslideshow.last }}
+                        </ul>                      
+                    </div>
+{{ /if }}
+{{ /foreach }}                    
+
+{{ foreachelse }}{{* if no slideshow is attached to articles published after launch or redesigned site, show only image *}}
+
+	<figure>
+		{{ include file="_tpl/renditions/img_647x431.tpl" }}
+    </figure>
+    
+{{ /foreach }}
+                    
+{{ elseif $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"  }}
 
 {{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
 <script type="text/javascript">
@@ -31,16 +73,11 @@ $(document).ready(function() {
     {{ /foreach }}
 
 {{ foreachelse }}
+
 	<figure>
-{{ image rendition="artikel" }}
-{{ if $gimme->article->publish_date gt "2012-05-01 13:00:00" || $gimme->article->creation_date gt "2012-05-01 13:00:00"  }}
-<img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
-{{ else }}
-<img src="{{ $image->src }}" width="555" height="370" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
-{{ /if }}
-        <p>{{ $image->caption }}&nbsp;{{ include file="_tpl/image-photographer.tpl" image=$image }}</p>
-{{ /image }}
+		{{ include file="_tpl/renditions/img_555x370.tpl" }}
     </figure>
+    
 {{ /foreach }}
 
 {{ else }}
@@ -113,7 +150,7 @@ $(document).ready(function() {
                             <li>
 {{ /if }}
                                 <figure>
-{{ include file="_tpl/renditions/img_647x431.tpl" }}
+{{ include file="_tpl/renditions/img_555x370.tpl" }}
                                       <p>
 {{ if $gimme->article->image->description != "" }}
 {{ $gimme->article->image->description }} 
