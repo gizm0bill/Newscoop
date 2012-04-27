@@ -25,7 +25,7 @@
 $(function() {
     window.router = new SearchRouter();
     topicFilterView = new TopicFilterView({collection: documents, el: $('#topic-filter'), url: {{ json_encode($view->url(['controller' => 'dashboard', 'action' => 'update-topics'], 'default')) }} });
-    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'my-topic']), '/')) }} });
+    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'my-topics']), '/')) }} });
 });
 </script>
 {{/block}}

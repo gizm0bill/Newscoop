@@ -10,8 +10,23 @@ require_once __DIR__ . '/TopicController.php';
 
 /**
  */
-class MyTopicController extends TopicController
+class MyTopicsController extends TopicController
 {
+    /** @var Newscoop\Entity\User */
+    protected $user;
+
+    public function init()
+    {
+        $this->user = $this->_helper->service('user')->getCurrentUser();
+        if ($this->user === null) {
+            $this->_forward('empty');
+        }
+    }
+
+    public function emptyAction()
+    {
+    }
+
     /**
      * Build solr topic filter
      *
@@ -22,10 +37,9 @@ class MyTopicController extends TopicController
         if ($this->_getParam('topic')) {
             $topics = explode(',', $this->_getParam('topic'));
         } else {
-            $user = $this->_helper->service('user')->getCurrentUser();
             $topics = array_map(function($topic) {
                 return $topic->getName();
-            }, $this->_helper->service('user.topic')->getTopics($user));
+            }, $this->_helper->service('user.topic')->getTopics($this->user));
         }
 
         if (empty($topics)) {

@@ -36,7 +36,7 @@ $(function() {
 
         $.post("{{ $view->url(['controller' => 'dashboard', 'action' => 'update-topics'], 'default') }}", {'topics': topics, 'format': 'json'}, function(data, textStatus, jqXHR) {
             $('> *', context).not('h3').hide();
-            $('h3', context).after('<p class="after">Neue Artikel zu allen Themen, denen Sie folgen, finden Sie unter <a href="{{ $view->url(['controller' => 'my-topic', 'action' => null], 'default') }}">Meine Themen</a>.</p>');
+            $('h3', context).after('<p class="after">Neue Artikel zu allen Themen, denen Sie folgen, finden Sie unter <a href="{{ $view->url(['controller' => 'my-topics', 'action' => null], 'default') }}">Meine Themen</a>.</p>');
         }, 'json');
     });
 });
