@@ -65,9 +65,9 @@
 {{ /if }}
                         <a href="{{ url options="template _section/section-topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
-                        {{* include file="_tpl/follow_topics.tpl" view=$view user=$gimme->user *}}
-                        </p>
-                    </article>                        
+                        <br /><a href="#theme-abonnieren-content" id="follow-topics" class="theme-subscribe theme-abonnieren-trigger">Themen abonnieren</a></p>
+                        {{ include file="_tpl/follow-topics.tpl" }}
+                    </article>
 {{ /if }}   
 {{ /list_article_topics }}                    
 
