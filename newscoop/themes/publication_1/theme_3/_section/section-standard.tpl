@@ -115,6 +115,8 @@
                 
 {{ include file="_tpl/sidebar-links.tpl" linksvar=$gimme->section->name }}
                 
+{{ include file="_tpl/sidebar-dossier.tpl" }}              
+                
 {{ include file="_tpl/sidebar-cover.tpl" }}
             
             </aside><!-- / Sidebar -->
