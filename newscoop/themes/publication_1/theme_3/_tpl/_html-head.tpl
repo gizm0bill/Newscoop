@@ -21,9 +21,7 @@
     <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/jquery.fancybox-1.3.4.css" }}">
 
 	{{* jquery has to go to header because of maps *}}
-	 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script>window.jQuery || document.write("<script src='{{ url static_file="_js/libs/jquery.min.js" }}'>\x3C/script>")</script>     
     <script src="{{ url static_file="_js/libs/modernizr-2.0.6.js" }}"></script>
-{{ if empty($no_close) }}
 </head>
-{{ /if }}

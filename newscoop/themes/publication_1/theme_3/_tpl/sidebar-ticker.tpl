@@ -29,10 +29,8 @@
     <p><%= doc.getTweet() %> <small>Von&nbsp;<%= doc.escape('tweet_user_screen_name') %>, <%= doc.relDate('published') %></small></p>
 </script>
 
-<script src="{{ $view->baseUrl('js/underscore.js') }}"></script>
-<script src="{{ $view->baseUrl('js/backbone.js') }}"></script>
-<script src="{{ $view->baseUrl('js/models/search.js') }}"></script>
-<script src="{{ $view->baseUrl('js/apps/ticker.js') }}"></script>
+<script src="{{ url static_file="_js/libs/underbackbone.js" }}"></script>     
+<script src="{{ url static_file="_js/tickerapp.js" }}"></script>
 <script>
 $(function() {
     var docs = new DocumentCollection();

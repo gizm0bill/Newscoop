@@ -1,7 +1,6 @@
-{{ include file="_tpl/_html-head.tpl" no_close=true }}
-    {{block head}}{{/block}}
-</head>
+{{ include file="_tpl/_html-head.tpl" }}
 <body>
+    {{block head}}{{/block}}
 	<div id="wrapper">
     {{ include file="_tpl/header-omnibox.tpl" }}
     {{ include file="_tpl/header.tpl" }}
