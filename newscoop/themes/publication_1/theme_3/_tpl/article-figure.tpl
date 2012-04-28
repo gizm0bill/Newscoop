@@ -10,10 +10,10 @@
                     
                     	<h4>{{ $slideshow->headline }}</h4>
 {{ /if }}   
-{{ assign var="i" value=i+1 }}          
+{{ assign var="i" value=$i+1 }}          
 {{ if $item->is_image }}           
                         <div id="image-{{ $i }}" class="img-content">
-                        	><img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" />
+                        	<img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" />
                             <p>{{ $item->caption }}</p>
                         </div>
 {{ else }}
@@ -26,7 +26,7 @@
 {{ if $smarty.foreach.insideslideshow.first }}                       
                         <ul class="slideshow-nav carousel jcarousel-skin-img-slider">
 {{ /if }}
-{{ assign var="i" value=i+1 }}                        
+{{ assign var="i" value=$i+1 }}                        
                         	<li><a href="#image-{{ $i }}"><img src="{{ $item->image->src }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
 {{ if $smarty.foreach.insideslideshow.last }}
                         </ul>                      
