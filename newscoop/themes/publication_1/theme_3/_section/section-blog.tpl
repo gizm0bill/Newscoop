@@ -32,6 +32,7 @@
                 
                 <div class="mobile-list-view clearfix slideshow">
 
+{{ if $seclike == 1 }}
 {{ list_articles columns="7" constraints="type is blog" }}
 {{ if $gimme->current_list->at_beginning }}
 						  <div class="slides">  
@@ -82,7 +83,18 @@ Vor
                         <li><a class="grey-button next" href="#">»</a></li>
                     </ul>
 {{ /if }}                    
-{{ /list_articles }}                
+{{ /list_articles }} 
+{{ else }}{{* if not seclike == 1 *}}
+{{ list_articles length="7" constraints="type is blog" }}
+						<article>
+                    <h2>{{ $gimme->article->name }}</h2>
+                    <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y, %H:%i" }}Uhr</span>                
+                    {{ include file="_tpl/article-figure.tpl" }}
+                    {{ $gimme->article->body }}
+                    <p><a href="{{ url options="article" }}">Kommentieren & Teilen</a></p>
+                  </article>
+{{ /list_articles }}
+{{ /if }}               
                 </div>
 
             </section><!-- / Main Section -->
