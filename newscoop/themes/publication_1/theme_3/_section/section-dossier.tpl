@@ -48,13 +48,16 @@
       
             	<article>
                     <header>
-                        <p>Topics</p>
+                        <p>Rubriken</p>
                     </header>                    	
                         <ul class="dossier-litem-list">    
-                        	<li><a href="">Hardcoded topic 1</a></li>
-                        	<li><a href="">Hardcoded topic 2</a></li>
-                        	<li><a href="">Hardcoded topic 3</a></li>
-                        	<li><a href="">Hardcoded topic 4</a></li>  	
+                        	<li><a href="/topic/Auch+das+noch">Auch das noch</a></li>
+                        	<li><a href="/topic/Fotoarchiv+Kurt+Wyss">Aus dem Fotoarchiv von Kurt Wyss</a></li>
+                        	<li><a href="/topic/Gefordert">Gefordert</a></li>
+                        	<li><a href="/topic/Kultwerk">Kultwerk</a></li>
+                        	<li><a href="/topic/Malenas+Welt">Malenas Welt</a></li> 
+                        	<li><a href="/topic/Wochenendlich">Wochenendlich</a></li> 
+                        	<li><a href="/topic/Wochengedicht">Wochengedicht</a></li>
                         </ul>
               </article>      
            
