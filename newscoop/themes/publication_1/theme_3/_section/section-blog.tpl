@@ -24,11 +24,15 @@
                     </figure>
                     <p>{{ strip }}{{ $gimme->article->infolong|strip_tags }}{{ /strip }}</p>
                 </article>
+                {{ assign var="seclike" value=0 }}
+                {{ if $gimme->article->section_like }}
+                {{ assign var="seclike" value=1 }}
+                {{ /if }}                
 {{ /list_articles }}
                 
                 <div class="mobile-list-view clearfix slideshow">
 
-{{ list_articles columns="3" constraints="type is blog" }}
+{{ list_articles columns="7" constraints="type is blog" }}
 {{ if $gimme->current_list->at_beginning }}
 						  <div class="slides">  
 {{ /if }}						  
@@ -52,15 +56,22 @@ Vor
 {{ if !$diff->d && !$diff->h && !$diff->i && $diff->s }} {{ $diff->s }} Sek.{{ /if }}
                                 {{ /if }}</p>
                         </header>
+{{ if $gimme->section->number gte 200 }}
+								<h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
+                        {{ list_article_images length="1" }}
+                        <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" /></a>
+                        {{ /list_article_images }} 
+{{ else }}                                                       
                         <figure class="left">
                             <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
-                        </figure>
+                        </figure>                        
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if !($gimme->article->lede|strip_tags:false|strip == "") }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->body|strip_tags:false|strip|truncate:200 }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} <a href="{{ url options="article" }}">Weiterlesen</a>
                         {{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}  
                         </p>
+{{ /if }}                        
                     </article>
-{{ if $gimme->current_list->column == "3" || $gimme->current_list->at_end }} 
+{{ if $gimme->current_list->column == "7" || $gimme->current_list->at_end }} 
 						  </div>  
 {{ /if }}                                        
 {{ if $gimme->current_list->at_end }} 
