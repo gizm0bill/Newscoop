@@ -43,10 +43,10 @@ class ArticleRecommendationController extends Zend_Controller_Action
             
             $subject = 'Lesetipp: '.$article->getName();
             $body = '';
-            $body = $body.$parameters['message']."<br>";
+            $body = $body.$parameters['message']."<br><br>";
             $body = $body.$article->getName()."<br>";
-            $body = $body.$article->getData('lede')."<br>";
-            $body = $body."Lesen: <a href='".$link."'>".$link."</a>"."<br>";
+            $body = $body.$article->getData('lede')."<br><br>";
+            $body = $body."Lesen: <a href='".$link."'>".$link."</a>"."<br><br>";
             $body = $body."Diese Email wurde von ".$parameters['sender_name']." via tageswoche.ch versandt.<br>";
             
             try {
