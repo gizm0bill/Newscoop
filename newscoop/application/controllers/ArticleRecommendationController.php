@@ -48,12 +48,17 @@ class ArticleRecommendationController extends Zend_Controller_Action
             $body = $body."Lesen: <a href='".$link."'>".$link."</a>\r\n";
             $body = $body."Diese Email wurde von ".$parameters['sender_name']." via tageswoche.ch versandt.\r\n";
             
-            $mail = new \Zend_Mail('utf-8');
-            $mail->setSubject($subject);
-            $mail->setBodyHtml($body);
-            $mail->setFrom($parameters['sender_email']);
-            $mail->addTo($parameters['recipient_email']);
-            $mail->send();
+            try {
+                $mail = new \Zend_Mail('utf-8');
+                $mail->setSubject($subject);
+                $mail->setBodyHtml($body);
+                $mail->setFrom($parameters['sender_email']);
+                $mail->addTo($parameters['recipient_email']);
+                $mail->send();
+            } catch (\Exception $e) {
+                $this->view->error = 'Email invalid.';
+                $this->_helper->redirector('index');
+            }
         }
     }
 }

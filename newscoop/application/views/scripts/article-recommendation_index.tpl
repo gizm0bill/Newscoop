@@ -11,6 +11,11 @@
     <form method="post" action="{{$view->baseUrl()}}/article-recommendation/send">
         <input type="hidden" name="article_number" value="{{ $view->articleNumber }}">
         <ul class="form">
+            {{if $view->error}}
+                <li>
+                    {{ $view->error }}
+                </li>
+            {{/if}}
             <li>
                 <label>E-Mail-Adresse des Empfängers *</label>
                 <input type="text" name="recipient_email"/>
