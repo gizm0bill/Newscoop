@@ -43,9 +43,10 @@ class ArticleRecommendationController extends Zend_Controller_Action
             
             $subject = 'Lesetipp: '.$article->getName();
             $body = '';
+            $body = $body.$parameters['message']."\r\n";
             $body = $body.$article->getName()."\r\n";
             $body = $body.$article->getData('lede')."\r\n";
-            $body = $body."Lesen: <a href='".$link."'>".$link."</a>\r\n";
+            $body = $body."Lesen: <a href='".$link."'>".$link."</a>"."\r\n";
             $body = $body."Diese Email wurde von ".$parameters['sender_name']." via tageswoche.ch versandt.\r\n";
             
             try {
