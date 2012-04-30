@@ -50,7 +50,7 @@ Vor
 {{ if !$diff->d && !$diff->h && !$diff->i && $diff->s }} {{ $diff->s }} Sek.{{ /if }}
                                 {{ /if }}</p>
                         </header>
-								<h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
+								<h2>{{ include file="_tpl/admin_frontpageedit.tpl" }}<a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         {{ list_article_images length="1" }}
                         <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" /></a>
                         {{ /list_article_images }} 
@@ -113,7 +113,7 @@ Vor
                     <h2>{{ $gimme->article->name }}</h2>
                     <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y, %H:%i" }}Uhr</span>                
                     {{ include file="_tpl/article-figure.tpl" }}
-                    {{ $gimme->article->body }}
+                    {{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}
                     <p><a href="{{ url options="article" }}">Kommentieren & Teilen</a></p>
                   </article>
 {{ if $gimme->current_list->at_end }}                

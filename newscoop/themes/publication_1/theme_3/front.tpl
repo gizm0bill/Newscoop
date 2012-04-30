@@ -42,9 +42,9 @@
                 
 {{ include file="_tpl/sidebar-cover.tpl" }}
                 
-{{ include file="_tpl/sidebar-debatte.tpl" }}
+{{* include file="_tpl/sidebar-debatte.tpl" *}}
                 
-{{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - front" }}
+{{* include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - front" *}}
             
             </aside><!-- / Sidebar -->
             

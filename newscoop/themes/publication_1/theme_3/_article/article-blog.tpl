@@ -17,7 +17,7 @@
                 <article>
                     <h2>{{ $gimme->article->name }}</h2>
                     <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y, %H:%i" }}Uhr</span>                
-                    {{ $gimme->article->body }}
+                    {{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}
                     {{ list_article_images }}
                     <figure style="margin-bottom: 15px">
                       <img src="{{ uri options="image width 980" }}" rel="resizable" alt="">
@@ -49,7 +49,7 @@
                     <h2>{{ $gimme->article->name }}</h2>
                     <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y, %H:%i" }}Uhr</span>                
                     {{ include file="_tpl/article-figure.tpl" }}
-                    {{ $gimme->article->body }}
+                    {{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}
                 </article>
             
             </section><!-- / Main Section -->
