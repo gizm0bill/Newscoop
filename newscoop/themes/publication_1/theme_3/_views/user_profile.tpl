@@ -142,11 +142,7 @@
     </article>
     {{ /if }}
 
-    <article class="community omni-corner-box mobile-hide">
-        <header>
-            <p>Willkommen in der Community!</p>
-        </header>
-    </article>
+    {{ include file="_tpl/sidebar-users.tpl" }}
 
     {{ include file="_werbung/user-profile-sidebar.tpl" }}
 
