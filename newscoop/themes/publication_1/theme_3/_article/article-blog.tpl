@@ -64,7 +64,7 @@ Vor
                     	<p>Autor: {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</p>
                     </header>
                     {{ if $gimme->author->user->defined }}
-                    <a href="{{ $gimme->author->url }}"><img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" /></a>
+                    <img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" />
                     {{ if !empty($gimme->author->user['bio']) }}
                     <p>{{ $gimme->author->user['bio']|bbcode }}</p>
                     {{ else }}
