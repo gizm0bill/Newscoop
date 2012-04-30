@@ -472,7 +472,7 @@ return;
                 
                 <h3>Genre</h3>
                 <ul class="categories">
-                        <li class="active li_genre" id="li_kino"><a href="#" onClick="load_genre('kino'); return false;">Alles</a></li>
+                        <li class="active li_genre" id="li_kino"><a href="#" onClick="load_genre('kino'); return false;">Alle</a></li>
                         <li class="li_genre" id="li_abenteuer"><a href="#" onClick="load_genre('abenteuer'); return false;">Abenteuer</a></li>
                         <li class="li_genre" id="li_action"><a href="#" onClick="load_genre('action'); return false;">Action</a></li>
                         <li class="li_genre" id="li_adult"><a href="#" onClick="load_genre('adult'); return false;">Adult</a></li>
@@ -537,10 +537,12 @@ return;
                 </ul>
 *}}
                 
+{{*
                 <h3>Presenting Partner</h3>
                 <ul class="partner-list">
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-3.jpg" }}" alt="" /></a></li>
                 </ul>
+*}}
             
             </aside>
 
@@ -952,7 +954,7 @@ function parse_date_text($date_time_text)
                             {{ $gimme->article->zipcode }} {{ $gimme->article->town }}</p>
                             <p>
                             {{ list_article_locations length="1" }}
-                                <a href="http://maps.google.com/maps?hl=de&t=k&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Google Maps</a><br />
+                                <a href="http://maps.google.com/maps?hl=de&t=k&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Auf Karte anzeigen</a><br />
                             {{ /list_article_locations }}
                             {{ if  "" != $gimme->article->web }}
                             <a href="{{ $gimme->article->web }}" target="_blank">{{ $gimme->article->web|replace:"http://":"" }}</a>

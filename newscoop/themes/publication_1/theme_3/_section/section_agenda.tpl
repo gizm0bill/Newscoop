@@ -179,14 +179,14 @@ function load_area(area) {
                         </select>
                     </li>
                 </ul>
-
+{{*
                 <h3>Presenting Partner</h3>
                 <ul class="partner-list">
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-1.jpg" }}" alt="" /></a></li>
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-2.jpg" }}" alt="" /></a></li>
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-3.jpg" }}" alt="" /></a></li>
                 </ul>
-
+*}}
                 <p><a href="mailto:agenda@tageswoche.ch">Melden Sie Ihre Veranstaltung!</a></p>
 
             </aside>

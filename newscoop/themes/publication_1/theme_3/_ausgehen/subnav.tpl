@@ -154,7 +154,7 @@ function highlight_agenda_type(ag_type) {
                 <li id="nav_musik" class="nav_one"><a id="nav_musik_link" href="{{ uri options="section" }}#/;type:musik;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('musik');">Konzerte</a></li>
                 <li id="nav_party" class="nav_one"><a id="nav_party_link" href="{{ uri options="section" }}#/;type:party;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('party');">Partys</a></li>
                 <li id="nav_ausstellung" class="nav_one"><a id="nav_ausstellung_link" href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('ausstellung');">Ausstellungen</a></li>
-                <li id="nav_andere" class="nav_one"><a id="nav_andere_link" href="{{ uri options="section" }}#/;type:andere;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('andere');">Andere</a></li>
+                <li id="nav_andere" class="nav_one"><a id="nav_andere_link" href="{{ uri options="section" }}#/;type:andere;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt;page:1" onClick="return load_events('andere');">Diverse</a></li>
 {{*
                 <!--<li id="nav_restaurants" class="nav_one"><a href="{{ uri options="section" }}restaurants/">Restaurants</a></li>-->
 *}}

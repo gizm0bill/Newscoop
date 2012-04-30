@@ -270,10 +270,12 @@ function get_time_text($multi_time_text, $req_date)
                 </ul>
 *}}
                 
+{{*
                 <h3>Presenting Partner</h3>
                 <ul class="partner-list">
                     <li><a href="#"><img src="{{ uri static_file="_ausgehen/pictures/partner-logo-small-1.jpg" }}" alt="" /></a></li>
                 </ul>
+*}}
                 
                 <p><a href="mailto:agenda@tageswoche.ch">Melden Sie Ihre Veranstaltung!</a></p>
             
