@@ -1,4 +1,4 @@
-{{extends file="layout.tpl"}}
+{{ extends file="layout_nocalendar.tpl"}}
 
 {{block content_classes}}content-box clearfix{{/block}}
 
@@ -14,8 +14,12 @@
             </figure>
 
             <div class="profile-info">
-                <h4>{{ $user->name }}{{ if $user['is_verified'] }} <a href="#" class="green-button">Verifiziertes Profil</a>{{ /if }}</h4>
-                <p>{{ $profile.bio }}</p>
+                <h4>{{ $user->first_name }} {{ $user->last_name }}{{ if $user['is_verified'] }} <a href="#" class="green-button">Verifiziertes Profil</a>{{ /if }}</h4>
+                {{ if $user->isAdmin() || $user->isBlogger() }}
+                <p>{{ $profile.bio|bbcode }}</p>
+                {{ else }}
+                <p>{{ $profile.bio|escape }}</p>
+                {{ /if }}
                 <ul class="links">
                     {{ if $user->logged_in }}
                     <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Edit profile</a>.</li>
@@ -59,7 +63,7 @@
                 </div>
                 </div>
                 </div>
-            {{ /if }}
+                {{ /if }}
             </div>
         </article>
     </div>
@@ -128,10 +132,10 @@
     {{ if !empty($profile.geolocation) }}
     <article>
         <header>
-            <p>{{ $user->name }} Standort</p>
+            <p>{{ $user->first_name }} {{ $user->last_name }} Standort</p>
         </header>
         <figure>
-            <div id="map_canvas" class="map-holder"></div>
+            <div id="map-canvas" class="map-holder" style="height:248px"></div>
         </figure>
     </article>
     {{ /if }}
@@ -146,8 +150,59 @@
 
 </aside>
 
+{{ if !empty($profile.email_public) }}
+<script type="text/javascript">
+$(function() {
+    $('#email-form').submit(function() {
+        var subject = $('#email-subject').val();
+        var message = $('#email-message').val();
+
+        if (!subject) {
+            $('#email-subject').addClass('error');
+        } else {
+            $('#email-subject').removeClass('error');
+        }
+
+        if (!message) {
+            $('#email-message').addClass('error');
+        } else {
+            $('#email-message').removeClass('error');
+        }
+
+        if ($('#email-message.error, #email-subject.error').size()) {
+            return false;
+        }
+
+        $.post("{{ $view->url(['action' => 'send-email', 'username' => $user->uname], 'user')}}?format=json", {
+            'subject': subject,
+            'message': message,
+        }, function(data, textStatus, jqXHR) {
+            $('#email-form').hide();
+            if (data.status) {
+                $('<p class="confirm">Ihre E-Mail wurde verschickt.</p>').appendTo($('#send-email')).css('margin', '0');
+            } else {
+                $('<p class="confirm" style="color: #c00;">There was an error. Please try again later.</p>').appendTo($('#send-email')).css('margin', '0');
+            }
+        }, 'json');
+
+        return false;
+    });
+
+    $('#send-user-email').fancybox({
+        'hideOnContentClick': false,
+        'type': 'inline',
+        'onClosed': function() {
+            $('#send-email p.confirm').detach();
+            $('#email-message, #email-subject').val('');
+            $('#email-form').show();
+        }
+    });
+});
+</script>
+{{ /if }}
+
 {{ if !empty($profile.geolocation) }}
-<script>
+<script type="text/javascript">
 var map;
 var marker;
 
@@ -163,7 +218,7 @@ function initialize() {
         draggable: false
     }
 
-    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
     marker = new google.maps.Marker({
         position: latLng,
         map: map
@@ -180,7 +235,6 @@ function loadScript() {
 $(document).ready(loadScript);
 </script>
 {{ /if }}
-
 
 {{/block}}
 
