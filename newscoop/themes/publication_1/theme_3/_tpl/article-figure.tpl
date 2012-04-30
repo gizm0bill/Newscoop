@@ -1,7 +1,5 @@
 {{ if !($gimme->article->Disable_Article_Image) }}
 
-{{ if $gimme->article->publish_date gt "2012-05-07 13:00:00" || $gimme->article->creation_date gt "2012-05-07 13:00:00"  }}{{* solution for slideshows that comes with redesign *}}
-
 {{ assign var="i" value=0 }}
 {{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
 {{ foreach $slideshow->items as $item name=insideslideshow }}
@@ -36,51 +34,20 @@
 
 {{ foreachelse }}{{* if no slideshow is attached to articles published after launch or redesigned site, show only image *}}
 
+{{ if $gimme->article->publish_date gt "2012-05-07 13:00:00" || $gimme->article->creation_date gt "2012-05-07 13:00:00"  }}
 	<figure>
 		{{ include file="_tpl/renditions/img_647x431.tpl" }}
     </figure>
-    
-{{ /foreach }}
-                    
-{{ elseif $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"  }}
-
-{{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
-<script type="text/javascript">
-$(document).ready(function() {
-    $("a.big_slideshow_list").fancybox({
-        type: 'image'
-    });
-});
-</script>
-
-    {{ foreach $slideshow->items as $item name=insideslideshow }}
-    {{ if $smarty.foreach.insideslideshow.first }}
-<div class="loader" style="height:431px">
-<ul id="article-single-carousel" class="jcarousel-skin-article-single">    
-    {{ /if }}
-    <li><figure>
-        {{ if $item->is_image }}
-        <a href="{{ $item->image->original }}" title="{{ $item->caption }}" class="big_slideshow_list" rel="bigslideshow"><img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" /><div class="zoomie"></div></a>
-        {{ else }}
-        {{ video_player video=$item->video }}
-        {{ /if }}
-        <p>{{ $item->caption }}&nbsp;{{ include file="_tpl/image-photographer.tpl" image=$item->image }}</p>
-    </figure></li>
-    {{ if $smarty.foreach.insideslideshow.last }}
-</ul>
-<div class="loading" style="height:431px"></div></div>     
-    {{ /if }}    
-    {{ /foreach }}
-
-{{ foreachelse }}
-
-	<figure>
+{{ elseif $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"  }}	
+	 <figure>
 		{{ include file="_tpl/renditions/img_555x370.tpl" }}
     </figure>
-    
+{{ /if }}  
+  
 {{ /foreach }}
+                    
 
-{{ else }}
+{{ if $gimme->article->publish_date lt "2012-02-08 13:00:00" || $gimme->article->creation_date lt "2012-02-08 13:00:00"  }}
 
 {{* check if article has big slideshow *}}
 {{if $gimme->article->big_slideshow }}
