@@ -137,7 +137,7 @@
             <p>{{ $user->first_name }} {{ $user->last_name }} Standort</p>
         </header>
         <figure>
-            <div id="map-canvas" class="map-holder" style="height:248px"></div>
+            <div id="map-canvas" class="map-holder" style="height:178px"></div>
         </figure>
     </article>
     {{ /if }}
