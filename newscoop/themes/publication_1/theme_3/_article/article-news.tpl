@@ -221,7 +221,7 @@
         <ul class="article-info">
             <li class="image">
                 {{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
-                <p>{{ $gimme->author->biography->text }}</p>
+                <p>{{ $gimme->author->biography->text|bbcode }}</p>
             </li>
             <li>
                 <h5>Beiträge</h5>

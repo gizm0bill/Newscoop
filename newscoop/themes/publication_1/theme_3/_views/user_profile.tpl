@@ -52,15 +52,21 @@
                 <a id="send-user-email" class="email" href="#send-email">{{ include file="_tpl/user-name.tpl" user=$user }} eine Nachricht senden</a>
                 <div style="display:none">
                 <div id="send-email">
-                <div class="text_container">
+                <div class="popup-box">
                     <form id="email-form">
-                    <label for="email-subject">Betreff</label>
-                    <input type="text" name="subject" id="email-subject" />
-                    <br />
-                    <label for="email-message">Mitteilung</label>
-                    <textarea id="email-message" name="message" rows="5"></textarea>
-                    <!--<button id="email-submit">Senden</button>//-->
-                    <input type="submit" id="email-submit" class="button" value="Senden" />
+                    <ul class="form">
+                        <li>
+                            <label for="email-subject">Betreff</label>
+                            <input type="text" name="subject" id="email-subject" />
+                        </li>
+                        <li>
+                            <label for="email-message">Mitteilung</label>
+                            <textarea id="email-message" name="message" rows="5"></textarea>
+                        </li>
+                        <li>
+                            <input type="submit" id="email-submit" class="button" value="Senden" />
+                        </li>
+                    </ul>
                     </form>
                 </div>
                 </div>
@@ -137,7 +143,7 @@
             <p>{{ $user->first_name }} {{ $user->last_name }} Standort</p>
         </header>
         <figure>
-            <div id="map-canvas" class="map-holder" style="height:248px"></div>
+            <div id="map-canvas" class="map-holder" style="height:178px"></div>
         </figure>
     </article>
     {{ /if }}

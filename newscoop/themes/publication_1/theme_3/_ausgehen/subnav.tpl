@@ -2,12 +2,22 @@
 #wann {
     width: 80px !important;
     margin-top: 0px;
-    height: 12px;
+    height: 14px;
     background: #fafafa;
+    border: 1px inset;
 }
 
 #wann_middle {
     margin-top: 6px;
+}
+
+#datepicker_single_ul {
+    z-index: 600 !important;
+}
+#ui-datepicker-div {
+    top: 234px !important;
+    left: 60px !important;
+    z-index: 600 !important;
 }
 
 .ui-datepicker-prev {
@@ -16,6 +26,11 @@
 .ui-datepicker-next {
     width: 60px !important;
 }
+
+.ui-datepicker-group-first {
+    margin-left: 11px;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -46,11 +61,21 @@ $(document).ready(function() {
   // Datepicker
   var dp = $( ".datepicker" ).datepicker({
     showOn: "button",
+    beforeShow: function(input, inst) {
+        //$('#ui-datepicker-div').css("z-index","600");
+        //$('#ui-datepicker-div').css("top","234px");
+        //$('#ui-datepicker-div').css("left","60px");
+        $('.agenda-top .overlay').fadeIn(500);
+    },
+    onClose: function(dateText, inst) {
+        $('.agenda-top .overlay').fadeOut(500);
+    },
     buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
     buttonImageOnly: true
   });
 
     $("#wann").attr('disabled', true);
+
     $("#wann_middle").click( function () {
         $(".datepicker").datepicker("show");
     });
@@ -61,6 +86,17 @@ $(document).ready(function() {
     $("#wann").change( function() {
         window.reload();
     });
+
+/*
+    $('#wann_middle').toggle(
+            function(){
+                    $(".datepicker").datepicker("show");
+            },
+            function(){
+                    $(".datepicker").datepicker("hide");
+            }
+    );
+*/
 
 });
 
