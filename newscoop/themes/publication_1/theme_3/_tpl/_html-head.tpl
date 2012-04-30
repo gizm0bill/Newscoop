@@ -15,6 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.png">
     <link rel="apple-touch-icon" href="touch-icon.png">
+    {{block head_links}}
+    {{/block}}
 
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/main.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/skin.css" }}">
