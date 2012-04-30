@@ -23,5 +23,5 @@
     </footer>
     {{ $count=floor($gimme->getUserCount() / 1000) }}
     <p>Die TagesWoche Community hat über {{ $count }}'000 Mitglieder!</p>
-    <a href="{{ $view->url(['controller' => 'register', 'action' => 'index'], 'default') }}" class="button">Jetzt mitmachen!</a>
+    {{ if !$gimme->user->logged_in }}<a href="{{ $view->url(['controller' => 'register', 'action' => 'index'], 'default') }}" class="button">Jetzt mitmachen!</a>{{ /if }}
 </article>

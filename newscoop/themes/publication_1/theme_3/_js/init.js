@@ -1,5 +1,4 @@
 $(document).ready(function() {
-	
 // this makes problems for js-based select/options manipulations
 //	$('select').dropdownized({fixed:true});
     $('select').each(function(ind_elm, elm) {
@@ -10,13 +9,6 @@ $(document).ready(function() {
     });
 	
 	// Datepicker
-	$( ".datepicker" ).datepicker({
-		showOn: "button",
-		buttonImage: "_css/tw2011/img/calendar.png",
-		buttonImageOnly: true,
-		nextText: '&raquo;',
-		prevText: '&laquo;'
-	});
 	$( "#agenda-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
