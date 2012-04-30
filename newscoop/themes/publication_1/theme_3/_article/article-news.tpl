@@ -200,7 +200,7 @@
                             <li>
                             	<h5>Lokalisierung</h5>
                                 {{ set_map articles=$gimme->article->number }}
-                                {{ map show_locations_list="false" show_reset_link=false auto_focus=false width="511" height="180" }}
+                                {{ map show_locations_list="false" show_reset_link=false max_zoom=12 auto_focus=true width="511" height="180" }}
                                 {{ unset_map }}
                             </li>
 {{ /if }}

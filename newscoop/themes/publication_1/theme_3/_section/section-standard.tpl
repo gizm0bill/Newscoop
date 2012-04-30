@@ -81,22 +81,38 @@
 {{*** werbung ***}}   
 {{ include file="_werbung/section-maincol.tpl" }}
 
-{{ list_playlist_articles length="13" name=$gimme->section->name }}
-{{ if $gimme->current_list->index > 10 }}                
+{{ list_playlist_articles columns="4" name=$gimme->section->name }}
+{{ if $gimme->current_list->index gt 10 }}
+{{ if $gimme->current_list->index == 11 }}                
+            	<div class="top-line clearfix slideshow">
+               <div class="slides">            	
+{{ /if }}                
+{{ if $gimme->current_list->column == "3" }}                                       
+                    <div class="slide-item">
+{{ /if }}                    
                 <article>
                     <header>
                         <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                     <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
-                </article>
-{{ /if }}                
-{{ if $gimme->current_list->at_end }}                
-                <ul class="paging content-paging">
-                    <li>Weiterblättern</li>
-                    <li><a class="grey-button" href="#">»</a></li>
-                </ul>
+                </article>                
+
+{{ if $gimme->current_list->column == "2" || $gimme->current_list->at_end }}
+                    </div><!-- /.slide-item -->                   
 {{ /if }}
+
+{{ if $gimme->current_list->at_end }}
+                </div><!-- /.slides -->
+                    <ul class="paging content-paging">
+                        <li><a class="grey-button prev" href="#">«</a></li>
+                        <li class="caption"></li>
+                        <li><a class="grey-button next" href="#">»</a></li>
+                    </ul>                 
+                </div>
+{{ /if }}         
+{{ /if }}       
 {{ /list_playlist_articles }}
+            
             
             </section><!-- / Main Section -->
             
