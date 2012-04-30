@@ -72,7 +72,7 @@ class TopicController extends AbstractSolrController
     {
         if ($this->_getParam('topic')) {
             $this->view->topic = $this->_getParam('topic');
-            return sprintf('topic:("%s")', implode('" OR "', explode(',',  $this->_getParam('topic'))));
+            return sprintf('topic:("%s")', rawurlencode($this->_getParam('topic')));
         }
     }
 }

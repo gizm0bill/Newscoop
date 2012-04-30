@@ -26,4 +26,4 @@ $(function() {
 </script>
 {{/block}}
 
-{{block head_links}}<link rel="alternate" type="application/rss-xml" href="{{ sprintf('%s%s?format=xml', $view->serverUrl(), $view->url(['topic' => $topic], 'topic')) }}" title="Tageswoche | Theme {{ $topic }} [RSS]">{{/block}}
+{{block head_links}}<link rel="alternate" type="application/rss-xml" href="{{ sprintf('%s%s?format=xml', $view->serverUrl(), $view->url(['topic' => $topic], 'topic')) }}" title="Tageswoche | Theme {{ $topic|escape }} [RSS]">{{/block}}

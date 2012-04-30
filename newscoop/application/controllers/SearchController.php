@@ -67,7 +67,7 @@ class SearchController extends AbstractSolrController
 
         $matches = array();
         if (preg_match('/^(author|topic):([^"]+)$/', $q, $matches)) {
-            $q = sprintf('%s:"%s"', $matches[1], $matches[2]);
+            $q = sprintf('%s:"%s"', $matches[1], rawurlencode($matches[2]));
         }
 
         return $q;
