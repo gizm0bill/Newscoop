@@ -18,6 +18,22 @@ class TopicController extends AbstractSolrController
         'news', 'newswire', 'blog', 'dossier',
     );
 
+    public function init()
+    {
+        $this->_helper->contextSwitch
+            ->addActionContext('index', 'xml');
+        parent::init();
+    }
+
+    public function indexAction()
+    {
+        parent::indexAction();
+        if ($this->_helper->contextSwitch->getCurrentContext() === 'xml') {
+            $this->getResponse()->setHeader('Content-Type', 'application/rss-xml', true);
+            $this->render('xml');
+        }
+    }
+
     /**
      * Build solr params array
      *
@@ -33,6 +49,7 @@ class TopicController extends AbstractSolrController
             ))),
             'sort' => 'published desc',
             'spellcheck' => 'false',
+            'rows' => $this->_getParam('format') === 'xml' ? 20 : null,
         ));
     }
 
