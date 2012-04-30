@@ -212,8 +212,8 @@
     {{ $escapedName=str_replace(" ", "\ ", $gimme->author->name) }}
     {{ $numArticles=0  }}
     
-    {{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName"}}
-        {{ $numArticles = $numArticles+1 }}
+    {{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName" length="1" }}
+        {{ $numArticles = $gimme->current_list->count }}
     {{ /list_articles }}
     
     <div class="author-box">
