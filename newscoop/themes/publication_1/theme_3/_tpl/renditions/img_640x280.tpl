@@ -10,7 +10,7 @@
 
 <!-- _tpl/img/img_640x280.tpl -->{{ strip }}
 {{ if $gimme->article->has_image(3) }}
-  <img src="{{ uri options="image 3" }}" width="680" height="280" rel="resizable" alt="{{ $gimme->article->image3->description }}" style="max-width: 100%">
+  <img src="{{ uri options="image 3" }}" width="640" height="280" rel="resizable" alt="{{ $gimme->article->image3->description }}" style="max-width: 100%">
 {{ elseif $gimme->article->has_image(1) }}
   <img src="{{ uri options="image 1 width 640 height 280 crop center" }}" width="680" height="280" rel="resizable" alt="{{ $gimme->article->image1->description }}" style="max-width: 100%">
 {{ /if }}
