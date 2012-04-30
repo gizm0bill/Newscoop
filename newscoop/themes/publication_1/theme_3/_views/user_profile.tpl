@@ -14,7 +14,9 @@
             </figure>
 
             <div class="profile-info">
-                <h4>{{ $user->first_name }} {{ $user->last_name }}{{ if $user['is_verified'] }} <a href="#" class="green-button">Verifiziertes Profil</a>{{ /if }}</h4>
+                <h4>{{ $user->first_name }} {{ $user->last_name }}
+                {{ if $user->is_editor && $user['is_verified'] }} <a href="#" class="green-button">TagesWoche Redaktion</a>
+                {{ elseif $user['is_verified'] }} <a href="#" class="green-button">Verifiziertes Profil</a>{{ /if }}</h4>
                 {{ if $user->isAdmin() || $user->isBlogger() }}
                 <p>{{ $profile.bio|bbcode }}</p>
                 {{ else }}
