@@ -7,7 +7,7 @@ class Application_Plugin_ContentType extends Zend_Controller_Plugin_Abstract
         $request = $this->getRequest();
         $response = $this->getResponse();
 
-        $this->setContentType();
+        $this->setContentType($response);
 
         switch ($request->getModuleName()) {
             case 'default':
