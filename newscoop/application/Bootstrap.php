@@ -339,9 +339,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'action' => 'profile',
         )));
 
-        $router->addRoute('topic', new Zend_Controller_Router_Route('topic/:topic', array(
+        $router->addRoute('topic', new Zend_Controller_Router_Route('@topic/:topic', array(
             'module' => 'default',
             'controller' => 'topic',
+            'action' => 'index',
+        )));
+
+        $router->addRoute('my-topics', new Zend_Controller_Router_Route('@my-topics', array(
+            'module' => 'default',
+            'controller' => 'my-topics',
             'action' => 'index',
         )));
 
@@ -360,6 +366,28 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                      'slideshow-rest',
                  ),
              )));
+    }
+
+    protected function _initRouteTranslator()
+    {
+        $translator = new Zend_Translate(array(
+            'adapter' => 'array',
+            'content' => array(),
+            'locale' => 'en',
+            'disableNotices' => true,
+        ));
+
+        $translator->addTranslation(array(
+            'content' => array(
+                'topic' => 'theme',
+                'my-topics' => 'meine-themen',
+            ),
+            'locale' => 'de',
+        ));
+
+        $translator->setLocale('de');
+
+        Zend_Controller_Router_Route::setDefaultTranslator($translator);
     }
 
     protected function _initActionHelpers()
