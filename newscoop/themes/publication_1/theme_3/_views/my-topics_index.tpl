@@ -7,7 +7,7 @@
     {{ dynamic }}
     {{ if $gimme->user->logged_in }}
     {{ foreach $gimme->user->topics as $topic }}
-    <li><a href="#{{ $topic }}">{{ $topic }}</a><br />
+    <li><a href="#{{ $topic|escape }}">{{ $topic|escape }}</a><br />
     <em id="topic-{{ $topic@key }}">entfernen</em></li>
     {{ /foreach }}
     {{ /if }}

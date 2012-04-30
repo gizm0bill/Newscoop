@@ -21,6 +21,8 @@ class MyTopicsController extends TopicController
         if ($this->user === null) {
             $this->_forward('empty');
         }
+
+        parent::init();
     }
 
     public function emptyAction()
@@ -35,7 +37,7 @@ class MyTopicsController extends TopicController
     protected function buildSolrTopicParam()
     {
         if ($this->_getParam('topic')) {
-            $topics = explode(',', $this->_getParam('topic'));
+            $topics = array_map('rawurlencode', explode(',', $this->_getParam('topic')));
         } else {
             $topics = array_map(function($topic) {
                 return $topic->getName();

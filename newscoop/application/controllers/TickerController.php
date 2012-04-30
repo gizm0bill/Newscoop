@@ -28,7 +28,6 @@ class TickerController extends AbstractSolrController
      */
     protected function buildSolrParams()
     {
-
         return array_merge(parent::buildSolrParams(), array(
             'q' => '*:*',
             'fq' => implode(' AND ', array_filter(array(
@@ -70,7 +69,7 @@ class TickerController extends AbstractSolrController
     {
         $section = $this->_getParam('section');
         if (!empty($section)) {
-            return sprintf('section:(%s)', $section);
+            return sprintf('section:("%s")', rawurlencode($section));
         }
     }
 }

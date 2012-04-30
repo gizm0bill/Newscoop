@@ -14,7 +14,9 @@
             </figure>
 
             <div class="profile-info">
-                <h4>{{ $user->first_name }} {{ $user->last_name }}{{ if $user['is_verified'] }} <a href="#" class="green-button">Verifiziertes Profil</a>{{ /if }}</h4>
+                <h4>{{ $user->first_name }} {{ $user->last_name }}
+                {{ if $user->is_editor && $user['is_verified'] }} <a href="#" class="green-button">TagesWoche Redaktion</a>
+                {{ elseif $user['is_verified'] }} <a href="#" class="green-button">Verifiziertes Profil</a>{{ /if }}</h4>
                 {{ if $user->isAdmin() || $user->isBlogger() }}
                 <p>{{ $profile.bio|bbcode }}</p>
                 {{ else }}
@@ -135,16 +137,12 @@
             <p>{{ $user->first_name }} {{ $user->last_name }} Standort</p>
         </header>
         <figure>
-            <div id="map-canvas" class="map-holder" style="height:248px"></div>
+            <div id="map-canvas" class="map-holder" style="height:178px"></div>
         </figure>
     </article>
     {{ /if }}
 
-    <article class="community omni-corner-box mobile-hide">
-        <header>
-            <p>Willkommen in der Community!</p>
-        </header>
-    </article>
+    {{ include file="_tpl/sidebar-users.tpl" }}
 
     {{ include file="_werbung/user-profile-sidebar.tpl" }}
 
