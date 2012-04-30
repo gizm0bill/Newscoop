@@ -32,14 +32,43 @@
                 
                 <div class="mobile-list-view clearfix slideshow">
 
-{{ if $seclike == 1 }}
-{{ list_articles columns="7" constraints="type is blog" }}
-{{ if $gimme->current_list->at_beginning }}
-						  <div class="slides">  
-{{ /if }}						  
-{{ if $gimme->current_list->column == "1" }} 
-						  <div class="slide-item">  
-{{ /if }}						               
+{{ if $gimme->section->number gte 200 }}
+{{ list_articles length="7" constraints="type is blog" }}
+                        <header>
+                            <p>{{ assign var="onedayback" value=$smarty.now-86400 }}
+                                {{ assign var="oneback" value=$onedayback|date_format:"%Y-%m-%d" }}
+                                {{ if $gimme->article->publish_date lt $oneback }}
+{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y" }}
+                                {{ else }}
+{{ $diff=date_diff(date_create('now'), date_create($gimme->article->publish_date)) }}
+Vor
+{{ if $diff->y }} {{ $diff->y }} {{ if $diff->y > 1 }}Jahre{{ else }}Jahr{{ /if }}{{ /if }}
+{{ if $diff->m }} {{ $diff->m }} {{ if $diff->m > 1 }}Monate{{ else }}Monat{{ /if }}{{ /if }}
+{{ if $diff->d }} {{ $diff->d }} {{ if $diff->d > 1 }}Tagen{{ else }}Tag{{ /if }}{{ /if }}
+{{ if $diff->h && (!$diff->d || empty($short)) }} {{ $diff->h }} Std.{{ /if }}
+{{ if !$diff->d && $diff->i && (empty($short) || !$diff->h) }} {{ $diff->i }} Min.{{ /if }}
+{{ if !$diff->d && !$diff->h && !$diff->i && $diff->s }} {{ $diff->s }} Sek.{{ /if }}
+                                {{ /if }}</p>
+                        </header>
+								<h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
+                        {{ list_article_images length="1" }}
+                        <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" /></a>
+                        {{ /list_article_images }} 
+{{ if $gimme->current_list->at_end }}                
+                    <ul class="paging content-paging">
+                    		{{ if $gimme->current_list->has_previous_elements }}
+                        <li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
+                        <li class="caption"></li>
+                        {{ if $gimme->current_list->has_next_elements }}
+                        <li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                    </ul>
+{{ /if }} 
+{{ /list_articles }} 
+                    
+{{ elseif $seclike == 1 }}
+
+{{ list_articles length="7" constraints="type is blog" }}						  
+						               
                     <article>
                         <header>
                             <p>{{ assign var="onedayback" value=$smarty.now-86400 }}
@@ -57,33 +86,27 @@ Vor
 {{ if !$diff->d && !$diff->h && !$diff->i && $diff->s }} {{ $diff->s }} Sek.{{ /if }}
                                 {{ /if }}</p>
                         </header>
-{{ if $gimme->section->number gte 200 }}
-								<h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
-                        {{ list_article_images length="1" }}
-                        <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" /></a>
-                        {{ /list_article_images }} 
-{{ else }}                                                       
+                                                      
                         <figure class="left">
                             <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
                         </figure>                        
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if !($gimme->article->lede|strip_tags:false|strip == "") }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->body|strip_tags:false|strip|truncate:200 }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ include file="_tpl/author-name.tpl" author=$gimme->author }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} <a href="{{ url options="article" }}">Weiterlesen</a>
                         {{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}  
-                        </p>
-{{ /if }}                        
+                        </p>                       
                     </article>
-{{ if $gimme->current_list->column == "7" || $gimme->current_list->at_end }} 
-						  </div>  
-{{ /if }}                                        
-{{ if $gimme->current_list->at_end }} 
-                   </div><!-- /.slides -->               
+                                        
+{{ if $gimme->current_list->at_end }}                
                     <ul class="paging content-paging">
-                        <li><a class="grey-button prev" href="#">«</a></li>
+                    		{{ if $gimme->current_list->has_previous_elements }}
+                        <li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
                         <li class="caption"></li>
-                        <li><a class="grey-button next" href="#">»</a></li>
+                        {{ if $gimme->current_list->has_next_elements }}
+                        <li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     </ul>
 {{ /if }}                    
 {{ /list_articles }} 
+
 {{ else }}{{* if not seclike == 1 *}}
 {{ list_articles length="7" constraints="type is blog" }}
 						<article>
@@ -93,6 +116,15 @@ Vor
                     {{ $gimme->article->body }}
                     <p><a href="{{ url options="article" }}">Kommentieren & Teilen</a></p>
                   </article>
+{{ if $gimme->current_list->at_end }}                
+                    <ul class="paging content-paging">
+                    		{{ if $gimme->current_list->has_previous_elements }}
+                        <li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
+                        <li class="caption"></li>
+                        {{ if $gimme->current_list->has_next_elements }}
+                        <li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                    </ul>
+{{ /if }}                   
 {{ /list_articles }}
 {{ /if }}               
                 </div>
@@ -107,7 +139,7 @@ Vor
 {{ list_article_authors }}                
                 <article class="regular-box">                
                 	<header>
-                    	<p>Autor: {{ if $gimme->author->user->is_admin }}{{ $gimme->author->name }}{{ else }}{{ $gimme->author->user->uname }}{{ /if }}</p>
+                    	<p>Autor: {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</p>
                     </header>
                     {{ if $gimme->author->user->defined }}
                     <img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" />

@@ -944,8 +944,8 @@ function parse_date_text($date_time_text)
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
                         <tr>
-                        <td rowspan="2">
-                    <ul>
+                        <td rowspan="2" style="width:164px;">
+                    <ul style="width:163px;">
                         <li><h5>{{ $gimme->article->organizer }}</h5></li>
                         <li>
                             <p>{{ $gimme->article->street }}<br />
@@ -984,7 +984,7 @@ function parse_date_text($date_time_text)
                             <tr>
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
                                     <td class="screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
-                                        <ul style="width:30px;margin-right:0px">
+                                        <ul style="width:50px;margin-left:0px;padding-left:0px;">
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
                                                     {{ assign var="scr_lang_k" $date_time_day_parts.has_k }}
@@ -993,9 +993,11 @@ function parse_date_text($date_time_text)
                                                         <li class="movie_lang{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
                                                         <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
 <!-- -->
-                                                        <div>
-                                                        <p>{{ $date_time_day_parts.time }}{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</p>
+                                                        {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
+                                                        <div style="display:none;background-color: #ffffff;">
+                                                        <p>{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}&nbsp;&nbsp;&nbsp;</p>
                                                         </div>
+                                                        {{ /if }}
 <!-- -->
                                                         </span></span>
                                                         </li>
