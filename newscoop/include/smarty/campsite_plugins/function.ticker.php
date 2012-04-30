@@ -11,7 +11,7 @@ function smarty_function_ticker($params, $smarty)
     $client = \Zend_Registry::get('container')->getService('solr.client.select');
 
     $filters = array();
-    $types = array('news', 'dossier', 'blog', 'tweet', 'newswire');
+    $types = array('news', 'blog', 'tweet', 'newswire');
     if (!empty($params['section']) && $params['section']->number) {
         $filters[] = sprintf('section:%s', $params['section']->url_name);
         $types = array_diff($types, array('tweet'));
