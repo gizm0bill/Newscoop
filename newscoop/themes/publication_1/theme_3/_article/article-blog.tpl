@@ -61,10 +61,10 @@ Vor
 {{ list_article_authors }}                
                 <article class="regular-box">                
                 	<header>
-                    	<p>Autor: {{ if $gimme->author->user->is_admin }}{{ $gimme->author->name }}{{ else }}{{ $gimme->author->user->uname }}{{ /if }}</p>
+                    	<p>Autor: {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</p>
                     </header>
                     {{ if $gimme->author->user->defined }}
-                    <img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" />
+                    <a href="{{ $gimme->author->url }}"><img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" /></a>
                     {{ if !empty($gimme->author->user['bio']) }}
                     <p>{{ $gimme->author->user['bio']|bbcode }}</p>
                     {{ else }}
