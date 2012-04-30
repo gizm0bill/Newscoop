@@ -1,5 +1,17 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+<style type="text/css">
+
+span span.title-box {
+    position: absolute;
+}
+
+.top_label {
+    z-index: 1000;
+}
+
+</style>
+
 <body>
 
     <div id="wrapper">
@@ -461,13 +473,13 @@ function parse_date_text($date_time_text)
         $template->assign('date_time_arr',$date_time_arr['dates']);
     {{ /php }}
 
-            <div style="margin-right:50px; float:left; width:580px;" class="movie-table">
+            <div style="margin-left:60px; float:left; width:580px;" class="movie-table">
 
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
                         <tr>
-                        <td rowspan="2">
-                    <ul>
+                        <td rowspan="2" style="width:164px;">
+                    <ul style="width:163px;">
                         <li><h5>{{ $gimme->article->organizer }}</h5></li>
                         <li>
                             <p>{{ $gimme->article->street }}<br />
@@ -506,7 +518,7 @@ function parse_date_text($date_time_text)
                             <tr>
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
                                     <td class="screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
-                                        <ul style="width:30px;margin-right:0px">
+                                        <ul style="width:50px;margin-left:0px;padding-left:0px;">
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
                                                     {{ assign var="scr_lang_k" $date_time_day_parts.has_k }}
@@ -514,11 +526,13 @@ function parse_date_text($date_time_text)
                                                     {{ assign var="scr_lang_t" $date_time_day_parts.has_t }}
                                                         <li class="movie_lang{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
                                                         <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
-<!-- -->
-                                                        <div>
-                                                        <p>{{ $date_time_day_parts.time }}{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</p>
+
+                                                        {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
+                                                        <div style="display:none;background-color: #ffffff;">
+                                                        <p>{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}&nbsp;&nbsp;&nbsp;</p>
                                                         </div>
-<!-- -->
+                                                        {{ /if }}
+
                                                         </span></span>
                                                         </li>
                                                     {{ /foreach }}
@@ -532,203 +546,6 @@ function parse_date_text($date_time_text)
             </div>
 
 {{ /list_articles }}
-
-
-{{*
-                    <div class="movie-table">
-                    
-                        <ul>
-                            <li><h5>Pathe Küchlin</h5></li>
-                            <li>
-                                <p>Steinvorstadt 55<br />
-                                4051 Basel</p>
-                                <p><a href="#">Google Maps</a><br />
-                                <a href="#">www.pathekuchlin.ch</a></p>
-                            </li>
-                            <li>
-                                <p>Tel  0900 0040 40 <a href="#" class="info">i</a></p>
-                            </li>
-                            <li>
-                                <a href="#" class="grey-button">Ticket kaufen</a>
-                            </li>
-                        </ul>
-                    
-                        <table cellpadding="0" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td class="current">Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td>11:15 <a href="#" class="info">i</a></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current">11:15 <a href="#" class="info">i</a></td>
-                                    <td>13:40 <a href="#" class="info">i</a></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>13:40 <a href="#" class="info">i</a></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    
-                    </div>
-                    
-                    <div class="movie-table">
-                    
-                        <ul>
-                            <li><h5>kult.kino atelier</h5></li>
-                            <li>
-                                <p>Theaterstrasse 7<br />
-                                4051 Basel</p>
-                                <p><a href="#">Google Maps</a><br />
-                                <a href="#">www.kultkino.ch</a></p>
-                            </li>
-                            <li>
-                                <p>Tel  0900 0040 40 <a href="#" class="info">i</a></p>
-                            </li>
-                            <li>
-                                <a href="#" class="grey-button">Ticket kaufen</a>
-                            </li>
-                        </ul>
-                    
-                        <table cellpadding="0" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td class="current">Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                    <td>Do<br />
-                                    22.03</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td>11:15 <a href="#" class="info">i</a></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current">11:15 <a href="#" class="info">i</a></td>
-                                    <td>13:40 <a href="#" class="info">i</a></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>13:40 <a href="#" class="info">i</a></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="current"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    
-                    </div>
-*}}
 
                 </article>
 
@@ -783,6 +600,38 @@ function parse_date_text($date_time_text)
         </div>
         
     </div><!-- / Wrapper -->
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+    window.set_title_boxes();
+});
+
+window.set_title_boxes = function() {
+    $('.info-link').hover(
+        function(){
+            $(this).children().children('div').fadeIn(200);
+        },
+        function(){
+            $(this).children().children('div').fadeOut(200);
+        }
+    );
+
+    //last-child for MSIE
+    if ( $.browser.msie ) {
+        //$('span.title-box div').append('<div class="ietest"></div>');
+        $('span.title-box').prev().hover(
+            function(){
+                $('.ietest').show();
+            },
+            function(){
+                $('.ietest').hide();
+            }
+        );
+    }
+};
+
+</script>
 
     <div id="footer">
 
