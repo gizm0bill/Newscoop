@@ -46,7 +46,10 @@ $(document).ready(function() {
 	
 	// Tabs
 	$('.tabs').tabs();
-	
+
+	// Carousel
+	$('.carousel').jcarousel();
+
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
 	$('#omnibox a.trigger, a.omni-box-trigger').toggle(
