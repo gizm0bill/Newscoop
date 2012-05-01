@@ -27,7 +27,7 @@ $(function() {
     window.router = new SearchRouter();
     sourceFilterView = new SourceFilterView({collection: documents, el: $('#source-filter') });
     sectionFilterView = new SectionFilterView({collection: documents, el: $('#section-filter') });
-    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'ticker']), '/')) }} });
+    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'omniticker']), '/')) }} });
 });
 </script>
 {{/block}}
@@ -35,7 +35,7 @@ $(function() {
 {{block top}}
 <ul class="top-filter clearfix">
     <li class="filter">Filter</li>
-    <li class="title">Ticker</li>
+    <li class="title">Omniticker</li>
     <li class="type">Quelle</li>
     <li class="time">Veröffentlicht</li>
 </ul>

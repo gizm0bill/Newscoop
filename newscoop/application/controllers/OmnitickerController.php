@@ -9,7 +9,7 @@ require_once __DIR__ . '/AbstractSolrController.php';
 
 /**
  */
-class TickerController extends AbstractSolrController
+class OmnitickerController extends AbstractSolrController
 {
     /**
      * @var array
