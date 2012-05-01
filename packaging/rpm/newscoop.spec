@@ -10,16 +10,15 @@ Release:        1
 License:        GPLv3
 Packager:       Daniel James <daniel@64studio.com>
 
-# TODO: This group does not seem right.
-# but the closest found in /usr/share/doc/rpm-*/GROUPS 
+# List found in /usr/share/doc/rpm-*/GROUPS 
 Group:          Applications/Publishing
 
 # TODO: use upstream tar ball for version > 3.5.2-rc2
 # we can not do that ATM because upstream has various issues.
 # see ../gen-debian-package.sh 
-#http://downloads.sourceforge.net/project/newscoop/$UPSTREAMDIST/newscoop-$UPSTREAMVERSION.tar.gz
+# http://downloads.sourceforge.net/project/newscoop/$UPSTREAMDIST/newscoop-$UPSTREAMVERSION.tar.gz
 Source0:        %{name}-%{version}.tar.gz
-URL:            http://www.sourcefabric.org/en/products/newscoop_overview/
+URL:            http://www.sourcefabric.org/en/newscoop/
 BuildRoot:      %{_tmppath}/%{name}-%{version}
 BuildArch:      noarch
 
@@ -31,13 +30,10 @@ Requires: php-mysql
 Requires: curl
 Requires: mysql
 Requires: ImageMagick
-# TODO: find MTA package
-#Requires: mail-server
-#Requires: sendmail
 
-# These are actually recommends only:
-#Requires: mysql-server
-#Requires:: php-apc | php5-xcache
+#These are recommends, rpm does not fully support the Suggests tag though:
+#Suggests: mysql-server
+#Suggests: postfix
 
 %description
 Newscoop is the open content management system for professional journalists.
@@ -56,12 +52,12 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/
 cp -a newscoop %{buildroot}/usr/share/
 
-# TODO: create config-files - debian/ folder will not be present in tar-ball
+# Copy config file
 mkdir -p %{buildroot}/etc/newscoop/4.0/
-cp debian/etc/newscoop.ini %{buildroot}/etc/newscoop/4.0/
-cp debian/etc/apache.conf %{buildroot}/etc/newscoop/4.0/
-cp debian/etc/apache.vhost.tpl %{buildroot}/etc/newscoop/4.0/
-cp debian/etc/newscoop.cron.tpl %{buildroot}/etc/newscoop/4.0/
+cp rpm/newscoop.ini %{buildroot}/etc/newscoop/4.0/
+cp rpm/apache.conf %{buildroot}/etc/newscoop/4.0/
+#cp debian/etc/apache.vhost.tpl %{buildroot}/etc/newscoop/4.0/
+#cp debian/etc/newscoop.cron.tpl %{buildroot}/etc/newscoop/4.0/
 
 cd $RPM_BUILD_ROOT
 rm -f %{manifest}
@@ -81,8 +77,8 @@ rm -rf %{buildroot}
 %doc ChangeLog CREDITS README  UPGRADE
 %config /etc/newscoop/4.0/apache.conf
 %config /etc/newscoop/4.0/newscoop.ini
-%config /etc/newscoop/4.0/apache.vhost.tpl
-%config /etc/newscoop/4.0/newscoop.cron.tpl
+#%config /etc/newscoop/4.0/apache.vhost.tpl
+#%config /etc/newscoop/4.0/newscoop.cron.tpl
 
 %post
 # symlink config files
@@ -108,15 +104,18 @@ if [ ! -e /etc/php.d/newscoop.ini ]; then
 fi
 
 # .htaccess file
-echo -ne "/RewriteBase/d\nwq\n\n" \
-| ed /var/lib/newscoop/.htaccess &>/dev/null || true
+#echo -ne "/RewriteBase/d\nwq\n\n" \
+#| ed /usr/share/newscoop/.htaccess &>/dev/null || true
+#
+#if [ -n "${dohtaccess}" ]; then
+#	echo -ne "/RewriteEngine/\n+1i\n    RewriteBase ${dohtaccess}\n.\nwq\n" \
+#	| ed /usr/share/newscoop/.htaccess &>/dev/null || true
+#fi
 
-if [ -n "${dohtaccess}" ]; then
-	echo -ne "/RewriteEngine/\n+1i\n    RewriteBase ${dohtaccess}\n.\nwq\n" \
-	| ed /var/lib/newscoop/.htaccess &>/dev/null || true
-fi
+# Fix SELinux
+chcon -R -t httpd_cache_t /usr/share/newscoop
 
-# XXX: restart apache - check if this is the recommended way
+# restart Apache
 /etc/init.d/httpd restart
 
 ## CRON JOB
@@ -145,15 +144,18 @@ if [ -L /etc/cron.d/newscoop ]; then
 	rm -f /etc/cron.d/newscoop || true
 fi
 # delete generated templates and user-installed plugins
-rm -rf /var/lib/newscoop || true
-rm -f /etc/newscoop/4.0/newscoop.cron || true
-rmdir /etc/newscoop/4.0 || true
-rmdir /etc/newscoop/ || true
+rm -rf /usr/share/newscoop || true
+#rm -f /etc/newscoop/4.0/newscoop.cron || true
+#rmdir /etc/newscoop/4.0 || true
+#rmdir /etc/newscoop/ || true
 		
-# XXX: restart apache - check if this is the recommended way
+# restart Apache
 /etc/init.d/httpd restart
 
 
 %changelog
+* Mon Apr 30 2012 Daniel James <daniel@64studio.com>
+- Update for Newscoop 4.0.0
+
 * Wed Jan 26 2011 Robin Gareus <robin@gareus.org>
 - Initial Version
