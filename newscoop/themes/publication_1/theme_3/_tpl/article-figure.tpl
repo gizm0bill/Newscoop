@@ -82,41 +82,44 @@ $(document).ready(function() {
 {{ assign var="slideshow" value=$hasvideo+$hasimg }}
 
 {{ if $slideshow gt 1 }}{{* initialize slideshow *}}
-<div class="loader" style="height:431px">
-            <ul id="article-single-carousel" class="jcarousel-skin-article-single">
+{{ assign var="i" value=0 }}
+<div class="image-slideshow tabs">
 {{ /if }}
                         
 {{ if !($gimme->article->vimeo_url == "") }}  
 {{ if $slideshow gt 1 }}
-                            <li>
+{{ assign var="i" value=$i+1 }}
+                            <div id="image-{{ $i }}" class="img-content">
 {{ /if }}
                                 <figure>
 {{ assign var="vimeocode" value=$gimme->article->vimeo_url|replace:"http://vimeo.com/":"" }}
 <iframe src="http://player.vimeo.com/video/{{ $vimeocode }}?title=0&amp;byline=0&amp;portrait=0&amp;color=e20020" width="555" height="370" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
                                 </figure>
 {{ if $slideshow gt 1 }}
-                            </li>
+                            </div>
 {{ /if }}
 {{ /if }} 
 
 {{ if !($gimme->article->youtube_shortcode == "") }}
 {{ if $slideshow gt 1 }}
-                            <li>
+{{ assign var="i" value=$i+1 }}
+                            <div id="image-{{ $i }}" class="img-content">
 {{ /if }}
                                 <figure>
 {{ assign var="youtubecode" value=$gimme->article->youtube_shortcode|replace:"http://youtu.be/":"" }}
 <iframe title="YouTube video player" width="555" height="370" src="http://www.youtube.com/embed/{{ $youtubecode }}?wmode=opaque" frameborder="0" allowfullscreen></iframe>
                                 </figure>
 {{ if $slideshow gt 1 }}
-                            </li>
+                            </div>
 {{ /if }}                                                        
 {{ /if }} 
 
 {{ if $hasimg gt 0 }}
 {{ if $slideshow gt 1 }}
-                            <li>
+{{ assign var="i" value=$i+1 }}
+                            <div id="image-{{ $i }}" class="img-content">
 {{ /if }}
-                                <figure>
+                                
 {{ include file="_tpl/renditions/img_555x370.tpl" }}
                                       <p>
 {{ if $gimme->article->image->description != "" }}
@@ -125,16 +128,16 @@ $(document).ready(function() {
 {{ /if }}
 {{ include file="_tpl/image-photographer.tpl" image=$gimme->article->image }}
 </p>
-                                </figure>
+
 {{ if $slideshow gt 1 }}
-                            </li>
+                            </div>
 {{ /if }}               
 {{ /if }} 
 
 {{ list_article_images }}
 {{ if ($gimme->image->article_index  gt 11) & ($gimme->image->article_index lt 100)}}                            
-                            <li>
-                                <figure>
+{{ assign var="i" value=$i+1 }}
+                            <div id="image-{{ $i }}" class="img-content">
                                         {{ if $bigslideshow == 1 }}<a href="{{ url options="image" }}" title="{{ $gimme->article->image->description }}" class="big_slideshow_list" rel="bigslideshow">{{ /if }}<img src="{{ url options="image width 555 height 370 crop center" }}" width="555" height="370" rel="resizable" alt="{{ $gimme->article->image->description }}" title="{{ $gimme->article->image->description }}">{{ if $bigslideshow == 1 }}<div class="zoomie"></div></a>{{ /if }}
                                         <p>
 {{ if $gimme->article->image->description != "" }}
@@ -142,15 +145,67 @@ $(document).ready(function() {
 {{ else }}&nbsp;
 {{ /if }}
 {{ include file="_tpl/image-photographer.tpl" image=$gimme->article->image }}</p>
+                                </div>
+{{ /if }}                            
+{{ /list_article_images }}                            
+
+
+
+
+
+
+{{ if $slideshow gt 1 }}{{* initialize slideshow *}}
+{{ assign var="i" value=0 }}
+<ul class="slideshow-nav carousel jcarousel-skin-img-slider">
+{{ /if }}
+                        
+{{ if !($gimme->article->vimeo_url == "") }}  
+{{ if $slideshow gt 1 }}
+{{ assign var="i" value=$i+1 }}
+                            <li><a href="#image-{{ $i }}">
+                                <figure>
+{{ assign var="vimeocode" value=$gimme->article->vimeo_url|replace:"http://vimeo.com/":"" }}
+<iframe src="http://player.vimeo.com/video/{{ $vimeocode }}?title=0&amp;byline=0&amp;portrait=0&amp;color=e20020" width="95" height="63" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
                                 </figure>
                             </li>
+{{ /if }}
+{{ /if }} 
+
+{{ if !($gimme->article->youtube_shortcode == "") }}
+{{ if $slideshow gt 1 }}
+{{ assign var="i" value=$i+1 }}
+                            <li><a href="#image-{{ $i }}">
+                                <figure>
+{{ assign var="youtubecode" value=$gimme->article->youtube_shortcode|replace:"http://youtu.be/":"" }}
+<iframe title="YouTube video player" width="95" height="63" src="http://www.youtube.com/embed/{{ $youtubecode }}?wmode=opaque" frameborder="0" allowfullscreen></iframe>
+                                </figure>
+                            </li>
+{{ /if }}                                                        
+{{ /if }} 
+
+{{ if $hasimg gt 0 }}
+{{ if $slideshow gt 1 }}
+{{ assign var="i" value=$i+1 }}
+                            <li><a href="#image-{{ $i }}"><img src="{{ url options="image 1 width 95 height 63 crop center" }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
+{{ /if }}               
+{{ /if }} 
+
+{{ list_article_images }}
+{{ if ($gimme->image->article_index  gt 11) & ($gimme->image->article_index lt 100)}}                            
+{{ assign var="i" value=$i+1 }}
+                            <li><a href="#image-{{ $i }}"><img src="{{ url options="image width 95 height 63 crop center" }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
 {{ /if }}                            
 {{ /list_article_images }}                            
 
 {{ if $slideshow gt 1 }}
 </ul>
-<div class="loading" style="height:431px"></div></div>
+</div>
 {{ /if }}
+
+
+
+
+
 
 {{ /if }}
 
