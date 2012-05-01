@@ -15,7 +15,9 @@
                             <p>{{ $item->caption }}</p>
                         </div>
 {{ else }}
+								<div id="image-{{ $i }}" class="img-content">
 								{{ video_player video=$item->video }}
+								</div>
 {{ /if }}
 {{ /foreach }} 
 
@@ -24,8 +26,12 @@
 {{ if $smarty.foreach.insideslideshow.first }}                       
                         <ul class="slideshow-nav carousel jcarousel-skin-img-slider">
 {{ /if }}
-{{ assign var="i" value=$i+1 }}                        
+{{ assign var="i" value=$i+1 }}
+{{ if $item->is_image }}                         
                         	<li><a href="#image-{{ $i }}"><img src="{{ $item->image->src }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
+{{ else }}         
+									<li><a href="#image-{{ $i }}">poster</a></li>
+{{ /if }}									               	
 {{ if $smarty.foreach.insideslideshow.last }}
                         </ul>                      
                     </div>
@@ -37,10 +43,12 @@
 {{ if $gimme->article->publish_date gt "2012-05-07 13:00:00" || $gimme->article->creation_date gt "2012-05-07 13:00:00"  }}
 	<figure>
 		{{ include file="_tpl/renditions/img_647x431.tpl" }}
+		<p>{{ $gimme->article->image->description }} {{ if !($gimme->article->image->photographer == "") }}(Bild: {{ $gimme->article->image->photographer }}){{ /if }}</p>
     </figure>
 {{ elseif $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"  }}	
 	 <figure>
 		{{ include file="_tpl/renditions/img_555x370.tpl" }}
+		<p>{{ $gimme->article->image->description }} {{ if !($gimme->article->image->photographer == "") }}(Bild: {{ $gimme->article->image->photographer }}){{ /if }}</p>
     </figure>
 {{ /if }}  
   
