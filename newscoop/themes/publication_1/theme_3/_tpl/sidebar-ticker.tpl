@@ -4,7 +4,7 @@
     </header>
 
     <footer>
-        {{ $url = $view->url(['controller' => 'ticker', 'action' => null], 'default') }}
+        {{ $url = $view->url(['controller' => 'omniticker', 'action' => null], 'default') }}
         {{ if $gimme->section->number }}
             {{ $url = sprintf('%s?section=%s', $url, $gimme->section->url_name) }}
         {{ /if }}
