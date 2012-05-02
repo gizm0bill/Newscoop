@@ -20,7 +20,7 @@
                                     </li>
                                     <li>
                                         <label for="omniboxLoginPassword">Passwort</label>
-                                        <input id="omniboxLoginPassword" type="text" />
+                                        <input id="omniboxLoginPassword" type="password" />
                                     </li>
                                     <li>
                                         <input id="omniboxLoginRemember" type="checkbox" /> <label for="omniboxLoginRemember" style="display: inline;">Eingeloggt bleiben</label>
@@ -65,7 +65,7 @@
                                 <textarea id="omniboxFeedbackContent" placeholder=""></textarea>
                             </li>
                             <li>
-                                <p class="info" style="font-size: 10px;">Material hochladen: Bilder (jpg, png, gif) Dokumente (pdf)</p>
+                                <p class="info">Material hochladen: Bilder (jpg, png, gif) Dokumente (pdf)</p>
                                 <div class="custom-file-upload" id="omniboxUploadContainer">
                                     <div class="showValue" id="omniboxUploadInfo"></div>
                                     <input type="button" id="omniboxUpload" value="Datei anhängen">
