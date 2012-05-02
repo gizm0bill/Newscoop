@@ -62,7 +62,7 @@ cp rpm/apache.conf %{buildroot}/etc/newscoop/4.0/
 cd $RPM_BUILD_ROOT
 rm -f %{manifest}
 find ./usr/share/ -type d \
-        | sed '1,2d;s,^\.,\%attr(-\,apache\,apache) \%dir ,' >> %{manifest}
+        | sed '1d;s,^\.,\%attr(-\,apache\,apache) \%dir ,' >> %{manifest}
 find ./usr/share/ -type f \
         | sed 's,^\.,\%attr(-\,apache\,apache) ,' >> %{manifest}
 find ./usr/share/ -type l \
