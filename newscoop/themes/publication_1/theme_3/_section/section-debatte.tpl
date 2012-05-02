@@ -85,7 +85,8 @@ phase 4 = currentdate > date_closing 12:00
         {{ $closingdate=date_create($gimme->article->date_closing) }}
         {{ $deadline=$closingdate->setTime(12, 0) }}
         {{ $diff=date_diff($deadline, date_create('now')) }}            
-            <ul class="debatte-top-nav">                            
+            <ul class="debatte-top-nav">   
+            {{*                         
                     	<li{{ if $wdstage == "0" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
                         {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
@@ -93,8 +94,24 @@ phase 4 = currentdate > date_closing 12:00
                         {{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}</a></li>
                      <li{{ if $wdphase == "3" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=3"><b>Schlussworte</b>
                         {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}</a></li>
-        					<li{{* if $deadline->getTimestamp() > time() *}}{{ if $wdphase == "4" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
+        					<li{{ if $wdphase == "4" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
                         {{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}</a></li>
+            *}}
+            
+                     <li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>   
+                    	<li{{ if $wdphase == "1" }} class="active"{{ /if }}>{{ if $wdphase > 0 }}<a href="{{ url options="section" }}?stage=1">{{ else }}<span>{{ /if }}<b>Standpunkte</b>
+                    	{{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 0 }}</a>{{ else }}</span>{{ /if }}</li>                    	
+                    	
+                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Entgegnung</b>
+                    	{{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 1 }}</a>{{ else }}</span>{{ /if }}</li>              	
+                    	
+                     <li{{ if $wdphase == "3"}} class="active"{{ /if }}>{{ if $wdphase > 2 }}<a href="{{ url options="section" }}?stage=3">{{ else }}<span>{{ /if }}<b>Schlussworte</b>
+                     {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 2 }}</a>{{ else }}</span>{{ /if }}</li>
+                     
+        					<li{{ if $wdphase == "4" }} class="active"{{ /if }}>{{ if $wdphase > 3 }}<a href="{{ url options="section" }}?stage=4">{{ else }}<span>{{ /if }}<b>Fazit</b>
+        					{{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 3 }}</a>{{ else }}</span>{{ /if }}</li>                        
+                        
+                        
             </ul>
 {{ /list_articles }}
             
@@ -109,7 +126,7 @@ already at that stage in the proceedings *}}
 {{ /if }}
  
 {{ list_articles length="1" constraints="type is deb_moderator" }}               
-{{ include file="_tpl/article-comments.tpl" }}
+{{ include file="_tpl/article-comments.tpl" artno=$gimme->article->number }}
 {{ /list_articles }}
             
             </section>

@@ -30,6 +30,7 @@ class RegisterController extends Zend_Controller_Action
             ->addActionContext('check-email', 'json')
             ->addActionContext('pending', 'json')
             ->addActionContext('create-user', 'json')
+            ->addActionContext('register', 'json')
             ->initContext();
     }
 
@@ -56,6 +57,32 @@ class RegisterController extends Zend_Controller_Action
             } else {
                 $this->_helper->service('email')->sendConfirmationToken($user);
                 $this->_helper->redirector('after');
+            }
+        }
+
+        $this->view->form = $form;
+    }
+    
+    public function registerAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $values = $form->getValues();
+            $users = $this->_helper->service('user')->findBy(array(
+                'email' => $values['email'],
+            ));
+
+            if (count($users) > 0) {
+                $user = array_pop($users);
+            } else {
+                $user = $this->_helper->service('user')->createPending($values['email']);
+            }
+
+            if (!$user->isPending()) {
+                $this->view->response = "User with email '$values[email]' is registered already.";
+            } else {
+                $this->_helper->service('email')->sendConfirmationToken($user);
+                $this->view->response = 'OK';
             }
         }
 
