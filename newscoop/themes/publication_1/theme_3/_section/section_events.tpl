@@ -506,8 +506,10 @@ $template->assign('one_time', $one_time);
         {{ /if }}
     {{ /for }}
     <span class="nav right">
-    {{ if 0 le $prev_page }}<a href="#" }}" onclick="window.paginate({{ $prev_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="prev">Previous</a>{{ /if }}
-    {{ if $page_count gt $next_page }}<a href="#" onclick="window.paginate({{ $next_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="next">Next</a>{{ /if }}
+    <ul id="search-pagination" class="paging content-paging">
+    {{ if 0 le $prev_page }}<li class="prev"><a href="#" }}" onclick="window.paginate({{ $prev_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="prev grey-button" style="width:30px;">&laquo;</a></li>{{ /if }}
+    {{ if $page_count gt $next_page }}<li class="next"><a href="#" onclick="window.paginate({{ $next_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="next grey-button" style="width:30px;">&raquo;</a><li>{{ /if }}
+    </ul>
     </span>
 </p>
 {{ /if }}
