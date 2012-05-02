@@ -13,8 +13,12 @@
             <section>
             
 {{ include file="_tpl/front-playlist-articles.tpl" }}
+
+<span class="desktop-hide">{{ include file="_tpl/sidebar-ticker.tpl" }}</span>
+
+<span class="desktop-hide">{{ include file="_tpl/front-blogs.tpl" }}</span>
                 
-{{ include file="_tpl/front-debatte.tpl" }}                
+<span class="mobile-hide">{{ include file="_tpl/front-debatte.tpl" }}                
                 
 {{ include file="_tpl/front-dossiers.tpl" }}
 
@@ -25,14 +29,14 @@
             
             <aside>
             
-{{ include file="_tpl/sidebar-ticker.tpl" }}
+<span class="mobile-hide">{{ include file="_tpl/sidebar-ticker.tpl" }}</span>
 
 {{ include file="_tpl/sidebar-goodcomments.tpl" }}
  
 {{*** werbung ***}}                
 {{ include file="_werbung/front-sidebar.tpl" }}
 
-{{ include file="_tpl/sidebar-community.tpl" }}
+<span class="mobile-hide">{{ include file="_tpl/sidebar-community.tpl" }}
                 
 {{ include file="_tpl/sidebar-links.tpl" linksvar="Front" }}
                 
@@ -44,7 +48,7 @@
                 
 {{* include file="_tpl/sidebar-debatte.tpl" *}}
                 
-{{* include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - front" *}}
+{{* include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - front" *}}</span>
             
             </aside><!-- / Sidebar -->
             
@@ -54,7 +58,7 @@
         
 {{ include file="_tpl/front-bildstoff.tpl" }}
             
-{{ include file="_tpl/front-blogs.tpl" }}
+<span class="mobile-hide">{{ include file="_tpl/front-blogs.tpl" }}</span>
         	
         </div>
         
@@ -62,7 +66,7 @@
     
     <div id="footer">
     
-{{ include file="_tpl/footer-calendar.tpl" }}
+<span class="mobile-hide">{{ include file="_tpl/footer-calendar.tpl" }}</span>
 
 {{ include file="_tpl/footer.tpl" }}
 
