@@ -173,6 +173,8 @@ $(document).ready(function() {
                     omnibox.setMessage('');
                     omnibox.loggedIn = true;
                     omnibox.checkView();
+                    $('#omnibox').width(omnibox.openWidth);
+                    $('#omnibox').height(omnibox.openHeight);
                 }
                 else {
                     omnibox.setMessage(data.response);
