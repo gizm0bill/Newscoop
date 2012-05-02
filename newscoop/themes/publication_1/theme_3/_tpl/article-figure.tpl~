@@ -23,9 +23,7 @@
                         
 {{ else }}
 								<div id="image-{{ $i }}" class="img-content">
-								<figure>
 								{{ video_player video=$item->video }}
-								</figure>
 								</div>
 {{ /if }}
 {{ /foreach }} 

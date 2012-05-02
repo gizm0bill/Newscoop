@@ -13,9 +13,9 @@
                         <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="article" }}">{{ $gimme->article->Newslinetext }}</a>{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}             	           	
-            		{{ if $gimme->current_list->index == 1 }}<figure>{{ include file="_tpl/renditions/img_640x280.tpl" }}</figure>{{ /if }}
+            		{{ if $gimme->current_list->index == 1 }}<figure><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a></figure>{{ /if }}
 						{{ if $gimme->current_list->index == 2 || $gimme->current_list->index == 3 }}<figure><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a></figure>{{ /if }}
-						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}<figure class="left">{{ include file="_tpl/renditions/img_170x115.tpl" }}</figure>{{ /if }}
+						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}<figure class="left"><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_170x115.tpl" }}</a></figure>{{ /if }}
 
 						{{ if $gimme->current_list->index < 4 }}	
                     <header>
