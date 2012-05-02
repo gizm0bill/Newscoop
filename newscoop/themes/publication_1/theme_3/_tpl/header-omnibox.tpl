@@ -417,12 +417,6 @@ var omnibox = {
         for (var i in views) {
             $('#'+views[i]).hide();
         }
-        if ($('#omnibox').width() != omnibox.openWidth) {
-            $('#omnibox').width(omnibox.openWidth);
-        }
-        if ($('#omnibox').height() != omnibox.openHeight) {
-            $('#omnibox').height(omnibox.openHeight);
-        }
         $('#'+view).show();
     },
     
