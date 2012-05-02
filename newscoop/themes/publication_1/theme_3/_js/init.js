@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	
 // this makes problems for js-based select/options manipulations
 //	$('select').dropdownized({fixed:true});
     $('select').each(function(ind_elm, elm) {
@@ -9,7 +10,13 @@ $(document).ready(function() {
     });
 	
 	// Datepicker
-/*  is defined inside agenda's subnav.tpl
+	$( ".datepicker" ).datepicker({
+		showOn: "button",
+		buttonImage: "_css/tw2011/img/calendar.png",
+		buttonImageOnly: true,
+		nextText: '&raquo;',
+		prevText: '&laquo;'
+	});
 	$( "#agenda-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
@@ -17,7 +24,6 @@ $(document).ready(function() {
 		prevText: '&laquo;',
 		numberOfMonths: 3
 	});
-*/
 	$( "#agenda-mobile-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
@@ -48,17 +54,14 @@ $(document).ready(function() {
 	
 	// Tabs
 	$('.tabs').tabs();
-
-	// Carousel
-	$('.carousel').jcarousel();
-
+	
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
 	$('#omnibox a.trigger, a.omni-box-trigger').toggle(
 		function(){
 			$('#omnibox').animate({
-				width: '319px',
-				height: '460px'
+				width: omnibox.openWidth,
+				height: omnibox.openHeight
 			},500);
 			$('.omnibox-content').show();
 			$('.overlay').fadeIn(500);
@@ -77,8 +80,8 @@ $(document).ready(function() {
 	$('#omnibox a.comm-trigger').toggle(
 		function(){
 			$('#omnibox.omnibox-comments').animate({
-				width: '582px',
-				height: '390px'
+				width: omnibox.openWidth,
+				height: omnibox.openHeight
 			},500);
 			$('.omnibox-content').show();
 			$('.overlay').fadeIn(500);
@@ -94,7 +97,6 @@ $(document).ready(function() {
 		}
 	);
 	
-/*  is defined inside agenda's subnav.tpl
 	$('.agenda-top a.trigger').toggle(
 		function(){
 			$(this).addClass('active');
@@ -107,7 +109,6 @@ $(document).ready(function() {
 			$('.agenda-top .overlay').fadeOut(500);
 		}
 	);
-*/
 	
 	$('#jetzt').click(function() {
 			omnibox.showHide();

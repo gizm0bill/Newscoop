@@ -339,6 +339,8 @@ var omnibox = {
     silverlightRuntime: '{{ $view->baseUrl("/js/plupload/js/plupload.silverlight.xap") }}',
     fileType: null,
     fileId: null,
+    openWidth: 0,
+    openHeight: 0,
     
     initialize: function() {
         if ('{{$gimme->user->logged_in}}' != '') {
@@ -403,6 +405,14 @@ var omnibox = {
     },
     
     switchView: function(view) {
+        if (view == 'omniboxLogin') {
+            omnibox.openWidth = 319;
+            omnibox.openHeight = 460;
+        }
+        else {
+            omnibox.openWidth = 582;
+            omnibox.openHeight = 390;
+        }
         var views = ['omniboxFeedback', 'omniboxComment', 'omniboxLogin', 'omniboxRegister', 'omniboxAfterRegister'];
         for (var i in views) {
             $('#'+views[i]).hide();
