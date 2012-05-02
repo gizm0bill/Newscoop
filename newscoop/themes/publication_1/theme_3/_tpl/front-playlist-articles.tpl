@@ -1,12 +1,16 @@
 {{ list_playlist_articles length="5" id="6"}}
 
 {{ if $gimme->current_list->index == 2 }}
+<div class="mobile-list-view header-fix clearfix">
 			<div class="two-columns clearfix">
+{{ /if }}
+{{ if $gimme->current_list->index == 4 }}
+ <div class="mobile-list-view clearfix">
 {{ /if }}			
             	<article>
 						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}	
                     <header>
-                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
+                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="article" }}">{{ $gimme->article->Newslinetext }}</a>{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}             	           	
             		{{ if $gimme->current_list->index == 1 }}<figure>{{ include file="_tpl/renditions/img_640x280.tpl" }}</figure>{{ /if }}
@@ -15,7 +19,7 @@
 
 						{{ if $gimme->current_list->index < 4 }}	
                     <header>
-                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
+                        <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="article" }}">{{ $gimme->article->Newslinetext }}</a>{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}
 {{* for positions 2 and 3, show short_name - if exists, of course *}}
@@ -66,5 +70,9 @@
                 </article>
 {{ if $gimme->current_list->index == 3 }}                
          </div><!-- /.two-columns -->
+</div> <!-- /.mobile-list-view header-fix clearfix -->         
+{{ /if }}
+{{ if $gimme->current_list->index == 5 }}
+ </div> <!-- /.mobile-list-view clearfix -->
 {{ /if }}
 {{ /list_playlist_articles }}

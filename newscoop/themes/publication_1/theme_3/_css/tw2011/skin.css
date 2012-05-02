@@ -2,7 +2,7 @@
 ------------------------------------------------------------------------------------------ */
 .jcarousel-skin-img-slider .jcarousel-container {}
 .jcarousel-skin-img-slider .jcarousel-clip {overflow: hidden; width:100%;}
-.jcarousel-skin-img-slider .jcarousel-item {margin-right:5px;}
+.jcarousel-skin-img-slider .jcarousel-item {margin-right:5px; padding:0; background-image:none;}
 .jcarousel-skin-img-slider .jcarousel-item-placeholder {}
 
 .jcarousel-skin-img-slider .jcarousel-next-horizontal,

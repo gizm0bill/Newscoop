@@ -5,6 +5,7 @@
     height: 14px;
     background: #fafafa;
     border: 1px inset;
+    display: none;
 }
 
 #wann_middle {
@@ -15,32 +16,48 @@
     z-index: 600 !important;
 }
 #ui-datepicker-div {
+/*
     top: 234px !important;
+*/
     left: 60px !important;
     z-index: 600 !important;
 }
 
 .ui-datepicker-prev {
+/*
     width: 60px !important;
+*/
+    width: 30px !important;
 }
 .ui-datepicker-next {
+/*
     width: 60px !important;
+*/
+    width: 30px !important;
 }
 
 .ui-datepicker-group-first {
     margin-left: 11px;
 }
 
+.ui-datepicker-trigger {
+    display: none;
+}
+
 </style>
 
 <script type="text/javascript">
+var closing_datepicker_text = 'Fertig';
+
 /* German initialisation for the jQuery UI date picker plugin. */
 /* Written by Milian Wolff (mail@milianw.de). */
 $(document).ready(function() {
   $.datepicker.regional['de'] = {
     closeText: 'schließen',
-    prevText: '&#x3c;&nbsp;zurück',
-    nextText: 'Vor&nbsp;&#x3e;',
+//    prevText: '&#x3c;&nbsp;zurück',
+//    nextText: 'Vor&nbsp;&#x3e;',
+    prevText: '&#x3c;',
+    nextText: '&#x3e;',
     currentText: 'heute',
     monthNames: ['Januar','Februar','März','April','Mai','Juni',
     'Juli','August','September','Oktober','November','Dezember'],
@@ -59,20 +76,66 @@ $(document).ready(function() {
   $.datepicker.setDefaults($.datepicker.regional['de']);
 
   // Datepicker
-  var dp = $( ".datepicker" ).datepicker({
-    showOn: "button",
-    beforeShow: function(input, inst) {
-        //$('#ui-datepicker-div').css("z-index","600");
-        //$('#ui-datepicker-div').css("top","234px");
-        //$('#ui-datepicker-div').css("left","60px");
-        $('.agenda-top .overlay').fadeIn(500);
-    },
-    onClose: function(dateText, inst) {
-        $('.agenda-top .overlay').fadeOut(500);
-    },
-    buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
-    buttonImageOnly: true
+  var dp_wann = $("#wann").datepicker({
+        showOn: "button",
+        buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
+        buttonImageOnly: true
   });
+
+  //var dp = $(".datepicker").datepicker({});
+  var dp = $("#agenda-datepicker").datepicker({
+        onSelect: function(dateText, inst) {
+            $("#wann-picker").val(dateText);
+        },
+        showOn: "button",
+        buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
+        buttonImageOnly: true
+  });
+
+    //$('.agenda-top a.trigger').toggle();
+    $('#datapicker-button').toggle(
+        function(){
+/*
+            var dateText = $("#wann").val();
+            var dateObj = $("#wann").datepicker("getDate");
+            $("#wann-picker").val(dateText);
+            $("#agenda-datepicker").datepicker("setDate", dateObj);
+*/
+            update_datepicker_visible();
+
+            $(this).addClass('active');
+            $('#top-calendar').show();
+            $('.agenda-top .overlay').fadeIn(500);
+
+            $('#datapicker-button').css('border', '#008148 solid 1px');
+            $('#datapicker-button').css('background-color', '#008148');
+            $('#datapicker-button').html(closing_datepicker_text);
+        },
+        function(){
+            $(this).removeClass('active');
+            $('#top-calendar').hide();
+            $('.agenda-top .overlay').fadeOut(500);
+
+            $('#datapicker-button').css('border', '#CDCDCD solid 1px');
+            $('#datapicker-button').css('background-color', '#F1F1F1');
+
+            $('#datapicker-button').html('');
+            update_datepicker_button();
+            //$('#datapicker-button').html('Heute, 7.3.');
+
+            var dateText = $("#wann-picker").val();
+            var to_reload = false;
+            if ($("#wann").val() != dateText) {
+                to_reload = true;
+            }
+            $("#wann").datepicker("setDate", dateText);
+            $("#wann").val(dateText);
+            //alert($("#wann").val());
+            if (to_reload) {
+                window.reload();
+            }
+        }
+    );
 
     $("#wann").attr('disabled', true);
 
@@ -80,25 +143,59 @@ $(document).ready(function() {
         $(".datepicker").datepicker("show");
     });
 
-    $(".datepicker").datepicker("setDate" , new Date());
+    //$(".datepicker").datepicker("setDate", new Date());
+    var date_ini = new Date();
+    $("#wann").datepicker("setDate", date_ini);
+    $("#datapicker-button").datepicker("setDate", date_ini);
+    $("#wann-picker").val(format_day_string(date_ini));
+
     $('#ui-datepicker-div').css('display','none'); // see http://stackoverflow.com/questions/5735888/updating-to-latest-jquery-ui-and-datepicker-is-causing-the-datepicker-to-always-b
 
     $("#wann").change( function() {
         window.reload();
     });
 
-/*
-    $('#wann_middle').toggle(
-            function(){
-                    $(".datepicker").datepicker("show");
-            },
-            function(){
-                    $(".datepicker").datepicker("hide");
-            }
-    );
-*/
+    //$("#date_picker_button_new").hide();
+    $("#top-calendar").hide();
+    //$("#date_picker_button_new").show();
+    //$("#top-calendar").show();
+
+    //$("#datepicker_single_ul").show();
 
 });
+
+function update_datepicker_button() {
+    if ($('#datapicker-button').html() == closing_datepicker_text) {
+        return;
+    }
+
+    var chosen_date = $("#wann").val();
+    var dateObj = $("#wann").datepicker("getDate");
+    var display_date = dateObj.getDate() + ". " + (dateObj.getMonth() + 1) + ". " + dateObj.getFullYear();
+
+    var testObj = new Date();
+    var today_str = format_day_string(testObj);
+    testObj.setDate(testObj.getDate() + 1);
+    var tommorow_str = format_day_string(testObj);
+
+    if (chosen_date == today_str) {
+        display_date = 'Heute, ' + dateObj.getDate() + "." + (dateObj.getMonth() + 1) + ".";
+    }
+    if (chosen_date == tommorow_str) {
+        display_date = 'Morgen, ' + dateObj.getDate() + "." + (dateObj.getMonth() + 1) + ".";
+    }
+
+    $('#datapicker-button').html(display_date);
+};
+
+function update_datepicker_visible() {
+    var dateText = $("#wann").val();
+    var dateObj = $("#wann").datepicker("getDate");
+    $("#wann-picker").val(dateText);
+    $("#agenda-datepicker").datepicker("setDate", dateObj);
+
+    update_datepicker_button();
+};
 
 function update_subnav_links(link_date, link_region) {
     var old_link = "";
@@ -142,37 +239,88 @@ function highlight_agenda_type(ag_type) {
 
     $("#nav_" + ag_type).addClass("active");
 };
+
+function format_day_string(dateObj) {
+    var day_str = "00" + dateObj.getDate();
+    day_str = day_str.substr(day_str.length - 2, 2);
+    var month_str = "00" + (dateObj.getMonth() + 1);
+    month_str = month_str.substr(month_str.length - 2, 2);
+
+    var dateText = day_str + '.' + month_str + '.' + dateObj.getFullYear();
+    return dateText;
+};
+
+function agenda_set_tomorrow() {
+    var dateObj = new Date();
+    dateObj.setDate(dateObj.getDate() + 1);
+/*
+    var day_str = "00" + dateObj.getDate();
+    day_str = day_str.substr(day_str.length - 2, 2);
+    var month_str = "00" + (dateObj.getMonth() + 1);
+    month_str = month_str.substr(month_str.length - 2, 2);
+
+    var dateText = day_str + '.' + month_str + '.' + dateObj.getFullYear();
+*/
+    var dateText = format_day_string(dateObj);
+    $("#wann-picker").val(dateText);
+
+    $("#agenda-datepicker").datepicker("setDate", dateText);
+    //$("#wann").datepicker("setDate", dateText);
+};
+
+function agenda_set_today() {
+    var dateObj = new Date();
+/*
+    var day_str = "00" + dateObj.getDate();
+    day_str = day_str.substr(day_str.length - 2, 2);
+    var month_str = "00" + (dateObj.getMonth() + 1);
+    month_str = month_str.substr(month_str.length - 2, 2);
+
+    var dateText = day_str + '.' + month_str + '.' + dateObj.getFullYear();
+*/
+    var dateText = format_day_string(dateObj);
+    $("#wann-picker").val(dateText);
+
+    $("#agenda-datepicker").datepicker("setDate", dateText);
+    //$("#wann").datepicker("setDate", dateText);
+};
+
 </script>
 
         <div class="content-box agenda-top">
 
             <div id="datepicker_single_ul" style="display:none">
                 <div id="wann_middle" class="left">
-                        <input type="text" value="" id="wann" class="datepicker" style="width:80px;" />
+                        <input type="text" value="" id="wann" class="datepicker_orig" style="width:80px;" />
                 </div>
             </div>
-            <a href="#" id="date_picker_button_new" class="trigger grey-button arrow" style="display:none">Heute, 7.3.</a>
-            <div id="top-calendar" class="clearfix" style="display:none'>
+
+            {{ assign var="month_str" $smarty.now|date_format:"%m" }}
+            {{ php }}
+                $month_str = $template->get_template_vars('month_str');
+                $month_str = ltrim($month_str, "0");
+                $template->assign('month_str', $month_str);
+            {{ /php }}
+            <a style="display:none;" id="datapicker-button" href="#" class="trigger grey-button arrow">Heute, {{ $smarty.now|date_format:"%e" }}.{{ $month_str }}.</a>
+            <div id="top-calendar" class="clearfix">
             
-                <ul class="left">
-                    <li><a href="#">Morgen</a></li>
-                    <li><a href="#">nächste 7 T.</a></li>
+                <ul class="left" style="margin-top:20px;">
+                    <li><a href="#" onClick="agenda_set_today(); return false;">Heute</a></li>
+                    <li><a href="#" onClick="agenda_set_tomorrow(); return false;">Morgen</a></li>
                     <li>
                         <fieldset>
-                            <input type="text" />
-                            <span>bis</span>
-                            <input type="text" />
+                            <input id="wann-picker" type="text" disabled="disabled" style="background:#ffffff;" />
                         </fieldset>
                     </li>
-                    <li>
+                    <li style="display:none;">
                         <input type="submit" value="Fertig" class="button" />
                     </li>
                 </ul>
             
-                <div id="agenda-datepicker"></div>
+                <div id="agenda-datepicker" style="margin-top:8px;margin-bottom:8px;"></div>
             
             </div>
-            
+
             <ul class="nav">
 {{ local }}
 {{* agenda *}}

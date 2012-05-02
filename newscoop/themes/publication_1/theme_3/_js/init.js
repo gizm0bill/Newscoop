@@ -9,6 +9,7 @@ $(document).ready(function() {
     });
 	
 	// Datepicker
+/*  is defined inside agenda's subnav.tpl
 	$( "#agenda-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
@@ -16,6 +17,7 @@ $(document).ready(function() {
 		prevText: '&laquo;',
 		numberOfMonths: 3
 	});
+*/
 	$( "#agenda-mobile-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
@@ -92,6 +94,7 @@ $(document).ready(function() {
 		}
 	);
 	
+/*  is defined inside agenda's subnav.tpl
 	$('.agenda-top a.trigger').toggle(
 		function(){
 			$(this).addClass('active');
@@ -104,6 +107,7 @@ $(document).ready(function() {
 			$('.agenda-top .overlay').fadeOut(500);
 		}
 	);
+*/
 	
 	$('#jetzt').click(function() {
 			omnibox.showHide();
