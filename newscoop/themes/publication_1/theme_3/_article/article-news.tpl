@@ -90,7 +90,7 @@
                     <article>
                         <figure>
                         	{{ map show_locations_list="false" show_reset_link=false auto_focus=false width="100%" height="180" }}
-                        	{{ list_map_locations }}{{ if $gimme->current_list->at_beginning }}<p>{{ /if }}{{ $gimme->location->name }}{{ if $gimme->current_list->at_end }}</p>{{ else }}, {{ /if }}{{ /list_map_locations }}
+                        	{{ if $gimme->article->map->name != "" }}<p>{{ $gimme->article->map->name }}</p>{{ /if }}
                         </figure>
                     </article>
 {{ /if }}                    
