@@ -1,4 +1,4 @@
-<{{ include file="_tpl/_html-head.tpl" }}
+{{ include file="_tpl/_html-head.tpl" }}
 
 <body>
 
