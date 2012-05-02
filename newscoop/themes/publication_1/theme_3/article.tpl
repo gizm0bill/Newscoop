@@ -13,3 +13,6 @@
 {{ if $gimme->section->number == 72 }}
     {{ render file="_article/article_screening.tpl" }}
 {{ /if}}
+{{ if $gimme->section->number == 81 }}
+    {{ render file="section.tpl" }}
+{{ /if}}

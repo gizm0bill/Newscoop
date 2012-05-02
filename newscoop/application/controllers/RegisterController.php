@@ -202,6 +202,7 @@ class RegisterController extends Zend_Controller_Action
 
         $this->view->form = $form;
         $this->view->img = $this->getUserImageSrc($user);
+        $this->view->social = true;
         $this->render('confirm');
     }
     
@@ -348,7 +349,7 @@ class RegisterController extends Zend_Controller_Action
                         break;
 
                     default:
-                        var_dump($e);
+                        var_dump($e->getMessage(), $e->getTraceAsString());
                         exit;
                 }
             }
