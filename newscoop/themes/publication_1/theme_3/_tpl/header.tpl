@@ -16,8 +16,10 @@
                     <li class="search"><a href="#">Search</a>
                     	<ul class="search-mobile">
                         	<li>
-                            	<input type="text" value="">
+                                <form method="GET" action="{{ $view->url(['controller' => 'search', 'action' => 'index'], 'default') }}">
+                                <input type="text" name="q" value="">
                                 <input type="submit" value="Suchen" class="grey-button">
+                                </form>
                             </li>
                         </ul>
                     </li>
@@ -31,6 +33,10 @@
                 </ul>
                 <nav>
                     <ul>
+
+                        {{ set_publication identifier="1" }}
+                        {{ set_current_issue }}
+                        <li><a href="{{ url options="issue" }}"{{ if $gimme->publication == $gimme->default_publication && $gimme->template->name == "front.tpl" }} class="active"{{ /if }}>Startseite</a></li>
 
 {{* STANDARD SECTIONS *}}
 {{ set_publication identifier="1" }}
