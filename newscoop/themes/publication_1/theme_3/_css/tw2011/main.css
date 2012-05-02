@@ -1365,7 +1365,17 @@ section article{padding-bottom:25px;}
 			margin-bottom:15px;
 			border-bottom:#e5e5e5 solid 2px;
 			}
-			.image-slideshow .img-content img {display:block; margin-bottom:7px; width:100%;}
+			.image-slideshow .img-content figure {display:block; margin-bottom:7px; width:100%;}
+			.image-slideshow .img-content figure a {position:relative; display:block; }
+			.image-slideshow .img-content figure a span {
+				display:block; width:57px; height:57px;
+				position:absolute; bottom:0; right:0; z-index:2;
+				background-image:url(img/open-slideshow.png);
+				background-repeat: no-repeat;
+				background-position: 15px 15px
+				}
+				.image-slideshow .img-content figure a:hover span {background-color:rgba(255, 255, 255, .4);}
+			.image-slideshow .img-content img, .image-slideshow .img-content a img {display:block; margin-bottom:0; width:100%; border:none;}
 			.image-slideshow .img-content p {
 				margin-bottom:5px;
 				font-size:13px;
@@ -1374,6 +1384,7 @@ section article{padding-bottom:25px;}
 		ul.slideshow-nav li {background:#000; float:left;}
 			ul.slideshow-nav li img {display:block;}
 				ul.slideshow-nav li.ui-tabs-selected img {-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: alpha(opacity=50); -moz-opacity: 0.5; -khtml-opacity: 0.5; opacity:0.5;}
+				
 
 
 	/* Profile Edit -------------- */
