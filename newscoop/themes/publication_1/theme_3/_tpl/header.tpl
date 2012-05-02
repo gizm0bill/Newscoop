@@ -3,7 +3,7 @@
 {{ local }}    
             <div id="top" class="clearfix">
                 <ul>
-                    <li>{{ $smarty.now|camp_date_format:"%W %e.%m.%Y" }}</li>
+                    <li>{{ $smarty.now|camp_date_format:"%W, %e.%m.%Y" }}</li>
                     <li>{{ weather }}</li>
                     <li><a href="#">Kontakt</a></li>
                     <li><a href="#">Login</a></li>
