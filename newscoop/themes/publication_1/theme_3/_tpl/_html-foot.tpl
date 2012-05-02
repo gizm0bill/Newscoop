@@ -8,6 +8,7 @@
     <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.jcarousel.min.js' }}"></script>
     <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.dropdownized.min.js' }}"></script>
     <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.address.js' }}"></script>
+    <script type="text/javascript" src="{{ $view->baseUrl('/js/plupload/js/plupload.full.js') }}"></script>
 
     <!--[if (gte IE 6)&(lte IE 8)]>
       <script type="text/javascript" src="{{ url static_file="_js/libs/selectivizr-min.js" }}"></script>
