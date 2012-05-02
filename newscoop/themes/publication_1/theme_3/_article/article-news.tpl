@@ -223,12 +223,12 @@
                 {{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
                 <p>{{ $gimme->author->biography->text|bbcode }}</p>
             </li>
+            {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
+            {{ /if }}
             <li>
                 <h5>Beiträge</h5>
                 <p>{{ $numArticles }}</p>
-            </li>
-            {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
-            {{ /if }}
+            </li>            
         </ul>
     </div>
                                 

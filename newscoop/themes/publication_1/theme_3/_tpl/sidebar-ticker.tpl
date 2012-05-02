@@ -4,7 +4,7 @@
     </header>
 
     <footer>
-        {{ $url = $view->url(['controller' => 'ticker', 'action' => null], 'default') }}
+        {{ $url = $view->url(['controller' => 'omniticker', 'action' => null], 'default') }}
         {{ if $gimme->section->number }}
             {{ $url = sprintf('%s?section=%s', $url, $gimme->section->url_name) }}
         {{ /if }}
@@ -14,14 +14,14 @@
 
 <script type="text/template" id="ticker-article-template">
     <span title="Artikel" class="icon">Artikel</span>
-    <h3><a href="<%= doc.get('link') %>"><%= doc.escape('title') %></a></h3>
-    <p><%= doc.escape('lead') %> <small>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></small></p>
+    <h3><a href="<%= doc.get('link') %>"><%= doc.has('title_short') ? doc.escape('title_short') : doc.escape('title') %></a></h3>
+    <p><%= doc.has('lead_short') ? doc.escape('lead_short') : doc.escape('lead') %> <small>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></small></p>
 </script>
 
 <script type="text/template" id="ticker-omni-template">
     <span title="Artikel" class="icon">Artikel</span>
-    <h3><a href="<%= doc.get('link') %>"><%= doc.escape('title') %></a></h3>
-    <p><%= doc.escape('lead') %> <small>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></small></p>
+    <h3><a href="<%= doc.get('link') %>"><%= doc.has('title_short') ? doc.escape('title_short') : doc.escape('title') %></a></h3>
+    <p><%= doc.has('lead_short') ? doc.escape('lead_short') : doc.escape('lead') %> <small>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></small></p>
 </script>
 
 <script type="text/template" id="ticker-tweet-template">

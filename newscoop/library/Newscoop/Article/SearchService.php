@@ -104,6 +104,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             case 'news':
                 $doc['lead'] = strip_tags($article->getData('lede'));
                 $doc['content'] = strip_tags($article->getData('body'));
+                $doc['title_short'] = strip_tags($article->getData('short_name'));
                 break;
 
             case 'dossier':
@@ -118,6 +119,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             case 'newswire':
                 $doc['lead'] = strip_tags($article->getData('DataLead'));
                 $doc['content'] = strip_tags($article->getData('DataContent'));
+                $doc['lead_short'] = strip_tags($article->getData('NewsLineText'));
                 break;
 
             case 'link':

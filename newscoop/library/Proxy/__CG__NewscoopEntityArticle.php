@@ -285,12 +285,6 @@ class Article extends \Newscoop\Entity\Article implements \Doctrine\ORM\Proxy\Pr
         return parent::getTopicNames();
     }
 
-    public function getSeoPath()
-    {
-        $this->__load();
-        return parent::getSeoPath();
-    }
-
     public function setKeywords($keywords)
     {
         $this->__load();

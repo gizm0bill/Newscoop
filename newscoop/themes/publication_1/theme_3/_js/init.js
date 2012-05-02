@@ -1,5 +1,4 @@
 $(document).ready(function() {
-	
 // this makes problems for js-based select/options manipulations
 //	$('select').dropdownized({fixed:true});
     $('select').each(function(ind_elm, elm) {
@@ -10,13 +9,7 @@ $(document).ready(function() {
     });
 	
 	// Datepicker
-	$( ".datepicker" ).datepicker({
-		showOn: "button",
-		buttonImage: "_css/tw2011/img/calendar.png",
-		buttonImageOnly: true,
-		nextText: '&raquo;',
-		prevText: '&laquo;'
-	});
+/*  is defined inside agenda's subnav.tpl
 	$( "#agenda-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
@@ -24,6 +17,7 @@ $(document).ready(function() {
 		prevText: '&laquo;',
 		numberOfMonths: 3
 	});
+*/
 	$( "#agenda-mobile-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],
@@ -54,7 +48,10 @@ $(document).ready(function() {
 	
 	// Tabs
 	$('.tabs').tabs();
-	
+
+	// Carousel
+	$('.carousel').jcarousel();
+
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
 	$('#omnibox a.trigger, a.omni-box-trigger').toggle(
@@ -97,6 +94,7 @@ $(document).ready(function() {
 		}
 	);
 	
+/*  is defined inside agenda's subnav.tpl
 	$('.agenda-top a.trigger').toggle(
 		function(){
 			$(this).addClass('active');
@@ -109,6 +107,7 @@ $(document).ready(function() {
 			$('.agenda-top .overlay').fadeOut(500);
 		}
 	);
+*/
 	
 	$('#jetzt').click(function() {
 			omnibox.showHide();

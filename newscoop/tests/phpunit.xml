@@ -20,6 +20,7 @@
                 <directory suffix=".php">../library/Newscoop/Controller</directory>
                 <directory suffix=".php">../library/Newscoop/Entity/Proxy</directory>
                 <directory suffix=".php">../library/Newscoop/Entity/Output</directory>
+                <directory suffix=".php">../library/Hybrid</directory>
                 <file>../application/Bootstrap.php</file>
                 <file>../application/modules/admin/Bootstrap.php</file>
             </exclude>

@@ -46,6 +46,9 @@
 {{ /list_articles }}
                 
                 <article>
+                <header>
+                	<p></p>
+                </header>
                     <h2>{{ $gimme->article->name }}</h2>
                     <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y, %H:%i" }}Uhr</span>                
                     {{ include file="_tpl/article-figure.tpl" }}

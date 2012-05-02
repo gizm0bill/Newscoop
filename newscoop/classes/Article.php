@@ -21,47 +21,6 @@ require_once dirname(__FILE__) . '/GeoMap.php';
  */
 class Article extends DatabaseObject
 {
-    /** @var array */
-    static $urlMap = array(
-        'ä' => 'ae',
-        'Ä' => 'ae',
-        'á' => 'a',
-        'à' => 'a',
-        'â' => 'a',
-        'æ' => 'a',
-        'é' => 'e',
-        'é' => 'e',
-        'è' => 'e',
-        'è' => 'e',
-        'ü' => 'ue',
-        'Ü' => 'ue',
-        'ö' => 'oe',
-        'Ö' => 'oe',
-        'ß' => 'ss',
-        'ç' => 'c',
-        'ê' => 'e',
-        'ê' => 'e',
-        'ì' => 'i',
-        'ì' => 'i',
-        'í' => 'i',
-        'í' => 'i',
-        'ô' => 'o',
-        'ô' => 'o',
-        'œ' => 'o',
-        'ò' => 'o',
-        'ò' => 'o',
-        'ó' => 'o',
-        'ó' => 'o',
-        'ù' => 'u',
-        'ù' => 'u',
-        'û' => 'u',
-        'û' => 'u',
-        'ú' => 'u',
-        'ú' => 'u',
-        'ÿ' => 'y',
-        'Ÿ' => 'y',
-    );
-
     /**
      * The column names used for the primary key.
      * @var array
@@ -1277,6 +1236,15 @@ class Article extends DatabaseObject
         return 0;
     } // fn getArticleNumber
 
+    /**
+     * Alias to getArticleNumber
+     *
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->getArticleNumber();
+    }
 
     /**
      * Get the title of the article.
@@ -1759,48 +1727,8 @@ class Article extends DatabaseObject
      */
     public function getSEOURLEnd(array $fields, $languageId)
     {
-        list($url,) = explode('.', $this->getLegacySEOURLEnd($fields, $languageId), 2);
-        $url = strtolower($url);
-        $url = str_replace(array_keys(self::$urlMap), array_values(self::$urlMap), $url);
-        $url = preg_replace('#[^-a-z0-9.]#', '-', $url);
-        $url = preg_replace('#[-]{2,}#', '-', $url);
-        return trim($url, '-') . '.htm';
+        return \Zend_Registry::get('container')->getService('article.link')->getSeo($this, $fields);
     }
-
-    /**
-     * Get seo url end
-     *
-     * @return string
-     * @deprecated
-     */
-    private function getLegacySEOURLEnd(array $seoFields, $languageId)
-    {
-    	$urlEnd = '';
-    	foreach ($seoFields as $field => $value) {
-    		switch ($field) {
-                case 'name':
-                    if ($text = trim($this->getName())) {
-                        $urlEnd .= $urlEnd ? '-' . $text : $text;
-                    }
-                    break;
-                case 'keywords':
-                    if ($text = trim($this->getKeywords())) {
-                        $urlEnd .= $urlEnd ? '-' . $text : $text;
-                    }
-                    break;
-                case 'topics':
-                    $articleTopics = ArticleTopic::GetArticleTopics($this->getArticleNumber());
-                    foreach ($articleTopics as $topic) {
-                        $urlEnd .= $urlEnd ? '-' . $topic->getName($languageId) : $topic->getName($languageId);
-                    }
-                    break;
-    		}
-    	}
-        $urlEnd = preg_replace('/[\\\\,\/\.\?"\+&%:#]/', '', trim($urlEnd));
-    	$urlEnd = str_replace(' ', '-', $urlEnd) . '.htm';
-		return $urlEnd;
-    }
-
 
     /**
      * @param string value

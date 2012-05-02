@@ -218,7 +218,9 @@ window.update_list_on_params = function(params) {
     }
 
     if ('' != new_spec['date']) {
-        $(".datepicker").datepicker("setDate" , new Date(new_spec['date']));
+        //$(".datepicker").datepicker("setDate" , new Date(new_spec['date']));
+        $("#wann").datepicker("setDate" , new Date(new_spec['date']));
+        update_datepicker_visible();
     }
 
     //window.reload(new_spec['page']);
@@ -1106,7 +1108,8 @@ window.used_date = function(separator, value_only) {
 
     if ("" != when) {
         if (!evdateobj) {
-            evdateobj = $(".datepicker").datepicker("getDate");
+            //evdateobj = $(".datepicker").datepicker("getDate");
+            evdateobj = $("#wann").datepicker("getDate");
         }
     }
 
@@ -1131,7 +1134,9 @@ window.used_date = function(separator, value_only) {
     }
     evdate_year = evdateobj.getFullYear();
 
-    $(".datepicker").datepicker("setDate" , evdateobj);
+    //$(".datepicker").datepicker("setDate" , evdateobj);
+    $("#wann").datepicker("setDate" , evdateobj);
+    update_datepicker_visible();
 
     var date_value = evdate_year + "-" + evdate_month + "-" + evdate_day;
     if (value_only) {
@@ -1302,6 +1307,7 @@ $(document).ready(function() {
     });
 
     $("#date_picker_button_new").hide();
+    $("#datapicker-button").hide();
     $("#top-calendar").hide();
 
     $(".nav_one").removeClass("active");

@@ -86,7 +86,7 @@ aside blockquote,
 	display:block;
 	height:34px;
 	padding:0 32px;
-	color:#fff; font-size:15px; line-height:34px; text-align:center;
+	color:#fff; font-size:15px; font-weight:bold; line-height:34px; text-align:center;
 	background:url(img/button-bgr.png) 0 0 repeat-x;
 	border:#008148 solid 1px; border-radius: 2px;
 	}
@@ -504,7 +504,7 @@ section article{padding-bottom:25px;}
 	h3.title {padding:0 0 5px 0; position:relative;}
 	aside article header {margin-bottom:10px; padding-top:10px; border-top:#dcdcdc solid 1px;}
 	.full-width article header,
-	h3.title {padding-top:10px; border-top:#dcdcdc solid 3px;}
+	h3.title {padding-top:10px; border-top:#dcdcdc solid 2px;}
 		article header p,
 		h3.title,
 		.mobile-header p {
@@ -644,9 +644,9 @@ section article{padding-bottom:25px;}
 			.profile-info h4 a.green-button {
 				display:inline-block; zoom:1; *display:inline;
 				overflow:hidden;
-				height:16px; width:77px;
+				height:17px; width:117px;
 				padding-left:5px; margin-left:10px;
-				font-size:8px; line-height:16px;
+				font-size:9px; line-height:17px;
 				}
 				.profile-info h4 a.green-button:after {right:-13px;}
 				
@@ -710,19 +710,20 @@ section article{padding-bottom:25px;}
 					border-bottom:#cdcdcd solid 1px;
 					}
 					aside .debate-box ul.nav li:last-child {border-bottom:0;}
-				.debate-box ul.nav li a {
+				.debate-box ul.nav li a, .debate-box ul.nav li span {
 					display:block; position:relative;
 					height:40px;
 					padding:6px 0 0 23px;
 					font-size:12px; line-height:16px; color:#7c7c7c; text-decoration:none;
 					}
+					.debate-box ul.nav li span {color:#b5b5b5;}
 					.debate-box ul.nav li a:hover {color:#000;}
 					.debate-box ul.nav li.active a {
 						color:#000;
 						background:url(img/debate-nav-bgr.png) 0 0 repeat-x;
 						}
 					aside .debate-box ul.nav li a {height:auto; padding:0 0 0 10px;}
-				.debate-box ul.nav li a:before {
+				.debate-box ul.nav li a:before, .debate-box ul.nav li span:before  {
 					content:"";
 					position:absolute; left:0; top:0;
 					width:11px; height:46px;
@@ -735,11 +736,16 @@ section article{padding-bottom:25px;}
 					background:url(img/debate-nav-active-separator.png) 0 0 no-repeat;
 					}
 					aside .debate-box ul.nav li a:before,
+					aside .debate-box ul.nav li span:before,
 					aside .debate-box ul.nav li.active a:after {display:none;}
-				.debate-box ul.nav li:first-child b {
+				.debate-box ul.nav li:first-child a {
 					padding-left:20px;
-					line-height:46px;
+					line-height:32px;
+					font-size:13px;
 					}
+					.debate-box ul.nav li:first-child b {padding-left:0;}
+					.debate-box ul.nav li:first-child a:before {display:none;}
+					
 				aside .debate-box ul.nav li:first-child b,
 				aside .debate-box ul.nav li a {padding-left:10px; line-height:29px;}
 					aside .debate-box ul.nav li a b {
@@ -916,12 +922,19 @@ section article{padding-bottom:25px;}
 				position:relative; overflow:hidden;
 				margin-bottom:30px; padding-right:180px;
 				}
+				.filter-list li#spellcheck {
+					border-bottom: 1px dotted #DCDCDC;
+					color: #676767;
+					font-size: 16px;
+					font-style: italic;
+					padding-bottom: 7px;
+					}
 				.filter-list li h3,
 				.filter-list li p {
 					margin:0;
 					font-size:16px; color:#000; line-height:24px;
 					}
-				.filter-list li h3 {font-weight:bold;}
+				.filter-list li h3 {font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif}
 					.filter-list li h3 small a {
 						display:inline-block; zoom:1; *display:inline;
 						height:13px;
@@ -1344,6 +1357,7 @@ section article{padding-bottom:25px;}
 		border:#e1e1e1 solid 1px;
 		background:#f8f8f8;
 		}
+	.image-slideshow.blank {padding:0; border:0; background:none;}
 		.image-slideshow h4 {margin-bottom:10px;}
 		.image-slideshow p,
 		.image-slideshow ul {margin-left:0 !important;}
@@ -1351,13 +1365,13 @@ section article{padding-bottom:25px;}
 			margin-bottom:15px;
 			border-bottom:#e5e5e5 solid 2px;
 			}
-			.image-slideshow .img-content img {display:block; margin-bottom:7px;}
+			.image-slideshow .img-content img {display:block; margin-bottom:7px; width:100%;}
 			.image-slideshow .img-content p {
 				margin-bottom:5px;
 				font-size:13px;
 				}
-		ul.slideshow-nav {list-style: none;}
-		ul.slideshow-nav li {background:#000;}
+		
+		ul.slideshow-nav li {background:#000; float:left;}
 			ul.slideshow-nav li img {display:block;}
 				ul.slideshow-nav li.ui-tabs-selected img {-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: alpha(opacity=50); -moz-opacity: 0.5; -khtml-opacity: 0.5; opacity:0.5;}
 
@@ -1367,6 +1381,7 @@ section article{padding-bottom:25px;}
 		padding:18px;
 		background:#f8f8f8;
 		border:#e1e1e1 solid 1px;
+		margin-bottom:20px;
 		}
 		.profile-edit p,
 		.terms-box h4 {font-family:Arial, Helvetica, sans-serif;font-size:12px; color:#7c7c7c; line-height:16px; font-weight:normal;}
@@ -1387,10 +1402,11 @@ section article{padding-bottom:25px;}
 					.profile-tab-nav li.ui-tabs-selected a {font-weight:bold; box-shadow:inset 0 15px 15px rgba(0,0,0,0.1);}
 		
 		.profile-edit-box {margin-bottom:10px;}
+		aside .profile-edit-box {background:#f8f8f8; padding:15px;}
 		
-			.profile-edit-box h3 {
-				margin-bottom:5px;
-				}
+			.profile-edit-box h3 {margin:0 0 15px;}
+			aside .profile-edit-box h3 {line-height:normal;}
+			aside .profile-edit-box p {font-family:Arial, Helvetica, sans-serif;}
 			.profile-edit-box.register-box p,
 			.terms-box h4 {color:#000; font-size:14px; line-height:18px;}
 			.profile-edit-box ul {
@@ -1398,6 +1414,7 @@ section article{padding-bottom:25px;}
 				list-style-type:none; font-family:Arial, Helvetica, sans-serif;
 				}
 			.profile-edit-box.register-box ul {padding-top:20px;}
+			aside .profile-edit-box.register-box ul {padding-top:10px;}
 				.profile-edit-box ul li {
 					overflow:hidden;
 					margin-bottom:3px;
@@ -1407,6 +1424,7 @@ section article{padding-bottom:25px;}
 						width:172px;
 						font-size:14px; line-height:32px;
 						}
+						aside .profile-edit-box ul li label {float:none; display:block; width:auto; line-height:normal; margin-bottom:4px;}
 					.profile-edit-box ul li input[type=text],
 					.profile-edit-box ul li input[type=password],
 					.profile-edit-box ul li textarea {
@@ -1415,24 +1433,49 @@ section article{padding-bottom:25px;}
 						font-size:14px;
 						border:#d4d4d4 solid 1px;
 						}
+						aside .profile-edit-box ul li input[type=text],
+						aside .profile-edit-box ul li input[type=password] {width:90.5%;}
 					.profile-edit-box ul li textarea {height:65px; padding:5px 12px; resize:vertical;}
 					.profile-edit-box ul li .ui-dropdownized {overflow:hidden; width:160px; height:30px;}
 					.profile-edit-box ul li input.search {width:288px;}
-				.profile-edit-box ul li div.info {
+				.profile-edit-box ul li div.info, .profile-edit-box ul li dd.info {
 					overflow:hidden;
 					padding:5px 0 0 172px;
 					}
 					.profile-edit-box ul li div.info p,
+					.profile-edit-box ul li dd.info p,
+					.profile-edit-box ul li dd,
 					.profile-edit-box ul li.profile-image div p {font-size:12px; line-height:16px;}
-					.profile-edit-box.register-box div.info p {color:#7c7c7c;}
-				.profile-edit-box ul li div.check input {
-					float:left;
-					margin-right:5px;
+					.profile-edit-box.register-box div.info p, .profile-edit-box.register-box dd, .profile-edit-box.register-box dd.info p  {color:#7c7c7c;}
+					.profile-edit-box.register-box div.info.error p, .profile-edit-box.register-box dd.info.error p {color:#990000;}
+				.profile-edit-box ul li div.check {
+					overflow:hidden;
+					margin:6px 0 15px 0;
+					}
+				.profile-edit-box ul li div.check dt {display:none;}
+				.profile-edit-box ul li div.check dd {
+						margin-right:7px;
+						float:left;
+						}
+						.profile-edit-box ul li div.check dd p {
+							margin:0;
+							}
+							.profile-edit-box ul li div.check dd label{
+								width:auto;
+								line-height:18px;
+								}
+				.profile-edit-box ul li div.check input[type="checkbox"] {
+					margin:0;
+					height:13px;
+					width:13px;
 					}
 				.profile-edit-box ul li.buttons {
 					padding-right:27px;
 					text-align:right;
 					}
+				aside .profile-edit-box ul li.buttons {padding:10px 0 0 0; text-align:left;}
+					aside .profile-edit-box ul li.buttons input {display:block; padding:0; width:100%; margin-bottom:5px;}
+					aside .profile-edit-box ul li.buttons a {color:#000;}
 				.profile-edit-box ul li .grey-button {
 					display:inline-block; zoom:1; *display:inline;
 					width:94px; height:30px;
@@ -1472,7 +1515,21 @@ section article{padding-bottom:25px;}
 					background:#fff;
 					border:#e1e1e1 solid 1px;
 					}
-					.profile-edit-box.register-box .terms-content p {font-size:14px; line-height:16px;}
+					.profile-edit-box.register-box .terms-content p,
+					.profile-edit-box.register-box .terms-content h5,
+					.profile-edit-box.register-box .terms-content ol {
+						font-size:14px; line-height:18px;
+						font-weight:normal;
+						}
+					.profile-edit-box.register-box .terms-content ol {
+						font-weight:normal;
+						margin:1em 0 2em 0;
+						}
+						.profile-edit-box.register-box .terms-content ol li {
+							list-style-type:none;
+							margin-bottom:1em;
+							}
+						
 			
 	
 	
@@ -1495,7 +1552,7 @@ ul.item-list li {
 		}
 	
 	aside article section span.icon,
-	ul.item-list li span.icon {position:absolute; left:0; top:2px; width:16px; height:16px; text-indent:-9999px; background-position:50% 50%; background-repeat:no-repeat;}
+	ul.item-list li span.icon {position:absolute; left:0; top:2px; width:20px; height:16px; text-indent:-9999px; background-position:50% 50%; background-repeat:no-repeat;}
 	
 	aside article section.article span.icon,
 	ul.item-list li.article span.icon {background-image:url(img/icons_small/article.png);}
@@ -1911,7 +1968,7 @@ ul.item-list li {
 				position:relative;
 				padding-left:135px; margin-bottom:15px;
 				}
-			.article-single ul.article-info li.image {min-height:134px;}
+			.article-single ul.article-info li.image {min-height:134px; overflow:hidden;}
 				.article-single ul.article-info li h5 {
 					position:absolute; left:0; top:0;
 					width:125px;
@@ -2041,13 +2098,20 @@ ul.item-list li {
 		width:20%;
 		font-family:Arial, Helvetica, sans-serif;
 		}
-		.debatte-top-nav li a {
+		.debatte-top-nav li a, .debatte-top-nav li span {
 			display:block; position:relative;
 			height:35px;
 			padding:0 10px 0 22px;
 			font-size:12px; text-decoration:none; line-height:35px; color:#7c7c7c;
 			}
+			.debatte-top-nav li span {
+				color:#b5b5b5;
+				}
+			.debatte-top-nav li a:hover {
+				color:#000;
+				}
 			.debatte-top-nav li a:after,
+			.debatte-top-nav li span:after,
 			.debatte-top-nav li.active a:before {
 				content:"";
 				position:absolute; top:0; right:-6px;
@@ -2056,6 +2120,7 @@ ul.item-list li {
 				}
 			.debatte-top-nav li.active a:before {right:auto; left:-6px;}
 				.debatte-top-nav li:last-child a:after,
+				.debatte-top-nav li:last-child span:after,
 				.debatte-top-nav li.active:first-child a:before {display:none;}
 				
 				.debatte-top-nav li.active a:before {background-position:0 -70px;}
@@ -2075,7 +2140,7 @@ ul.item-list li {
 .debatte-page aside small.info {
 	display:block;
 	padding:10px 0;
-	font-family:Arial, Helvetica, sans-serif; font-size:12px;
+	font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#999999;
 	}
 .debatte-stat-box {
 	padding:22px;
@@ -2143,9 +2208,9 @@ ul.item-list li {
 #top {padding-top:32px;}
 	#top h1 {
 		float:left;
-		width:478px; height:68px;
+		width:510px; height:68px;
 		text-indent:-9999px;
-		background:url(img/logo.png) 0 0 no-repeat;
+		background:url(img/logo-beta.png) 0 0 no-repeat;
 		}
 		#top h1 a {
 			display:block;
@@ -2589,9 +2654,9 @@ ul.item-list li {
 	a.article-switch.bottom-align {display:none;}
 	
 	.debate-box h3 {font-size:24px; line-height:30px;}
-	.content-box.debatte-page ul.debatte-top-nav {padding:10px; margin:0 0 12px 0; background:#fff; border:0; box-shadow:0 2px 2px rgba(0, 0, 0, 0.1)}
-	.debate-box ul.nav li,
-	.content-box.debatte-page ul.debatte-top-nav li {float:none; width:100%; border:#cdcdcd solid 1px; border-bottom:0;}
+	.content-box.debatte-page ul.debatte-top-nav {padding:10px; margin:0 0 12px 0; background:#fff; border:0; box-shadow:none;}
+	.debate-box ul.nav li {float:none; width:100%; border-bottom:1px solid #cdcdcd;}
+	.content-box.debatte-page ul.debatte-top-nav li {float:none; width:100%; border:1px solid #cdcdcd; border-width: 1px 1px 0 1px;}
 		.content-box.debatte-page ul.debatte-top-nav li:last-child {border-bottom:#cdcdcd solid 1px; margin-bottom:10px;}
 		.debate-box ul.nav li:last-child {border-bottom:0;}
 		.debate-box ul.nav li a,
@@ -2603,9 +2668,9 @@ ul.item-list li {
 			.content-box.debatte-page ul.debatte-top-nav li.active a:after,
 			.debatte-top-nav li a:after, 
 			.debatte-top-nav li.active a:before {display:none;}
-				.debate-box ul.nav li:first-child b,
+				.debate-box ul.nav li:first-child a,
 				.debate-box ul.nav li a,
-				.content-box.debatte-page ul.debatte-top-nav li a {padding-left:10px; line-height:29px;}
+				.content-box.debatte-page ul.debatte-top-nav li a {padding-left:10px; line-height:29px; font-size:12px !important;}
 					.debate-box ul.nav li a b,
 					.content-box.debatte-page ul.debatte-top-nav li a b {display:inline-block; zoom:1; *display:inline; width:145px;}
 					
@@ -2643,7 +2708,7 @@ ul.item-list li {
 	.profile-tab-nav li {width:32%;}
 		.profile-tab-nav li a {width:auto;}
 	.profile-edit-box ul li label {float:none; width:auto; display:block;}
-	.profile-edit-box ul li div.info {padding-left:0;}
+	.profile-edit-box ul li div.info, .profile-edit-box ul li dd.info {padding-left:0;}
 	.profile-edit-box ul li input[type="text"], 
 	.profile-edit-box ul li input[type="password"], 
 	.profile-edit-box ul li textarea {width:97%; padding:0;}
@@ -2740,7 +2805,9 @@ ul.item-list li {
 	#wrapper .agenda-single section .movie .movie-trailer,
 	#wrapper .agenda-single section .movie .movie-trailer iframe,
 	#wrapper .agenda-single section .movie .image-slideshow .img-content img {width:100%;}
-	
+
+
+	aside .profile-edit-box ul li input[type=password], aside .profile-edit-box ul li input[type="text"]  {width:98%;}
 }
 
 @media all and (max-width: 640px) {
@@ -2927,10 +2994,13 @@ ul.item-list li {
 	
 	
 	.profile-edit {border:0; padding:0; background:none;}
+	.profile-edit-box .terms-box {padding-right: 1px;}
 	.profile-edit-box ul li label {display:block; float:none; width:auto;}
 	.profile-edit-box ul li input[type=text],
 	.profile-edit-box ul li input[type=password],
-	.profile-edit-box ul li textarea {width:97%; padding:0; text-indent:10px;}
+	.profile-edit-box ul li textarea {width:99.5%; padding:0; text-indent:10px;}
+	.profile-edit-box ul li.buttons {padding-right:0;}
+	.profile-edit-box ul li.buttons input {width:100%;}
 	.profile-edit-box ul li div.info {padding-left:0;}
 	.profile-edit-box ul li.profile-image {padding-right:0;}
 	.profile-edit-box ul li.profile-image img {display:none;}
@@ -2942,6 +3012,9 @@ ul.item-list li {
 		.profile-edit-box ul li .map-holder {width:auto;}
 		.profile-edit-box ul li .grey-button {float:left; margin:5px 5px 0 0;}
 		
+	
+	aside .profile-edit-box {background: #fff; padding: 0;}
+	aside .profile-edit-box ul li input[type=password], aside .profile-edit-box ul li input[type="text"]  {width:99.5%;}		
 	
 	.top-content-box {
 		position:relative;

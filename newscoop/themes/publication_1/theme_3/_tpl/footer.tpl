@@ -3,25 +3,24 @@
                 <li>
                     <h4>TagesWoche</h4>
                     <ul>
-                        <li><a href="#">Über uns</a></li>
-                        <li><a href="#">Dialogkultur</a></li>
-                        <li><a href="#">Kontakt</a></li>
-                        <li><a href="#">Werbung</a></li>
-                        <li><a href="#">Impressum</a></li>
-                        <li><a href="#">Zeitungsarchiv</a></li>
-                        <li><a href="#">RSS-Feeds</a></li>
-                        <li><a href="#">Press Corner</a></li>
-                        <li><a href="#">AGB</a></li>
-                        <li><a href="#">Abos</a></li>
+								<li><a href="#">Über uns</a></li>
+								<li><a href="/user/editors">Redaktion</a></li>
+								<li><a href="#">Kontakt</a></li> 
+								<li><a href="#">Werbung</a></li> 
+								<li><a href="#">Abos</a></li> 
+								<li><a href="#">Zeitungsarchiv</a></li> 
+								<li><a href="#">RSS-Feeds</a></li> 
+								<li><a href="#">AGB</a></li> 
+								<li><a href="#">Impressum</a></li>                        
                     </ul>
                 </li>
                 <li>
                     <h4>Dialog</h4>
                     <ul>
-                        <li><a href="#">Kommentare</a></li>
-                        <li><a href="#">Nutzersuche</a></li>
-                        <li><a href="#">Storyboard</a></li>
-                        <li><a href="#">Wochendebatte</a></li>
+                       	<li><a href="#">Kommentare</a></li><!-- (new dialog page) --> 
+								<li><a href="#">Community</a></li><!-- (community page) --> 
+								<li><a href="#">Wochendebatte</a></li> 
+								<li><a href="#">Dialogkultur</a></li>                         
                     </ul>
                 </li>
                 <li>
@@ -66,6 +65,16 @@
                     </ul>
 {{ /local }}
                 </li>
+                
+{{* Martin, this is the order of elements
+Kino 
+Theater 
+Konzerte 
+Partys 
+Ausstellungen 
+Andere                
+*}}
+                
                 <li>
                     <h4>Blogs</h4>
                     <ul>

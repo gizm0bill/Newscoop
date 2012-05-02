@@ -614,44 +614,6 @@ class Article implements \Newscoop\Search\DocumentInterface
     }
 
     /**
-     * Get seo url path
-     *
-     * @return string
-     */
-    public function getSeoPath()
-    {
-    	$path = array();
-        foreach ($this->publication->getSeo() as $field => $value) {
-            switch ($field) {
-                case 'name':
-                    if (!empty($this->name)) {
-                        $path[] = $this->name;
-                    }
-
-                    break;
-
-                case 'keywords':
-                    if (!empty($this->keywords)) {
-                        $path[] = $this->keywords;
-                    }
-
-                    break;
-
-                case 'topics':
-                    foreach ($this->getTopics() as $topic) {
-                        $path[] = $topic->getName($this->getLanguageId());
-                    }
-
-                    break;
-    		}
-    	}
-
-        $path = implode('-', $path);
-        $path = preg_replace('/[\\\\,\/\.\?"\+&%:#]/', '', trim($path));
-    	return str_replace(' ', '-', $path) . '.htm';
-    }
-
-    /**
      * Set keywords
      *
      * @param string $keywords

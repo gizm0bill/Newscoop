@@ -74,15 +74,20 @@ and then all is compared according to a matrix.
                
                 	<h3>Die Wochendebatte: {{ $gimme->article->subject }}</h3>
                     <ul class="nav">                    
-                    	<li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></li>
-                    	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
-                        {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
-                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Entgegnung</b>
-                        {{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}</a></li>
-                     <li{{ if $wdphase == "3"}} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=3"><b>Schlussworte</b>
-                        {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}</a></li>
-        					<li{{ if $wdphase == "4" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>                        
-                        {{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}</a></li>        
+                    	<li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
+                    	
+                    	<li{{ if $wdphase == "1" }} class="active"{{ /if }}>{{ if $wdphase > 0 }}<a href="{{ url options="section" }}?stage=1">{{ else }}<span>{{ /if }}<b>Standpunkte</b>
+                    	{{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 0 }}</a>{{ else }}</span>{{ /if }}</li>                    	
+                    	
+                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Entgegnung</b>
+                    	{{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 1 }}</a>{{ else }}</span>{{ /if }}</li>              	
+                    	
+                     <li{{ if $wdphase == "3"}} class="active"{{ /if }}>{{ if $wdphase > 2 }}<a href="{{ url options="section" }}?stage=3">{{ else }}<span>{{ /if }}<b>Schlussworte</b>
+                     {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 2 }}</a>{{ else }}</span>{{ /if }}</li>
+                     
+        					<li{{ if $wdphase == "4" }} class="active"{{ /if }}>{{ if $wdphase > 3 }}<a href="{{ url options="section" }}?stage=4">{{ else }}<span>{{ /if }}<b>Fazit</b>
+        					{{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 3 }}</a>{{ else }}</span>{{ /if }}</li>
+        					        
                     </ul>
                     <h5>Zwischenstand</h5>
                     <ul class="votes">
@@ -100,12 +105,12 @@ and then all is compared according to a matrix.
   {{ list_article_authors }}
     								<a href="{{ url options="section" }}?stage={{ $wdphase }}"><img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width="60" /></a>
   {{ /list_article_authors }}                    	
-                            <p><b>{{ if $gimme->article->contra }}Nein{{ else }}Ja{{ /if }}</b> {{ strip }}&laquo;
+                            <p><b>{{ if $gimme->article->contra }}Nein{{ else }}Ja{{ /if }}</b> {{ strip }}
     {{ if $wdphase == 1 }}{{ $gimme->article->opening|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
     {{ if $wdphase == 2 }}{{ $gimme->article->rebuttal|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
     {{ if $wdphase == 3 }}{{ $gimme->article->closing|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
     {{ if $wdphase == 4 }}{{ $gimme->article->closing|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
-    &raquo;{{ /strip }} <em>{{ list_article_authors }}{{ $gimme->author->name }} (23){{ if !($gimme->current_list->at_end) }}, {{ /if }}{{ /list_article_authors }}</em></p>
+    {{ /strip }} <em>{{ list_article_authors }}{{ $gimme->author->name }} {{ if !($gimme->current_list->at_end) }}, {{ /if }}{{ /list_article_authors }}</em></p>
                         </li>
 
 {{ if $gimme->current_list->at_end }}                        

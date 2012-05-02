@@ -39,6 +39,14 @@
                 'css_path' : '{{ url static_file="_js/libs/socialshareprivacy/socialshareprivacy.css" }}'
             });
         });
+        
+        $( ".datepicker" ).datepicker({
+    		showOn: "button",
+    		buttonImage: "{{ url static_file='_css/tw2011/img/calendar.png' }}",
+    		buttonImageOnly: true,
+    		nextText: '&raquo;',
+    		prevText: '&laquo;'
+    	});
     });
 	</script>
     

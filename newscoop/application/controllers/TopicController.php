@@ -25,6 +25,13 @@ class TopicController extends AbstractSolrController
         parent::init();
     }
 
+    public function preDispatch()
+    {
+        if ($this->_getParam('topic') === null && $this->getRequest()->getActionName() === 'index') {
+            $this->_forward('empty');
+        }
+    }
+
     public function indexAction()
     {
         parent::indexAction();
@@ -74,5 +81,9 @@ class TopicController extends AbstractSolrController
             $this->view->topic = $this->_getParam('topic');
             return sprintf('topic:("%s")', rawurlencode($this->_getParam('topic')));
         }
+    }
+
+    public function emptyAction()
+    {
     }
 }

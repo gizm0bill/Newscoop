@@ -97,7 +97,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                     $topicList = ArticleTopic::GetArticleTopics($article->getNumber());
                     foreach ($topicList as $topic) {
                         $topics[] = array(
-                            'topic_id' => $topic->getTopicId(),
+                            'topic_id' => (int) $topic->getTopicId(),
                             'topic_name' => $topic->getName(self::LANGUAGE),
                         );
                     }
@@ -115,7 +115,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                     }
 
                     $response[] = array(
-                        'article_id' => $article->getNumber(),
+                        'article_id' => (int) $article->getNumber(),
                         'url' => $this->url . '/api/articles/item?article_id=' . $article->getNumber(),
                         'dateline' => $dateline,
                         'short_name' => empty($short_name) ? $article->getTitle() : $short_name,
@@ -126,7 +126,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                         'comment_url' => $this->url . '/api/comments/list?article_id=' . $article->getNumber() . '&version=' . self::API_VERSION,
                         'topics' => $topics,
                         'rank' => $rank++,
-                        'section_id' => $article->getSectionId(),
+                        'section_id' => (int) $article->getSectionId(),
                         'section_name' => $playlist->getName(),
                         'section_url' => $this->url . '/api/sections/item?section_id=' . $article->getSectionId() . '&version=' . self::API_VERSION,
                         'section_rank' => $section_rank,
