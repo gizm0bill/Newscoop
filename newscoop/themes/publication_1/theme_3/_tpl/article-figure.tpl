@@ -13,12 +13,12 @@
          
                         <div id="image-{{ $i }}" class="img-content">
 								<figure>
-                        <a href="pictures/slideshow-img-1.jpg" class="fancybox-thumb" rel="fancybox-thumb">
+                        <a href="{{ $item->image->original }}" title="{{ $item->caption }}" class="fancybox-thumb" rel="fancybox-thumb">
                         <span></span>
                         	<img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" />
-                            <p>{{ $item->caption }}</p>
                         </a>
                         </figure> 
+                        <p>{{ $item->caption }}</p>
                         </div>
                         
 {{ else }}
