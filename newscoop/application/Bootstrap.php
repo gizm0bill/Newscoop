@@ -343,6 +343,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'module' => 'default',
             'controller' => 'topic',
             'action' => 'index',
+            'topic' => null,
         )));
 
         $router->addRoute('my-topics', new Zend_Controller_Router_Route('@my-topics', array(
@@ -379,7 +380,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $translator->addTranslation(array(
             'content' => array(
-                'topic' => 'theme',
+                'topic' => 'themen',
                 'my-topics' => 'meine-themen',
             ),
             'locale' => 'de',
