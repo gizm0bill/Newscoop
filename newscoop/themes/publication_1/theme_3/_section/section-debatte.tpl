@@ -90,7 +90,7 @@ phase 4 = currentdate > date_closing 12:00
                     	<li{{ if $wdstage == "0" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
                         {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
-                    	<li{{ if $wdphase == "2" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Entgegnung</b>
+                    	<li{{ if $wdphase == "2" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Repliken</b>
                         {{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}</a></li>
                      <li{{ if $wdphase == "3" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=3"><b>Schlussworte</b>
                         {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}</a></li>

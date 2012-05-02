@@ -69,13 +69,6 @@
 {{* check if article has big slideshow *}}
 {{if $gimme->article->big_slideshow }}
 {{ assign var="bigslideshow" value=1 }}
-<script type="text/javascript">
-$(document).ready(function() {
-    $("a.big_slideshow_list").fancybox({
-        type: 'image'
-    });
-});
-</script>
 {{ /if }}
 
 {{* Check if article has video attached *}}
@@ -132,8 +125,9 @@ $(document).ready(function() {
 {{ assign var="i" value=$i+1 }}
                             <div id="image-{{ $i }}" class="img-content">
 {{ /if }}
-                                
+<figure>                                
 {{ include file="_tpl/renditions/img_555x370.tpl" }}
+</figure>
                                       <p>
 {{ if $gimme->article->image->description != "" }}
 {{ $gimme->article->image->description }} 
@@ -151,7 +145,9 @@ $(document).ready(function() {
 {{ if ($gimme->image->article_index  gt 11) & ($gimme->image->article_index lt 100)}}                            
 {{ assign var="i" value=$i+1 }}
                             <div id="image-{{ $i }}" class="img-content">
-                                        {{ if $bigslideshow == 1 }}<a href="{{ url options="image" }}" title="{{ $gimme->article->image->description }}" class="big_slideshow_list" rel="bigslideshow">{{ /if }}<img src="{{ url options="image width 555 height 370 crop center" }}" width="555" height="370" rel="resizable" alt="{{ $gimme->article->image->description }}" title="{{ $gimme->article->image->description }}">{{ if $bigslideshow == 1 }}<div class="zoomie"></div></a>{{ /if }}
+                            <figure>
+                                        {{ if $bigslideshow == 1 }}<a href="{{ url options="image" }}" title="{{ $gimme->article->image->description }}" class="fancybox-thumb" rel="fancybox-thumb"><span></span>{{ /if }}<img src="{{ url options="image width 555 height 370 crop center" }}" width="555" height="370" rel="resizable" alt="{{ $gimme->article->image->description }}" title="{{ $gimme->article->image->description }}">{{ if $bigslideshow == 1 }}</a>{{ /if }}
+                            </figure>
                                         <p>
 {{ if $gimme->article->image->description != "" }}
 {{ $gimme->article->image->description }} 
