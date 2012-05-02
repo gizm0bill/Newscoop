@@ -9,25 +9,29 @@
 {{ include file="_tpl/header.tpl" }}
 
 {{ if $gimme->section->number >= "200" }}
+
 			<div class="content-box article-single full-size clearfix">
 				<section>
-				{{ list_articles length="1" constraints="type is bloginfo" }} 
+				{{* list_articles length="1" constraints="type is bloginfo" }} 
                   <h2><a href="{{ url options="section" }}">{{ $gimme->article->name }}</a></h2>
-            {{ /list_articles }}
+            {{ /list_articles *}}
                 <article>
-                    <h2>{{ $gimme->article->name }}</h2>
-                    <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y, %H:%i" }}Uhr</span>                
+                    <header>
+                            <p><a href="{{ url options="section" }}">{{ $gimme->section->name }}</a></p>
+                    </header>
+                    <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
+                        <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>                
                     {{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}
                     {{ list_article_images }}
                     <figure style="margin-bottom: 15px">
                       <img src="{{ uri options="image width 980" }}" rel="resizable" alt="">
-                      <p>{{ $gimme->article->image->description }}</p>
-                      <small>{{ $gimme->article->image->photographer }}</small>
+                      <p>{{ $gimme->article->image->description }} {{ if $gimme->article->image->photographer != "" }}({{ $gimme->article->image->photographer }}){{ /if }}</p>
                     </figure>
                     {{ /list_article_images }}
                 </article>            
 				</section>
 			</div>
+			
 {{ else }}
         
         <div class="content-box article-single clearfix">
