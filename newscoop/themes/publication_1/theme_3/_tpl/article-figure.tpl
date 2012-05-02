@@ -1,5 +1,7 @@
 {{ if !($gimme->article->Disable_Article_Image) }}
 
+{{ if $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"  }}
+
 {{ assign var="i" value=0 }}
 {{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
 {{ foreach $slideshow->items as $item name=insideslideshow }}
@@ -55,7 +57,7 @@
 {{ /foreach }}
                     
 
-{{ if $gimme->article->publish_date lt "2012-02-08 13:00:00" || $gimme->article->creation_date lt "2012-02-08 13:00:00"  }}
+{{ else }}{{* if publish date is before introduction of slideshows *}}
 
 {{* check if article has big slideshow *}}
 {{if $gimme->article->big_slideshow }}
@@ -91,7 +93,7 @@ $(document).ready(function() {
 
 {{ if $slideshow gt 1 }}{{* initialize slideshow *}}
 {{ assign var="i" value=0 }}
-<div class="image-slideshow tabs">
+<div class="image-slideshow tabs">{{ strip }}
 {{ /if }}
                         
 {{ if !($gimme->article->vimeo_url == "") }}  
@@ -99,10 +101,8 @@ $(document).ready(function() {
 {{ assign var="i" value=$i+1 }}
                             <div id="image-{{ $i }}" class="img-content">
 {{ /if }}
-                                <figure>
 {{ assign var="vimeocode" value=$gimme->article->vimeo_url|replace:"http://vimeo.com/":"" }}
 <iframe src="http://player.vimeo.com/video/{{ $vimeocode }}?title=0&amp;byline=0&amp;portrait=0&amp;color=e20020" width="555" height="370" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-                                </figure>
 {{ if $slideshow gt 1 }}
                             </div>
 {{ /if }}
@@ -113,12 +113,10 @@ $(document).ready(function() {
 {{ assign var="i" value=$i+1 }}
                             <div id="image-{{ $i }}" class="img-content">
 {{ /if }}
-                                <figure>
 {{ assign var="youtubecode" value=$gimme->article->youtube_shortcode|replace:"http://youtu.be/":"" }}
-<iframe title="YouTube video player" width="555" height="370" src="http://www.youtube.com/embed/{{ $youtubecode }}?wmode=opaque" frameborder="0" allowfullscreen></iframe>
-                                </figure>
+<iframe title="YouTube video player" width="555" height="370" src="http://www.youtube.com/embed/{{ $youtubecode }}?rel=0 frameborder="0" allowfullscreen></iframe>
 {{ if $slideshow gt 1 }}
-                            </div>
+                            </div>                            
 {{ /if }}                                                        
 {{ /if }} 
 
@@ -171,10 +169,7 @@ $(document).ready(function() {
 {{ if $slideshow gt 1 }}
 {{ assign var="i" value=$i+1 }}
                             <li><a href="#image-{{ $i }}">
-                                <figure>
-{{ assign var="vimeocode" value=$gimme->article->vimeo_url|replace:"http://vimeo.com/":"" }}
-<iframe src="http://player.vimeo.com/video/{{ $vimeocode }}?title=0&amp;byline=0&amp;portrait=0&amp;color=e20020" width="95" height="63" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-                                </figure>
+                                poster
                             </li>
 {{ /if }}
 {{ /if }} 
@@ -183,10 +178,7 @@ $(document).ready(function() {
 {{ if $slideshow gt 1 }}
 {{ assign var="i" value=$i+1 }}
                             <li><a href="#image-{{ $i }}">
-                                <figure>
-{{ assign var="youtubecode" value=$gimme->article->youtube_shortcode|replace:"http://youtu.be/":"" }}
-<iframe title="YouTube video player" width="95" height="63" src="http://www.youtube.com/embed/{{ $youtubecode }}?wmode=opaque" frameborder="0" allowfullscreen></iframe>
-                                </figure>
+                                poster
                             </li>
 {{ /if }}                                                        
 {{ /if }} 
@@ -207,7 +199,7 @@ $(document).ready(function() {
 
 {{ if $slideshow gt 1 }}
 </ul>
-</div>
+</div>{{ /strip }}
 {{ /if }}
 
 
