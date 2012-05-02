@@ -92,7 +92,9 @@ window.update_list_on_params = function(params) {
     }
 
     if ('' != new_spec['date']) {
-        $(".datepicker").datepicker("setDate" , new Date(new_spec['date']));
+        //$(".datepicker").datepicker("setDate" , new Date(new_spec['date']));
+        $("#wann").datepicker("setDate" , new Date(new_spec['date']));
+        update_datepicker_visible();
     }
 
     window.reload(new_spec['page']);
@@ -105,6 +107,8 @@ $(document).ready(function() {
     //$("#was").val('alles');
     //$("#was").val('theater');
     $("#wo").val('region-basel');
+
+    $("#datapicker-button").show();
 
 });
 
@@ -676,7 +680,8 @@ window.used_date = function(separator, value_only) {
 
     if ("" != when) {
         if (!evdateobj) {
-            evdateobj = $(".datepicker").datepicker("getDate");
+            //evdateobj = $(".datepicker").datepicker("getDate");
+            evdateobj = $("#wann").datepicker("getDate");
         }
     }
     if (!evdateobj) {
@@ -700,7 +705,9 @@ window.used_date = function(separator, value_only) {
     }
     evdate_year = evdateobj.getFullYear();
 
-    $(".datepicker").datepicker("setDate" , evdateobj);
+    //$(".datepicker").datepicker("setDate" , evdateobj);
+    $("#wann").datepicker("setDate" , evdateobj);
+    update_datepicker_visible();
 
     var date_value = evdate_year + "-" + evdate_month + "-" + evdate_day;
     if (value_only) {
@@ -845,10 +852,6 @@ $(document).ready(function() {
         window.reload();
     });
 
-    $("#date_picker_button_new").hide();
-    $("#top-calendar").hide();
-
-    $("#datepicker_single_ul").show();
 });
 
 function load_events(ev_type) {
