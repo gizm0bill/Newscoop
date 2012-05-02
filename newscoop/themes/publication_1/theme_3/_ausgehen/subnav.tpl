@@ -43,15 +43,113 @@
 .ui-datepicker-trigger {
     display: none;
 }
+/*
+.ui-datepicker-inline-narrow {
+    width: 320px !important;
+    
+}
+*/
+.top-calendar-narrow {
+    width: 322px !important;
+}
+
+.agenda-datepicker-narrow {
+    width: 320px !important;
+}
+
 
 </style>
 
 <script type="text/javascript">
 var closing_datepicker_text = 'Fertig';
 
+function get_month_view_count() {
+    var month_num = 3;
+    var doc_width = $(document).width();
+    if (640 > doc_width) {
+        month_num = 1;
+    }
+
+    if (1 == month_num) {
+        $("#agenda-datepicker").addClass("agenda-datepicker-narrow");
+        $("#top-calendar").addClass("top-calendar-narrow");
+    }
+    else {
+        $("#agenda-datepicker").removeClass("agenda-datepicker-narrow");
+        $("#top-calendar").removeClass("top-calendar-narrow");
+    }
+
+    return month_num;
+};
+
+var calendar_is_open = false;
+
+function switch_calendar() {
+    if (!calendar_is_open) {
+        calendar_is_open = true;
+        open_calendar();
+        return;
+    }
+
+    calendar_is_open = false;
+    close_calendar();
+};
+
+function open_calendar() {
+            $("#agenda-datepicker").datepicker("option", "numberOfMonths", get_month_view_count());
+
+/*
+            var dateText = $("#wann").val();
+            var dateObj = $("#wann").datepicker("getDate");
+            $("#wann-picker").val(dateText);
+            $("#agenda-datepicker").datepicker("setDate", dateObj);
+*/
+            update_datepicker_visible();
+
+            //$(this).addClass('active');
+            $('#datapicker-button').addClass('active');
+
+            $('#top-calendar').show();
+            $('.agenda-top .overlay').fadeIn(500);
+/*
+            $('#datapicker-button').css('border', '#008148 solid 1px');
+            $('#datapicker-button').css('background-color', '#008148');
+            $('#datapicker-button').html(closing_datepicker_text);
+*/
+};
+
+function close_calendar() {
+            //$(this).removeClass('active');
+            $('#datapicker-button').removeClass('active');
+
+            $('#top-calendar').hide();
+            $('.agenda-top .overlay').fadeOut(500);
+/*
+            $('#datapicker-button').css('border', '#CDCDCD solid 1px');
+            $('#datapicker-button').css('background-color', '#F1F1F1');
+*/
+            $('#datapicker-button').html('');
+            update_datepicker_button();
+            //$('#datapicker-button').html('Heute, 7.3.');
+
+            var dateText = $("#wann-picker").val();
+            var to_reload = false;
+            if ($("#wann").val() != dateText) {
+                to_reload = true;
+            }
+            $("#wann").datepicker("setDate", dateText);
+            $("#wann").val(dateText);
+            //alert($("#wann").val());
+            if (to_reload) {
+                window.reload();
+            }
+
+};
+
 /* German initialisation for the jQuery UI date picker plugin. */
 /* Written by Milian Wolff (mail@milianw.de). */
 $(document).ready(function() {
+
   $.datepicker.regional['de'] = {
     closeText: 'schließen',
 //    prevText: '&#x3c;&nbsp;zurück',
@@ -70,7 +168,7 @@ $(document).ready(function() {
     dateFormat: 'dd.mm.yy',
     firstDay: 1,
     isRTL: false,
-    numberOfMonths: 3,
+    numberOfMonths: get_month_view_count(),
     showMonthAfterYear: false,
     yearSuffix: ''};
   $.datepicker.setDefaults($.datepicker.regional['de']);
@@ -96,6 +194,7 @@ $(document).ready(function() {
         maxDate: maxdateObj,
         onSelect: function(dateText, inst) {
             $("#wann-picker").val(dateText);
+            switch_calendar();
         },
         showOn: "button",
         buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
@@ -106,49 +205,15 @@ $(document).ready(function() {
     //$("#agenda-datepicker").datepicker("maxDate", maxdateObj);
 
     //$('.agenda-top a.trigger').toggle();
+/*
     $('#datapicker-button').toggle(
         function(){
-/*
-            var dateText = $("#wann").val();
-            var dateObj = $("#wann").datepicker("getDate");
-            $("#wann-picker").val(dateText);
-            $("#agenda-datepicker").datepicker("setDate", dateObj);
-*/
-            update_datepicker_visible();
-
-            $(this).addClass('active');
-            $('#top-calendar').show();
-            $('.agenda-top .overlay').fadeIn(500);
-
-            $('#datapicker-button').css('border', '#008148 solid 1px');
-            $('#datapicker-button').css('background-color', '#008148');
-            $('#datapicker-button').html(closing_datepicker_text);
         },
         function(){
-            $(this).removeClass('active');
-            $('#top-calendar').hide();
-            $('.agenda-top .overlay').fadeOut(500);
-
-            $('#datapicker-button').css('border', '#CDCDCD solid 1px');
-            $('#datapicker-button').css('background-color', '#F1F1F1');
-
-            $('#datapicker-button').html('');
-            update_datepicker_button();
-            //$('#datapicker-button').html('Heute, 7.3.');
-
-            var dateText = $("#wann-picker").val();
-            var to_reload = false;
-            if ($("#wann").val() != dateText) {
-                to_reload = true;
-            }
-            $("#wann").datepicker("setDate", dateText);
-            $("#wann").val(dateText);
-            //alert($("#wann").val());
-            if (to_reload) {
-                window.reload();
-            }
         }
     );
+*/
+    $('#datapicker-button').click( function() { switch_calendar(); return false; });
 
     $("#wann").attr('disabled', true);
 
@@ -279,6 +344,8 @@ function agenda_set_tomorrow() {
 
     $("#agenda-datepicker").datepicker("setDate", dateText);
     //$("#wann").datepicker("setDate", dateText);
+
+    switch_calendar();
 };
 
 function agenda_set_today() {
@@ -296,6 +363,8 @@ function agenda_set_today() {
 
     $("#agenda-datepicker").datepicker("setDate", dateText);
     //$("#wann").datepicker("setDate", dateText);
+
+    switch_calendar();
 };
 
 </script>
@@ -315,12 +384,12 @@ function agenda_set_today() {
                 $template->assign('month_str', $month_str);
             {{ /php }}
             <a style="display:none;" id="datapicker-button" href="#" class="trigger grey-button arrow">Heute, {{ $smarty.now|date_format:"%e" }}.{{ $month_str }}.</a>
-            <div id="top-calendar" class="clearfix">
+            <div id="top-calendar" class="clearfix" style="width:644px;height:292px;">
             
                 <ul class="left" style="margin-top:20px;">
-                    <li><a href="#" onClick="agenda_set_today(); return false;">Heute</a></li>
-                    <li><a href="#" onClick="agenda_set_tomorrow(); return false;">Morgen</a></li>
-                    <li>
+                    <li style="position:absolute;margin-left:0px;"><a href="#" onClick="agenda_set_today(); return false;">Heute</a></li>
+                    <li style="position:absolute;margin-left:60px;"><a href="#" onClick="agenda_set_tomorrow(); return false;">Morgen</a></li>
+                    <li style="display:none;">
                         <fieldset>
                             <input id="wann-picker" type="text" disabled="disabled" style="background:#ffffff;" />
                         </fieldset>
@@ -330,7 +399,7 @@ function agenda_set_today() {
                     </li>
                 </ul>
             
-                <div id="agenda-datepicker" style="margin-top:8px;margin-bottom:8px;"></div>
+                <div id="agenda-datepicker" style="position:absolute;margin-left:-10px;margin-top:50px;margin-bottom:8px;"></div>
             
             </div>
 
