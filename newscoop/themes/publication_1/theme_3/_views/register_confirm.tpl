@@ -87,6 +87,32 @@
             
             </section>
 
+            {{ if !empty($social) }}
+            <aside>
+            	<div class="profile-edit-box register-box">
+                    <form method="POST" action="{{ $view->url(['controller' => 'auth', 'action' => 'merge'], 'default') }}">
+                    <fieldset>
+                        <h3>Sie haben schon ein Profil bei der TagesWoche?</h3>
+                        <p>Umso besser. Loggen Sie sich ein, um Ihr bestehendes Konto mit Facebook zu verknupfen.</p>
+                        <ul>
+                            <li>
+                                <label>E-Mail-Adresse</label>
+                                <input type="text" name="email" value="" />
+                            </li>
+                            <li>
+                                <label>Passwort</label>
+                                <input type="password" name="password" value="" />
+                            </li>
+                            <li class="buttons">
+                                <input type="submit" value="Konto verknupfen" class="button" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    </form>
+                </div>
+            </aside>
+            {{ /if }}
+
 <script type="text/javascript">
 $('#first_name, #last_name').keyup(function() {
     $.post('{{ $view->url(['controller' => 'register', 'action' => 'generate-username'], 'default') }}?format=json', {
