@@ -205,6 +205,26 @@ $(document).ready(function() {
     	}
 	});
 	
+$(".fancybox-thumb").fancybox({
+		prevEffect	: 'none',
+		nextEffect	: 'none',
+		helpers	: {
+			title	: {
+				type: 'outside'
+			},
+			overlay	: {
+				opacity : 0.6,
+				css : {
+					'background-color' : '#000'
+				}
+			},
+			thumbs	: {
+				width	: 100,
+				height	: 75
+			}
+		}
+	});	
+	
 	// Custom FIle Inputs
 	$('input[type=file]').change(function(e){
 	  $in=$(this);

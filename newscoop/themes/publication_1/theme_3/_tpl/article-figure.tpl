@@ -7,18 +7,25 @@
 {{ foreach $slideshow->items as $item name=insideslideshow }}
 {{ if $smarty.foreach.insideslideshow.first }}
 <div class="image-slideshow tabs">
-                    
-                    	<h4>{{ $slideshow->headline }}</h4>
 {{ /if }}   
 {{ assign var="i" value=$i+1 }}          
-{{ if $item->is_image }}           
+{{ if $item->is_image }}  
+         
                         <div id="image-{{ $i }}" class="img-content">
+								<figure>
+                        <a href="pictures/slideshow-img-1.jpg" class="fancybox-thumb" rel="fancybox-thumb">
+                        <span></span>
                         	<img src="{{ $item->image->src }}" width="{{ $item->image->width }}" height="{{ $item->image->height }}" alt="{{ $item->caption }}" />
                             <p>{{ $item->caption }}</p>
+                        </a>
+                        </figure> 
                         </div>
+                        
 {{ else }}
 								<div id="image-{{ $i }}" class="img-content">
+								<figure>
 								{{ video_player video=$item->video }}
+								</figure>
 								</div>
 {{ /if }}
 {{ /foreach }} 
