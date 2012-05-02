@@ -28,10 +28,16 @@
                       <p>{{ $gimme->article->image->description }} {{ if $gimme->article->image->photographer != "" }}({{ $gimme->article->image->photographer }}){{ /if }}</p>
                     </figure>
                     {{ /list_article_images }}
-                </article>            
+                </article>       
+ 
 				</section>
 			</div>
 			
+			<div class="content-box article-single clearfix">            
+            <section>
+            {{ include file="_tpl/social-bookmarks.tpl" }} 
+			   </section>
+			</div>
 {{ else }}
         
         <div class="content-box article-single clearfix">
@@ -58,6 +64,8 @@
                     {{ include file="_tpl/article-figure.tpl" }}
                     {{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}
                 </article>
+            
+					 {{ include file="_tpl/social-bookmarks.tpl" }}             
             
             </section><!-- / Main Section -->
             
@@ -156,7 +164,7 @@ Vor
         
 {{ /if }}        
         
-        <div class="content-box clearfix">
+        <div class="content-box clearfix">    
             
 {{ include file="_tpl/article-comments.tpl" }} 
             
