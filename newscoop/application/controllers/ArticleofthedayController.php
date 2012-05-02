@@ -31,20 +31,22 @@ class ArticleofthedayController extends Zend_Controller_Action
         $today = date("Y/m/d");
         $today = explode("/", $today);
         $this->view->today = $today;
-
-        if (isset($date[0])) {
-            $this->view->year = $date[0];
+        
+        //TagesWoche wants the previous month shown instead of the current month now as a default.
+        $startDate = array();
+        
+        if ($today[1] == "1") {
+            $startDate[0] = $today[0] - 1;
+            $startDate[1] = 12;
         }
-        if (isset($date[1])) {
-            $this->view->month = $date[1]-1;
+        else {
+            $startDate[0] = $today[0];
+            $startDate[1] = $today[1] - 1;
         }
-        if (isset($date[2])) {
-            $this->view->day = $date[2];
-        }
-        else if (!isset($date[2]) && ($view === "month")) {
-            $this->view->day = 1;
-        }
-
+        
+        $this->view->year = $startDate[0];
+        $this->view->month = $startDate[1] - 1;
+        
         $now = new DateTime("$today[0]-$today[1]");
 
         //oldest month user can scroll to YYYY/mm
@@ -69,7 +71,7 @@ class ArticleofthedayController extends Zend_Controller_Action
 
         //most recent month user can scroll to YYYY/mm
         $latestMonth = $request->getParam('latestMonth', null);
-        if (isset($latestMonth) && $latestMonth == "current") {
+        if (isset($latestMonth) && $latestMonth == "current") { 
             $this->view->latestMonth = $today;
         }
         else if (isset($latestMonth)) {
@@ -88,7 +90,7 @@ class ArticleofthedayController extends Zend_Controller_Action
 
         $imageWidth = $request->getParam('imageWidth', 140);
         if (!is_int($imageWidth)) {
-            $imageWidth = 128;
+            $imageWidth = 140;
         }
         $this->view->imageWidth = $imageWidth;
 

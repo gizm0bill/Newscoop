@@ -379,6 +379,13 @@ a.theme-subscribe {
 					position:absolute; top:22px; right:32px;
 					font-size:12px;
 					}
+                
+                .omnibox-content div.message {
+					font-size:12px;
+                    display: block;
+                    background-color: #ffffff;
+                    padding: 4px;
+                }
 				
 				.omnibox-content fieldset input[type=text],
 				.omnibox-content fieldset input[type=password],

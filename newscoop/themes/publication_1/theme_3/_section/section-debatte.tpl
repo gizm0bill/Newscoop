@@ -126,7 +126,7 @@ already at that stage in the proceedings *}}
 {{ /if }}
  
 {{ list_articles length="1" constraints="type is deb_moderator" }}               
-{{ include file="_tpl/article-comments.tpl" }}
+{{ include file="_tpl/article-comments.tpl" artno=$gimme->article->number }}
 {{ /list_articles }}
             
             </section>
