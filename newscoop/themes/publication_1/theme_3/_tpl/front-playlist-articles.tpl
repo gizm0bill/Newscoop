@@ -49,7 +49,7 @@
 <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
 {{ /if }}
 
-<p>{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
+<p class="mobile-hide">{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
 {{ include file="_tpl/admin_frontpageedit.tpl" }}
   {{ if $gimme->article->type_name == "news" }}
     {{ $gimme->article->teaser|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}

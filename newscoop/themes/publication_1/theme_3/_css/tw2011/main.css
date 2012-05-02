@@ -1385,7 +1385,10 @@ section article{padding-bottom:25px;}
 			ul.slideshow-nav li img {display:block;}
 				ul.slideshow-nav li.ui-tabs-selected img {-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: alpha(opacity=50); -moz-opacity: 0.5; -khtml-opacity: 0.5; opacity:0.5;}
 				
-
+	/* 
+	Desktop hide --------------------- */
+		.desktop-hide {display:none;}
+	
 
 	/* Profile Edit -------------- */
 	.profile-edit {
@@ -2824,6 +2827,10 @@ ul.item-list li {
 @media all and (max-width: 640px) {
 	
 	body {border:0; background:#e5e5e5;}
+	
+	/* 
+	Desktop hide --------------------- */
+	.desktop-hide {display:block;}
 	
 	#wrapper,
 	.footer-holder,
