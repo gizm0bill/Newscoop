@@ -14,7 +14,6 @@
                         	{{ include file="_tpl/renditions/img_300x133.tpl" }}
                         </figure>
                         </a>
-                    	  <p>{{ $gimme->article->teaser }}</p>
                     </section>
 
 {{ if $gimme->current_list->at_end }}                    
