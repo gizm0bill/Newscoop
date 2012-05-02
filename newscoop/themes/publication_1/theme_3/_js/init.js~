@@ -50,13 +50,10 @@ $(document).ready(function() {
 			var caption = (opts.currSlide + 1) + '/' + opts.slideCount;
 			$(cap).html(caption);
 		}
-    });	
+    });
 	
 	// Tabs
 	$('.tabs').tabs();
-	
-// Carousel
- $('.carousel').jcarousel();	
 	
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
