@@ -74,7 +74,7 @@ and then all is compared according to a matrix.
                
                 	<h3>Die Wochendebatte: {{ $gimme->article->subject }}</h3>
                     <ul class="nav">                    
-                    	<li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></li>
+                    	<li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
                         {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
                     	<li{{ if $wdphase == "2"}} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Entgegnung</b>

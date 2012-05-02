@@ -1,7 +1,11 @@
 {{ list_playlist_articles length="5" id="6"}}
 
 {{ if $gimme->current_list->index == 2 }}
+<div class="mobile-list-view header-fix clearfix">
 			<div class="two-columns clearfix">
+{{ /if }}
+{{ if $gimme->current_list->index == 4 }}
+ <div class="mobile-list-view clearfix">
 {{ /if }}			
             	<article>
 						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}	
@@ -66,5 +70,9 @@
                 </article>
 {{ if $gimme->current_list->index == 3 }}                
          </div><!-- /.two-columns -->
+</div> <!-- /.mobile-list-view header-fix clearfix -->         
+{{ /if }}
+{{ if $gimme->current_list->index == 5 }}
+ </div> <!-- /.mobile-list-view clearfix -->
 {{ /if }}
 {{ /list_playlist_articles }}
