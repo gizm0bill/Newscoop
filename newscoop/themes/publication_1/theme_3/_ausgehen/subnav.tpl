@@ -1,4 +1,14 @@
 <style type="text/css">
+#wo {
+    border: #cdcdcd solid 1px;
+    background-color: #f1f1f1;
+    height: 25px;
+    width: 136px;
+    margin-bottom: 10px;
+    height: 28px;
+    font-size: 86%;
+}
+
 #wann {
     width: 80px !important;
     margin-top: 0px;
