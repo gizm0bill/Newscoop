@@ -75,8 +75,16 @@ $(document).ready(function() {
     yearSuffix: ''};
   $.datepicker.setDefaults($.datepicker.regional['de']);
 
+    var todayObj = new Date();
+    var mindateObj = new Date();
+    mindateObj.setDate(todayObj.getDate() - 30);
+    var maxdateObj = new Date();
+    maxdateObj.setDate(todayObj.getDate() + 90);
+
   // Datepicker
   var dp_wann = $("#wann").datepicker({
+        minDate: mindateObj,
+        maxDate: maxdateObj,
         showOn: "button",
         buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
         buttonImageOnly: true
@@ -84,6 +92,8 @@ $(document).ready(function() {
 
   //var dp = $(".datepicker").datepicker({});
   var dp = $("#agenda-datepicker").datepicker({
+        minDate: mindateObj,
+        maxDate: maxdateObj,
         onSelect: function(dateText, inst) {
             $("#wann-picker").val(dateText);
         },
@@ -91,6 +101,9 @@ $(document).ready(function() {
         buttonImage: "{{ uri static_file="_css/tw2011/img/calendar.png" }}",
         buttonImageOnly: true
   });
+
+    //$("#agenda-datepicker").datepicker("minDate", mindateObj);
+    //$("#agenda-datepicker").datepicker("maxDate", maxdateObj);
 
     //$('.agenda-top a.trigger').toggle();
     $('#datapicker-button').toggle(
