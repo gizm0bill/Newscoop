@@ -24,7 +24,7 @@
                                     <h4>{{ $gimme->comment->subject }}</h4>
                                     <small>von {{ if $user->identifier }}<a{{ if $user->is_active }} href="{{ $view->url(['username' => $user->uname], 'user') }}"{{ /if }}>{{ include file="_tpl/user-name.tpl" user=$user }}</a>{{ else }}<a>{{ $gimme->comment->nickname }}</a>{{ /if }} um {{ $gimme->comment->submit_date|camp_date_format:"%e.%m.%Y um %H:%iUhr" }}</small>
                                     <p>{{ $gimme->comment->content|create_links|nl2br }}<br />
-                                    <a href="{{ if $artno }}{{ url options="article" }}{{ /if }}#comment_{{ $gimme->comment->identifier }}">Direktlink zum Kommentar</a></p>
+                                    <small style="margin-top: 10px"><a href="{{ if $artno }}{{ url options="article" }}{{ /if }}#comment_{{ $gimme->comment->identifier }}">Direktlink zum Kommentar</a></small></p>
                                 </li>
 									 {{ $recommendedEmpty=0 }}
 								    {{ /list_article_comments }}
