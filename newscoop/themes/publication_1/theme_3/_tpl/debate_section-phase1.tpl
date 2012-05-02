@@ -1,6 +1,6 @@
         <div class="top-line clearfix">
                 
-                	<h3>Repliken</h3>
+                	<h3>Standpunkte</h3>
                     
                     <div class="two-columns">
                     
