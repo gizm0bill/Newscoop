@@ -46,3 +46,5 @@ $(function() {
 <li><a href="#2d">Gestern</a></li>
 <li><a href="#7d">Letzte 7 Tage</a></li>
 {{/block}}
+
+{{block title append}} | Omniticker{{/block}}

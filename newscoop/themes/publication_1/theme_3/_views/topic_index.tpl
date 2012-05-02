@@ -12,7 +12,7 @@ $(function() {
 {{block top}}
 <ul class="top-filter clearfix">
     <li class="filter">&nbsp;</li>
-    <li class="title"><h2>{{ if !empty($topic) }}Themen {{ $topic|escape }}{{ else }}Themen{{ /if }}</h2></li>
+    <li class="title"><h2>{{ if !empty($topic) }}Thema {{ $topic|escape }}{{ else }}Themen{{ /if }}</h2></li>
     <li class="type">Typ</li>
     <li class="time">Veröffentlicht</li>
 </ul>
@@ -26,4 +26,5 @@ $(function() {
 </script>
 {{/block}}
 
-{{block head_links}}<link rel="alternate" type="application/rss-xml" href="{{ sprintf('%s%s?format=xml', $view->serverUrl(), $view->url(['topic' => $topic], 'topic')) }}" title="Tageswoche | Themen {{ $topic|escape }} [RSS]">{{/block}}
+{{block head_links}}<link rel="alternate" type="application/rss-xml" href="{{ sprintf('%s%s?format=xml', $view->serverUrl(), $view->url(['topic' => $topic], 'topic')) }}" title="Tageswoche | Thema {{ $topic|escape }} [RSS]">{{/block}}
+{{block title append}} | Thema {{ $topic|escape }}{{/block}}
