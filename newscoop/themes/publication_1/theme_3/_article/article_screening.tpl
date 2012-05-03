@@ -167,6 +167,14 @@ function load_events(ev_type) {
 
             <section>
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="72" }}
+                <header class="mobile-header first-header">
+                    <p><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button">Zurück zu Kinoübersicht</a></p>
+                </header>
+{{ /local }}
+
                 <article id="movie_article" class="movie {{*stared*}}">
 
                     <h2>{{ $gimme->article->headline|strip_tags }}</h2>

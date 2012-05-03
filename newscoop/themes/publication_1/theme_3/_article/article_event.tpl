@@ -461,6 +461,14 @@ function load_events(ev_type) {
 
             <section>
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="71" }}
+                <header class="mobile-header">
+                        <p><a href="{{ uri options="section" }}#/;type:{{ $event_type_link }};date:{{ $usedate_link }};region:{{ $region_link }};page:1" class="grey-button back-button">Zurück zur Veranstaltungen</a></p>
+                </header>
+{{ /local }}
+
                 <article class="event {{ if $canceled_date eq 1 }}off{{ /if }}">
 
                     <h2>{{ $gimme->article->headline|replace:'\\':'\'' }}{{ if $canceled_date eq 1 }} <small>abgesagt</small>{{ /if }}{{ if $postponed_date eq 1 }} <small>verschoben</small>{{ /if }}</h2>
@@ -507,7 +515,9 @@ function load_events(ev_type) {
 {{ local }}
 {{ set_current_issue }}
 {{ set_section number="71" }}
+                <div class="mobile-hide">
                 <a href="{{ uri options="section" }}#/;type:{{ $event_type_link }};date:{{ $usedate_link }};region:{{ $region_link }};page:1" class="grey-button back-button"><span>Zurück zur Veranstaltungen</span></a>
+                </div>
 {{ /local }}
                 
 {{ if $gimme->article->has_image(1) }}
