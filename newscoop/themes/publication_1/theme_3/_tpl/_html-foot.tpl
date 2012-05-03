@@ -53,6 +53,7 @@
 	</script>
     
     <script type="text/javascript" src="{{ url static_file="_js/init.js" }}"></script>
-
+    
+	 <script type="text/javascript" src="http://imagesrv.adition.com/js/secure_tag_before_body_end.js"></script>
 </body>
 </html>
