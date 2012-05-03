@@ -606,20 +606,7 @@ function parse_date_text($date_time_text)
                 </article>
 *}}
 
-                <article>
-                    <header>
-                        <p><em>Werbung</em></p>
-                    </header>
-                    <span class="werbung">
-<!-- BEGIN ADITIONTAG -->
-<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
-<div id="adition_tag_460337"></div>
-<!-- END ADITIONTAG -->
-{{*
-                        <img src="pictures/werbung-sidebar.jpg"  rel="resizable" alt="" />
-*}}
-                    </span>
-                </article>
+{{ include file="_werbung/article-movies-sidebar.tpl" }}
 
 {{*
                 <article>

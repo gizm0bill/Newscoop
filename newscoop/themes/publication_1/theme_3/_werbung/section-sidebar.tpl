@@ -33,5 +33,11 @@
 <div id="adition_tag_460087"></div>
 <!-- END ADITIONTAG -->               
 {{ /if }}
+{{ if $gimme->section->number == 60 }}                    
+<!-- BEGIN ADITIONTAG -->
+<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
+<div id="adition_tag_520867"></div>
+<!-- END ADITIONTAG -->               
+{{ /if }}
                     </span>
                 </article>              
