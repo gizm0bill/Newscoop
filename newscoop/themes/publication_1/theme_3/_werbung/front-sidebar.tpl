@@ -3,6 +3,9 @@
                     	<p><em>Werbung</em></p>
                     </header>
                     <span class="werbung">
-                    	<img src="{{ url static_file="pictures/werbung-sidebar.jpg" }}"  rel="resizable" alt="" />
+<!-- BEGIN ADITIONTAG -->
+<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
+<div id="adition_tag_460061"></div>
+<!-- END ADITIONTAG -->
                     </span>
                 </article>
