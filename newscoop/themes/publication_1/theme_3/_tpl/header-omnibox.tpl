@@ -29,6 +29,8 @@
                                         <button class="button">Login</button>
                                         <a href="#" id="omniboxRegisterLink">Benutzerkonto anlegen</a><br>
                                         <a href="#" id="omniboxForgotPasswordLink">Passwort vergessen</a>
+                                        <span class="sep"><em>oder</em></span>
+                                        <a href="{{ $view->url(['controller' => 'auth', 'action' => 'social', 'provider' => 'Facebook'], 'default') }}" class="button fb-button"><span>Login mit Facebook</span></a>
                                     </li>
                                 </ul>
                            </li>
@@ -452,7 +454,7 @@ var omnibox = {
     switchView: function(view) {
         if (view == 'omniboxLogin') {
             omnibox.openWidth = 319;
-            omnibox.openHeight = 460;
+            omnibox.openHeight = 500;
         }
         else {
             omnibox.openWidth = 582;
