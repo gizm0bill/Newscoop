@@ -16,6 +16,8 @@ class AuthController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         $this->auth = Zend_Auth::getInstance();
+        
+        $this->getHelper('contextSwitch')->addActionContext('password-restore-ajax', 'json')->initContext();
     }
 
     public function preDispatch()
@@ -157,6 +159,26 @@ class AuthController extends Zend_Controller_Action
 
     public function passwordRestoreAfterAction()
     {
+    }
+    
+    public function passwordRestoreAjaxAction()
+    {
+        $request = $this->getRequest();
+        $parameters = $request->getParams();
+        
+        if ($request->isPost()) {
+            $user = $this->_helper->service('user')->findOneBy(array(
+                'email' => $parameters['email'],
+            ));
+
+            if (!empty($user) && $user->isActive()) {
+                $this->_helper->service('email')->sendPasswordRestoreToken($user);
+                
+                $this->view->response = "E-mail with instructions was sent to given email address.";
+            } else if (empty($user)) {
+                $this->view->response = "Given email not found.";
+            }
+        }
     }
 
     public function passwordRestoreFinishAction()

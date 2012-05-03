@@ -146,15 +146,15 @@
             
             <div id="omniboxForgotPassword">
                 <fieldset>
-                    <h3></h3>
-                    <p></p>
+                    <h3>Passwort wiederherstellen</h3>
                     <form id="omniboxForgotPasswordForm">
                         <ul class="reg-form">
                             <li>
                                 <input type="text" id="omniboxForgotPasswordEmail" placeholder="Ihre E-Mail-Adresse" />
                             </li>
                             <li class="clearfix">
-                                <button class="button right">OK</button>
+                                <button class="button right">Neues Passwort anfordern</button>
+                                <a href="#" class="left" id="omniboxForgotPasswordBackLink">Back</a>
                             </li>
                         </ul>
                     </form>
@@ -309,6 +309,24 @@ $(document).ready(function() {
         return(false);
     });
     
+    $('#omniboxForgotPasswordForm').submit(function() {
+        var data = {
+            email: $('#omniboxForgotPasswordEmail').val()
+        };
+        
+        $.ajax({
+            type: 'POST',
+            url: '{{ $view->baseUrl("/auth/password-restore-ajax/?format=json") }}',
+            data: data,
+            dataType: 'json',
+            success: function(data) {
+                omnibox.setMessage(data.response);
+            }
+        });
+        
+        return(false);
+    });
+    
     $('#omniboxFeedbackRadioComment').change(function() {
         if ($('#omniboxFeedbackRadioComment').is(':checked')) {
             $('#omniboxCommentRadioComment').attr('checked', 'checked');
@@ -351,6 +369,10 @@ $(document).ready(function() {
     
     $('#omniboxForgotPasswordLink').click(function() {
         omnibox.switchView('omniboxForgotPassword');
+    });
+    
+    $('#omniboxForgotPasswordBackLink').click(function() {
+        omnibox.switchView('omniboxLogin');
     });
 });
 
