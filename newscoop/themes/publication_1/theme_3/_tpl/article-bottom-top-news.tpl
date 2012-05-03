@@ -3,7 +3,12 @@
             <h3 class="title">Aktuell</h3>
             
         	<div class="three-columns clearfix">
-{{ list_playlist_articles length="3" id="6"}}        	
+{{ assign var="curart" value=$gimme->article->number }}       
+{{ assign var="counter" value=0 }}  	
+{{ list_playlist_articles length="4" id="6" }} 
+{{ if !($gimme->article->number == $curart) }}
+{{ assign var="counter" value=$counter+1 }}       	
+{{ if $counter lte 3 }}
                 <article>
                     <figure>
                         <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
@@ -44,6 +49,8 @@
 {{ /strip }}
 {{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}</p>
                 </article>
+{{ /if }}  
+{{ /if }}               
 {{ /list_playlist_articles }}
             </div>
         	
