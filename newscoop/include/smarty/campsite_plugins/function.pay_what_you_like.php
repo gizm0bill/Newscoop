@@ -60,7 +60,8 @@ JS;
 
     //taking out the getGS('') because we want to get rid really fast of the (*) signs
 
-	$linktext = 'tageswoche.ch honorieren';
+    $classes = isset($p_params['classes']) ? (string) $p_params['classes'] : '';
+    $linktext = 'tageswoche.ch honorieren';
     if (isset($p_params['linktext'])) {
         $linktext = $p_params['linktext'];
     }
@@ -88,7 +89,7 @@ JS;
 
 
     $p_smarty->smarty->loadPlugin('smarty_function_uri');
-	$pwylUri = smarty_function_uri( array('static_file' => "_css/tw2011/img/thumb_tw-pwyl.png"), $p_smarty);
+    $pwylUri = smarty_function_uri( array('static_file' => "_css/tw2011/img/thumb_tw-pwyl.png"), $p_smarty);
 
 
 
@@ -99,11 +100,10 @@ JS;
 
 	$markup .= <<<HTML
 <div style="display: block; margin-bottom: 25px">
-	<img style="float: left; margin-right: 10px" alt="pwyl" src="{$pwylUri}" />
-	<p><a href="#pay-what-you-want-popup-{$orderId}" id="pay-what-you-want-{$orderId}">{$linktext}</a></p>
+	<a href="#pay-what-you-want-popup-{$orderId}" id="pay-what-you-want-{$orderId}" class="{$classes}"><span>{$linktext}</span></a>
 
 	<div style="display:none">
-		<div class="pay-what-you-want-popup" id="pay-what-you-want-popup-{$orderId}">
+		<div class="pay-what-you-want-popup popup-box" id="pay-what-you-want-popup-{$orderId}">
 	    	<article>
 	        	<header><p>{$title}</p></header>
 	        	<p>{$pre}</p>
@@ -130,7 +130,7 @@ JS;
 							
 							<input type="button" value="Postfinance" style="background-color: #FFCC00; font-weight: bold; color: black; float:left;" onclick="submitPSForm_{$orderId}();" />
 						</form>
-							<label for='postfinance_amount' style='float: left; margin-top:5px; margin-right:2px;'>CHF</label>
+							<label for='postfinance_amount' style='float: left; margin-top:8px; margin-right:3px;'>CHF</label>
         					<input type="text" value="5" id='postfinance_amount_{$orderId}' name='postfinance_amount' style='width:35px; float: left; margin-top:2px;'/>
 					</div>
 	        	</div>
