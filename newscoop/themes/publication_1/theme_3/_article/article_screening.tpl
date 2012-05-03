@@ -1,5 +1,10 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+<script type="text/javascript">
+window.agenda_has_select_tags = false;
+window.agenda_has_date_picker = false;
+</script>
+
 {{ assign var="moviekey_canon" $gimme->article->movie_key }}
 {{ if $moviekey_canon }}
 <link rel="canonical" href="{{ $view->baseUrl('movie/search?key=') }}{{ $moviekey_canon }}" />
