@@ -597,6 +597,9 @@ function parse_date_text($date_time_text)
                     <p><img src="pictures/restaurant-img-small-1.jpg" class="left" alt="" /><strong>Lorem Ipsum Dolor</strong> <em>Asiatisch, Modern</em> Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat <a href="#" class="more">Details &amp; Reservieren</a></p>
                 </article>
 *}}
+
+{{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - Kino" }}
+
             </aside>
 
         </div>
