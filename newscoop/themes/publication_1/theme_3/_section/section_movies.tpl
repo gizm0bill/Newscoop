@@ -875,7 +875,7 @@ function parse_date_text($date_time_text)
                                 {{ if $movie_rating_wv ne "" }}
                                     {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                                     {{ if $movie_rating_wv ne 0 }}
-                                        <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
+                                        <li class="rating"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
                                 {{ /if }}
                                 {{ if $gimme->article->movie_cast ne "" }}
@@ -985,16 +985,20 @@ function parse_date_text($date_time_text)
 
                         <!--<thead>-->
                             <!--<tr>-->
+                        {{ assign var="day_count" 0 }}
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                            <td class="cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                            {{ assign var="day_count" $day_count + 1 }}
+                            <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
                         {{ /foreach }}
                             </tr>
                         <!--</thead>-->
 
                         <!--<tbody>-->
                             <tr>
+                            {{ assign var="day_count" 0 }}
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                                    <td class="screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
+                                {{ assign var="day_count" $day_count + 1 }}
+                                    <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
                                         <ul style="width:50px;margin-left:0px;padding-left:0px;">
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
@@ -1208,6 +1212,8 @@ window.set_list_content = function(data, direct) {
     show_lang('last');
 
     show_highlight(window.list_spec['date']);
+
+    adapt_global_sizes(true);
 
     $(".trailer-button").fancybox({
         type: 'iframe',

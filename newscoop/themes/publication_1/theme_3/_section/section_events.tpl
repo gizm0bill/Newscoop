@@ -602,6 +602,9 @@ window.set_list_content = function(data, direct) {
         $('#newslist').html(data);
         //$('#newslist_pagination').html('&nbsp;');
         $('#newslist_pagination').hide();
+
+        adapt_global_sizes(true);
+
         return;
     }
 
@@ -612,6 +615,9 @@ window.set_list_content = function(data, direct) {
 
     //window.set_cufon_fonts();
     //Cufon.now();
+
+    adapt_global_sizes(true);
+
 };
 
 window.paginate = function(page, listname, setcount) {

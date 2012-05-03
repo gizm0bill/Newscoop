@@ -86,19 +86,32 @@
     margin-left: 10px !important;
 }
 
+.datapicker-button_narrow {
+    margin-left: 5px;
+}
+
+.movie-table_narrow {
+    width: 330px !important;
+}
+
 </style>
 
 <script type="text/javascript">
 var closing_datepicker_text = 'Fertig';
 var desktop_view = true;
 
-function adapt_global_sizes() {
+function adapt_global_sizes(force) {
     //var doc_width = $(document).width();
     var doc_width = $(window).width();
     if (769 > doc_width) {
-        if (desktop_view) {
+        if (force || desktop_view) {
+            $(".movie-table").each(function(ind_elm, elm) {
+                $(elm).addClass("movie-table_narrow");
+            });
+
             $("#datapicker-button").after($("#wo"));
             if (window.agenda_has_date_picker) {
+                $("#datapicker-button").addClass("datapicker-button_narrow");
                 $("#wo").addClass("place_selector_narrow");
             }
             else {
@@ -115,11 +128,17 @@ function adapt_global_sizes() {
         desktop_view = false;
     }
     else {
-        if (!desktop_view) {
+        if (force || (!desktop_view)) {
+            $(".movie-table").each(function(ind_elm, elm) {
+                $(elm).removeClass("movie-table_narrow");
+            });
+            //$(".movie-table").removeClass("movie-table_narrow");
+
             $("#wo-place").after($("#wo"));
             $("#wo").removeClass("place_selector_narrow");
             $("#events_nav").removeClass("nav_events_narrow");
             $("#events_nav").removeClass("nav_events_narrow_alone");
+            $("#datapicker-button").removeClass("datapicker-button_narrow");
         }
         desktop_view = true;
     }

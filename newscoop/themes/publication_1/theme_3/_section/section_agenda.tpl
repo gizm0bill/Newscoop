@@ -399,7 +399,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
 {{ if 1 eq $load_list }}
 
-                <h2>Kino</h2>
+                <h2><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $linkregion }}">Kino</a></h2>
 
 {{ assign var=today_date "2011-11-01" }}
 {{ assign var=today_date $smarty.now|date_format:"%Y-%m-%d" }}
@@ -428,7 +428,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                                 {{ if $movie_rating_wv ne "" }}
                                     {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                                     {{ if $movie_rating_wv ne 0 }}
-                                        <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
+                                        <li class="rating"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
                                 {{ /if }}
                                 {{ if $gimme->article->movie_director ne "" }}
@@ -443,19 +443,19 @@ function prepare_lang_time($date_time_text, $chosen_date)
                             {{ $gimme->article->description|strip_tags|truncate:300 }}
                             <a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">Details, Trailer & Bilder</a>
                             </p>
-                            <ul class="bottom-list-details clearfix">
+                            <ul class="bottom-list-details {{*top-list-details*}} clearfix" style="display:block !important;">
         {{ /if }}
     {{ /if }}
     {{ assign var="lastmovname" $gimme->article->headline }}
         {{ if 4 > $movie_rank }}
-                        <li>
+                        <li class="schedule">
                         <div class="data_movie data_movie_{{ $movie_rank }}" style="display:none;">
                             {{ if $gimme->article->recommended }}
                             r_{{ $movie_rank }};
                             {{ /if }}
                         </div>
                         <h5>{{ $gimme->article->organizer }}</h5>
-                            <p>{{ $gimme->article->street }}, {{ $gimme->article->town }}<br />
+                            <p style="display:block;">{{ $gimme->article->street }}, {{ $gimme->article->town }}<br />
                             {{ assign var="date_time_str" $gimme->article->date_time_text|replace:"&nbsp;":" " }}
                             {{ php }}
                                 $date_time_str = $template->get_template_vars('date_time_str');
@@ -474,15 +474,15 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ else}}
             </ul>
               </article>
-{{ /if }}
 
 {{ local }}
 {{ set_current_issue }}
 {{ set_section number="72" }}
                 <a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $linkregion }}" class="grey-button more-arrow"><span>Mehr Filme</span></a>
 {{ /local }}
+{{ /if }}
 
-                <h2 class="mobile-top-separator">Theater</h2>
+                <h2 class="mobile-top-separator"><a href="{{ uri options="section" }}#/;type:theater;date:{{ $usedate_link }};region:{{ $linkregion }};page:1">Theater</a></h2>
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -507,7 +507,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
 {{ if $event_rank eq 0 }}
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
-{{ /if }}
+{{ else }}
 
 {{ local }}
 {{ set_current_issue }}
@@ -515,6 +515,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                 <a href="{{ uri options="section" }}#/;type:theater;date:{{ $usedate_link }};region:{{ $linkregion }};page:1" class="grey-button more-arrow"><span>Mehr Theater</span></a>
 {{ /local }}
 
+{{ /if }}
 
 {{* here the tw staff event *}}
 {{ list_articles ignore_issue="true" ignore_section="true" constraints="type is news print is off section is 71" length=1 order="bypublishdate desc" }}
@@ -543,7 +544,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ /list_articles }}
 
 
-                <h2 class="mobile-top-separator">Konzerte</h2>
+                <h2 class="mobile-top-separator"><a href="{{ uri options="section" }}#/;type:musik;date:{{ $usedate_link }};region:{{ $linkregion }};page:1">Konzerte</a></h2>
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -568,7 +569,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
 {{ if $event_rank eq 0 }}
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
-{{ /if }}
+{{ else }}
 
 {{ local }}
 {{ set_current_issue }}
@@ -576,8 +577,9 @@ function prepare_lang_time($date_time_text, $chosen_date)
                 <a href="{{ uri options="section" }}#/;type:musik;date:{{ $usedate_link }};region:{{ $linkregion }};page:1" class="grey-button more-arrow"><span>Mehr Konzerte</span></a>
 {{ /local }}
 
+{{ /if }}
 
-                <h2 class="mobile-top-separator">Ausstellungen</h2>
+                <h2 class="mobile-top-separator"><a href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $usedate_link }};region:{{ $linkregion }};page:1">Ausstellungen</a></h2>
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -602,14 +604,15 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
 {{ if $event_rank eq 0 }}
     <div class="no_movie_found">Ihre Suche ergab keine Treffer</div>
-{{ /if }}
-
+{{ else }}
 
 {{ local }}
 {{ set_current_issue }}
 {{ set_section number="71" }}
                 <a href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $usedate_link }};region:{{ $linkregion }};page:1" class="grey-button more-arrow"><span>Mehr Ausstellungen</span></a>
 {{ /local }}
+
+{{ /if }}
 
 
 {{ else }}
@@ -761,6 +764,9 @@ window.set_list_content = function(data, direct) {
 
     //window.set_cufon_fonts();
     //Cufon.now();
+
+    adapt_global_sizes(true);
+
 };
 
 window.get_basic_path = function() {
