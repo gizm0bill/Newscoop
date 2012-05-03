@@ -475,6 +475,24 @@ var omnibox = {
         else {
             $('#omniboxMessage').show();
         }
+    },
+    
+    show: function() {
+        $('#omnibox').animate({
+            width: omnibox.openWidth,
+            height: omnibox.openHeight
+        },500);
+        $('.omnibox-content').show();
+        $('.overlay').fadeIn(500);
+    },
+    
+    hide: function() {
+        $('#omnibox').animate({
+            width: '44px',
+            height: '54px'
+        },500);
+        $('.omnibox-content').fadeOut(500);
+        $('.overlay').fadeOut(500);
     }
 }
 </script>
