@@ -11,7 +11,7 @@
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
-            	<a href="/" class="start">Startseite</a>
+                <a href="/" class="start">{{ if $gimme->section->number }}{{ $gimme->section->name }}{{ else }}Startseite{{ /if }}</a>
                 <ul id="mobile-nav">
                     <li class="search"><a href="#">Search</a>
                     	<ul class="search-mobile">
@@ -25,7 +25,7 @@
                     </li>
                     <li class="settings"><a href="#">Settings</a></li>
                     <li class="login"><a href="#">Login</a>
-                    	<ul>
+                    		<ul>
                         	<li><a href="#">Profil bearbeiten</a></li>
                         	<li><a href="#">Meine Themen</a></li>
                         </ul>

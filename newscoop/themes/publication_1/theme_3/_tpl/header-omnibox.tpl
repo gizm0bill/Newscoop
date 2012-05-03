@@ -50,7 +50,7 @@
                                 <ul class="radio-list">
                                     <li>
                                         <input type="radio" id="omniboxFeedbackRadioComment" name="omnibox-1" class="styled">
-                                        <label for="omniboxFeedbackRadioComment">Kommentier zum Artikel</label>
+                                        <label for="omniboxFeedbackRadioComment">Kommentar zum Artikel</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="omniboxFeedbackRadioFeedback" name="omnibox-1" class="styled" checked="checked">
@@ -92,7 +92,7 @@
                                 <ul class="radio-list">
                                     <li>
                                         <input type="radio" id="omniboxCommentRadioComment" name="omnibox-2" class="styled" checked="checked">
-                                        <label for="omniboxCommentRadioComment">Kommentier zum Artikel</label>
+                                        <label for="omniboxCommentRadioComment">Kommentar zum Artikel</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="omniboxCommentRadioFeedback" name="omnibox-2" class="styled">
@@ -475,6 +475,24 @@ var omnibox = {
         else {
             $('#omniboxMessage').show();
         }
+    },
+    
+    show: function() {
+        $('#omnibox').animate({
+            width: omnibox.openWidth,
+            height: omnibox.openHeight
+        },500);
+        $('.omnibox-content').show();
+        $('.overlay').fadeIn(500);
+    },
+    
+    hide: function() {
+        $('#omnibox').animate({
+            width: '44px',
+            height: '54px'
+        },500);
+        $('.omnibox-content').fadeOut(500);
+        $('.overlay').fadeOut(500);
     }
 }
 </script>
