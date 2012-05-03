@@ -28,7 +28,7 @@
                                     <li>
                                         <button class="button">Login</button>
                                         <a href="#" id="omniboxRegisterLink">Benutzerkonto anlegen</a><br>
-                                        <a href="{{ $view->baseUrl('/auth/password-restore ') }}">Passwort vergessen</a>
+                                        <a href="#" id="omniboxForgotPasswordLink">Passwort vergessen</a>
                                     </li>
                                 </ul>
                            </li>
@@ -141,6 +141,23 @@
                     <p>Bitte prüfen Sie Ihren Posteingang und aktivieren Sie Ihr Benutzerkonto, indem Sie auf den Link in der E-Mail klicken.</p>
                     <p>Sollten Sie die E-Mail innert 10 Minuten nicht erhalten haben, kontrollieren Sie, ob die E-Mail möglicherweise im Spam-Filter hängen geblieben ist. Ist die E-Mail auch dort nicht aufzufinden, schreiben Sie uns an anmelden@tageswoche.ch und wir kümmern uns darum.</p>
                     <p>Wir freuen uns, Sie in wenigen Minuten in unserer Community begrüssen zu dürfen. </p>
+                </fieldset>
+            </div>
+            
+            <div id="omniboxForgotPassword">
+                <fieldset>
+                    <h3></h3>
+                    <p></p>
+                    <form id="omniboxForgotPasswordForm">
+                        <ul class="reg-form">
+                            <li>
+                                <input type="text" id="omniboxForgotPasswordEmail" placeholder="Ihre E-Mail-Adresse" />
+                            </li>
+                            <li class="clearfix">
+                                <button class="button right">OK</button>
+                            </li>
+                        </ul>
+                    </form>
                 </fieldset>
             </div>
             
@@ -284,8 +301,8 @@ $(document).ready(function() {
                         omnibox.setMessage(data.response);
                     }
                     
-                    $('#omniboxCommentSubject').val('')
-                    $('#omniboxCommentContent').val('')
+                    $('#omniboxCommentSubject').val('');
+                    $('#omniboxCommentContent').val('');
                 }
             });
         }
@@ -330,6 +347,10 @@ $(document).ready(function() {
     
     $('#omniboxLoginLink').click(function() {
         omnibox.switchView('omniboxLogin');
+    });
+    
+    $('#omniboxForgotPasswordLink').click(function() {
+        omnibox.switchView('omniboxForgotPassword');
     });
 });
 
@@ -413,9 +434,9 @@ var omnibox = {
         }
         else {
             omnibox.openWidth = 582;
-            omnibox.openHeight = 390;
+            omnibox.openHeight = 420;
         }
-        var views = ['omniboxFeedback', 'omniboxComment', 'omniboxLogin', 'omniboxRegister', 'omniboxAfterRegister'];
+        var views = ['omniboxFeedback', 'omniboxComment', 'omniboxLogin', 'omniboxRegister', 'omniboxAfterRegister', 'omniboxForgotPassword'];
         for (var i in views) {
             $('#'+views[i]).hide();
         }
