@@ -546,7 +546,7 @@ function load_events(ev_type) {
                     {{ /list_article_locations }}
                 </article>
                 
-                <article>
+                <article class="mobile-hide">
                     <header>
                         <p><em>Werbung</em></p>
                     </header>
