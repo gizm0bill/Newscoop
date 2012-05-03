@@ -157,7 +157,7 @@ $(document).ready(function() {
         $('a.article-view-rear').trigger('click');
     };
     
-    $('#article-recommend-button').fancybox({height: 460, padding: 4, margin: 0, scrolling: 0});
+    $('#article-recommend-button').fancybox({type: 'iframe', height: 460, padding: 4, margin: 0, scrolling: 0});
 	
 	
 	
