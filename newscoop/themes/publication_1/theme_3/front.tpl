@@ -14,7 +14,11 @@
             
 {{ include file="_tpl/front-playlist-articles.tpl" }}
 
-<span class="desktop-hide">{{ include file="_tpl/sidebar-ticker.tpl" }}</span>
+<div class="omniticker-main-content desktop-hide">
+    <div class="mobile-divider"></div>
+    {{ include file="_tpl/sidebar-ticker.tpl" }}
+    <div class="mobile-divider"></div>
+</div>
 
 <span class="desktop-hide">{{ include file="_tpl/front-blogs.tpl" }}</span>
                 

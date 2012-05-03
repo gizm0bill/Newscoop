@@ -10,6 +10,7 @@
             	<article>
 						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}	
                     <header>
+                    		{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }}</a>{{ /if }}
                         <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="article" }}">{{ $gimme->article->Newslinetext }}</a>{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}             	           	
@@ -19,6 +20,7 @@
 
 						{{ if $gimme->current_list->index < 4 }}	
                     <header>
+                    		{{ if $gimme->current_list->index > 1 }}{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }}</a>{{ /if }}{{ /if }}
                         <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}<a href="{{ url options="article" }}">{{ $gimme->article->dateline }}</a>{{ else }}<a href="{{ url options="article" }}">{{ $gimme->article->Newslinetext }}</a>{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}
@@ -49,7 +51,7 @@
 <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
 {{ /if }}
 
-<p{{ if $gimme->current_list->index != 1 }} class="mobile-hide"{{ /if }}>{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
+<p>{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
 {{ include file="_tpl/admin_frontpageedit.tpl" }}
   {{ if $gimme->article->type_name == "news" }}
     {{ $gimme->article->teaser|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
@@ -65,7 +67,7 @@
   <a href="{{ url options="article" }}">Weiterlesen</a> 
   {{ /if }}  
 {{ /strip }}
-{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}
+{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments mobile-hide">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}
 </p>
                 </article>
 {{ if $gimme->current_list->index == 3 }}                

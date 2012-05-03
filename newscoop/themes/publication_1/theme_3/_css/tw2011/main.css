@@ -213,7 +213,7 @@ a.theme-subscribe {
 			a.article-view-rear span {background-position:25px -94px;}
 			a.article-view-front span {background-position:30px 7px;}
 	
-	a.bottom-align {position:absolute; bottom:0; right:0; width:306px;}
+	a.bottom-align {position:absolute; bottom:0; right:0; width:306px; margin-bottom: 0;}
 	
 	a.button.fb-button {
 		color:#fff;
@@ -351,11 +351,18 @@ a.theme-subscribe {
 			
 			
 			.omnibox-content fieldset,
+			.omnibox-content .message,
 			.omnibox-content .inner-content {
 				padding:19px 32px;
 				background:#fff; background:rgba(255,255,255,0.97);
-				border:#dbdbdb solid 1px;
+				border:none;
 				}
+				.omnibox-content .message {
+					padding-bottom:2px;
+					font-size: 14px;
+					}
+					.omnibox-content .message.error {color:#990000;}
+					.omnibox-content .message.success {color:#0ca701;}
 				.omnibox-content fieldset h3,
 				.omnibox-content .inner-content h3 {
 					margin:0 0 15px 0;
@@ -386,7 +393,7 @@ a.theme-subscribe {
 				.popup-box input[type=text],
 				.popup-box input[type=password],
 				.popup-box textarea {
-					width:243px; height:27px;
+					width:96%; height:27px;
 					padding:0 5px;
 					font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#000;
 					border:#bdbdbd solid 1px; border-right:#e5e5e5 solid 1px; border-bottom:#e5e5e5 solid 1px;
@@ -492,7 +499,9 @@ section article{padding-bottom:25px;}
 		background:url(img/icons_small/comment.png) 5px 5px no-repeat;
 		}
 		a.comments:hover {color:#333;}
-		
+
+		article header a.comments {float:right; line-height: 21px; display:none;}
+	
 	p.info-box {
 		padding:7px 0; margin-bottom:10px;
 		text-align:center;
@@ -627,7 +636,7 @@ section article{padding-bottom:25px;}
 				}
 				ul.post-list li p a {color:#000;}
 					ul.post-list li p a:hover {text-decoration:none;}
-			ul.post-list li span.meta {
+			ul.post-list li span.meta, ul.post-list li span.meta small {
 				overflow:hidden;
 				line-height:19px; color:#7f7f7f; font-size:12px;
 				}
@@ -1390,6 +1399,16 @@ section article{padding-bottom:25px;}
 	/* 
 	Desktop hide --------------------- */
 		.desktop-hide {display:none;}
+		.mobile-divider {
+			background-color: #efefef;
+			box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), inset 0 -2px 2px rgba(0, 0, 0, 0.1);
+			float: none;
+			margin: 0 -10px;
+			height:12px;
+			border:1px solid #c2c2c2;
+			border-width:0;
+		}
+		
 	
 
 	/* Profile Edit -------------- */
@@ -1530,6 +1549,8 @@ section article{padding-bottom:25px;}
 					padding:10px; margin-bottom:5px;
 					background:#fff;
 					border:#e1e1e1 solid 1px;
+					overflow:auto;
+					height:300px;
 					}
 					.profile-edit-box.register-box .terms-content p,
 					.profile-edit-box.register-box .terms-content h5,
@@ -1542,9 +1563,12 @@ section article{padding-bottom:25px;}
 						margin:1em 0 2em 0;
 						}
 						.profile-edit-box.register-box .terms-content ol li {
-							list-style-type:none;
-							margin-bottom:1em;
-							}
+							    list-style-type: decimal;
+								margin-bottom: 1em;
+								margin-left: 30px;
+								overflow: visible;
+								padding: 0;
+								}
 						
 			
 	
@@ -1555,8 +1579,11 @@ section article{padding-bottom:25px;}
 -------------------------------------------------------------------------------------- */
 .content-box aside article section {float:none; width:auto;}
 aside article {font-family:Arial, Helvetica, sans-serif;}
+aside article section p small, aside article section p em,
+.omniticker-main-content article section p small, .omniticker-main-content article section p em {font-size:12px; color:#999;}
 ul.item-list {margin:0; list-style-type:none;}
 aside article section,
+.omniticker-main-content article section,
 ul.item-list li {
 	position:relative;
 	padding:0 0 0 30px;
@@ -1568,17 +1595,23 @@ ul.item-list li {
 		}
 	
 	aside article section span.icon,
+	.omniticker-main-content article section span.icon,
 	ul.item-list li span.icon {position:absolute; left:0; top:2px; width:20px; height:16px; text-indent:-9999px; background-position:50% 50%; background-repeat:no-repeat;}
 	
 	aside article section.article span.icon,
+	.omniticker-main-content article section.article span.icon,
 	ul.item-list li.article span.icon {background-image:url(img/icons_small/article.png);}
 	aside article section.link span.icon,
+	.omniticker-main-content article section.link span.icon,
 	ul.item-list li.link span.icon {background-image:url(img/icons_small/link.png);}
 	aside article section.tweet span.icon,
+	.omniticker-main-content article section.tweet span.icon,
 	ul.item-list li.tweet span.icon {background-image:url(img/icons_small/twitter.png);}
 	aside article section.comment span.icon,
+	.omniticker-main-content article section.comment span.icon,
 	ul.item-list li.comment span.icon {background-image:url(img/icons_small/comment.png);}
 	aside article section.omni span.icon,
+	.omniticker-main-content article section.omni span.icon,
 	ul.item-list li.omni span.icon {background-image:url(img/icons_small/omni.png);}
 	
 	
@@ -1588,8 +1621,10 @@ ul.item-list li {
 	ul.item-list li.story {background:url(img/icons_small/story.png) 0 0 no-repeat; padding:2px 0 0 30px;}
 	
 	
-	aside article h3 {margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#333; font-weight:bold; line-height:18px;}
+	aside article h3,
+	.omniticker-main-content article h3 {margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#333; font-weight:bold; line-height:18px;}
 	aside article p,
+	.omniticker-main-content article p,
 	ul.item-list li {position:relative; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#000; line-height:18px;}
 		aside article section h3 a {color:#333; text-decoration:none;}
 		aside article section p a {color:#000;}
@@ -2322,6 +2357,7 @@ ul.item-list li {
 		width:300px;
 		border:#bbbbbb solid 1px; border-bottom:#e1e1e1 solid 1px; border-right:#e1e1e1 solid 1px;
 		box-shadow:inset 1px 1px 1px #ebebeb;
+		background-color:#fcfcfc;
 		}
 	#main-nav fieldset {position:absolute; top:-47px; right:0;}
 	.top-filter fieldset {float:left;}
@@ -2627,8 +2663,19 @@ ul.item-list li {
 /*
 = Size adjustments
 -------------------------------------------------------------------------------------- */
+@media all and (max-width: 1160px) {
+	#omni-box-placeholder {left:0; width:100%; margin-left:0;}
+			#omnibox {right:1%;}
+	#top ul {
+		padding-right: 45px;
+	}
+}
 
-@media all and (max-width: 1005px) {
+
+
+
+@media all and (max-width: 1024px) {
+	
 	
 	#wrapper,
 	.footer-holder,
@@ -2666,6 +2713,7 @@ ul.item-list li {
 	aside article p,
 	ul.item-list li,
 	aside article h3,
+	.omniticker-main-content article h3,
 	ul.post-list li p,
 	.debate-box .debate-content li p,
 	ul.post-list li h4,
@@ -2835,9 +2883,12 @@ ul.item-list li {
 	aside .profile-edit-box ul li input[type=password], aside .profile-edit-box ul li input[type="text"]  {width:98%;}
 }
 
-@media all and (max-width: 640px) {
+@media all and (max-width: 768px) {
 	
 	body {border:0; background:#e5e5e5;}
+	
+	article header a.comments {display:block;}
+	.mobile-hide{display:none !important;}
 	
 	/* 
 	Desktop hide --------------------- */
@@ -2855,7 +2906,6 @@ ul.item-list li {
 	.desktop-hide {display:block;}
 	
 	#omnibox,
-	.mobile-hide,
 	a.bottom-align {display:none;}
 	.content-box {padding:0;}
 	.content-box section,
@@ -2869,11 +2919,14 @@ ul.item-list li {
 		}
 		.content-box aside,
 		.content-box section {padding-top:10px;}
-		.content-box aside article section {padding:inherit; margin:inherit; background-color:inherit; box-shadow:none;}
+		.content-box aside article section,
+		.content-box .omniticker-main-content article section {padding:inherit; margin:inherit; background-color:inherit; box-shadow:none;}
 	.two-columns article,
 	.three-columns article,
 	ul.post-list li {float:none; width:auto; margin:0;}
 	ul.post-list li {margin-bottom:10px; padding-bottom:10px; border-bottom:#e1e1e1 solid 1px;}
+	
+	ul.post-list li:nth-child(4), ul.post-list li:nth-child(5), ul.post-list li:nth-child(6) {display:none;}
 	
 	article figure.left,
 	article figure {float:none; width:auto; overflow:visible; margin:0 -10px 10px -10px;}
@@ -2903,6 +2956,7 @@ ul.item-list li {
 	.article-single section article header {padding-top:0; border:0;}
 	
 	aside article header,
+	.omniticker-main-content article header,
 	.full-width article header, 
 	h3.title,
 	.mobile-header {
@@ -2916,6 +2970,7 @@ ul.item-list li {
 		.full-width article header, 
 		h3.title {border-top:0;}
 		aside article header p,
+		.omniticker-main-content article header p,
 		.full-width article header,
 		h3.title {padding:15px 10px; line-height:normal;}
 		article header ul.paging {right:10px; top:10px;}
@@ -2926,7 +2981,8 @@ ul.item-list li {
 			.mobile-header p a,
 			.link-back a {display:block; padding:10px 10px 10px 30px; color:#333; background:url(img/mobile-arrow-prev.png) 15px 50% no-repeat;}
 	
-	.content-box aside article section {padding:0 0 0 30px;}
+	.content-box aside article section,
+	.content-box .omniticker-main-content article section {padding:0 0 0 30px;}
 	
 	.content-box.debatte-page h2 span {display:none;}
 	
@@ -2967,7 +3023,7 @@ ul.item-list li {
 	.debatte-page aside small.info {display:none;}
 	
 		.mobile-list-view article {
-			padding:15px 10px !important; margin:0 -10px;
+			padding:15px 10px !important; margin:0 -10px !important;
 			border-bottom:#e5e5e5 solid 1px;
 			}
 			.mobile-list-view article:first-child {border-top:#e5e5e5 solid 1px;}
@@ -2976,13 +3032,18 @@ ul.item-list li {
 				.mobile-list-view article header,
 				.mobile-list-view article h2,
 				.mobile-list-view article p {margin:0; padding:0; overflow:hidden;}
+				.mobile-list-view article h2 {font-size:18px; line-height:140%;}
 				
 				.mobile-list-view article header {padding-left:30%; margin-left:10px;}
 				.mobile-list-view article figure {margin-top:-19px;}
 		
 		.mobile-list-view.header-fix article header {padding-left:0; margin-left:0;}
 		.mobile-list-view.header-fix article figure {margin-top:0;}
+
+		.mobile-list-view > .two-columns {padding-bottom:0;}
 		
+		.mobile-list-view + .mobile-list-view {margin-top:-1px;}
+
 		.content-box aside .teaser-box {padding-bottom:10px !important;}
 			.content-box aside .teaser-box section {overflow:hidden; padding:10px 0; border-bottom:#eee solid 1px;}
 			.content-box aside .teaser-box section:last-child {border-bottom:0;}
@@ -3299,7 +3360,7 @@ ul.item-list li {
 	p.footer-text {
 		display:block;
 		height:20px;
-		padding-top:20px;
+		padding-top:20px; margin-bottom: 20px;
 		font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#333;
 		background:url(img/logo.png) 100% 100% no-repeat; background-size:auto 25px;
 		}
@@ -3451,7 +3512,10 @@ ul.item-list li {
 	.mobile-list-view article p,
 	.social-network-box a.print {display:none;}
 	.mobile-list-view article header p,
+	.mobile-list-view.dossier-mobile-list article p,
 	.mobile-list-view.plain-list p {display:block;}
+	
+	
 	
 	.content-box aside .teaser-box section img {width:30%;}
 	
