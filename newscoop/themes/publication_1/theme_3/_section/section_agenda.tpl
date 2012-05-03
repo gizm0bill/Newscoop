@@ -482,7 +482,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                 <a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $linkregion }}" class="grey-button more-arrow"><span>Mehr Filme</span></a>
 {{ /local }}
 
-                <h2>Theater</h2>
+                <h2 class="mobile-top-separator">Theater</h2>
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -543,7 +543,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ /list_articles }}
 
 
-                <h2>Konzerte</h2>
+                <h2 class="mobile-top-separator">Konzerte</h2>
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -577,7 +577,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ /local }}
 
 
-                <h2>Ausstellungen</h2>
+                <h2 class="mobile-top-separator">Ausstellungen</h2>
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
