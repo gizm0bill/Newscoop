@@ -2,6 +2,9 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
 <body>
+
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
 <div id="fb-root"></div>
 <script>
   window.fbAsyncInit = function() {

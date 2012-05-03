@@ -2,6 +2,8 @@
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
 	<div id="wrapper">
         
 {{ include file="_tpl/header-omnibox.tpl" }}
@@ -16,7 +18,7 @@
 
 <div class="omniticker-main-content desktop-hide">
     <div class="mobile-divider"></div>
-    {{ include file="_tpl/sidebar-ticker.tpl" }}
+    {{ include file="_tpl/sidebar-ticker.tpl" id="mobil" }}
     <div class="mobile-divider"></div>
 </div>
 
@@ -33,7 +35,9 @@
             
             <aside>
             
-<span class="mobile-hide">{{ include file="_tpl/sidebar-ticker.tpl" }}</span>
+<span class="mobile-hide">{{ include file="_tpl/sidebar-ticker.tpl" id="desktop" }}</span>
+
+{{ include file="_tpl/sidebar-ticker-init.tpl" ids="mobil,desktop" }}
 
 {{ include file="_tpl/sidebar-goodcomments.tpl" }}
  
