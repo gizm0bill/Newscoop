@@ -17,12 +17,15 @@ class MyTopicsController extends TopicController
 
     public function init()
     {
+        parent::init();
         $this->user = $this->_helper->service('user')->getCurrentUser();
-        if ($this->user === null) {
+    }
+
+    public function preDispatch()
+    {
+        if ($this->user === null && $this->getRequest()->getActionName() === 'index') {
             $this->_forward('empty');
         }
-
-        parent::init();
     }
 
     public function emptyAction()
