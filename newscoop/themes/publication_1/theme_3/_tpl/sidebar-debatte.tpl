@@ -85,11 +85,19 @@ and then all is compared according to a matrix.
                      <li{{ if $wdphase == "4" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=4"><b>Fazit</b>
                         {{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}</a></li>
                     </ul>
-                    <h5>Zwischenstand</h5>
-                    <ul class="votes">
-                    	  <li class="ja" style="width:64%"><p>Ja 64%</p></li>
-                    	  <li class="nein" style="width:36%"><p>Nein 36%</p></li>
-                    </ul>
+
+      {{ list_debates length="1" item="article" }}
+          {{ if $gimme->debate->is_votable }}
+          <h5>Zwischenstand</h5>
+          {{ else }}
+          <h5>Endresultat</h5>
+          {{ /if }}
+          <ul class="votes">
+          {{ list_debate_answers order="bynumber asc" }}
+              <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
+          {{ /list_debate_answers }}
+          </ul>
+      {{ /list_debates }}
 {{ /list_articles }}                    
                     
 {{* Pro and Contra introduction *}}
