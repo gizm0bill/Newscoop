@@ -1,4 +1,8 @@
 {{ include file="_tpl/_html-head.tpl" }}
+<script type="text/javascript">
+window.agenda_has_select_tags = true;
+window.agenda_has_date_picker = true;
+</script>
 
 <style type="text/css">
 
@@ -149,11 +153,11 @@ function load_area(area) {
         {{*<div class="content-box clearfix reverse-columns agenda-content movies-list">*}}
         <div class="content-box clearfix reverse-columns agenda-content">
 
-            <aside>
+            <aside class="mobile-hide">
 
                 <h3>Ort</h3>
                 <ul>
-                    <li>
+                    <li id="wo-place">
                         <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>

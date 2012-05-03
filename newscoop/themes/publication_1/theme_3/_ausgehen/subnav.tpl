@@ -67,11 +67,64 @@
     width: 320px !important;
 }
 
+.place_selector_narrow {
+    margin-left: 150px !important;
+    margin-top: 12px !important;
+}
+
+.place_selector_narrow_alone {
+    margin-left: 10px !important;
+    margin-top: 12px !important;
+}
+
+.nav_events_narrow {
+    margin-top: 50px !important;
+    margin-left: 10px !important;
+}
+
+.nav_events_narrow_alone {
+    margin-left: 10px !important;
+}
 
 </style>
 
 <script type="text/javascript">
 var closing_datepicker_text = 'Fertig';
+var desktop_view = true;
+
+function adapt_global_sizes() {
+    //var doc_width = $(document).width();
+    var doc_width = $(window).width();
+    if (769 > doc_width) {
+        if (desktop_view) {
+            $("#datapicker-button").after($("#wo"));
+            if (window.agenda_has_date_picker) {
+                $("#wo").addClass("place_selector_narrow");
+            }
+            else {
+                $("#wo").addClass("place_selector_narrow_alone");
+            }
+
+            if (window.agenda_has_select_tags) {
+                $("#events_nav").addClass("nav_events_narrow");
+            }
+            else {
+                $("#events_nav").addClass("nav_events_narrow_alone");
+            }
+        }
+        desktop_view = false;
+    }
+    else {
+        if (!desktop_view) {
+            $("#wo-place").after($("#wo"));
+            $("#wo").removeClass("place_selector_narrow");
+            $("#events_nav").removeClass("nav_events_narrow");
+            $("#events_nav").removeClass("nav_events_narrow_alone");
+        }
+        desktop_view = true;
+    }
+
+};
 
 function get_month_view_count() {
     var month_num = 3;
@@ -159,6 +212,9 @@ function close_calendar() {
 /* German initialisation for the jQuery UI date picker plugin. */
 /* Written by Milian Wolff (mail@milianw.de). */
 $(document).ready(function() {
+
+    adapt_global_sizes();
+    setInterval("adapt_global_sizes();", 2000);
 
   $.datepicker.regional['de'] = {
     closeText: 'schließen',
@@ -413,7 +469,7 @@ function agenda_set_today() {
             
             </div>
 
-            <ul class="nav">
+            <ul class="nav" id="events_nav">
 {{ local }}
 {{* agenda *}}
 {{ set_current_issue }}

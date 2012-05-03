@@ -1,4 +1,8 @@
 {{ include file="_tpl/_html-head.tpl" }}
+<script type="text/javascript">
+window.agenda_has_select_tags = false;
+window.agenda_has_date_picker = false;
+</script>
 
 <link rel="canonical" href="{{ uri options="article" }}" />
 {{*
