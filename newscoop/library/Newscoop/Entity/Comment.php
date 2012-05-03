@@ -473,8 +473,9 @@ class Comment implements \Newscoop\Search\DocumentInterface
      */
     public function setThread(Article $p_thread)
     {
-        $this->thread = $p_thread;
         $this->article_num = $p_thread->getNumber();
+        $this->thread = $p_thread;
+        $this->article = $p_thread;
         // return this for chaining mechanism
         return $this;
     }
