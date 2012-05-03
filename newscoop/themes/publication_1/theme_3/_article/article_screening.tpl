@@ -1,5 +1,18 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+{{ assign var="moviekey_canon" $gimme->article->movie_key }}
+{{ if $moviekey_canon }}
+<link rel="canonical" href="{{ $view->baseUrl('movie/search?key=') }}{{ $moviekey_canon }}" />
+{{*
+<script type="text/javascript">
+$(document).ready(function() {
+    var canonical = $("link[rel=canonical]").attr("href");
+    //alert(canonical);
+});
+</script>
+*}}
+{{ /if }}
+
 <style type="text/css">
 
 span span.title-box {
@@ -191,6 +204,10 @@ function load_events(ev_type) {
                     <p>
                     {{ $gimme->article->other|replace:"<a href=":"<a target='_blank' href="|replace:">http://":">" }}
                     </p>
+{{ /if }}
+
+{{ if $moviekey_canon }}
+                    {{ include file="_tpl/social-bookmarks.tpl" }}
 {{ /if }}
 
 {{*

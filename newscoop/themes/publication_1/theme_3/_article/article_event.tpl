@@ -1,5 +1,14 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+<link rel="canonical" href="{{ uri options="article" }}" />
+{{*
+<script type="text/javascript">
+$(document).ready(function() {
+    var canonical = $("link[rel=canonical]").attr("href");
+    //alert(canonical);
+});
+</script>
+*}}
 <body>
 
 {{ include file="_tpl/_netmetrix-stats.tpl" }}
@@ -484,9 +493,11 @@ function load_events(ev_type) {
                     </p>
 {{ /if }}
                 </article>
-            
+
+                {{ include file="_tpl/social-bookmarks.tpl" }}
+
             </section>
-            
+
             <aside>
             
 {{ local }}
