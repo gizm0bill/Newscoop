@@ -119,7 +119,8 @@
             <aside>
 
 {{ if !($gimme->section->number == 60) }}             
-{{ include file="_tpl/sidebar-ticker.tpl" }}
+{{ include file="_tpl/sidebar-ticker.tpl" id="single" }}
+{{ include file="_tpl/sidebar-ticker-init.tpl" ids="single" }}
 {{ /if }}
                 
 {{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
