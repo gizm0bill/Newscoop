@@ -575,7 +575,7 @@ function parse_date_text($date_time_text)
 
             </section>
 
-            <aside>
+            <aside class="mobile-hide">
 
 {{ local }}
 {{ set_current_issue }}

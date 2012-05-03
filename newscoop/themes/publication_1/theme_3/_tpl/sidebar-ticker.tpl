@@ -1,6 +1,6 @@
 <article id="ticker-sidebar-{{ $id }}">
     <header>
-        <p>Aktuelle Nachrichten</p>
+        <p>Omniticker{{ if $gimme->section->number }} {{ $gimme->section->name }}{{ /if }}</p>
     </header>
 
     <footer>

@@ -4,6 +4,5 @@
     {{ /list_users }}
 </ul>
 
-{{ $count=floor($gimme->getUserCount() / 1000) }}
-<p>Die TagesWoche Community hat über {{ $count }}'000 Mitglieder!</p>
+<p>Die TagesWoche-Community hat bereits {{ number_format($gimme->getUserCount(), 0, '.', '\'') }} Mitglieder.</p>
 {{ if !$gimme->user->logged_in }}<a href="{{ $view->url(['controller' => 'register', 'action' => 'index'], 'default') }}" class="button">Jetzt mitmachen!</a>{{ /if }}
