@@ -7,6 +7,8 @@
 	<div id="wrapper">
         
 {{ include file="_tpl/header-omnibox.tpl" }}
+
+{{ include file="_werbung/article-dossier-header.tpl" }}
         
 {{ include file="_tpl/header.tpl" }}
 
