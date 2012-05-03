@@ -24,26 +24,26 @@
                     
 {{ /list_articles }}
                 </article>
-                
+
 {{ include file="_tpl/dialog-article-comments.tpl" }}
-                
-{{ include file="_tpl/front-debatte.tpl" }}
-            
+
             </section><!-- / Main Section -->
-            
+
             <aside>
-            
+
 {{ include file="_tpl/sidebar-community.tpl" where="dialog" }}
-                
+
 {{ include file="_tpl/sidebar-facebook.tpl" }}
-                
+
 {{ include file="_tpl/sidebar-twitter.tpl" where="dialog" }}
 
 <div class="right"><a href="https://twitter.com/tageswoche" class="twitter-follow-button" data-show-count="false" data-lang="de" data-size="large">@tageswoche folgen</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
-                
+
 {{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - {{ $gimme->section->name }}" }}
-            
+
+{{ include file="_tpl/sidebar-debatte.tpl" }}
+
             </aside><!-- / Sidebar -->
             
         </div>

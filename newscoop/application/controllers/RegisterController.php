@@ -324,6 +324,10 @@ class RegisterController extends Zend_Controller_Action
                     $values['image'] = $this->getUserImageFilename($user);
                 }
 
+                if ($userData !== null) {
+                    $values['email'] = $userData->email;
+                }
+
                 $this->_helper->service('user')->savePending($values, $user);
                 $this->_helper->service('user.token')->invalidateTokens($user, 'email.confirm');
                 $this->notifyDispatcher($user);
