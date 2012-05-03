@@ -64,41 +64,27 @@ $(document).ready(function() {
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
 	$('#omnibox a.trigger, a.omni-box-trigger').toggle(
 		function(){
-			$('#omnibox').animate({
-				width: omnibox.openWidth,
-				height: omnibox.openHeight
-			},500);
-			$('.omnibox-content').show();
-			$('.overlay').fadeIn(500);
-			
+			if (omnibox) {
+                omnibox.show();
+            }
 		},
 		function(){
-			$('#omnibox').animate({
-				width: '44px',
-				height: '54px'
-			},500);
-			$('.omnibox-content').fadeOut(500);
-			$('.overlay').fadeOut(500);
+			if (omnibox) {
+                omnibox.hide();
+            }
 		}
 	);
 	
 	$('#omnibox a.comm-trigger').toggle(
 		function(){
-			$('#omnibox.omnibox-comments').animate({
-				width: omnibox.openWidth,
-				height: omnibox.openHeight
-			},500);
-			$('.omnibox-content').show();
-			$('.overlay').fadeIn(500);
-			
+			if (omnibox) {
+                omnibox.show();
+            }
 		},
 		function(){
-			$('#omnibox.omnibox-comments').animate({
-				width: '44px',
-				height: '54px'
-			},500);
-			$('.omnibox-content').fadeOut(500);
-			$('.overlay').fadeOut(500);
+			if (omnibox) {
+                omnibox.hide();
+            }
 		}
 	);
 	
