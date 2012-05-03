@@ -419,7 +419,7 @@ function get_time_text($multi_time_text, $req_date)
     {{* /if *}}
                         <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
                             {{ if $gimme->article->has_image(1) }}
-                                    <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                                    <a href="{{ uri options="article" }}?date={{$usedate}}"><img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" /></a>
                             {{ /if }}
                             <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
                             {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
@@ -728,6 +728,8 @@ window.reload = function(page) {
 };
 
 function content_loading() {
+    //$(".ui-dropdownized").remove();
+    //$("#wo").dropdownized({fixed:true});
 //return;
     ini_data = "";
     ini_data += '<figure class="loading_block_events">' + "\n";
