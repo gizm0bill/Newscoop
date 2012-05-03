@@ -416,6 +416,8 @@ return;
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
   <div id="wrapper">
       
 {{ include file="_tpl/header-omnibox.tpl" }}
@@ -848,7 +850,7 @@ function parse_date_text($date_time_text)
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
 
                           {{ if $gimme->article->has_image(1) }}
-                          <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
+                          <a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}"><img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" /></a>
                           {{ /if }}
 
                             {{* <a href="#" class="grey-button trailer-button" onClick="show_trailer('{{ $gimme->article->movie_trailer_vimeo }}'); return false;"><span>Trailer anschauen</span></a> *}}

@@ -2,6 +2,8 @@
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
 {{**************************************************
 {{ $wdphase }} first, we decide what phase the Wochendebatte is in. the links and pages will
 be loaded accordingly. 

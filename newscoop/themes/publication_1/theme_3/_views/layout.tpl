@@ -1,5 +1,6 @@
 {{ include file="_tpl/_html-head.tpl" }}
 <body>
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
     {{block head}}{{/block}}
 	<div id="wrapper">
     {{ include file="_tpl/header-omnibox.tpl" }}

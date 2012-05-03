@@ -136,6 +136,8 @@ function load_area(area) {
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
   <div id="wrapper">
       
 {{ include file="_tpl/header-omnibox.tpl" }}
@@ -413,7 +415,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                       <article id="movie_{{ $movie_rank }}" class="movie {{* stared *}} movie_lang has_not_d has_not_k has_not_f has_not_t">
 
                           {{ if $gimme->article->has_image(1) }}
-                          <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
+                          <a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}"><img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" /></a>
                           {{ /if }}
 
                           <h3><a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">{{ $gimme->article->headline }}</a> {{ if $recommended }}<small class="tw_recommended"></small>{{ /if }}</h3>
@@ -488,7 +490,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
-                <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                <a href="{{ uri options="article" }}?date={{$usedate}}"><img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" /></a>
         {{ /if }}
         <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
         {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
@@ -517,7 +519,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                     <p><a href="{{ uri options="article" }}">TagesWoche empfielt</a></p>
                 </header>
                 {{ if $gimme->article->has_image(1) }}
-                        <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                        <a href="{{ uri options="article" }}"><img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" /></a>
                 {{ /if }}
                 <h3><a href="{{ uri options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h3>
                 {{ if "" != $gimme->article->dateline }}
@@ -549,7 +551,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
-                <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                <a href="{{ uri options="article" }}?date={{$usedate}}"><img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" /></a>
         {{ /if }}
         <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
         {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
@@ -583,7 +585,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
     <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
         {{ assign var="event_rank" $event_rank+1 }}
         {{ if $gimme->article->has_image(1) }}
-                <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                <a href="{{ uri options="article" }}?date={{$usedate}}"><img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" /></a>
         {{ /if }}
         <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
         {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
