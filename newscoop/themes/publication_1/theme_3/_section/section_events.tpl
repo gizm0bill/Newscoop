@@ -215,6 +215,8 @@ function get_time_text($multi_time_text, $req_date)
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
     <div id="wrapper">
 
 {{ include file="_tpl/header-omnibox.tpl" }}
