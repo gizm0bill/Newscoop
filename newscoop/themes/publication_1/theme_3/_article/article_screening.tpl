@@ -14,6 +14,8 @@ span span.title-box {
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
     <div id="wrapper">
 
 {{ include file="_tpl/header-omnibox.tpl" }}
