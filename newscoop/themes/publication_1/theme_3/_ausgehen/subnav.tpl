@@ -259,7 +259,7 @@ function update_datepicker_button() {
 
     var chosen_date = $("#wann").val();
     var dateObj = $("#wann").datepicker("getDate");
-    var display_date = dateObj.getDate() + ". " + (dateObj.getMonth() + 1) + ". " + dateObj.getFullYear();
+    var display_date = dateObj.getDate() + "." + (dateObj.getMonth() + 1) + "." + dateObj.getFullYear();
 
     var testObj = new Date();
     var today_str = format_day_string(testObj);
