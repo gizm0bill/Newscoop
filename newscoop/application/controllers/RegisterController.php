@@ -177,7 +177,6 @@ class RegisterController extends Zend_Controller_Action
         if (!empty($userData->email)) { // try to find user by email
             $user = $this->_helper->service('user')->findOneBy(array('email' => $userData->email));
             if (!empty($user)) { // we have user for given email, add him login
-                $user = array_pop($user);
                 $this->authSocial($user, $userData);
                 $this->_helper->redirector('index', 'dashboard');
             }
