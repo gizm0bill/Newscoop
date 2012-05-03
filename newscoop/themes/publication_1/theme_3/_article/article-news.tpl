@@ -226,6 +226,20 @@
                 <p>{{ $gimme->author->biography->text|bbcode }}</p>
             </li>
             {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
+            <li>
+                <h5>Social Networks</h5>
+                <p class="social">
+                    {{ if !empty($gimme->author->user['facebook']) }}
+                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ trim($gimme->author->user['facebook']) }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="90" style="margin-right: 8px"></div>
+                    {{ /if }}
+                    {{ if !empty($gimme->author->user['twitter']) }}
+                    <div class="tw-follow" style="display: inline-block; position: relative; top: 2px">
+                        <a href="http://twitter.com/{{ trim($gimme->author->user['twitter'], '@') }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ trim($gimme->author->user['twitter'], '@') }} folgen</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</scrip
+                    </div>
+                    {{ /if }}
+                </p>
+            </li>
             {{ /if }}
             <li>
                 <h5>Beiträge</h5>
