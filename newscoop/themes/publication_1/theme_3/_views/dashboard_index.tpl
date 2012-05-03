@@ -112,7 +112,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                             <div id="map_canvas" class="map-holder" style="width:409px; height:180px"></div>
                         </li>
                         <li class="buttons">
-                            {{*<input type="submit" value="Profil ansehen" class="grey-button" />*}}
+                            <a href="{{ $view->url(['username' => $user->uname], 'user') }}" target="_blank" title="Profil ansehen" class="grey-button">Profil ansehen</a>
                             <input type="submit" value="Speichern" class="grey-button" />
                         </li>
                     </ul>
