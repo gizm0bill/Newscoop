@@ -191,13 +191,12 @@ $(document).ready(function() {
                     $('#omniboxFeedbackUserLink').attr('href', "{{ $view->baseUrl('/user/profile/') }}" + data.userData.userName);
                     omnibox.setMessage('');
                     omnibox.loggedIn = true;
+                    if ('afterLogin' in omnibox) {
+                        omnibox.afterLogin();
+                    }
                     omnibox.checkView();
                     $('#omnibox').width(omnibox.openWidth);
                     $('#omnibox').height(omnibox.openHeight);
-                    
-                    if (typeof(omnibox.afterLogin) != 'undefined') {
-                        omnibox.afterLogin();
-                    }
                 }
                 else {
                     omnibox.setMessage(data.response);
