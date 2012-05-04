@@ -111,11 +111,13 @@
             {{ /if }}
             {{ if $gimme->current_list->at_end }}
             </div>
+                    {{ if $gimme->current_list->count > 10 }}
                     <ul class="paging content-paging">
                         <li><a class="grey-button prev" href="#">«</a></li>
                         <li class="caption"></li>
                         <li><a class="grey-button next" href="#">»</a></li>
                     </ul>
+                    {{ /if }}
             </div>
             {{ /if }}
         {{ /list_articles }}
@@ -136,11 +138,13 @@
             {{ /if }}
             {{ if $gimme->current_list->at_end }}
             </div><!-- /.slides -->
+                    {{ if $gimme->current_list->count > 10 }}
                     <ul class="paging content-paging">
                         <li><a class="grey-button prev" href="#">«</a></li>
                         <li class="caption"></li>
                         <li><a class="grey-button next" href="#">»</a></li>
                     </ul>
+                    {{ /if }}
             </div>
             {{ /if }}
         {{ /list_articles }}
@@ -163,11 +167,13 @@
             {{ /if }}
             {{ if $gimme->current_list->at_end }}
             </div><!-- /.slides -->
+                    {{ if $gimme->current_list->count > 10 }}
                     <ul class="paging content-paging">
                         <li><a class="grey-button prev" href="#">«</a></li>
                         <li class="caption"></li>
                         <li><a class="grey-button next" href="#">»</a></li>
                     </ul>
+                    {{ /if }}
             </div>
             {{ /if }}
         {{ /list_user_comments }}
