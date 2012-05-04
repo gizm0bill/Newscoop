@@ -121,12 +121,11 @@ class ArticleofthedayController extends Zend_Controller_Action
             $json = array();
 
             $json['title'] = $article->getTitle();
-
-            $images = ArticleImage::GetImagesByArticleNumber($article_number);
-
-            if (count($images) > 0) {
-                $image = $images[0];
-                $json['image'] = $this->view->baseUrl("/get_img?ImageWidth=$imageWidth&ImageId=".$image->getImageId());
+            
+            $image = $this->_helper->service('image.rendition')->getArticleRenditionImage($article_number, 'rubrikenseite', 140, 94);
+            
+            if (isset($image)) {
+                $json['image'] = $this->view->url(array('src' => $image['src']), 'image', true, false);
             }
             else {
                 $json['image'] = null;
