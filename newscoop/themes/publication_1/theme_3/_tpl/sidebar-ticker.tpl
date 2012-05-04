@@ -8,6 +8,6 @@
         {{ if $gimme->section->number }}
             {{ $url = sprintf('%s?section=%s', $url, $gimme->section->url_name) }}
         {{ /if }}
-        <a href="{{ $url }}" class="grey-button full-button">Alle Nachrichten des Tages</a>
+        <a href="{{ $url }}" class="grey-button full-button">Alle News ansehen</a>
     </footer>
 </article>
