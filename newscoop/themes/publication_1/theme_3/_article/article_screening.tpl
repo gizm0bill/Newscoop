@@ -1,5 +1,23 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+<script type="text/javascript">
+window.agenda_has_select_tags = false;
+window.agenda_has_date_picker = false;
+</script>
+
+{{ assign var="moviekey_canon" $gimme->article->movie_key }}
+{{ if $moviekey_canon }}
+<link rel="canonical" href="{{ $view->baseUrl('movie/search?key=') }}{{ $moviekey_canon }}" />
+{{*
+<script type="text/javascript">
+$(document).ready(function() {
+    var canonical = $("link[rel=canonical]").attr("href");
+    //alert(canonical);
+});
+</script>
+*}}
+{{ /if }}
+
 <style type="text/css">
 
 span span.title-box {
@@ -13,6 +31,8 @@ span span.title-box {
 </style>
 
 <body>
+
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
 
     <div id="wrapper">
 
@@ -147,6 +167,14 @@ function load_events(ev_type) {
 
             <section>
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="72" }}
+                <header class="mobile-header first-header">
+                    <p><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button">Zurück zu Kinoübersicht</a></p>
+                </header>
+{{ /local }}
+
                 <article id="movie_article" class="movie {{*stared*}}">
 
                     <h2>{{ $gimme->article->headline|strip_tags }}</h2>
@@ -189,6 +217,10 @@ function load_events(ev_type) {
                     <p>
                     {{ $gimme->article->other|replace:"<a href=":"<a target='_blank' href="|replace:">http://":">" }}
                     </p>
+{{ /if }}
+
+{{ if $moviekey_canon }}
+                    {{ include file="_tpl/social-bookmarks.tpl" }}
 {{ /if }}
 
 {{*
@@ -508,16 +540,20 @@ function parse_date_text($date_time_text)
 
                         <!--<thead>-->
                             <!--<tr>-->
+                        {{ assign var="day_count" 0 }}
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                            <td class="cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                            {{ assign var="day_count" $day_count + 1 }}
+                            <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
                         {{ /foreach }}
                             </tr>
                         <!--</thead>-->
 
                         <!--<tbody>-->
                             <tr>
+                            {{ assign var="day_count" 0 }}
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                                    <td class="screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
+                                {{ assign var="day_count" $day_count + 1 }}
+                                    <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }} screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
                                         <ul style="width:50px;margin-left:0px;padding-left:0px;">
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
@@ -551,7 +587,7 @@ function parse_date_text($date_time_text)
 
             </section>
 
-            <aside>
+            <aside class="mobile-hide">
 
 {{ local }}
 {{ set_current_issue }}
@@ -570,20 +606,7 @@ function parse_date_text($date_time_text)
                 </article>
 *}}
 
-                <article>
-                    <header>
-                        <p><em>Werbung</em></p>
-                    </header>
-                    <span class="werbung">
-<!-- BEGIN ADITIONTAG -->
-<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
-<div id="adition_tag_460337"></div>
-<!-- END ADITIONTAG -->
-{{*
-                        <img src="pictures/werbung-sidebar.jpg"  rel="resizable" alt="" />
-*}}
-                    </span>
-                </article>
+{{ include file="_werbung/article-movies-sidebar.tpl" }}
 
 {{*
                 <article>
@@ -595,6 +618,9 @@ function parse_date_text($date_time_text)
                     <p><img src="pictures/restaurant-img-small-1.jpg" class="left" alt="" /><strong>Lorem Ipsum Dolor</strong> <em>Asiatisch, Modern</em> Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat <a href="#" class="more">Details &amp; Reservieren</a></p>
                 </article>
 *}}
+
+{{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - Kino" }}
+
             </aside>
 
         </div>

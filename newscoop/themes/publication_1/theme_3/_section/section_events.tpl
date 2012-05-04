@@ -1,4 +1,8 @@
 {{ include file="_tpl/_html-head.tpl" }}
+<script type="text/javascript">
+window.agenda_has_select_tags = true;
+window.agenda_has_date_picker = true;
+</script>
 
 <style type="text/css">
 
@@ -215,6 +219,8 @@ function get_time_text($multi_time_text, $req_date)
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
     <div id="wrapper">
 
 {{ include file="_tpl/header-omnibox.tpl" }}
@@ -225,11 +231,11 @@ function get_time_text($multi_time_text, $req_date)
 
         <div class="content-box clearfix reverse-columns agenda-content">
 
-            <aside>
+            <aside class="mobile-hide">
             
                 <h3>Ort</h3>
                 <ul>
-                    <li>
+                    <li id="wo-place">
                         <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
@@ -419,7 +425,7 @@ function get_time_text($multi_time_text, $req_date)
     {{* /if *}}
                         <article class="{{ if $gimme->article->recommended }} stared{{ /if }}">
                             {{ if $gimme->article->has_image(1) }}
-                                    <img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" />
+                                    <a href="{{ uri options="article" }}?date={{$usedate}}"><img src="{{ url options="image 1 width 250" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" /></a>
                             {{ /if }}
                             <h3><a href="{{ uri options="article" }}?date={{$usedate}}">{{ $gimme->article->headline|replace:'\\':'\'' }}</a></h3>
                             {{ if $gimme->article->genre }}<h6>{{ $gimme->article->genre }}</h6>{{ /if }}
@@ -506,8 +512,10 @@ $template->assign('one_time', $one_time);
         {{ /if }}
     {{ /for }}
     <span class="nav right">
-    {{ if 0 le $prev_page }}<a href="#" }}" onclick="window.paginate({{ $prev_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="prev">Previous</a>{{ /if }}
-    {{ if $page_count gt $next_page }}<a href="#" onclick="window.paginate({{ $next_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="next">Next</a>{{ /if }}
+    <ul id="search-pagination" class="paging content-paging">
+    {{ if 0 le $prev_page }}<li class="prev"><a href="#" }}" onclick="window.paginate({{ $prev_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="prev grey-button" style="width:30px;">&laquo;</a></li>{{ /if }}
+    {{ if $page_count gt $next_page }}<li class="next"><a href="#" onclick="window.paginate({{ $next_page }}, '{{ $list_name }}', {{ $colcount }}); return false;" class="next grey-button" style="width:30px;">&raquo;</a><li>{{ /if }}
+    </ul>
     </span>
 </p>
 {{ /if }}
@@ -594,6 +602,9 @@ window.set_list_content = function(data, direct) {
         $('#newslist').html(data);
         //$('#newslist_pagination').html('&nbsp;');
         $('#newslist_pagination').hide();
+
+        adapt_global_sizes(true);
+
         return;
     }
 
@@ -604,6 +615,9 @@ window.set_list_content = function(data, direct) {
 
     //window.set_cufon_fonts();
     //Cufon.now();
+
+    adapt_global_sizes(true);
+
 };
 
 window.paginate = function(page, listname, setcount) {
@@ -726,6 +740,8 @@ window.reload = function(page) {
 };
 
 function content_loading() {
+    //$(".ui-dropdownized").remove();
+    //$("#wo").dropdownized({fixed:true});
 //return;
     ini_data = "";
     ini_data += '<figure class="loading_block_events">' + "\n";

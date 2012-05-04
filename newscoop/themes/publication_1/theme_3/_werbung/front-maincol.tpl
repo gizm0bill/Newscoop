@@ -2,5 +2,8 @@
                     <header>
                         <p><em>Werbung</em></p>
                     </header>
-                    <a href="#"><img src="{{ url static_file="pictures/werbung-content-1.png" }}" alt="" rel="resizable" /></a>
+<!-- BEGIN ADITIONTAG -->
+<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
+<div id="adition_tag_460062"></div>
+<!-- END ADITIONTAG -->
                 </article>               

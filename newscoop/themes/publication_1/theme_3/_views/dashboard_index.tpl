@@ -78,7 +78,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                         <li class="profile-image">
                             <img src="{{ include file="_tpl/user-image.tpl" user=$user width=125 height=125 }}" />
                             <div>
-                                <dl>{{ $form->image->setLabel("Profil hochladen") }}</dl>
+                                <dl>{{ $form->image->setLabel("Neues Profilbild hochladen") }}</dl>
                                 <p>Bitte verwenden Sie keine Bilder, an denen Sie die Rechte nicht besitzenoder auf denen andere Personen als Sie selber abgebildet sind.</p>
                             </div>
                         </li>
@@ -108,11 +108,11 @@ function newSubscriber(firstName, lastName, email, productId) {
                             <input type="submit" id="location-search" class="grey-button" value="Suchen" />
                         </li>
                         <li class="map">
-                            <label>Markierung entfernen</label>
+                            <label id="remove-geolocation">Markierung entfernen</label>
                             <div id="map_canvas" class="map-holder" style="width:409px; height:180px"></div>
                         </li>
                         <li class="buttons">
-                            {{*<input type="submit" value="Profil ansehen" class="grey-button" />*}}
+                            <a href="{{ $view->url(['username' => $user->uname], 'user') }}" target="_blank" title="Profil ansehen" class="grey-button">Profil ansehen</a>
                             <input type="submit" value="Speichern" class="grey-button" />
                         </li>
                     </ul>
@@ -132,7 +132,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                     {{ /foreach }}
                     </p>
 
-                    <p><a href="{{ $view->url([], 'my-topics') }}" title="Meine Themen">Themen verwalten</a></p>
+                    <p><a href="{{ $view->url([], 'my-topics') }}" title="Meine Themen">Neue Artikel zu diesen Themen lesen & Themen verwalten</a></p>
         </div>
         <div id="author-3" class="profile-edit-box" >
             <script>
@@ -249,6 +249,11 @@ $(document).ready(function() {
         if (value.length >= 150) {
             return false;
         }
+    });
+
+    $('#remove-geolocation').click(function() {
+        $('#geolocation').val('');
+        marker.setVisible(false);
     });
 });
 </script>

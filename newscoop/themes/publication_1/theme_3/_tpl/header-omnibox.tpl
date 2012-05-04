@@ -20,7 +20,7 @@
                                     </li>
                                     <li>
                                         <label for="omniboxLoginPassword">Passwort</label>
-                                        <input id="omniboxLoginPassword" type="text" />
+                                        <input id="omniboxLoginPassword" type="password" />
                                     </li>
                                     <li>
                                         <input id="omniboxLoginRemember" type="checkbox" /> <label for="omniboxLoginRemember" style="display: inline;">Eingeloggt bleiben</label>
@@ -28,7 +28,9 @@
                                     <li>
                                         <button class="button">Login</button>
                                         <a href="#" id="omniboxRegisterLink">Benutzerkonto anlegen</a><br>
-                                        <a href="{{ $view->baseUrl('/auth/password-restore ') }}">Passwort vergessen</a>
+                                        <a href="#" id="omniboxForgotPasswordLink">Passwort vergessen</a>
+                                        <span class="sep"><em>oder</em></span>
+                                        <a href="{{ $view->url(['controller' => 'auth', 'action' => 'social', 'provider' => 'Facebook'], 'default') }}" class="button fb-button"><span>Login mit Facebook</span></a>
                                     </li>
                                 </ul>
                            </li>
@@ -48,7 +50,7 @@
                                 <ul class="radio-list">
                                     <li>
                                         <input type="radio" id="omniboxFeedbackRadioComment" name="omnibox-1" class="styled">
-                                        <label for="omniboxFeedbackRadioComment">Kommentier zum Artikel</label>
+                                        <label for="omniboxFeedbackRadioComment">Kommentar zum Artikel</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="omniboxFeedbackRadioFeedback" name="omnibox-1" class="styled" checked="checked">
@@ -65,7 +67,7 @@
                                 <textarea id="omniboxFeedbackContent" placeholder=""></textarea>
                             </li>
                             <li>
-                                <p class="info" style="font-size: 10px;">Material hochladen: Bilder (jpg, png, gif) Dokumente (pdf)</p>
+                                <p class="info">Material hochladen: Bilder (jpg, png, gif) Dokumente (pdf)</p>
                                 <div class="custom-file-upload" id="omniboxUploadContainer">
                                     <div class="showValue" id="omniboxUploadInfo"></div>
                                     <input type="button" id="omniboxUpload" value="Datei anhängen">
@@ -90,7 +92,7 @@
                                 <ul class="radio-list">
                                     <li>
                                         <input type="radio" id="omniboxCommentRadioComment" name="omnibox-2" class="styled" checked="checked">
-                                        <label for="omniboxCommentRadioComment">Kommentier zum Artikel</label>
+                                        <label for="omniboxCommentRadioComment">Kommentar zum Artikel</label>
                                     </li>
                                     <li>
                                         <input type="radio" id="omniboxCommentRadioFeedback" name="omnibox-2" class="styled">
@@ -144,6 +146,23 @@
                 </fieldset>
             </div>
             
+            <div id="omniboxForgotPassword">
+                <fieldset>
+                    <h3>Passwort wiederherstellen</h3>
+                    <form id="omniboxForgotPasswordForm">
+                        <ul class="reg-form">
+                            <li>
+                                <input type="text" id="omniboxForgotPasswordEmail" placeholder="Ihre E-Mail-Adresse" />
+                            </li>
+                            <li class="clearfix">
+                                <button class="button right">Neues Passwort anfordern</button>
+                                <a href="#" class="left" id="omniboxForgotPasswordBackLink">Back</a>
+                            </li>
+                        </ul>
+                    </form>
+                </fieldset>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -173,6 +192,8 @@ $(document).ready(function() {
                     omnibox.setMessage('');
                     omnibox.loggedIn = true;
                     omnibox.checkView();
+                    $('#omnibox').width(omnibox.openWidth);
+                    $('#omnibox').height(omnibox.openHeight);
                 }
                 else {
                     omnibox.setMessage(data.response);
@@ -282,11 +303,29 @@ $(document).ready(function() {
                         omnibox.setMessage(data.response);
                     }
                     
-                    $('#omniboxCommentSubject').val('')
-                    $('#omniboxCommentContent').val('')
+                    $('#omniboxCommentSubject').val('');
+                    $('#omniboxCommentContent').val('');
                 }
             });
         }
+        return(false);
+    });
+    
+    $('#omniboxForgotPasswordForm').submit(function() {
+        var data = {
+            email: $('#omniboxForgotPasswordEmail').val()
+        };
+        
+        $.ajax({
+            type: 'POST',
+            url: '{{ $view->baseUrl("/auth/password-restore-ajax/?format=json") }}',
+            data: data,
+            dataType: 'json',
+            success: function(data) {
+                omnibox.setMessage(data.response);
+            }
+        });
+        
         return(false);
     });
     
@@ -329,6 +368,14 @@ $(document).ready(function() {
     $('#omniboxLoginLink').click(function() {
         omnibox.switchView('omniboxLogin');
     });
+    
+    $('#omniboxForgotPasswordLink').click(function() {
+        omnibox.switchView('omniboxForgotPassword');
+    });
+    
+    $('#omniboxForgotPasswordBackLink').click(function() {
+        omnibox.switchView('omniboxLogin');
+    });
 });
 
 var omnibox = {
@@ -339,6 +386,8 @@ var omnibox = {
     silverlightRuntime: '{{ $view->baseUrl("/js/plupload/js/plupload.silverlight.xap") }}',
     fileType: null,
     fileId: null,
+    openWidth: 0,
+    openHeight: 0,
     
     initialize: function() {
         if ('{{$gimme->user->logged_in}}' != '') {
@@ -403,7 +452,15 @@ var omnibox = {
     },
     
     switchView: function(view) {
-        var views = ['omniboxFeedback', 'omniboxComment', 'omniboxLogin', 'omniboxRegister', 'omniboxAfterRegister'];
+        if (view == 'omniboxLogin') {
+            omnibox.openWidth = 319;
+            omnibox.openHeight = 500;
+        }
+        else {
+            omnibox.openWidth = 582;
+            omnibox.openHeight = 420;
+        }
+        var views = ['omniboxFeedback', 'omniboxComment', 'omniboxLogin', 'omniboxRegister', 'omniboxAfterRegister', 'omniboxForgotPassword'];
         for (var i in views) {
             $('#'+views[i]).hide();
         }
@@ -418,6 +475,24 @@ var omnibox = {
         else {
             $('#omniboxMessage').show();
         }
+    },
+    
+    show: function() {
+        $('#omnibox').animate({
+            width: omnibox.openWidth,
+            height: omnibox.openHeight
+        },500);
+        $('.omnibox-content').show();
+        $('.overlay').fadeIn(500);
+    },
+    
+    hide: function() {
+        $('#omnibox').animate({
+            width: '44px',
+            height: '54px'
+        },500);
+        $('.omnibox-content').fadeOut(500);
+        $('.overlay').fadeOut(500);
     }
 }
 </script>

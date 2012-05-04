@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	
 // this makes problems for js-based select/options manipulations
 //	$('select').dropdownized({fixed:true});
     $('select').each(function(ind_elm, elm) {
@@ -9,6 +10,13 @@ $(document).ready(function() {
     });
 	
 	// Datepicker
+	$( ".datepicker" ).datepicker({
+		showOn: "button",
+		buttonImage: "_css/tw2011/img/calendar.png",
+		buttonImageOnly: true,
+		nextText: '&raquo;',
+		prevText: '&laquo;'
+	});
 /*  is defined inside agenda's subnav.tpl
 	$( "#agenda-datepicker" ).datepicker({
 		dayNamesMin: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
@@ -44,53 +52,39 @@ $(document).ready(function() {
 			var caption = (opts.currSlide + 1) + '/' + opts.slideCount;
 			$(cap).html(caption);
 		}
-    });
+    });	
 	
 	// Tabs
 	$('.tabs').tabs();
-
-	// Carousel
-	$('.carousel').jcarousel();
-
+	
+// Carousel
+ $('.carousel').jcarousel();	
+	
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
 	$('#omnibox a.trigger, a.omni-box-trigger').toggle(
 		function(){
-			$('#omnibox').animate({
-				width: '319px',
-				height: '460px'
-			},500);
-			$('.omnibox-content').show();
-			$('.overlay').fadeIn(500);
-			
+			if (omnibox) {
+                omnibox.show();
+            }
 		},
 		function(){
-			$('#omnibox').animate({
-				width: '44px',
-				height: '54px'
-			},500);
-			$('.omnibox-content').fadeOut(500);
-			$('.overlay').fadeOut(500);
+			if (omnibox) {
+                omnibox.hide();
+            }
 		}
 	);
 	
 	$('#omnibox a.comm-trigger').toggle(
 		function(){
-			$('#omnibox.omnibox-comments').animate({
-				width: '582px',
-				height: '390px'
-			},500);
-			$('.omnibox-content').show();
-			$('.overlay').fadeIn(500);
-			
+			if (omnibox) {
+                omnibox.show();
+            }
 		},
 		function(){
-			$('#omnibox.omnibox-comments').animate({
-				width: '44px',
-				height: '54px'
-			},500);
-			$('.omnibox-content').fadeOut(500);
-			$('.overlay').fadeOut(500);
+			if (omnibox) {
+                omnibox.hide();
+            }
 		}
 	);
 	
@@ -131,7 +125,7 @@ $(document).ready(function() {
 	
 	// Article page side flip
 	$('a.article-view-rear').click(function(){
-        document.location.hash = 'hintergrund';
+        document.location.hash = '';
         $('#article-rear').show();
         $('#article-front').hide();
         // insert analytics code here
@@ -149,7 +143,7 @@ $(document).ready(function() {
         $('a.article-view-rear').trigger('click');
     };
     
-    $('#article-recommend-button').fancybox({height: 460, padding: 4, margin: 0, scrolling: 0});
+    $('#article-recommend-button').fancybox({type: 'iframe', width: 600, height: 500, padding: 4, margin: 0, scrolling: 0});
 	
 	
 	
@@ -203,6 +197,26 @@ $(document).ready(function() {
         	}
     	}
 	});
+	
+$(".fancybox-thumb").fancybox({
+		prevEffect	: 'none',
+		nextEffect	: 'none',
+		helpers	: {
+			title	: {
+				type: 'outside'
+			},
+			overlay	: {
+				opacity : 0.6,
+				css : {
+					'background-color' : '#000'
+				}
+			},
+			thumbs	: {
+				width	: 100,
+				height	: 75
+			}
+		}
+	});	
 	
 	// Custom FIle Inputs
 	$('input[type=file]').change(function(e){

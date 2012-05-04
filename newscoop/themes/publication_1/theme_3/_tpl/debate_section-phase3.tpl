@@ -1,6 +1,6 @@
         <div class="top-line clearfix">
                 
-                	<h3>Repliken</h3>
+                	<h3>Schlussworte</h3>
                     
                     <div class="two-columns">
                     

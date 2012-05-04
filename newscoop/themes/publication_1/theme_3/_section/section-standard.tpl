@@ -2,9 +2,13 @@
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
 	<div id="wrapper">
         
 {{ include file="_tpl/header-omnibox.tpl" }}
+
+{{ include file="_werbung/section-header.tpl" }}
         
 {{ include file="_tpl/header.tpl" }}
         
@@ -81,7 +85,7 @@
 {{*** werbung ***}}   
 {{ include file="_werbung/section-maincol.tpl" }}
 
-{{ list_playlist_articles columns="4" name=$gimme->section->name }}
+{{ list_playlist_articles columns="4" length="30" name=$gimme->section->name }}
 {{ if $gimme->current_list->index gt 10 }}
 {{ if $gimme->current_list->index == 11 }}                
             	<div class="top-line clearfix slideshow">
@@ -119,7 +123,8 @@
             <aside>
 
 {{ if !($gimme->section->number == 60) }}             
-{{ include file="_tpl/sidebar-ticker.tpl" }}
+{{ include file="_tpl/sidebar-ticker.tpl" id="single" }}
+{{ include file="_tpl/sidebar-ticker-init.tpl" ids="single" }}
 {{ /if }}
                 
 {{ include file="_tpl/sidebar-partnerbuttons.tpl" }}

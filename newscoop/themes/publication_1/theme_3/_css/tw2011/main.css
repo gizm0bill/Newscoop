@@ -213,7 +213,7 @@ a.theme-subscribe {
 			a.article-view-rear span {background-position:25px -94px;}
 			a.article-view-front span {background-position:30px 7px;}
 	
-	a.bottom-align {position:absolute; bottom:0; right:0; width:306px;}
+	a.bottom-align {position:absolute; bottom:0; right:0; width:306px; margin-bottom: 0;}
 	
 	a.button.fb-button {
 		color:#fff;
@@ -351,11 +351,18 @@ a.theme-subscribe {
 			
 			
 			.omnibox-content fieldset,
+			.omnibox-content .message,
 			.omnibox-content .inner-content {
 				padding:19px 32px;
 				background:#fff; background:rgba(255,255,255,0.97);
-				border:#dbdbdb solid 1px;
+				border:none;
 				}
+				.omnibox-content .message {
+					padding-bottom:2px;
+					font-size: 14px;
+					}
+					.omnibox-content .message.error {color:#990000;}
+					.omnibox-content .message.success {color:#0ca701;}
 				.omnibox-content fieldset h3,
 				.omnibox-content .inner-content h3 {
 					margin:0 0 15px 0;
@@ -379,13 +386,6 @@ a.theme-subscribe {
 					position:absolute; top:22px; right:32px;
 					font-size:12px;
 					}
-                
-                .omnibox-content div.message {
-					font-size:12px;
-                    display: block;
-                    background-color: #ffffff;
-                    padding: 4px;
-                }
 				
 				.omnibox-content fieldset input[type=text],
 				.omnibox-content fieldset input[type=password],
@@ -393,7 +393,7 @@ a.theme-subscribe {
 				.popup-box input[type=text],
 				.popup-box input[type=password],
 				.popup-box textarea {
-					width:243px; height:27px;
+					width:96%; height:27px;
 					padding:0 5px;
 					font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#000;
 					border:#bdbdbd solid 1px; border-right:#e5e5e5 solid 1px; border-bottom:#e5e5e5 solid 1px;
@@ -499,7 +499,9 @@ section article{padding-bottom:25px;}
 		background:url(img/icons_small/comment.png) 5px 5px no-repeat;
 		}
 		a.comments:hover {color:#333;}
-		
+
+		article header a.comments {float:right; line-height: 21px; display:none;}
+	
 	p.info-box {
 		padding:7px 0; margin-bottom:10px;
 		text-align:center;
@@ -634,7 +636,7 @@ section article{padding-bottom:25px;}
 				}
 				ul.post-list li p a {color:#000;}
 					ul.post-list li p a:hover {text-decoration:none;}
-			ul.post-list li span.meta {
+			ul.post-list li span.meta, ul.post-list li span.meta small {
 				overflow:hidden;
 				line-height:19px; color:#7f7f7f; font-size:12px;
 				}
@@ -729,7 +731,8 @@ section article{padding-bottom:25px;}
 						color:#000;
 						background:url(img/debate-nav-bgr.png) 0 0 repeat-x;
 						}
-					aside .debate-box ul.nav li a {height:auto; padding:0 0 0 10px;}
+					aside .debate-box ul.nav li a,
+					aside .debate-box ul.nav li span {height:auto; padding:0 0 0 10px;}
 				.debate-box ul.nav li a:before, .debate-box ul.nav li span:before  {
 					content:"";
 					position:absolute; left:0; top:0;
@@ -752,27 +755,37 @@ section article{padding-bottom:25px;}
 					}
 					.debate-box ul.nav li:first-child b {padding-left:0;}
 					.debate-box ul.nav li:first-child a:before {display:none;}
-					
-				aside .debate-box ul.nav li:first-child b,
-				aside .debate-box ul.nav li a {padding-left:10px; line-height:29px;}
+				aside .debate-box ul.nav li:first-child a,
+				aside .debate-box ul.nav li span,	
+				aside .debate-box ul.nav li a {padding-left:10px; line-height:29px; font-size: 12px;}
 					aside .debate-box ul.nav li a b {
 						display:inline-block; zoom:1; *display:inline;
 						width:145px;
+						padding-left:0 !important;
 						}
 				
-		.debate-box ul.votes ,
-		.debatte-stat-box ul.votes {
+		.debate-box ul.votes,
+		.debatte-stat-box ul.votes,
+		.debate-box ul.votes-text,
+		.debatte-stat-box ul.votes-text {
 			overflow:hidden;
-			margin:0 0 20px;
+			margin:0;
 			list-style-type:none;
 			}
-		.debatte-stat-box ul.votes {margin:0;}
+		.debatte-stat-box ul.votes,
+		.debatte-stat-box ul.votes-text {position:relative;}
+		.debatte-stat-box ul.votes-text, .debate-box ul.votes-text {z-index:2;}
 		.debatte-stat-box ul.votes.bottom-margin {margin-bottom:30px !important;}
 			.debate-box ul.votes li,
-			.debatte-stat-box ul.votes li {float:left; position:relative;}
-				.debate-box ul.votes li p,
-				.debatte-stat-box ul.votes li p {
-					padding:0 0 0 15px; margin:0;
+			.debatte-stat-box ul.votes li,
+			.debate-box ul.votes-text li,
+			.debatte-stat-box ul.votes-text li {float:left; position:relative;}
+			.debate-box ul.votes-text li, .debatte-stat-box ul.votes-text li {width:50%;}
+				.debate-box ul.votes li,
+				.debatte-stat-box ul.votes li {height:36px;}
+				.debate-box ul.votes-text li p,
+				.debatte-stat-box ul.votes-text li p {
+					padding:0 15px 0 0; text-align:right; margin:0;
 					font-family:Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; color:#000; line-height:36px;
 					}
 			.debate-box ul.votes li.ja,
@@ -786,6 +799,17 @@ section article{padding-bottom:25px;}
 					}
 			.debate-box ul.votes li.nein,
 			.debatte-stat-box ul.votes li.nein {background:#7cbca0;}
+			
+			.debate-box ul.votes-text li:first-child p,
+			.debatte-stat-box ul.votes-text li:first-child p {padding:0 0 0 15px; text-align:left;}
+			
+			.debate-box .votes-container,
+			.debatte-stat-box .votes-container {position:relative; height:36px; overflow:hidden;}
+			.debate-box .votes-container {margin-bottom:20px;}
+				.debatte-stat-box .votes-container ul.votes,
+				.debatte-stat-box .votes-container ul.votes-text,
+				.debate-box .votes-container ul.votes,
+				.debate-box .votes-container ul.votes-text {position:absolute; top:0; left:0; right:0;}
 	
 		.debate-box .debate-content {
 			overflow:hidden;
@@ -1372,7 +1396,17 @@ section article{padding-bottom:25px;}
 			margin-bottom:15px;
 			border-bottom:#e5e5e5 solid 2px;
 			}
-			.image-slideshow .img-content img {display:block; margin-bottom:7px; width:100%;}
+			.image-slideshow .img-content figure {display:block; margin-bottom:7px; width:100%;}
+			.image-slideshow .img-content figure a {position:relative; display:block; }
+			.image-slideshow .img-content figure a span {
+				display:block; width:57px; height:57px;
+				position:absolute; top:0; right:0; z-index:2;
+				background-image:url(img/open-slideshow.png);
+				background-repeat: no-repeat;
+				background-position: 15px 15px
+				}
+				.image-slideshow .img-content figure a:hover span {background-color:rgba(255, 255, 255, .4);}
+			.image-slideshow .img-content img, .image-slideshow .img-content a img {display:block; margin-bottom:0; width:100%; border:none;}
 			.image-slideshow .img-content p {
 				margin-bottom:5px;
 				font-size:13px;
@@ -1381,7 +1415,21 @@ section article{padding-bottom:25px;}
 		ul.slideshow-nav li {background:#000; float:left;}
 			ul.slideshow-nav li img {display:block;}
 				ul.slideshow-nav li.ui-tabs-selected img {-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; filter: alpha(opacity=50); -moz-opacity: 0.5; -khtml-opacity: 0.5; opacity:0.5;}
-
+				
+	/* 
+	Desktop hide --------------------- */
+		.desktop-hide {display:none;}
+		.mobile-divider {
+			background-color: #efefef;
+			box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.1), inset 0 -2px 2px rgba(0, 0, 0, 0.1);
+			float: none;
+			margin: 0 -10px;
+			height:12px;
+			border:1px solid #c2c2c2;
+			border-width:0;
+		}
+		
+	
 
 	/* Profile Edit -------------- */
 	.profile-edit {
@@ -1521,6 +1569,8 @@ section article{padding-bottom:25px;}
 					padding:10px; margin-bottom:5px;
 					background:#fff;
 					border:#e1e1e1 solid 1px;
+					overflow:auto;
+					height:300px;
 					}
 					.profile-edit-box.register-box .terms-content p,
 					.profile-edit-box.register-box .terms-content h5,
@@ -1533,9 +1583,12 @@ section article{padding-bottom:25px;}
 						margin:1em 0 2em 0;
 						}
 						.profile-edit-box.register-box .terms-content ol li {
-							list-style-type:none;
-							margin-bottom:1em;
-							}
+							    list-style-type: decimal;
+								margin-bottom: 1em;
+								margin-left: 30px;
+								overflow: visible;
+								padding: 0;
+								}
 						
 			
 	
@@ -1546,8 +1599,11 @@ section article{padding-bottom:25px;}
 -------------------------------------------------------------------------------------- */
 .content-box aside article section {float:none; width:auto;}
 aside article {font-family:Arial, Helvetica, sans-serif;}
+aside article section p small, aside article section p em,
+.omniticker-main-content article section p small, .omniticker-main-content article section p em {font-size:12px; color:#999;}
 ul.item-list {margin:0; list-style-type:none;}
 aside article section,
+.omniticker-main-content article section,
 ul.item-list li {
 	position:relative;
 	padding:0 0 0 30px;
@@ -1559,17 +1615,23 @@ ul.item-list li {
 		}
 	
 	aside article section span.icon,
+	.omniticker-main-content article section span.icon,
 	ul.item-list li span.icon {position:absolute; left:0; top:2px; width:20px; height:16px; text-indent:-9999px; background-position:50% 50%; background-repeat:no-repeat;}
 	
 	aside article section.article span.icon,
+	.omniticker-main-content article section.article span.icon,
 	ul.item-list li.article span.icon {background-image:url(img/icons_small/article.png);}
 	aside article section.link span.icon,
+	.omniticker-main-content article section.link span.icon,
 	ul.item-list li.link span.icon {background-image:url(img/icons_small/link.png);}
 	aside article section.tweet span.icon,
+	.omniticker-main-content article section.tweet span.icon,
 	ul.item-list li.tweet span.icon {background-image:url(img/icons_small/twitter.png);}
 	aside article section.comment span.icon,
+	.omniticker-main-content article section.comment span.icon,
 	ul.item-list li.comment span.icon {background-image:url(img/icons_small/comment.png);}
 	aside article section.omni span.icon,
+	.omniticker-main-content article section.omni span.icon,
 	ul.item-list li.omni span.icon {background-image:url(img/icons_small/omni.png);}
 	
 	
@@ -1579,8 +1641,10 @@ ul.item-list li {
 	ul.item-list li.story {background:url(img/icons_small/story.png) 0 0 no-repeat; padding:2px 0 0 30px;}
 	
 	
-	aside article h3 {margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#333; font-weight:bold; line-height:18px;}
+	aside article h3,
+	.omniticker-main-content article h3 {margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#333; font-weight:bold; line-height:18px;}
 	aside article p,
+	.omniticker-main-content article p,
 	ul.item-list li {position:relative; font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#000; line-height:18px;}
 		aside article section h3 a {color:#333; text-decoration:none;}
 		aside article section p a {color:#000;}
@@ -1832,6 +1896,9 @@ ul.item-list li {
 /*
 = ARTICLE SINGLE
 -------------------------------------------------------------------------------------- */
+
+
+
 .article-single {position:relative;}
 
 .full-size section {float:none; width:auto;}
@@ -1852,6 +1919,7 @@ ul.item-list li {
 		}
 		.article-single article header p {margin:0; line-height:17px;}
 	.article-single article figure {margin-bottom:20px;}
+		.article-single section article > h2 + .time + figure {margin-top:20px;}
 		.article-single article figure p {
 			margin:0; padding-top:5px;
 			font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:15px;
@@ -1888,12 +1956,17 @@ ul.item-list li {
 			margin-bottom:0; padding-left:33px;
 			background:url(img/bullet-dash.png) 15px 12px no-repeat;
 			}
+			#article-rear .article-single article ul li {background-image:none}
 
 
 	/* Aside ---------------------- */
 	#wrapper .article-single aside article {padding-bottom:10px;}
 		.article-single aside article p,
 		.dossier-overview aside article p {font-family:'GeorgiaProW01-Regular', Georgia, 'Times New Roman', Times, serif;}
+		
+		.article-single aside article p strong,
+		.dossier-overview aside article p strong {font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif;}
+		
 		.article-single aside article header p,
 		.article-single article figure p,
 		.dossier-overview aside article header p {
@@ -1921,7 +1994,7 @@ ul.item-list li {
 		.comments-box a.button {width:207px; margin:auto;}
 		.comments-nav {
 			overflow:hidden;
-			width:400px;
+			width:480px;
 			margin:0 auto 20px auto;
 			list-style-type:none;
 			border:#d8d8d8 solid 1px;
@@ -1995,7 +2068,7 @@ ul.item-list li {
 				}
 				.article-single .author-box h4 span {font-weight:normal;}
 				.article-single .author-box h5,
-				.article-related-tabs div h5 {font-size:16px;}
+				.article-related-tabs div h5 {font-size:16px; font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif;}
 			
 			.article-single ul.article-info li p.social {overflow:hidden;}
 				.article-single ul.article-info li p.social a {
@@ -2071,6 +2144,19 @@ ul.item-list li {
 					}
 					.tabs.article-related-tabs ul li.ui-tabs-selected a {font-weight:bold;}
 					
+
+/* Font Fix ---------------------- */
+
+.article-single > section > article strong,
+.article-single > section > article p strong,
+.article-single > section > article h4 {font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif;}
+
+.article-single > section > article blockquote,
+.article-single > section > article em, 
+.article-single > section > article p em {font-family:Georgia, "Times New Roman", Times, serif;}
+
+
+
 					
 /*
 = DEBATTE PAGES
@@ -2102,9 +2188,15 @@ ul.item-list li {
 	}
 	.debatte-top-nav li {
 		float:left;
-		width:20%;
+		width:24%;
 		font-family:Arial, Helvetica, sans-serif;
 		}
+		.debatte-top-nav li:first-child {
+			width:10%;
+			}
+		.debatte-top-nav li:last-child, .debatte-top-nav li.last {
+			width:18%;
+			}
 		.debatte-top-nav li a, .debatte-top-nav li span {
 			display:block; position:relative;
 			height:35px;
@@ -2307,6 +2399,7 @@ ul.item-list li {
 		width:300px;
 		border:#bbbbbb solid 1px; border-bottom:#e1e1e1 solid 1px; border-right:#e1e1e1 solid 1px;
 		box-shadow:inset 1px 1px 1px #ebebeb;
+		background-color:#fcfcfc;
 		}
 	#main-nav fieldset {position:absolute; top:-47px; right:0;}
 	.top-filter fieldset {float:left;}
@@ -2477,6 +2570,12 @@ ul.item-list li {
 	.social-network-box .left {
 		height:34px;
 		border:#cdcdcd solid 1px;
+		background-color:#f1f1f1;
+		background-image: -moz-linear-gradient(top, #ffffff, #f4f4f4);
+		background-image: -o-linear-gradient(top, #ffffff, #f4f4f4);
+		background-image: -webkit-gradient(linear, center top, center bottom, from(#ffffff), to(#f4f4f4));
+		background-image: -webkit-linear-gradient(top, #ffffff, #f4f4f4);
+		background-image: linear-gradient(top, #ffffff, #f4f4f4);
 		}
 		.social-network-box .left ul {margin:0 !important;}
 	.social-network-box p.right {margin:0 !important;}
@@ -2612,8 +2711,19 @@ ul.item-list li {
 /*
 = Size adjustments
 -------------------------------------------------------------------------------------- */
+@media all and (max-width: 1160px) {
+	#omni-box-placeholder {left:0; width:100%; margin-left:0;}
+			#omnibox {right:1%;}
+	#top ul {
+		padding-right: 45px;
+	}
+}
 
-@media all and (max-width: 1005px) {
+
+
+
+@media all and (max-width: 1024px) {
+	
 	
 	#wrapper,
 	.footer-holder,
@@ -2651,6 +2761,7 @@ ul.item-list li {
 	aside article p,
 	ul.item-list li,
 	aside article h3,
+	.omniticker-main-content article h3,
 	ul.post-list li p,
 	.debate-box .debate-content li p,
 	ul.post-list li h4,
@@ -2667,16 +2778,19 @@ ul.item-list li {
 		.content-box.debatte-page ul.debatte-top-nav li:last-child {border-bottom:#cdcdcd solid 1px; margin-bottom:10px;}
 		.debate-box ul.nav li:last-child {border-bottom:0;}
 		.debate-box ul.nav li a,
+		.debate-box ul.nav li span,
 		.content-box.debatte-page ul.debatte-top-nav li a {height:auto; padding:0 0 0 10px;}
 		.content-box.debatte-page ul.debatte-top-nav li.active a {background: url(img/debate-nav-bgr.png) 0 0 repeat-x; color: #000000;}
 			.debate-box ul.nav li a:before,
 			.debate-box ul.nav li.active a:after,
 			.content-box.debatte-page ul.debatte-top-nav li a:before,
 			.content-box.debatte-page ul.debatte-top-nav li.active a:after,
-			.debatte-top-nav li a:after, 
+			.debatte-top-nav li a:after,
+			.debate-box ul.nav li span:before, 
 			.debatte-top-nav li.active a:before {display:none;}
 				.debate-box ul.nav li:first-child a,
 				.debate-box ul.nav li a,
+				.debate-box ul.nav li span,
 				.content-box.debatte-page ul.debatte-top-nav li a {padding-left:10px; line-height:29px; font-size:12px !important;}
 					.debate-box ul.nav li a b,
 					.content-box.debatte-page ul.debatte-top-nav li a b {display:inline-block; zoom:1; *display:inline; width:145px;}
@@ -2817,9 +2931,16 @@ ul.item-list li {
 	aside .profile-edit-box ul li input[type=password], aside .profile-edit-box ul li input[type="text"]  {width:98%;}
 }
 
-@media all and (max-width: 640px) {
+@media all and (max-width: 768px) {
 	
 	body {border:0; background:#e5e5e5;}
+	
+	article header a.comments {display:block;}
+	.mobile-hide{display:none !important;}
+	
+	/* 
+	Desktop hide --------------------- */
+	.desktop-hide {display:block;}
 	
 	#wrapper,
 	.footer-holder,
@@ -2833,7 +2954,6 @@ ul.item-list li {
 	.desktop-hide {display:block;}
 	
 	#omnibox,
-	.mobile-hide,
 	a.bottom-align {display:none;}
 	.content-box {padding:0;}
 	.content-box section,
@@ -2847,11 +2967,14 @@ ul.item-list li {
 		}
 		.content-box aside,
 		.content-box section {padding-top:10px;}
-		.content-box aside article section {padding:inherit; margin:inherit; background-color:inherit; box-shadow:none;}
+		.content-box aside article section,
+		.content-box .omniticker-main-content article section {padding:inherit; margin:inherit; background-color:inherit; box-shadow:none;}
 	.two-columns article,
 	.three-columns article,
 	ul.post-list li {float:none; width:auto; margin:0;}
 	ul.post-list li {margin-bottom:10px; padding-bottom:10px; border-bottom:#e1e1e1 solid 1px;}
+	
+	ul.post-list li:nth-child(4), ul.post-list li:nth-child(5), ul.post-list li:nth-child(6) {display:none;}
 	
 	article figure.left,
 	article figure {float:none; width:auto; overflow:visible; margin:0 -10px 10px -10px;}
@@ -2881,6 +3004,7 @@ ul.item-list li {
 	.article-single section article header {padding-top:0; border:0;}
 	
 	aside article header,
+	.omniticker-main-content article header,
 	.full-width article header, 
 	h3.title,
 	.mobile-header {
@@ -2894,6 +3018,7 @@ ul.item-list li {
 		.full-width article header, 
 		h3.title {border-top:0;}
 		aside article header p,
+		.omniticker-main-content article header p,
 		.full-width article header,
 		h3.title {padding:15px 10px; line-height:normal;}
 		article header ul.paging {right:10px; top:10px;}
@@ -2904,7 +3029,8 @@ ul.item-list li {
 			.mobile-header p a,
 			.link-back a {display:block; padding:10px 10px 10px 30px; color:#333; background:url(img/mobile-arrow-prev.png) 15px 50% no-repeat;}
 	
-	.content-box aside article section {padding:0 0 0 30px;}
+	.content-box aside article section,
+	.content-box .omniticker-main-content article section {padding:0 0 0 30px;}
 	
 	.content-box.debatte-page h2 span {display:none;}
 	
@@ -2945,7 +3071,7 @@ ul.item-list li {
 	.debatte-page aside small.info {display:none;}
 	
 		.mobile-list-view article {
-			padding:15px 10px !important; margin:0 -10px;
+			padding:15px 10px !important; margin:0 -10px !important;
 			border-bottom:#e5e5e5 solid 1px;
 			}
 			.mobile-list-view article:first-child {border-top:#e5e5e5 solid 1px;}
@@ -2954,13 +3080,18 @@ ul.item-list li {
 				.mobile-list-view article header,
 				.mobile-list-view article h2,
 				.mobile-list-view article p {margin:0; padding:0; overflow:hidden;}
+				.mobile-list-view article h2 {font-size:18px; line-height:140%;}
 				
 				.mobile-list-view article header {padding-left:30%; margin-left:10px;}
 				.mobile-list-view article figure {margin-top:-19px;}
 		
 		.mobile-list-view.header-fix article header {padding-left:0; margin-left:0;}
 		.mobile-list-view.header-fix article figure {margin-top:0;}
+
+		.mobile-list-view > .two-columns {padding-bottom:0;}
 		
+		.mobile-list-view + .mobile-list-view {margin-top:-1px;}
+
 		.content-box aside .teaser-box {padding-bottom:10px !important;}
 			.content-box aside .teaser-box section {overflow:hidden; padding:10px 0; border-bottom:#eee solid 1px;}
 			.content-box aside .teaser-box section:last-child {border-bottom:0;}
@@ -3277,7 +3408,7 @@ ul.item-list li {
 	p.footer-text {
 		display:block;
 		height:20px;
-		padding-top:20px;
+		padding-top:20px; margin-bottom: 20px;
 		font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#333;
 		background:url(img/logo.png) 100% 100% no-repeat; background-size:auto 25px;
 		}
@@ -3429,7 +3560,10 @@ ul.item-list li {
 	.mobile-list-view article p,
 	.social-network-box a.print {display:none;}
 	.mobile-list-view article header p,
+	.mobile-list-view.dossier-mobile-list article p,
 	.mobile-list-view.plain-list p {display:block;}
+	
+	
 	
 	.content-box aside .teaser-box section img {width:30%;}
 	

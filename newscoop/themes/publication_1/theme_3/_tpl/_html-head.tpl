@@ -19,10 +19,14 @@
 
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/main.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/skin.css" }}">
-    <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/jquery.fancybox-1.3.4.css" }}">
+    
+    <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/jquery.fancybox.css" }}">
+    <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/helpers/jquery.fancybox-thumbs.css" }}">
 
 	{{* jquery has to go to header because of maps *}}
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script>window.jQuery || document.write("<script src='{{ url static_file="_js/libs/jquery.min.js" }}'>\x3C/script>")</script>     
     <script src="{{ url static_file="_js/libs/modernizr-2.0.6.js" }}"></script>
+    
+    <script type="text/javascript" src="http://imagesrv.adition.com/js/secure_tag_head_ad1_adfarm1.js"></script>
 </head>

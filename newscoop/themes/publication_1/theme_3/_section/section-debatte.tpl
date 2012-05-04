@@ -2,6 +2,8 @@
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
 {{**************************************************
 {{ $wdphase }} first, we decide what phase the Wochendebatte is in. the links and pages will
 be loaded accordingly. 
@@ -90,7 +92,7 @@ phase 4 = currentdate > date_closing 12:00
                     	<li{{ if $wdstage == "0" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=1"><b>Standpunkte</b>
                         {{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}</a></li>
-                    	<li{{ if $wdphase == "2" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Entgegnung</b>
+                    	<li{{ if $wdphase == "2" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=2"><b>Repliken</b>
                         {{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}</a></li>
                      <li{{ if $wdphase == "3" }} class="active"{{ /if }}><a href="{{ url options="section" }}?stage=3"><b>Schlussworte</b>
                         {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}</a></li>
@@ -102,7 +104,7 @@ phase 4 = currentdate > date_closing 12:00
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}>{{ if $wdphase > 0 }}<a href="{{ url options="section" }}?stage=1">{{ else }}<span>{{ /if }}<b>Standpunkte</b>
                     	{{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 0 }}</a>{{ else }}</span>{{ /if }}</li>                    	
                     	
-                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Entgegnung</b>
+                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Repliken</b>
                     	{{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 1 }}</a>{{ else }}</span>{{ /if }}</li>              	
                     	
                      <li{{ if $wdphase == "3"}} class="active"{{ /if }}>{{ if $wdphase > 2 }}<a href="{{ url options="section" }}?stage=3">{{ else }}<span>{{ /if }}<b>Schlussworte</b>

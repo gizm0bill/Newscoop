@@ -54,6 +54,11 @@
 
 
 {{ include file="_tpl/_html-head.tpl" }}
+<script type="text/javascript">
+window.agenda_has_select_tags = true;
+window.agenda_has_date_picker = false;
+</script>
+
 
 <style type="text/css">
 
@@ -416,9 +421,13 @@ return;
 
 <body>
 
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
   <div id="wrapper">
       
 {{ include file="_tpl/header-omnibox.tpl" }}
+
+{{ include file="_werbung/section-movies-header.tpl" }}
 
 {{ include file="_tpl/header.tpl" }}
         
@@ -426,7 +435,7 @@ return;
 
         <div class="content-box clearfix reverse-columns agenda-content movies-list">
 
-            <aside>
+            <aside class="mobile-hide">
 
 {{*
                 <h3>Sortieren nach</h3>
@@ -439,7 +448,7 @@ return;
 
                 <h3>Ort</h3>
                 <ul>
-                    <li>
+                    <li id="wo-place">
                         <select id="wo" name="region" class="omit_dropdown option_styled" onChange="load_area(this); return true;">
                                     <option value="region-basel">Region Basel</option>
                                     <option value="kanton-basel-stadt" selected>Basel-Stadt</option>
@@ -848,7 +857,7 @@ function parse_date_text($date_time_text)
                           {{ assign var="movie_text_len" $movie_desc_len+$movie_other_len }}
 
                           {{ if $gimme->article->has_image(1) }}
-                          <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
+                          <a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}"><img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" /></a>
                           {{ /if }}
 
                             {{* <a href="#" class="grey-button trailer-button" onClick="show_trailer('{{ $gimme->article->movie_trailer_vimeo }}'); return false;"><span>Trailer anschauen</span></a> *}}
@@ -868,7 +877,7 @@ function parse_date_text($date_time_text)
                                 {{ if $movie_rating_wv ne "" }}
                                     {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                                     {{ if $movie_rating_wv ne 0 }}
-                                        <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
+                                        <li class="rating"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul> <em>{{ $movie_rating_wv }}</em></li>
                                     {{ /if }}
                                 {{ /if }}
                                 {{ if $gimme->article->movie_cast ne "" }}
@@ -978,16 +987,20 @@ function parse_date_text($date_time_text)
 
                         <!--<thead>-->
                             <!--<tr>-->
+                        {{ assign var="day_count" 0 }}
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                            <td class="cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                            {{ assign var="day_count" $day_count + 1 }}
+                            <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
                         {{ /foreach }}
                             </tr>
                         <!--</thead>-->
 
                         <!--<tbody>-->
                             <tr>
+                            {{ assign var="day_count" 0 }}
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                                    <td class="screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
+                                {{ assign var="day_count" $day_count + 1 }}
+                                    <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
                                         <ul style="width:50px;margin-left:0px;padding-left:0px;">
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
@@ -1201,6 +1214,8 @@ window.set_list_content = function(data, direct) {
     show_lang('last');
 
     show_highlight(window.list_spec['date']);
+
+    adapt_global_sizes(true);
 
     $(".trailer-button").fancybox({
         type: 'iframe',

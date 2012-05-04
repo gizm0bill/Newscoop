@@ -1,7 +1,9 @@
-<div id="hintergrund"></div>
 {{ include file="_tpl/_html-head.tpl" }}
 
 <body>
+
+{{ include file="_tpl/_netmetrix-stats.tpl" }}
+
 <div id="fb-root"></div>
 <script>
   window.fbAsyncInit = function() {
@@ -24,6 +26,8 @@
 	<div id="wrapper">
         
 {{ include file="_tpl/header-omnibox.tpl" }}
+
+{{ include file="_werbung/article-header.tpl" }}
         
 {{ include file="_tpl/header.tpl" }}
         
@@ -42,7 +46,7 @@
                         <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
                         {{ include file="_tpl/article-figure.tpl" }}
 
-								{{ if $gimme->article->body }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}{{ else }}{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
+								{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if $gimme->article->body }}{{ $gimme->article->body }}{{ else }}{{ $gimme->article->DataContent|replace:'h2>':'h4>' }}{{ /if }}
 
                     </article>
                     
@@ -90,7 +94,7 @@
                     <article>
                         <figure>
                         	{{ map show_locations_list="false" show_reset_link=false auto_focus=false width="100%" height="180" }}
-                        	{{ list_map_locations }}{{ if $gimme->current_list->at_beginning }}<p>{{ /if }}{{ $gimme->location->name }}{{ if $gimme->current_list->at_end }}</p>{{ else }}, {{ /if }}{{ /list_map_locations }}
+                        	{{ if $gimme->article->map->name != "" }}<p>{{ $gimme->article->map->name }}</p>{{ /if }}
                         </figure>
                     </article>
 {{ /if }}                    
@@ -224,6 +228,20 @@
                 <p>{{ $gimme->author->biography->text|bbcode }}</p>
             </li>
             {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
+            <li>
+                <h5>Social Networks</h5>
+                <p class="social">
+                    {{ if !empty($gimme->author->user['facebook']) }}
+                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ trim($gimme->author->user['facebook']) }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="90" style="margin-right: 8px"></div>
+                    {{ /if }}
+                    {{ if !empty($gimme->author->user['twitter']) }}
+                    <div class="tw-follow" style="display: inline-block; position: relative; top: 2px">
+                        <a href="http://twitter.com/{{ trim($gimme->author->user['twitter'], '@') }}" class="twitter-follow-button" data-show-count="false" data-lang="de" data-show-screen-name="false">@{{ trim($gimme->author->user['twitter'], '@') }} folgen</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    </div>
+                    {{ /if }}
+                </p>
+            </li>
             {{ /if }}
             <li>
                 <h5>Beiträge</h5>
@@ -258,15 +276,7 @@
 {{ /if }}      
 {{ /list_related_articles }}              
                     
-                    <article>
-                        <header>
-                            <p>Tageswoche honorieren</p>
-                        </header>
-                        <p>Alle Artikel auf tageswoche.ch sind feri verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, können Sie uns freiwillig unterstützen. Sie entscheiden wieviel Sie bezahlen. Danke, dass Sie uns helfen, tageswoche.ch in Zukunft besser zu machen.</p>
-                    </article>
-                    
-                    <a href="#" class="grey-button reward-button"><span>Jetzt honorieren!</span></a>
-                    {{* pay_what_you_like *}}
+                    {{ pay_what_you_like title="Jetzt honorieren!" classes="grey-button reward-button" descr="Alle Artikel auf tageswoche.ch sind frei verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, nutzen Sie doch die Gelegenheit, uns zu unterstützen. Die Redaktion bedankt sich für Ihren Beitrag." }}
 
 {{*** WERBUNG ***}}                    
 {{ include file="_werbung/article-sidebar-3-backpage.tpl" }}

@@ -79,7 +79,7 @@ and then all is compared according to a matrix.
                     	<li{{ if $wdphase == "1" }} class="active"{{ /if }}>{{ if $wdphase > 0 }}<a href="{{ url options="section" }}?stage=1">{{ else }}<span>{{ /if }}<b>Standpunkte</b>
                     	{{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 0 }}</a>{{ else }}</span>{{ /if }}</li>                    	
                     	
-                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Entgegnung</b>
+                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Repliken</b>
                     	{{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 1 }}</a>{{ else }}</span>{{ /if }}</li>              	
                     	
                      <li{{ if $wdphase == "3"}} class="active"{{ /if }}>{{ if $wdphase > 2 }}<a href="{{ url options="section" }}?stage=3">{{ else }}<span>{{ /if }}<b>Schlussworte</b>
@@ -89,11 +89,19 @@ and then all is compared according to a matrix.
         					{{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 3 }}</a>{{ else }}</span>{{ /if }}</li>
         					        
                     </ul>
-                    <h5>Zwischenstand</h5>
-                    <ul class="votes">
-                    	<li class="ja" style="width:64%"><p>Ja 64%</p></li>
-                    	<li class="nein" style="width:36%"><p>Nein 36%</p></li>
-                    </ul>
+
+      {{ list_debates length="1" item="article" }}
+          {{ if $gimme->debate->is_votable }}
+          <h5>Zwischenstand</h5>
+          {{ else }}
+          <h5>Endresultat</h5>
+          {{ /if }}
+          <ul class="votes">
+          {{ list_debate_answers order="bynumber asc" }}
+              <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
+          {{ /list_debate_answers }}
+          </ul>
+      {{ /list_debates }}
 {{ /list_articles }}     
   
 {{* Pro and Contra introduction *}}

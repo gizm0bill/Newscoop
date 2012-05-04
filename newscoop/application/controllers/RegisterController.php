@@ -177,7 +177,6 @@ class RegisterController extends Zend_Controller_Action
         if (!empty($userData->email)) { // try to find user by email
             $user = $this->_helper->service('user')->findOneBy(array('email' => $userData->email));
             if (!empty($user)) { // we have user for given email, add him login
-                $user = array_pop($user);
                 $this->authSocial($user, $userData);
                 $this->_helper->redirector('index', 'dashboard');
             }
@@ -202,6 +201,7 @@ class RegisterController extends Zend_Controller_Action
 
         $this->view->form = $form;
         $this->view->img = $this->getUserImageSrc($user);
+        $this->view->social = true;
         $this->render('confirm');
     }
     
@@ -323,6 +323,10 @@ class RegisterController extends Zend_Controller_Action
                     $values['image'] = $this->getUserImageFilename($user);
                 }
 
+                if ($userData !== null) {
+                    $values['email'] = $userData->email;
+                }
+
                 $this->_helper->service('user')->savePending($values, $user);
                 $this->_helper->service('user.token')->invalidateTokens($user, 'email.confirm');
                 $this->notifyDispatcher($user);
@@ -348,7 +352,7 @@ class RegisterController extends Zend_Controller_Action
                         break;
 
                     default:
-                        var_dump($e);
+                        var_dump($e->getMessage(), $e->getTraceAsString());
                         exit;
                 }
             }

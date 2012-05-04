@@ -2,7 +2,9 @@
     <script>window.jQuery || document.write("<script src='{{ uri static_file='_js/libs/jquery.min.js' }}'>\x3C/script>")</script>
 
     <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.cycle.all.js' }}"></script>
-    <script type="text/javascript" src="{{ uri static_file='_js/libs/fancybox/jquery.fancybox-1.3.4.pack.js' }}"></script>
+    <script type="text/javascript" src="{{ uri static_file='_js/libs/fancybox/jquery.fancybox.pack.js' }}"></script>
+    
+	 <script type="text/javascript" src="{{ uri static_file='_js/libs/fancybox/helpers/jquery.fancybox-thumbs.js' }}"></script>    
     
     <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery-ui-1.8.16.custom.min.js' }}"></script>
     <script type="text/javascript" src="{{ uri static_file='_js/libs/jquery.jcarousel.min.js' }}"></script>
@@ -51,6 +53,7 @@
 	</script>
     
     <script type="text/javascript" src="{{ url static_file="_js/init.js" }}"></script>
-
+    
+	 <script type="text/javascript" src="http://imagesrv.adition.com/js/secure_tag_before_body_end.js"></script>
 </body>
 </html>

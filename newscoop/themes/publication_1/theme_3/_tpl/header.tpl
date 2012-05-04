@@ -3,7 +3,7 @@
 {{ local }}    
             <div id="top" class="clearfix">
                 <ul>
-                    <li>{{ $smarty.now|camp_date_format:"%W %e.%m.%Y" }}</li>
+                    <li>{{ $smarty.now|camp_date_format:"%W, %e.%m.%Y" }}</li>
                     <li>{{ weather }}</li>
                     <li><a href="#">Kontakt</a></li>
                     <li><a href="#">Login</a></li>
@@ -11,19 +11,21 @@
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
-            	<a href="/" class="start">Startseite</a>
+                <a href="/" class="start">{{ if $gimme->section->number }}{{ $gimme->section->name }}{{ else }}Startseite{{ /if }}</a>
                 <ul id="mobile-nav">
                     <li class="search"><a href="#">Search</a>
                     	<ul class="search-mobile">
                         	<li>
-                            	<input type="text" value="">
+                                <form method="GET" action="{{ $view->url(['controller' => 'search', 'action' => 'index'], 'default') }}">
+                                <input type="text" name="q" value="">
                                 <input type="submit" value="Suchen" class="grey-button">
+                                </form>
                             </li>
                         </ul>
                     </li>
                     <li class="settings"><a href="#">Settings</a></li>
                     <li class="login"><a href="#">Login</a>
-                    	<ul>
+                    		<ul>
                         	<li><a href="#">Profil bearbeiten</a></li>
                         	<li><a href="#">Meine Themen</a></li>
                         </ul>
@@ -31,6 +33,10 @@
                 </ul>
                 <nav>
                     <ul>
+
+                        {{ set_publication identifier="1" }}
+                        {{ set_current_issue }}
+                        <li class="desktop-hide"><a href="{{ url options="issue" }}"{{ if $gimme->publication == $gimme->default_publication && $gimme->template->name == "front.tpl" }} class="active"{{ /if }}>Startseite</a></li>
 
 {{* STANDARD SECTIONS *}}
 {{ set_publication identifier="1" }}
@@ -70,7 +76,7 @@
 {{ /local }}
 
                 {{* SEARCH BOX *}}                
-                <form method="get" action="{{ $view->url(['controller' => 'search', 'action' => null], 'default') }}">
+                <form method="get" action="{{ $view->url(['controller' => 'search', 'action' => null], 'default') }}/">
                 <fieldset>
                     <input type="text" value="" name="q" placeholder="Suchbegriff, Webcode +awafa" />
                     <button>Go</button>

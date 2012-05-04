@@ -27,7 +27,7 @@ $(function() {
     window.router = new SearchRouter();
     sourceFilterView = new SourceFilterView({collection: documents, el: $('#source-filter') });
     sectionFilterView = new SectionFilterView({collection: documents, el: $('#section-filter') });
-    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'omniticker']), '/')) }} });
+    Backbone.history.start({pushState: true, silent: window.location.hash.length == 0, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'omniticker']), '/')) }} });
 });
 </script>
 {{/block}}
