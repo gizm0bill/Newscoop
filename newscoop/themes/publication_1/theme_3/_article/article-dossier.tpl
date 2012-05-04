@@ -12,11 +12,16 @@
         
 {{ include file="_tpl/header.tpl" }}
 
-{{ assign var="curnum" value=$gimme->article->number }}
+{{ assign var="curnum" value=$gimme->article->number }}       
         
         <div class="content-box full-size clearfix">
             <section>
                 <article class="top">
+		  <article class="desktop-hide">
+            <header>
+            	<p><a class="mobile-arrow left" href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}"><span>&lt;</span></a>Dossiers</p>
+            </header> 
+        </article>                
                     <figure>
                         {{ include file="_tpl/renditions/img_990x330.tpl" }}
                         <big>Dossier:<br />
@@ -35,7 +40,7 @@
                 </article>
 
 {{ if !($gimme->article->history == "") }}                 
-                <article>
+                <article class="mobile-hide">
 {{ foreach array_filter(explode("<br />", $gimme->article->history)) as $item }}
 {{ if $item@first }}                
                 	<div class="slideshow">
@@ -114,7 +119,7 @@
 {{ list_related_articles columns="3" }}
 {{ if $gimme->current_list->index gt "3" }}
 {{ if $gimme->current_list->index == "4" }}                
-            	<div class="top-line clearfix slideshow">
+            	<div class="top-line clearfix slideshow mobile-hide">
                <div class="slides">            	
 {{ /if }}
 {{ if $gimme->current_list->column == "1" }}                                       
@@ -175,7 +180,7 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
 
 {{*** recommended links ***}}
 {{ if !($gimme->article->linklist == "") }}            
-            	<article>
+            	<article class="mobile-hide">
                 	<header>
                     	<p>Interessante Links zum Thema</p>
                     </header>
