@@ -28,7 +28,6 @@ var SearchFormView = Backbone.View.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        this.render();
     },
 
     render: function() {
@@ -132,7 +131,6 @@ var TypeFilterView = FilterView.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        this.render();
     },
 
     render: function() {
@@ -174,7 +172,6 @@ var DateFilterView = FilterView.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        this.render();
     },
 
     render: function() {
@@ -229,7 +226,6 @@ var TopicFilterView = FilterView.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        this.render();
     },
 
     render: function() {
@@ -322,7 +318,6 @@ var TickerFilterView = FilterView.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        this.render();
     },
 
     /**
@@ -440,7 +435,6 @@ var SortView = Backbone.View.extend({
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
-        this.render();
     },
 
     render: function() {
@@ -468,7 +462,38 @@ var SearchRouter = Backbone.Router.extend({
         "?*params": "search"
     },
 
+    map: {
+        q: 'query',
+        type: 'type',
+        date: 'date',
+        start: 'start',
+        sortf: 'sortf',
+        source: 'source',
+        section: 'section'
+    },
+
+    first: true,
+
     search: function(params) {
+        if (this.first) {
+            this.first = false;
+            if (window.location.hash.length != 0) {
+                this.setCollectionParams(window.documents, params);
+            }
+        }
+
         window.documents.fetch();
+    },
+
+    setCollectionParams: function(collection, params) {
+        var doubles = params.split('&');
+        for (var i = 0; i < doubles.length; i++) {
+            var param = doubles[i].split('=', 2);
+            if (param[0] in this.map) {
+                collection[this.map[param[0]]] = param[1];
+            } else if (param[0] == 'topic') {
+                collection.topic = param[1].split(',');
+            }
+        }
     }
 });

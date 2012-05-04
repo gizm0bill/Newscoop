@@ -74,7 +74,6 @@ $(function() {
     window.documents = new DocumentCollection();
     documentsView = new DocumentListView({collection: documents, el: $('#results'), emptyTemplate: $('#empty-search-list-template')});
     paginationView = new PaginationView({collection: documents, el: $('#search-pagination') });
-    {{ dynamic }}documents.reset(documents.parse({{ json_encode($result) }}));{{ /dynamic }}
     {{block datefilter_script}}dateFilterView = new DateFilterView({collection: documents, el: $('#date-filter') });{{/block}}
 });
 </script>
@@ -108,4 +107,11 @@ $(function() {
         <li class="next"><a href="#" class="grey-button">&raquo;</a></li>
     </ul>
 </section>
+<script>
+$(function() {
+    {{ dynamic }}if (window.location.hash.length == 0) {
+        documents.reset(documents.parse({{ json_encode($result) }}));
+    }{{ /dynamic }}
+});
+</script>
 {{/block}}

@@ -4,7 +4,7 @@
 <script>
 $(function() {
     window.router = new SearchRouter();
-    Backbone.history.start({pushState: true, silent: true, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'topic']), '/')) }} });
+    Backbone.history.start({pushState: true, silent: window.location.hash.length == 0, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'topic']), '/')) }} });
 });
 </script>
 {{/block}}
