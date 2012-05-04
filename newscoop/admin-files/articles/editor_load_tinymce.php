@@ -252,9 +252,23 @@ function CampsiteSubhead(ed) {
 $().ready(function() {
     $('textarea.tinymce').tinymce({
 
+        <?php
+        $loadOriginal = true;
+        $userGroups = $p_user->getUserTypes();
+        foreach($userGroups as $group) {
+            if (in_array($group->getId(), array(1, 2, 3))) {
+                $loadOriginal = false;
+                break;
+            }
+        }
 
+        if ($loadOriginal) {
+        ?>
     	// Location of TinyMCE script
         script_url : '<?php echo $Campsite['WEBSITE_URL']; ?>/js/tinymce/tiny_mce.js',
+        <?php } else { ?>
+        script_url : '<?php echo $Campsite['WEBSITE_URL']; ?>/js/tinymce/tw.tiny_mce.js',
+        <?php } ?>
 
      	// General options
         language : "<?php p($p_editorLanguage); ?>",

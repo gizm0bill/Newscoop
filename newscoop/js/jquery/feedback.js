@@ -89,7 +89,7 @@ var datatableCallback = {
                     }, serverObj.security),
                     success: function (data) {
                         flashMessage(putGS('Messages status change to $1.', statusMap[status]));
-                        datatable.fnDraw(false);
+                        datatable.fnClearTable(true);
                     },
                     error: function (rq, status, error) {
                         if (status == 0 || status == -1) {
@@ -145,7 +145,7 @@ $(function () {
             if(!datatableCallback.loading) {
                 datatableCallback.loading = true;
                 datatableCallback.serverData[$(this).val()] = $(this).is(':checked');
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             } else
                 return false;
     }).end().find('label').click(function(evt){
@@ -168,7 +168,7 @@ $(function () {
             if(!datatableCallback.loading) {
                 datatableCallback.loading = true;
                 datatableCallback.serverData[$(this).val()] = $(this).is(':checked');
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             } else
                 return false;
     }).end().find('label').click(function(evt){
@@ -199,7 +199,7 @@ $(function () {
             success: function (data) {
                 if ('deleted' == status) flashMessage(putGS('Message deleted.'));
                 else flashMessage(putGS('Message status change to $1.', statusMap[status]));
-                datatable.fnDraw(false);
+                datatable.fnClearTable(true);
             },
             error: function (rq, status, error) {
                 if (status == 0 || status == -1) {
@@ -221,7 +221,7 @@ $(function () {
             data: $(this).serialize(),
             success: function (data) {
                 flashMessage(putGS('Message updated.'));
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
             },
             error: function (rq, status, error) {
                 if (status == 0 || status == -1) {
@@ -242,7 +242,7 @@ $(function () {
             url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function (data) {
-                datatable.fnDraw();
+                datatable.fnClearTable(true);
                 flashMessage(putGS('Message updated.'));
             },
             error: function (rq, status, error) {

@@ -166,9 +166,9 @@ final class MetaArticleBodyField {
             $updateArticle = empty($requestObjectId);
             try {
                 // note that an analogy to SessionRequest::Create() is run at the js-based stats now, at Statistics::WriteStats();
-                if ($updateArticle) {
-                    $this->m_parent_article->setProperty('object_id', $requestObjectId);
-                }
+                //if ($updateArticle) {
+                //    $this->m_parent_article->setProperty('object_id', $requestObjectId);
+                //}
 
                 // statistics shall be only gathered if the site admin set it on (and not for editor previews)
                 $context = CampTemplate::singleton()->context();
