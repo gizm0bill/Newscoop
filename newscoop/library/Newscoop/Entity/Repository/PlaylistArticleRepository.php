@@ -49,7 +49,7 @@ class PlaylistArticleRepository extends EntityRepository
         $em = $this->getEntityManager();
         $article = $em->getRepository('Newscoop\Entity\Article')->findOneBy(array('number' => $articleId));
         $query = $em->createQuery("DELETE FROM Newscoop\Entity\PlaylistArticle pa WHERE pa.article = ?1");
-        $query->setParameter(1, $article);
+        $query->setParameter(1, $article->getNumber());
         try
         {
             $query->execute();
