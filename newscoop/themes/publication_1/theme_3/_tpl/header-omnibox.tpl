@@ -194,6 +194,10 @@ $(document).ready(function() {
                     omnibox.checkView();
                     $('#omnibox').width(omnibox.openWidth);
                     $('#omnibox').height(omnibox.openHeight);
+                    
+                    if (typeof(omnibox.afterLogin) != 'undefined') {
+                        omnibox.afterLogin();
+                    }
                 }
                 else {
                     omnibox.setMessage(data.response);
@@ -479,7 +483,6 @@ var omnibox = {
     },
     
     show: function() {
-        console.log('show');
         $('#omnibox').animate({
             width: omnibox.openWidth,
             height: omnibox.openHeight
@@ -491,7 +494,6 @@ var omnibox = {
     },
     
     hide: function() {
-        console.log('hide');
         $('#omnibox').animate({
             width: '44px',
             height: '54px'
@@ -503,7 +505,6 @@ var omnibox = {
     },
     
     toggle: function() {
-        console.log('toggle');
         if (omnibox.status == 0) {
             omnibox.show();
         }
