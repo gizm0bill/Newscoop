@@ -62,28 +62,18 @@ $(document).ready(function() {
 	
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
-	$('#omnibox a.trigger, a.omni-box-trigger').toggle(
+	$('#omnibox a.trigger, a.omni-box-trigger').click(
 		function(){
 			if (omnibox) {
-                omnibox.show();
-            }
-		},
-		function(){
-			if (omnibox) {
-                omnibox.hide();
+                omnibox.toggle();
             }
 		}
 	);
 	
-	$('#omnibox a.comm-trigger').toggle(
+	$('#omnibox a.comm-trigger').click(
 		function(){
 			if (omnibox) {
-                omnibox.show();
-            }
-		},
-		function(){
-			if (omnibox) {
-                omnibox.hide();
+                omnibox.toggle();
             }
 		}
 	);

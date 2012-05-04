@@ -388,6 +388,7 @@ var omnibox = {
     fileId: null,
     openWidth: 0,
     openHeight: 0,
+    status: 0,
     
     initialize: function() {
         if ('{{$gimme->user->logged_in}}' != '') {
@@ -478,21 +479,37 @@ var omnibox = {
     },
     
     show: function() {
+        console.log('show');
         $('#omnibox').animate({
             width: omnibox.openWidth,
             height: omnibox.openHeight
         },500);
         $('.omnibox-content').show();
         $('.overlay').fadeIn(500);
+        
+        omnibox.status = 1;
     },
     
     hide: function() {
+        console.log('hide');
         $('#omnibox').animate({
             width: '44px',
             height: '54px'
         },500);
         $('.omnibox-content').fadeOut(500);
         $('.overlay').fadeOut(500);
+        
+        omnibox.status = 0;
+    },
+    
+    toggle: function() {
+        console.log('toggle');
+        if (omnibox.status == 0) {
+            omnibox.show();
+        }
+        else if (omnibox.status == 1) {
+            omnibox.hide();
+        }
     }
 }
 </script>
