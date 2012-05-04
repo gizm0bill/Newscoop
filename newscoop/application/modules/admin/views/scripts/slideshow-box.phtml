@@ -83,6 +83,13 @@
         },
 
         render: function() {
+            if (this.collection.length >= 1) {
+                $('#create-slideshow').css('display', 'none');
+            }
+            if (this.collection.length < 1) {
+                $('#create-slideshow').css('display', 'inline');
+            }
+            
             $('#slideshow-list').empty();
             this.collection.each(function(slideshow) {
                 var view = new SlideshowView({model: slideshow});

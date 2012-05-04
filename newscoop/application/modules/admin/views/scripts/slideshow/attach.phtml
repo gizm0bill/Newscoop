@@ -50,7 +50,7 @@
         },
 
         addToArticle: function(article) {
-            if (!article.get('slideshows').get(this.get('id'))) {
+            if (!article.get('slideshows').get(this.get('id')) && article.get('slideshows').length == 0) {
                 article.get('slideshows').add(this);
             }
         },
