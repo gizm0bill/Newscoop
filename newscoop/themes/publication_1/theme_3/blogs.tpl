@@ -58,7 +58,7 @@
                     <article>
                         <figure>
                             <big>{{ $gimme->article->name }}</big>
-                            <a href="{{ url options="section" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
+                            <a href="{{ url options="section" }}">{{ include file="_tpl/renditions/img_300x200.tpl" where="blogs" }}</a>
                         </figure>
                         <p>{{ $gimme->article->motto }}</p>
                     </article>
@@ -70,14 +70,18 @@
             </section><!-- / Main Section -->
             
             <aside>
-                
+
+<span class="mobile-hide">                
 {{ include file="_tpl/sidebar-community.tpl" }}
+</span>
                 
 {{*** werbung ***}}                
 {{ include file="_werbung/front-blogs-sidebar.tpl" }}
 
+<span class="mobile-hide">
 {{*** pay what you like ***}}   
 {{ include file="_tpl/sidebar-honorieren.tpl" }}                
+</span>
             
             </aside><!-- / Sidebar -->
             
