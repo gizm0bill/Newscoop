@@ -47,6 +47,7 @@ div.geomap_open_large_map {
                         <header>
                             <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
+                        <a href="#" class="grey-button article-switch article-view-rear desktop-hide"><span>Hintergrund zum Artikel</span></a>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
                         <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
@@ -67,7 +68,7 @@ div.geomap_open_large_map {
 {{* ARTICLE TOPICS *}}
 {{ list_article_topics }}                
 {{ if $gimme->current_list->at_beginning }}
-                    <article>                                            
+                    <article class="mobile-hide">                                            
                         <header>
                             <p>Mehr zum Thema</p>
                         </header>
@@ -84,7 +85,7 @@ div.geomap_open_large_map {
 {{* RELATED ARTICLES *}}
 {{ list_related_articles }}
 {{ if $gimme->current_list->at_beginning }}  
-                    <article>
+                    <article class="mobile-hide">
                         <header>
                             <p>Verwandte Artikel</p>
                         </header>
@@ -97,7 +98,7 @@ div.geomap_open_large_map {
 
 {{* MAP - display only if set *}}
 {{ if $gimme->article->has_map }}                   
-                    <article>
+                    <article class="mobile-hide">
                         <figure>
                         	{{ map show_locations_list="false" show_reset_link=false auto_focus=false width="100%" height="180" }}
                         	{{ if $gimme->article->map->name != "" }}<p>{{ $gimme->article->map->name }}</p>{{ /if }}
@@ -133,9 +134,10 @@ div.geomap_open_large_map {
                 
                 <aside>
 
+<div  class="mobile-hide">
 {{*** WERBUNG ***}}                
 {{ include file="_werbung/article-sidebar-2.tpl" }}  
-                
+</div>                
                 </aside>
             
             </div>
@@ -152,8 +154,8 @@ div.geomap_open_large_map {
                         <header>
                             <p>Informationen zum Artikel</p>
                         </header>
+                        <a href="#" class="grey-button article-switch article-view-front desktop-hide"><span>Zurück zum Artikel</span></a>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
-                        
                         <ul class="article-info">
 								{{ list_article_topics }}
                         {{ if $gimme->current_list->at_beginning }}                        
