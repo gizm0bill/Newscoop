@@ -63,6 +63,12 @@
 {{ set_current_issue }}
 {{ set_section number="80" }}
                         <li><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
+
+{{* DEBATE *}}
+{{ set_current_issue }}
+{{ set_section number="81" }}
+                        <li class="desktop-hide"><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>                        
+                        
                     </ul>
                     
                     <ul>
