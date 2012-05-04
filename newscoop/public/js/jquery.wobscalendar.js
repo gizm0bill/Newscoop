@@ -311,8 +311,8 @@
 	        $div = $('<div class="'+ns+'top"><h4>'+options.title+'</h4><h3></h3></div>');
         
         if (options.navigation === true) {
-        	html = html + '<li class="'+ns+'button-prev grey-button"><a>'+options.buttons.prev+'</a></li>';
-            html = html + '<li class="'+ns+'button-next grey-button"><a>'+options.buttons.next+'</a></li>';   
+        	html = html + '<li class="'+ns+'button-prev"><a class="grey-button">'+options.buttons.prev+'</a></li>';
+            html = html + '<li class="'+ns+'button-next"><a class="grey-button">'+options.buttons.next+'</a></li>';   
          
 	        $ul.append(html);
 	        
