@@ -85,7 +85,7 @@
 {{*** werbung ***}}   
 {{ include file="_werbung/section-maincol.tpl" }}
 
-{{ list_playlist_articles columns="4" name=$gimme->section->name }}
+{{ list_playlist_articles columns="4" length="30" name=$gimme->section->name }}
 {{ if $gimme->current_list->index gt 10 }}
 {{ if $gimme->current_list->index == 11 }}                
             	<div class="top-line clearfix slideshow">
