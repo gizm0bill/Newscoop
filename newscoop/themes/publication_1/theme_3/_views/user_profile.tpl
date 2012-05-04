@@ -95,34 +95,60 @@
         {{ if $user->isAuthor() }}
         {{ $escapedName=str_replace(" ", "\ ", $user->author->name) }}
 
-        {{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName type is news" order="bypublishdate desc" }}
+        {{ list_articles length=100 columns=10 ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName type is news" order="bypublishdate desc" }}
             {{ if $gimme->current_list->at_beginning }}
-            <div id="author-1">
+            <div id="author-1" class="slideshow">
+            <div class="slides">
+            {{ /if }}
+            {{ if $gimme->current_list->column == 1 }}
+            <div class="slide-item">
             {{ /if }}
             <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%d.%m.%Y um %H:%i" }}</span>
             <h5><a href="{{ $gimme->article->url }}{{ $gimme->article->seo_url_end }}" title="{{ $gimme->article->title|escape }}">{{ $gimme->article->title }}</a></h5>
             {{ $gimme->article->teaser }}
+            {{ if $gimme->current_list->column == "10" || $gimme->current_list->at_end }}
+            </div><!-- /.slide-item -->
+            {{ /if }}
             {{ if $gimme->current_list->at_end }}
+            </div>
+                    <ul class="paging content-paging">
+                        <li><a class="grey-button prev" href="#">«</a></li>
+                        <li class="caption"></li>
+                        <li><a class="grey-button next" href="#">»</a></li>
+                    </ul>
             </div>
             {{ /if }}
         {{ /list_articles }}
 
-        {{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName type is blog" order="bypublishdate desc" }}
+        {{ list_articles length=100 columns=10 ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="author is $escapedName type is blog" order="bypublishdate desc" }}
             {{ if $gimme->current_list->at_beginning }}
-            <div id="author-2">
+            <div id="author-2" class="slideshow">
+            <div class="slides">
+            {{ /if }}
+            {{ if $gimme->current_list->column == 1 }}
+            <div class="slide-item">
             {{ /if }}
             <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%d.%m.%Y um %H:%i" }}</span>
             <h5><a href="{{ $gimme->article->url }}{{ $gimme->article->seo_url_end }}" title="{{ $gimme->article->title|escape }}">{{ $gimme->article->title }}</a></h5>
             <p>{{ $gimme->article->lede|trim }}</p>
+            {{ if $gimme->current_list->column == "10" || $gimme->current_list->at_end }}
+            </div><!-- /.slide-item -->
+            {{ /if }}
             {{ if $gimme->current_list->at_end }}
+            </div><!-- /.slides -->
+                    <ul class="paging content-paging">
+                        <li><a class="grey-button prev" href="#">«</a></li>
+                        <li class="caption"></li>
+                        <li><a class="grey-button next" href="#">»</a></li>
+                    </ul>
             </div>
             {{ /if }}
         {{ /list_articles }}
         {{ /if }}
 
-        {{ list_user_comments user=$user->identifier columns=10 order="bydate desc" }}
+        {{ list_user_comments user=$user->identifier length=100 columns=10 order="bydate desc" }}
             {{ if $gimme->current_list->at_beginning }}
-            <div id="author-3" class="top-line clearfix slideshow">
+            <div id="author-3" class="slideshow">
             <div class="slides">
             {{ /if }}
             {{ if $gimme->current_list->column == 1 }}
@@ -134,14 +160,14 @@
                 <p><a href="{{ $gimme->user_comment->article->url }}">{{ $gimme->user_comment->article->name }}</a></p>
             {{ if $gimme->current_list->column == "10" || $gimme->current_list->at_end }}
             </div><!-- /.slide-item -->
-            {{ /if }}                    
+            {{ /if }}
             {{ if $gimme->current_list->at_end }}
             </div><!-- /.slides -->
                     <ul class="paging content-paging">
                         <li><a class="grey-button prev" href="#">«</a></li>
                         <li class="caption"></li>
                         <li><a class="grey-button next" href="#">»</a></li>
-                    </ul>                 
+                    </ul>
             </div>
             {{ /if }}
         {{ /list_user_comments }}
