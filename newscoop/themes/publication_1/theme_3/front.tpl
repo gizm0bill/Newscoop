@@ -23,6 +23,8 @@
 </div>
 
 <span class="desktop-hide">{{ include file="_tpl/front-blogs.tpl" }}</span>
+
+<span class="desktop-hide">{{ include file="_tpl/front-dossiers.tpl" }}</span>
                 
 <span class="mobile-hide">{{ include file="_tpl/front-debatte.tpl" }}                
                 

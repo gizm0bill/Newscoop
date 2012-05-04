@@ -6,9 +6,9 @@
                     <li>{{ $smarty.now|camp_date_format:"%W, %e.%m.%Y" }}</li>
                     <li>{{ weather }}</li>
                     <li><a href="#">Kontakt</a></li>
-                    <li><a href="#">Login</a></li>
+                    <li><a href="#" onClick="omnibox.show()">Login</a></li>
                 </ul>
-                <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1>
+                <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><div id="mobile-date" class="desktop-hide right">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</div>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
                 <a href="/" class="start">{{ if $gimme->section->number }}{{ $gimme->section->name }}{{ else }}Startseite{{ /if }}</a>
@@ -24,7 +24,7 @@
                         </ul>
                     </li>
                     <li class="settings"><a href="#">Settings</a></li>
-                    <li class="login"><a href="#">Login</a>
+                    <li class="login"><a href="#" onClick="omnibox.show()">Login</a>
                     		<ul>
                         	<li><a href="#">Profil bearbeiten</a></li>
                         	<li><a href="#">Meine Themen</a></li>
