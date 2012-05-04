@@ -13,15 +13,6 @@
             <button>Go</button>
         </fieldset>
         </form>
-        <a href="#" class="info">Info
-            <span>
-                Sie können folgende Operatoren verwenden:<br />
-                "exacte wortkombination"<br />
-                -nichtdieserbegriff<br />
-                author:dani winter<br />
-                topic:fc basel<br />
-            </span>
-        </a>
     </li>
     <li class="type">Mitglied seit</li>
     <li class="time">Beiträge</li>
@@ -55,7 +46,7 @@
         {{ foreach $users as $user }}
         <li>
             <a href="{{ $view->url(['username' => $user->uname], 'user') }}"><img src="{{ include file="_tpl/user-image.tpl" user=$user width=65 height=65 }}" /></a>
-            <h3><a href="{{ $view->url(['username' => $user->uname], 'user') }}">{{ include file="_tpl/user-name.tpl" user=$user }}</a>{{ if $user->is_editor }} <small><a href="#">TagesWoche Redaktion</a></small>{{ elseif $user['is_verified'] }} <small><a href="#">Verifiziertes Profil</a></small>{{ /if }}</h3>
+            <h3><a href="{{ $view->url(['username' => $user->uname], 'user') }}">{{ include file="_tpl/user-name.tpl" user=$user }}</a>{{ if $user->is_editor }} <small><a>TagesWoche Redaktion</a></small>{{ elseif $user['is_verified'] }} <small><a>Verifiziertes Profil</a></small>{{ /if }}</h3>
             <p>{{ if !empty($user['bio']) }}{{ if $user->isAdmin() || $user->isBlogger() }}{{ $user['bio']|bbcode }}{{ else }}{{ $user['bio']|escape }}{{ /if }}{{ else }}...{{ /if }}</p>
             <span class="info"><em>{{ $user->created }}</em> <em>{{ $user->posts_count }}</em></span>
         </li>
