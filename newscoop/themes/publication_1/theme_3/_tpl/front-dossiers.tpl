@@ -1,7 +1,11 @@
 <div class="mobile-list-view dossier-mobile-list clearfix">
                 <div class="two-columns clearfix">
 {{ list_articles length="2" order="bysection desc" constraints="issue is 1 section is 5 type is dossier" }}                
-
+						<article class="desktop-hide">
+						<header>
+                	<p>Dossiers<a class="mobile-arrow right" href="{{ local }}{{ set_publication identifier="1" }}{{ set_issue number="1" }}{{ set_section number="5" }}{{ url options="section" }}{{ /local }}"><span>&gt;</span></a></p>
+                </header>
+						</article>
                 	<article>
                 			<a href="{{ url options="article" }}">
                         <figure>
