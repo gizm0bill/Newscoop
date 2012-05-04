@@ -229,11 +229,11 @@ div.geomap_open_large_map {
     {{ /list_articles }}
     
     <div class="author-box">
-        <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
+        <h4><span>{{ $gimme->author->type }}:</span> {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</h4>
         <ul class="article-info">
             <li class="image">
-                {{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
-                <p>{{ $gimme->author->biography->text|bbcode }}</p>
+                {{ include file="_tpl/author-image.tpl" author=$gimme->author width=120 height=120 }}
+                <p>{{ include file="_tpl/author-bio.tpl" author=$gimme->author }}</p>
             </li>
             {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
             <li>
