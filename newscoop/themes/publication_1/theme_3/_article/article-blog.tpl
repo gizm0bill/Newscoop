@@ -181,7 +181,7 @@ Vor
         
         </div>
         
-        <div class="content-box full-width clearfix">
+        <div class="mobile-hide content-box full-width clearfix">
             
             <article>
             	<header class="link-back">
