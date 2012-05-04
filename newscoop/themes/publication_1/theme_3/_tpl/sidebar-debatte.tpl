@@ -114,7 +114,7 @@ and then all is compared according to a matrix.
     {{ if $wdphase == 2 }}{{ $gimme->article->rebuttal|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
     {{ if $wdphase == 3 }}{{ $gimme->article->closing|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
     {{ if $wdphase == 4 }}{{ $gimme->article->closing|strip_tags|escape:'html'|trim|truncate:220:" [...]" }}{{ /if }}
-    &raquo;{{ /strip }} <em>{{ list_article_authors }}{{ $gimme->author->name }} (23){{ if !($gimme->current_list->at_end) }}, {{ /if }}{{ /list_article_authors }}</em></p>
+    &raquo;{{ /strip }} <em>{{ list_article_authors }}{{ $gimme->author->name }}{{ if !($gimme->current_list->at_end) }}, {{ /if }}{{ /list_article_authors }}</em></p>
                         </li>
 
 {{ if $gimme->current_list->at_end }}                        
