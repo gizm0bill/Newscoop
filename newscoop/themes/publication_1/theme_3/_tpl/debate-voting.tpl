@@ -29,11 +29,18 @@
     {{ if !$gimme->debate->is_votable }}
     <p><b>Endresultat</b></p>
 
-    <ul class="votes bottom-margin">
-    {{ list_debate_answers order="bynumber asc" }}
-        <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
-    {{ /list_debate_answers }}
-    </ul>
+    <div class="votes-container">
+        <ul class="votes-text">
+        {{ list_debate_answers order="bynumber asc" }}
+            <li><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
+        {{ /list_debate_answers }}
+        </ul>
+        <ul class="votes">
+        {{ list_debate_answers order="bynumber asc" }}
+            <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"></li>
+        {{ /list_debate_answers }}
+        </ul>
+    </div>
     {{ /if }}
 
     <ul class="debatte-stat-list">
@@ -43,20 +50,18 @@
         {{/list_debate_answers}}
         </li>
 
-        {{ $stages.zero.answers.yes=0 }}
-        {{ $stages.zero.answers.no=0 }}
+        {{ $stages.one.label="Runde 1" }}
         {{ $stages.one.answers.yes=0 }}
         {{ $stages.one.answers.no=0 }}
+        {{ $stages.two.label="Runde 2" }}
         {{ $stages.two.answers.yes=0 }}
         {{ $stages.two.answers.no=0 }}
+        {{ $stages.three.label="Runde 3" }}
         {{ $stages.three.answers.yes=0 }}
         {{ $stages.three.answers.no=0 }}
         {{ list_debate_days length="7" }}
             {{ assign var=debate_time value=$gimme->debatedays->time|date_format:"%Y-%m-%d" }}
-            {{ if $debate_time == $gimme->article->date_opening }}
-                {{ $stages.zero.answers.yes = $stages.zero.answers.yes + $gimme->debatedays->answers[0]['value'] }}
-                {{ $stages.zero.answers.no = $stages.zero.answers.no + $gimme->debatedays->answers[1]['value'] }}
-            {{ elseif $debate_time > $gimme->article->date_opening && $debate_time < $gimme->article->date_rebuttal }}
+            {{ if $debate_time >= $gimme->article->date_opening && $debate_time < $gimme->article->date_rebuttal }}
                 {{ $stages.one.answers.yes = $stages.one.answers.yes + $gimme->debatedays->answers[0]['value'] }}
                 {{ $stages.one.answers.no = $stages.one.answers.no + $gimme->debatedays->answers[1]['value'] }}
             {{ elseif $debate_time >= $gimme->article->date_rebuttal && $debate_time < $gimme->article->date_final }}
@@ -68,7 +73,6 @@
             {{ /if }}
         {{ /list_debate_days }}
 
-        {{ $stages.zero.count = $stages.zero.answers.yes + $stages.zero.answers.no }}
         {{ $stages.one.count = $stages.one.answers.yes + $stages.one.answers.no }}
         {{ $stages.two.count = $stages.two.answers.yes + $stages.two.answers.no }}
         {{ $stages.three.count = $stages.three.answers.yes + $stages.three.answers.no }}
@@ -85,7 +89,7 @@
                 {{ if $votes@key == "yes" }}<dt {{ else }}<dd {{ /if }}style="height:{{ math equation="round(x)" x=$stage_percentage format="%d" }}px;"><span>{{ math equation="round(x)" x=$stage_percentage format="%d" }}%</span>{{ if $votes@key == "yes" }}</dt>{{ else }}</dd>{{ /if }}
             {{ /foreach }}
             </dl>
-            <p>{{ $stage@key }}</p>
+            <p>{{ $stage.label }}</p>
         </li>
         {{ /foreach }}
     </ul>
@@ -93,11 +97,18 @@
     {{ if $gimme->debate->is_votable }}
     <p><b>Zwischenstand</b></p>
 
-    <ul class="votes">
-    {{ list_debate_answers order="bynumber asc" }}
-        <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
-    {{ /list_debate_answers }}
-    </ul>
+    <div class="votes-container">
+        <ul class="votes-text">
+        {{ list_debate_answers order="bynumber asc" }}
+            <li><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
+        {{ /list_debate_answers }}
+        </ul>
+        <ul class="votes">
+        {{ list_debate_answers order="bynumber asc" }}
+            <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"></li>
+        {{ /list_debate_answers }}
+        </ul>
+    </div>
     {{ /if }}
 </div>
 

@@ -92,11 +92,19 @@ and then all is compared according to a matrix.
           {{ else }}
           <h5>Endresultat</h5>
           {{ /if }}
-          <ul class="votes">
-          {{ list_debate_answers order="bynumber asc" }}
-              <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
-          {{ /list_debate_answers }}
-          </ul>
+
+          <div class="votes-container">
+              <ul class="votes-text">
+              {{ list_debate_answers order="bynumber asc" }}
+                  <li><p>{{ $gimme->debateanswer->answer }} {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d" }}%</p></li>
+              {{ /list_debate_answers }}
+              </ul>
+              <ul class="votes">
+              {{ list_debate_answers order="bynumber asc" }}
+                  <li style="width:{{ $gimme->debateanswer->percentage|string_format:"%d" }}%;" class="{{ $gimme->debateanswer->answer|lower }}"></li>
+              {{ /list_debate_answers }}
+              </ul>
+          </div>
       {{ /list_debates }}
 {{ /list_articles }}                    
                     
