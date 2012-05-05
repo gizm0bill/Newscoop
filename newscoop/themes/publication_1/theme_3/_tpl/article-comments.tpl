@@ -54,7 +54,7 @@
                         
                         </div>
                         
-                        <a href="#" class="button">Kommentieren</a>
+                        <a href="#" onClick="omnibox.show()" class="button">Kommentieren</a>
                     
                     </div>
                 
@@ -63,7 +63,7 @@
 {{ else }}
     <section>
                     <div class="comments-box">   
-                        <p>Für diesen Artikel wurde die Kommentarfunktion deaktiviert, Sie können aber eine <a href="javascript:omnibox.showHide()">Mitteilung</a> an die Redaktion senden.</p>       
+                        <p>Für diesen Artikel wurde die Kommentarfunktion deaktiviert, Sie können aber eine <a href="#" onClick="omnibox.show()">Mitteilung</a> an die Redaktion senden.</p>       
                     </div>
     </section>
 {{ /if }}
