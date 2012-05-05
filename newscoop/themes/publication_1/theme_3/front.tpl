@@ -22,16 +22,18 @@
     <div class="mobile-divider"></div>
 </div>
 
-<span class="desktop-hide">{{ include file="_tpl/front-blogs.tpl" }}</span>
+{{* <span class="desktop-hide">{{ include file="_tpl/front-blogs.tpl" }}</span> *}}
 
-<span class="desktop-hide">{{ include file="_tpl/front-dossiers.tpl" }}</span>
+{{* <span class="desktop-hide">{{ include file="_tpl/front-dossiers.tpl" }}</span> *}}
                 
 <span class="mobile-hide">{{ include file="_tpl/front-debatte.tpl" }}</span>                
                 
-<span class="mobile-hide">{{ include file="_tpl/front-dossiers.tpl" }}</span>
+{{ include file="_tpl/front-dossiers.tpl" }}
 
+<span class="mobile-hide">
 {{*** werbung ***}}   
 {{ include file="_werbung/front-maincol.tpl" }}
+</span>
             
             </section><!-- / Main Section -->
             
@@ -68,7 +70,7 @@
         
 {{ include file="_tpl/front-bildstoff.tpl" }}
             
-<span class="mobile-hide">{{ include file="_tpl/front-blogs.tpl" }}</span>
+{{ include file="_tpl/front-blogs.tpl" }}
         	
         </div>
         
@@ -76,7 +78,7 @@
     
     <div id="footer">
     
-<span class="mobile-hide">{{ include file="_tpl/footer-calendar.tpl" }}</span>
+{{ include file="_tpl/footer-calendar.tpl" }}
 
 {{ include file="_tpl/footer.tpl" }}
 
