@@ -76,13 +76,13 @@
         </article>
     </div>
 
-    <article class="mobile-hide">
+    <article>
         <header class="top-line">
             <p>Beiträge auf tageswoche.ch: {{ $user->posts_count }}</p>
         </header>
     </article>
 
-    <div class="tabs article-related-tabs mobile-hide">
+    <div class="tabs article-related-tabs">
 
         <ul>
             {{ if $user->isAuthor() }}
@@ -181,7 +181,7 @@
     </div>
 </section>
 
-<aside>
+<aside class="mobile-hide">
     {{ if !empty($profile.geolocation) }}
     <article>
         <header>
