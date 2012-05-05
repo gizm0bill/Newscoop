@@ -7,6 +7,7 @@
                     <li>{{ weather }}</li>
                     {{ set_article number="3918" }}
                     <li><a href="{{ url options="article" }}">Kontakt</a></li>
+                    <li><a href="#email-popup-box" class="email-trigger">Email trigger</a></li>
                     <li><a href="#" onClick="omnibox.show()">Login</a></li>
                 </ul>
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><p class="date">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</p>
