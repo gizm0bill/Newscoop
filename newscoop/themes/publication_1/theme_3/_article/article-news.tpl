@@ -113,7 +113,7 @@ div.geomap_open_large_map {
                         <figure>
                             <big>Dossier: <br />
                             <b>{{ $gimme->article->name|strip }} {{ $gimme->article->subtitle }}</b></big>
-                            <a href="{{ url options="article" }}">{{ include file="_tpl/img/img_300x200.tpl" }}</a>
+                            <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
                         </figure>
                     </article>
 {{ /if }} 
