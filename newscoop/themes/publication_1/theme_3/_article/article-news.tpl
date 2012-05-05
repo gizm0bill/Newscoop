@@ -43,11 +43,11 @@ div.geomap_open_large_map {
                 
                 <section>
                 
-                    <article>
+                    <article class="article-main-front">
                         <header>
                             <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
-                        <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-rear"><span>Hintergrund zum Artikel</span></a></div>
+                        <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-rear"><span></span></a></div>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
                         <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
@@ -150,11 +150,11 @@ div.geomap_open_large_map {
                 
                 <section>
                 
-                    <article>
+                    <article class="article-main-back">
                         <header>
                             <p>Informationen zum Artikel</p>
                         </header>
-                        <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-front"><span>Zurück zum Artikel</span></a></div>
+                        <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-front"><span></span></a></div>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <ul class="article-info">
 								{{ list_article_topics }}

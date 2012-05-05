@@ -26,7 +26,7 @@
 
 <span class="desktop-hide">{{ include file="_tpl/front-dossiers.tpl" }}</span>
                 
-<span class="mobile-hide">{{ include file="_tpl/front-debatte.tpl" }}                
+<span class="mobile-hide">{{ include file="_tpl/front-debatte.tpl" }}</span>                
                 
 {{ include file="_tpl/front-dossiers.tpl" }}
 

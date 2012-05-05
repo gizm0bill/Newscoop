@@ -9,7 +9,7 @@
                     <li><a href="{{ url options="article" }}">Kontakt</a></li>
                     <li><a href="#" onClick="omnibox.show()">Login</a></li>
                 </ul>
-                <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><div id="mobile-date" class="desktop-hide right">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</div>
+                <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><div class="mobile-date desktop-hide right">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</div>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
                 <a href="/" class="start">{{ if $gimme->section->number }}{{ $gimme->section->name }}{{ else }}Startseite{{ /if }}</a>
