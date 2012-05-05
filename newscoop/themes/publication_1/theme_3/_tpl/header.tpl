@@ -35,7 +35,6 @@
                 </ul>
                 <nav>
                     <ul>
-
                         {{ set_publication identifier="1" }}
                         {{ set_current_issue }}
                         <li class="desktop-hide"><a href="{{ url options="issue" }}"{{ if $gimme->publication == $gimme->default_publication && $gimme->template->name == "front.tpl" }} class="active"{{ /if }}>Startseite</a></li>

@@ -265,8 +265,10 @@ div.geomap_open_large_map {
             </li>            
         </ul>
     </div>
-                                
+    
+	 {{ if $escapedName != "sda" }}                                
     {{ include file="_tpl/user-content.tpl" }}
+    {{ /if }}
                         
 {{ /list_article_authors }}
                                                 
