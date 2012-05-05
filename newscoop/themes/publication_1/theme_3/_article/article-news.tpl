@@ -216,6 +216,10 @@ div.geomap_open_large_map {
                                 {{ unset_map }}
                             </li>
 {{ /if }}
+									 <li>
+                            	<h5>Artikel-Webcode</h5>
+                            	<p>tageswoche.ch/{{ $gimme->article->webcode }}</p>
+                            </li>
 
 									{{ include file="_tpl/social-bookmarks.tpl" }}
 
