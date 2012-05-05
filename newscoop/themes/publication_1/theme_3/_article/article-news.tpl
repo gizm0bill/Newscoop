@@ -43,7 +43,7 @@ div.geomap_open_large_map {
                 
                 <section>
                 
-                    <article>
+                    <article class="article-main-front">
                         <header>
                             <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
@@ -150,7 +150,7 @@ div.geomap_open_large_map {
                 
                 <section>
                 
-                    <article>
+                    <article class="article-main-back">
                         <header>
                             <p>Informationen zum Artikel</p>
                         </header>
