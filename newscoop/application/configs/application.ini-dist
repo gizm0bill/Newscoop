@@ -89,7 +89,6 @@ resourceNames.Translations = translation
 listener[] = audit
 listener[] = comment
 listener[] = community_feed
-listener[] = user_points
 listener[] = user_attributes
 listener[] = comment_notification
 listener[] = search_indexer_article
@@ -157,8 +156,6 @@ community_feed.events[] = topic.follow
 ;community_feed.events[] = image.approved
 community_feed.events[] = document.approved
 community_feed.events[] = blog.published
-
-user_points.events[] = image.published
 
 user_attributes.events[] = image.delivered
 user_attributes.events[] = image.approved

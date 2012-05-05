@@ -55,7 +55,7 @@ class UserController extends Zend_Controller_Action
 
         $this->setViewUsers($users);
         $this->setViewPaginator($count, self::LIMIT);
-	$this->view->current = $this->_getParam('action');
+	    $this->view->current = $this->_getParam('action');
         $this->render('index');
     }
 
