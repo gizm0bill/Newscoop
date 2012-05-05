@@ -39,7 +39,7 @@
 {{ if $item->is_image }}                         
                         	<li><a href="#image-{{ $i }}"><img src="{{ $item->image->src }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
 {{ else }}         
-									<li><a href="#image-{{ $i }}">poster</a></li>
+									<li><a href="#image-{{ $i }}"><img src="{{ url static_file="_css/tw2011/img/video-icon.png" }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
 {{ /if }}									               	
 {{ if $smarty.foreach.insideslideshow.last }}
                         </ul>                      
@@ -171,32 +171,28 @@
 {{ if !($gimme->article->vimeo_url == "") }}  
 {{ if $slideshow gt 1 }}
 {{ assign var="i" value=$i+1 }}
-                            <li><a href="#image-{{ $i }}">
-                                poster
-                            </li>
+                            <li><a href="#image-{{ $i }}"><img src="{{ url static_file="_css/tw2011/img/video-icon.png" }}" width="95" height="63" alt="{{ $item->caption }}" /></li>
 {{ /if }}
 {{ /if }} 
 
 {{ if !($gimme->article->youtube_shortcode == "") }}
 {{ if $slideshow gt 1 }}
 {{ assign var="i" value=$i+1 }}
-                            <li><a href="#image-{{ $i }}">
-                                poster
-                            </li>
+                            <li><a href="#image-{{ $i }}"><img src="{{ url static_file="_css/tw2011/img/video-icon.png" }}" width="95" height="63" alt="{{ $item->caption }}" /></li>
 {{ /if }}                                                        
 {{ /if }} 
 
 {{ if $hasimg gt 0 }}
 {{ if $slideshow gt 1 }}
 {{ assign var="i" value=$i+1 }}
-                            <li><a href="#image-{{ $i }}"><img src="{{ url options="image 1 width 95 height 63 crop center" }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
+                            <li><a href="#image-{{ $i }}"><img src="{{ url options="image 1 width 95 height 63 crop center" }}" width="95" height="63" alt="{{ $gimme->article->image->description }}" /></a></li>
 {{ /if }}               
 {{ /if }} 
 
 {{ list_article_images }}
 {{ if ($gimme->image->article_index  gt 11) & ($gimme->image->article_index lt 100)}}                            
 {{ assign var="i" value=$i+1 }}
-                            <li><a href="#image-{{ $i }}"><img src="{{ url options="image width 95 height 63 crop center" }}" width="95" height="63" alt="{{ $item->caption }}" /></a></li>
+                            <li><a href="#image-{{ $i }}"><img src="{{ url options="image width 95 height 63 crop center" }}" width="95" height="63" alt="{{ $gimme->article->image->description }}" /></a></li>
 {{ /if }}                            
 {{ /list_article_images }}                            
 

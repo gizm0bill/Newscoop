@@ -157,6 +157,7 @@ class Admin_CommentController extends Zend_Controller_Action
                 ->setOption('fnServerData', 'datatableCallback.addServerData')
                 ->setOption('fnInitComplete', 'datatableCallback.init')
                 ->setOption('sDom','<"top">lf<"#actionExtender">rit<"bottom"ip>')
+                ->setOption('bStateSave', true)
                 ->setStripClasses()
                 ->toggleAutomaticWidth(false)
                 ->setDataProp(

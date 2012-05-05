@@ -14,7 +14,7 @@
             
             <section>
             
-                <article class="quote-list">            
+                <article class="quote-list mobile-hide">            
 {{ $weekbackdate=date_create("-1 week") }}
 {{ $weekback=$weekbackdate->format("Y-m-d") }}
 {{ list_articles length="4" ignore_issue="true" ignore_section="true" order="byLastUpdate desc" constraints="section is 85 type is good_comment publish_date greater_equal $weekback" }}                
@@ -24,7 +24,11 @@
                     
 {{ /list_articles }}
                 </article>
-
+                
+                <aside class="desktop-hide">
+                {{ include file="_tpl/sidebar-goodcomments.tpl" }}
+                </aside>					
+					
 {{ include file="_tpl/dialog-article-comments.tpl" }}
 
             </section><!-- / Main Section -->
@@ -32,6 +36,8 @@
             <aside>
 
 {{ include file="_tpl/sidebar-community.tpl" where="dialog" }}
+
+<div class="mobile-hide">
 
 {{ include file="_tpl/sidebar-facebook.tpl" }}
 
@@ -43,6 +49,8 @@
 {{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - {{ $gimme->section->name }}" }}
 
 {{ include file="_tpl/sidebar-debatte.tpl" }}
+
+</div>
 
             </aside><!-- / Sidebar -->
             

@@ -11,6 +11,20 @@
     <ul id="article-slideshows" class="list-view grid slideshow-list"></ul>
 </section>
 
+<section>
+    <div style="margin: 8px;"></div>
+    <form method="post" action="<?php echo($this->url(array(
+            'module' => 'admin',
+            'controller' => 'slideshow',
+            'action' => 'attach',
+    ))); ?>">
+    <div style="margin-left: 10px;">
+        <input type="text" placeholder="<?php echo(getGS('Search')); ?>" name="q" value="<?php if ($this->q) echo($this->q); ?>">
+        <input type="submit" value="<?php echo(getGS('Search')); ?>">
+    </div>
+    </form>
+</section>
+
 <nav></nav>
 
 <section>
@@ -29,6 +43,7 @@
     <span class="video"></span>
     <% } %>
 </div>
+<span class="info"></span>
 </script>
 <?php echo $this->render('paginator-template.phtml'); ?>
 
@@ -50,7 +65,7 @@
         },
 
         addToArticle: function(article) {
-            if (!article.get('slideshows').get(this.get('id'))) {
+            if (!article.get('slideshows').get(this.get('id')) && article.get('slideshows').length == 0) {
                 article.get('slideshows').add(this);
             }
         },
@@ -90,6 +105,8 @@
 
         events: {
             'click': 'action',
+            'mouseout': 'removeHint',
+            'mouseover': 'addHint'
         },
 
         initialize: function() {
@@ -100,16 +117,28 @@
         render: function() {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
+        },
+
+        addHint: function() { // no-op
+            $(this.el).find('.info').text(this.hint ? this.hint : '');
+        },
+
+        removeHint: function() {
+            $(this.el).find('.info').text('');
         }
     });
 
     var AddSlideshowView = SlideshowView.extend({
+        hint: <?php echo json_encode(getGS('Attach')); ?>,
+
         action: function() {
             this.model.addToArticle(window.article);
         }
     });
 
     var RemoveSlideshowView = SlideshowView.extend({
+        hint: <?php echo json_encode(getGS('Detach')); ?>,
+
         action: function() {
             this.model.removeFromArticle(window.article);
         }

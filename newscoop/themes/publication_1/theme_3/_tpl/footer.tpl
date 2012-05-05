@@ -3,43 +3,47 @@
                 <li>
                     <h4>TagesWoche</h4>
                     <ul>
-								<li><a href="#">Über uns</a></li>
-								<li><a href="/user/editors">Redaktion</a></li>
-								<li><a href="#">Kontakt</a></li> 
-								<li><a href="#">Werbung</a></li> 
-								<li><a href="#">Abos</a></li> 
-								<li><a href="#">Zeitungsarchiv</a></li> 
-								<li><a href="#">RSS-Feeds</a></li> 
-								<li><a href="#">AGB</a></li> 
-								<li><a href="#">Impressum</a></li>                        
+{{ local }}                    
+{{ set_publication identifier="1" }}
+            {{ unset_topic }}
+            {{ list_articles ignore_issue="true" ignore_section="true" constraints="issue is 1 section is 10 type is static_page number not 3919" }}
+            {{ if $gimme->current_list->index == 2 }}
+            				<li><a href="/user/editors">Redaktion</a></li>        
+            {{ /if }}            
+								<li><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></li>
+				{{ /list_articles }}   				                     
                     </ul>
                 </li>
+                
                 <li>
                     <h4>Dialog</h4>
                     <ul>
-                       	<li><a href="#">Kommentare</a></li><!-- (new dialog page) --> 
-								<li><a href="#">Community</a></li><!-- (community page) --> 
-								<li><a href="#">Wochendebatte</a></li> 
-								<li><a href="#">Dialogkultur</a></li>                         
+                       	<li><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ set_section number="80" }}{{ url options="section" }}">Kommentare</a></li> 
+								<li><a href="/user">Community</a></li> 
+								<li><a href="{{ set_section number="81" }}{{ url options="section" }}">Wochendebatte</a></li>
+								{{ set_article number="3919" }} 
+								<li><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></li>                         
                     </ul>
                 </li>
+                
                 <li>
                     <h4>Themen</h4>
                     <ul>
-                        <li><a href="#">Meine Themen</a></li>
-                        <li><a href="#">Basel</a></li>
-                        <li><a href="#">Schweiz</a></li>
-                        <li><a href="#">International</a></li>
-                        <li><a href="#">Sport</a></li>
-                        <li><a href="#">Kultur</a></li>
-                        <li><a href="#">Leben</a></li>
-                        <li><a href="#">Dossiers</a></li>
-                        <li><a href="#">Alle Nachrichten</a></li>
+                        <li><a href="/dashboard">Meine Themen</a></li>
+								{{ set_current_issue }}
+								{{ list_sections constraints="number smaller_equal 60" }}                        
+                        <li><a href="{{ url options="section" }}">{{ $gimme->section->name }}</a></li>
+                        {{ /list_sections }}
+                        {{ set_issue number="1" }}
+                        {{ set_section number="5" }}
+                        <li><a href="{{ url options="section" }}">Dossiers</a></li>
+                        <li><a href="/omniticker">Alle Nachrichten</a></li>
                     </ul>
                 </li>
+                
                 <li>
-{{ local }}
 {{* agenda *}}
+{{ set_publication identifier="1" }}
 {{ set_current_issue }}
 {{ set_section number="70" }}
                     <h4><a href="{{ uri options="section" }}#/;date:{{ $smarty.now|camp_date_format:"%Y-%m-%d" }};region:kanton-basel-stadt">Ausgehen</a></h4>
@@ -66,36 +70,21 @@
 {{ /local }}
                 </li>
                 
-{{* Martin, this is the order of elements
-Kino 
-Theater 
-Konzerte 
-Partys 
-Ausstellungen 
-Andere                
-*}}
-                
                 <li>
                     <h4>Blogs</h4>
                     <ul>
-                        <li><a href="#">Bildstoff</a></li>
-                        <li><a href="#">FF-Blog</a></li>
-                        <li><a href="#">Doppelspitze</a></li>
-                        <li><a href="#">Bohnenkult</a></li>
-                        <li><a href="#">Kulturschocker</a></li>
-                        <li><a href="#">Habenmuss</a></li>
-                        <li><a href="#">Lichtspiele</a></li>
-                        <li><a href="#">Listomania</a></li>
-                        <li><a href="#">Mittendrin</a></li>
+{{ list_articles ignore_publication="true" ignore_issue="true" ignore_section="true" order="byName asc" constraints="type is bloginfo active is on" }}                    
+                        <li><a href="{{ url options="section" }}">{{ $gimme->article->name }}</a></li>
+{{ /list_articles }}
                     </ul>
                 </li>
                 <li>
                     <h4>Folgen Sie uns</h4>
                     <ul class="social">
-                        <li class="fb"><a href="#">Facebook</a></li>
-                        <li class="tw"><a href="#">Twitter</a></li>
-                        <li class="yt"><a href="#">YouTube</a></li>
-                        <li class="sc"><a href="#">Soundcloud</a></li>
+                        <li class="fb"><a href="https://www.facebook.com/tageswoche" target="_blank">Facebook</a></li>
+                        <li class="tw"><a href="https://twitter.com/#!/tageswoche" target="_blank">Twitter</a></li>
+                        <li class="yt"><a href="http://www.youtube.com/user/tageswoche" target="_blank">YouTube</a></li>
+                        <li class="sc"><a href="http://soundcloud.com/tageswoche" target="_blank">Soundcloud</a></li>
                     </ul>
                 </li>
             </ul>

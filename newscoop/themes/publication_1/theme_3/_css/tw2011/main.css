@@ -764,19 +764,28 @@ section article{padding-bottom:25px;}
 						padding-left:0 !important;
 						}
 				
-		.debate-box ul.votes ,
-		.debatte-stat-box ul.votes {
+		.debate-box ul.votes,
+		.debatte-stat-box ul.votes,
+		.debate-box ul.votes-text,
+		.debatte-stat-box ul.votes-text {
 			overflow:hidden;
-			margin:0 0 20px;
+			margin:0;
 			list-style-type:none;
 			}
-		.debatte-stat-box ul.votes {margin:0;}
+		.debatte-stat-box ul.votes,
+		.debatte-stat-box ul.votes-text {position:relative;}
+		.debatte-stat-box ul.votes-text, .debate-box ul.votes-text {z-index:2;}
 		.debatte-stat-box ul.votes.bottom-margin {margin-bottom:30px !important;}
 			.debate-box ul.votes li,
-			.debatte-stat-box ul.votes li {float:left; position:relative;}
-				.debate-box ul.votes li p,
-				.debatte-stat-box ul.votes li p {
-					padding:0 0 0 15px; margin:0;
+			.debatte-stat-box ul.votes li,
+			.debate-box ul.votes-text li,
+			.debatte-stat-box ul.votes-text li {float:left; position:relative;}
+			.debate-box ul.votes-text li, .debatte-stat-box ul.votes-text li {width:50%;}
+				.debate-box ul.votes li,
+				.debatte-stat-box ul.votes li {height:36px;}
+				.debate-box ul.votes-text li p,
+				.debatte-stat-box ul.votes-text li p {
+					padding:0 15px 0 0; text-align:right; margin:0;
 					font-family:Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; color:#000; line-height:36px;
 					}
 			.debate-box ul.votes li.ja,
@@ -790,6 +799,17 @@ section article{padding-bottom:25px;}
 					}
 			.debate-box ul.votes li.nein,
 			.debatte-stat-box ul.votes li.nein {background:#7cbca0;}
+			
+			.debate-box ul.votes-text li:first-child p,
+			.debatte-stat-box ul.votes-text li:first-child p {padding:0 0 0 15px; text-align:left;}
+			
+			.debate-box .votes-container,
+			.debatte-stat-box .votes-container {position:relative; height:36px; overflow:hidden;}
+			.debate-box .votes-container {margin-bottom:20px;}
+				.debatte-stat-box .votes-container ul.votes,
+				.debatte-stat-box .votes-container ul.votes-text,
+				.debate-box .votes-container ul.votes,
+				.debate-box .votes-container ul.votes-text {position:absolute; top:0; left:0; right:0;}
 	
 		.debate-box .debate-content {
 			overflow:hidden;
@@ -1380,7 +1400,7 @@ section article{padding-bottom:25px;}
 			.image-slideshow .img-content figure a {position:relative; display:block; }
 			.image-slideshow .img-content figure a span {
 				display:block; width:57px; height:57px;
-				position:absolute; bottom:0; right:0; z-index:2;
+				position:absolute; top:0; right:0; z-index:2;
 				background-image:url(img/open-slideshow.png);
 				background-repeat: no-repeat;
 				background-position: 15px 15px
@@ -1876,6 +1896,9 @@ ul.item-list li {
 /*
 = ARTICLE SINGLE
 -------------------------------------------------------------------------------------- */
+
+
+
 .article-single {position:relative;}
 
 .full-size section {float:none; width:auto;}
@@ -1896,6 +1919,7 @@ ul.item-list li {
 		}
 		.article-single article header p {margin:0; line-height:17px;}
 	.article-single article figure {margin-bottom:20px;}
+		.article-single section article > h2 + .time + figure {margin-top:20px;}
 		.article-single article figure p {
 			margin:0; padding-top:5px;
 			font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:15px;
@@ -1932,12 +1956,17 @@ ul.item-list li {
 			margin-bottom:0; padding-left:33px;
 			background:url(img/bullet-dash.png) 15px 12px no-repeat;
 			}
+			#article-rear .article-single article ul li {background-image:none}
 
 
 	/* Aside ---------------------- */
 	#wrapper .article-single aside article {padding-bottom:10px;}
 		.article-single aside article p,
 		.dossier-overview aside article p {font-family:'GeorgiaProW01-Regular', Georgia, 'Times New Roman', Times, serif;}
+		
+		.article-single aside article p strong,
+		.dossier-overview aside article p strong {font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif;}
+		
 		.article-single aside article header p,
 		.article-single article figure p,
 		.dossier-overview aside article header p {
@@ -1965,7 +1994,7 @@ ul.item-list li {
 		.comments-box a.button {width:207px; margin:auto;}
 		.comments-nav {
 			overflow:hidden;
-			width:400px;
+			width:480px;
 			margin:0 auto 20px auto;
 			list-style-type:none;
 			border:#d8d8d8 solid 1px;
@@ -2039,7 +2068,7 @@ ul.item-list li {
 				}
 				.article-single .author-box h4 span {font-weight:normal;}
 				.article-single .author-box h5,
-				.article-related-tabs div h5 {font-size:16px;}
+				.article-related-tabs div h5 {font-size:16px; font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif;}
 			
 			.article-single ul.article-info li p.social {overflow:hidden;}
 				.article-single ul.article-info li p.social a {
@@ -2115,6 +2144,19 @@ ul.item-list li {
 					}
 					.tabs.article-related-tabs ul li.ui-tabs-selected a {font-weight:bold;}
 					
+
+/* Font Fix ---------------------- */
+
+.article-single > section > article strong,
+.article-single > section > article p strong,
+.article-single > section > article h4 {font-weight:normal; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif;}
+
+.article-single > section > article blockquote,
+.article-single > section > article em, 
+.article-single > section > article p em {font-family:Georgia, "Times New Roman", Times, serif;}
+
+
+
 					
 /*
 = DEBATTE PAGES
@@ -2528,6 +2570,12 @@ ul.item-list li {
 	.social-network-box .left {
 		height:34px;
 		border:#cdcdcd solid 1px;
+		background-color:#f1f1f1;
+		background-image: -moz-linear-gradient(top, #ffffff, #f4f4f4);
+		background-image: -o-linear-gradient(top, #ffffff, #f4f4f4);
+		background-image: -webkit-gradient(linear, center top, center bottom, from(#ffffff), to(#f4f4f4));
+		background-image: -webkit-linear-gradient(top, #ffffff, #f4f4f4);
+		background-image: linear-gradient(top, #ffffff, #f4f4f4);
 		}
 		.social-network-box .left ul {margin:0 !important;}
 	.social-network-box p.right {margin:0 !important;}

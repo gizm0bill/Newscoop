@@ -23,6 +23,12 @@
    }(document));
 </script>
 
+<style type="text/css">
+div.geomap_open_large_map {
+	display: none;
+}
+</style>
+
 	<div id="wrapper">
         
 {{ include file="_tpl/header-omnibox.tpl" }}
@@ -41,6 +47,7 @@
                         <header>
                             <p>{{ if $gimme->article->type_name == "blog" }}<a href="{{ url options="section" }}">{{ $gimme->section->name }}</a>{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
+                        <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-rear"><span>Hintergrund zum Artikel</span></a></div>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
                         <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
@@ -61,7 +68,7 @@
 {{* ARTICLE TOPICS *}}
 {{ list_article_topics }}                
 {{ if $gimme->current_list->at_beginning }}
-                    <article>                                            
+                    <article class="mobile-hide">                                            
                         <header>
                             <p>Mehr zum Thema</p>
                         </header>
@@ -78,7 +85,7 @@
 {{* RELATED ARTICLES *}}
 {{ list_related_articles }}
 {{ if $gimme->current_list->at_beginning }}  
-                    <article>
+                    <article class="mobile-hide">
                         <header>
                             <p>Verwandte Artikel</p>
                         </header>
@@ -91,7 +98,7 @@
 
 {{* MAP - display only if set *}}
 {{ if $gimme->article->has_map }}                   
-                    <article>
+                    <article class="mobile-hide">
                         <figure>
                         	{{ map show_locations_list="false" show_reset_link=false auto_focus=false width="100%" height="180" }}
                         	{{ if $gimme->article->map->name != "" }}<p>{{ $gimme->article->map->name }}</p>{{ /if }}
@@ -127,9 +134,10 @@
                 
                 <aside>
 
+<div  class="mobile-hide">
 {{*** WERBUNG ***}}                
 {{ include file="_werbung/article-sidebar-2.tpl" }}  
-                
+</div>                
                 </aside>
             
             </div>
@@ -146,8 +154,8 @@
                         <header>
                             <p>Informationen zum Artikel</p>
                         </header>
+                        <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-front"><span>Zurück zum Artikel</span></a></div>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
-                        
                         <ul class="article-info">
 								{{ list_article_topics }}
                         {{ if $gimme->current_list->at_beginning }}                        
@@ -204,10 +212,14 @@
                             <li>
                             	<h5>Lokalisierung</h5>
                                 {{ set_map articles=$gimme->article->number }}
-                                {{ map show_locations_list="false" show_reset_link=false max_zoom=12 auto_focus=true width="511" height="180" }}
+                                {{ map show_locations_list="false" show_reset_link=false max_zoom=12 auto_focus=true width="100%" height="180" }}
                                 {{ unset_map }}
                             </li>
 {{ /if }}
+
+									{{ include file="_tpl/social-bookmarks.tpl" }}
+
+									 <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-front"><span>Zurück zum Artikel</span></a></div>
                             
                         </ul>
 
@@ -221,18 +233,18 @@
     {{ /list_articles }}
     
     <div class="author-box">
-        <h4><span>{{ $gimme->author->type }}:</span> {{ $gimme->author->name }}</h4>
+        <h4><span>{{ $gimme->author->type }}:</span> {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</h4>
         <ul class="article-info">
             <li class="image">
-                {{ if $gimme->author->picture->imageurl }}<img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width=121 />{{ /if }}
-                <p>{{ $gimme->author->biography->text|bbcode }}</p>
+                {{ include file="_tpl/author-image.tpl" author=$gimme->author width=120 height=120 }}
+                <p>{{ include file="_tpl/author-bio.tpl" author=$gimme->author }}</p>
             </li>
             {{ if $gimme->author->user->defined && (!empty($gimme->author->user['facebook']) || !empty($gimme->author->user['twitter'])) }}
             <li>
                 <h5>Social Networks</h5>
                 <p class="social">
                     {{ if !empty($gimme->author->user['facebook']) }}
-                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ trim($gimme->author->user['facebook']) }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="90" style="margin-right: 8px"></div>
+                    <div class="fb-subscribe" data-href="https://www.facebook.com/{{ trim($gimme->author->user['facebook']) }}" data-layout="button_count" data-show-faces="false" data-font="arial" data-width="160" style="margin-right: 8px"></div>
                     {{ /if }}
                     {{ if !empty($gimme->author->user['twitter']) }}
                     <div class="tw-follow" style="display: inline-block; position: relative; top: 2px">
@@ -276,7 +288,7 @@
 {{ /if }}      
 {{ /list_related_articles }}              
                     
-                    {{ pay_what_you_like title="Jetzt honorieren!" classes="grey-button reward-button" descr="Alle Artikel auf tageswoche.ch sind frei verfügbar. Wenn Ihnen unsere Arbeit etwas wert ist, nutzen Sie doch die Gelegenheit, uns zu unterstützen. Die Redaktion bedankt sich für Ihren Beitrag." }}
+                    <div class="mobile-hide">{{ include file="_tpl/sidebar-honorieren.tpl" }}</div>
 
 {{*** WERBUNG ***}}                    
 {{ include file="_werbung/article-sidebar-3-backpage.tpl" }}

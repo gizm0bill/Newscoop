@@ -87,9 +87,10 @@
                
 {{*** werbung ***}}                
 {{ include file="_werbung/section-dossier-sidebar.tpl" }}
-                
+
+<div class="mobile-hide">                
 {{ include file="_tpl/sidebar-honorieren.tpl" }}
-            
+</div>            
             </aside>
         
         </div>

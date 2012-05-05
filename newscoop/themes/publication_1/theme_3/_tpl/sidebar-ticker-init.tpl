@@ -1,7 +1,7 @@
 <script type="text/template" id="ticker-article-template">
     <span title="Artikel" class="icon">Artikel</span>
     <h3><a href="<%= doc.get('link') %>"><%= doc.has('title_short') ? doc.escape('title_short') : doc.escape('title') %></a></h3>
-    <p><%= doc.has('lead_short') ? doc.escape('lead_short') : doc.escape('lead') %> <small>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></small></p>
+    <p><%= doc.has('lead_short') || doc.get('type') == 'newswire' ? doc.escape('lead_short') : doc.escape('lead') %> <small>Von&nbsp;<%= doc.get('author').join(', ') %>, <%= doc.relDate('published') %></small></p>
 </script>
 
 <script type="text/template" id="ticker-omni-template">

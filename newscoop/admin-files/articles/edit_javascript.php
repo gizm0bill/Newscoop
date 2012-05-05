@@ -200,9 +200,6 @@ function unlockArticle(doAction) {
 // save all buttons
 
 $('.save-button-bar input').click(function() {
-    $('form#article-keywords').submit();
-    $('form#article-switches').submit();
-    
     if ($(this).attr('id') == 'save_and_close') {
         if (articleChanged()) {
             unlockArticle();
@@ -225,10 +222,14 @@ $('.save-button-bar input').click(function() {
             echo "/$ADMIN/";
         }
         ?>';
+        return false;
     } else if ($(this).attr('id') == 'save') {
         save_and_close = false;
         $('form#article-main').submit();
     }
+
+    $('form#article-keywords').submit();
+    $('form#article-switches').submit();
 
     return false;
 });
@@ -314,6 +315,9 @@ $('#attach-images').fancybox({
     width: 1300,
     height: 800,
     type: 'iframe',
+    onStart: function() { // check if there are any changes
+        return checkChanged();
+    },
     onClosed: function() {
 		window.location.reload();
 	}

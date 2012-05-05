@@ -1,6 +1,6 @@
             <article>
             	<header>
-                	<p>Blogs</p>
+                	<p>Blogs<a class="mobile-arrow desktop-hide right" href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}"><span>&gt;</span></a></p>
                 </header>
                 <ul class="post-list">
                 

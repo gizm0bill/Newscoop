@@ -80,15 +80,15 @@
 {{ if $gimme->current_list->at_end }}                 
                 </div>
 {{ /if }}                
-{{ /list_playlist_articles }}
+{{ /list_playlist_articles }}                
                 
 {{*** werbung ***}}   
 {{ include file="_werbung/section-maincol.tpl" }}
 
-{{ list_playlist_articles columns="4" name=$gimme->section->name }}
+{{ list_playlist_articles columns="4" length="30" name=$gimme->section->name }}
 {{ if $gimme->current_list->index gt 10 }}
 {{ if $gimme->current_list->index == 11 }}                
-            	<div class="top-line clearfix slideshow">
+            	<div class="top-line clearfix slideshow mobile-hide">
                <div class="slides">            	
 {{ /if }}                
 {{ if $gimme->current_list->column == "3" }}                                       
@@ -126,19 +126,27 @@
 {{ include file="_tpl/sidebar-ticker.tpl" id="single" }}
 {{ include file="_tpl/sidebar-ticker-init.tpl" ids="single" }}
 {{ /if }}
-                
+
+<span class="mobile-hide">                
 {{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
-                
+</span>                
+
+<span class="mobile-hide">                
 {{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - {{ $gimme->section->name }}" }}
+</span>
                 
 {{*** werbung ***}}                
 {{ include file="_werbung/section-sidebar.tpl" }}
-                
+
+<span class="mobile-hide">                
+
 {{ include file="_tpl/sidebar-links.tpl" linksvar=$gimme->section->name }}
                 
 {{ include file="_tpl/sidebar-dossier.tpl" }}              
                 
 {{ include file="_tpl/sidebar-cover.tpl" }}
+
+</span>
             
             </aside><!-- / Sidebar -->
             

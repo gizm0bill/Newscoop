@@ -239,6 +239,9 @@ printdesk.url = ""
 
 ; will go to application.ini
 editorRoles[] = 3
+communityExcludedRoles[] = 1
+communityExcludedRoles[] = 2
+communityExcludedRoles[] = 3
 
 characterGroup.a = "a ä à â æ"
 characterGroup.c = "c ç"

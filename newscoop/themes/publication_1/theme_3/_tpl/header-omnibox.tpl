@@ -191,6 +191,9 @@ $(document).ready(function() {
                     $('#omniboxFeedbackUserLink').attr('href', "{{ $view->baseUrl('/user/profile/') }}" + data.userData.userName);
                     omnibox.setMessage('');
                     omnibox.loggedIn = true;
+                    if ('afterLogin' in omnibox) {
+                        omnibox.afterLogin();
+                    }
                     omnibox.checkView();
                     $('#omnibox').width(omnibox.openWidth);
                     $('#omnibox').height(omnibox.openHeight);
@@ -388,6 +391,7 @@ var omnibox = {
     fileId: null,
     openWidth: 0,
     openHeight: 0,
+    status: 0,
     
     initialize: function() {
         if ('{{$gimme->user->logged_in}}' != '') {
@@ -484,6 +488,8 @@ var omnibox = {
         },500);
         $('.omnibox-content').show();
         $('.overlay').fadeIn(500);
+        
+        omnibox.status = 1;
     },
     
     hide: function() {
@@ -493,6 +499,17 @@ var omnibox = {
         },500);
         $('.omnibox-content').fadeOut(500);
         $('.overlay').fadeOut(500);
+        
+        omnibox.status = 0;
+    },
+    
+    toggle: function() {
+        if (omnibox.status == 0) {
+            omnibox.show();
+        }
+        else if (omnibox.status == 1) {
+            omnibox.hide();
+        }
     }
 }
 </script>
