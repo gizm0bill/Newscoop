@@ -69,6 +69,20 @@
 {{ /strip }}
 {{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments mobile-hide">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}
 </p>
+
+{{* related articles *}}
+{{ if $gimme->current_list->index lte 3 }}
+{{ if $gimme->current_list->index == 1 }}{{ assign var="listlength" value=3 }}{{ else }}{{ assign var="listlength" value=2 }}{{ /if }}
+{{ list_related_articles length=$listlength }}
+{{ if $gimme->current_list->at_beginning }}
+<ul class="related mobile-hide">
+{{ /if }}
+<li><a href="{{ url options="article" }}">{{ if !($gimme->article->short_name == "") }}{{ $gimme->article->short_name }}{{ else }}{{ $gimme->article->name }}{{ /if }}</a></li>
+{{ if $gimme->current_list->at_end }}
+</ul>
+{{ /if }}
+{{ /list_related_articles }}
+{{ /if }}
                 </article>
 {{ if $gimme->current_list->index == 3 }}                
          </div><!-- /.two-columns -->
