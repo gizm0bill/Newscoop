@@ -459,6 +459,16 @@ section article{padding-bottom:25px;}
 	#wrapper .events-movies section article {padding-bottom:0;}
 #wrapper article{padding-bottom: 25px;}
 
+article .related {
+    font-size: 16px;
+    line-height: 24px;
+    margin: 0 0 10px 0;
+	list-style-type:none;
+	}
+	article .related a {
+		color: #000000;
+		}
+	
 
 	/* 
 	Pagination -------------- */
@@ -511,6 +521,27 @@ section article{padding-bottom:25px;}
 	/* Header */
 	article header,
 	h3.title {padding:0 0 5px 0; position:relative;}
+		article header a.mobile-arrow {
+			position:absolute;
+			top:0; right:0; bottom:0; left:0;
+			z-index:2;
+			text-decoration:none !important;
+			}
+			article header a.mobile-arrow {
+				position:absolute;
+				top:0; right:0; bottom:0; left:0;
+				z-index:2;
+				text-decoration:none !important;
+				}
+				article header a.mobile-arrow span {
+				position:absolute;
+				top:0; right:10px; bottom:0;
+				width:7px;
+				text-indent: 100%;
+				white-space: nowrap;
+				background:url(img/mobile-arrow-next.png) no-repeat 0 50%;
+				}
+			
 	aside article header {margin-bottom:10px; padding-top:10px; border-top:#dcdcdc solid 1px;}
 	.full-width article header,
 	h3.title {padding-top:10px; border-top:#dcdcdc solid 2px;}
@@ -2155,9 +2186,33 @@ ul.item-list li {
 .article-single > section > article em, 
 .article-single > section > article p em {font-family:Georgia, "Times New Roman", Times, serif;}
 
+/* Nemetrix ---------------------- */
+.hide-netmetrix {
+	float:left;
+	width:1px;
+	height:1px;
+	overflow:hidden;
+	}
+	.hide-netmetrix img {float:left;}
 
 
-					
+/* Home Fixes ---------------------- */
+article.header-only, .mobile-list-view article.header-only {
+	padding:0 !important;
+	margin-bottom:0;
+	border:none !important;
+	}
+	article.header-only header, .mobile-list-view article.header-only header {
+		padding:0;
+		margin-bottom:0;
+		border:none;
+		}
+		article.header-only header p, .mobile-list-view article.header-only header p {
+			line-height: normal;
+			padding: 15px 10px;
+			}
+
+				
 /*
 = DEBATTE PAGES
 -------------------------------------------------------------------------------------- */	
@@ -2305,6 +2360,11 @@ ul.item-list li {
 = TOP
 -------------------------------------------------------------------------------------- */	
 #top {padding-top:32px;}
+	#top .mobile-date {
+		float:right;
+		margin: 20px 3% 0 0; 
+		font-family:Arial, Helvetica, sans-serif; font-size:14px;
+		color:#333; }
 	#top h1 {
 		float:left;
 		width:510px; height:68px;
@@ -2934,7 +2994,7 @@ ul.item-list li {
 @media all and (max-width: 768px) {
 	
 	body {border:0; background:#e5e5e5;}
-	
+
 	article header a.comments {display:block;}
 	.mobile-hide{display:none !important;}
 	
@@ -3166,7 +3226,7 @@ ul.item-list li {
 			padding-top:44px; margin:0;
 			border-bottom:#dcdcdc solid 1px;
 			}
-			#top h1 {width:197px; margin-left:3%;}
+			#top h1 {width:240px; margin-left:3%;}
 			#top ul {display:none;}
 			#top p.date {
 				display:block; position:absolute; right:3%; top:auto; bottom:16px;
@@ -3274,8 +3334,7 @@ ul.item-list li {
 		
 		.article-single .author-box h4 {font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif; font-size:16px; font-weight:normal; padding-top:20px;}
 		.article-single .author-box ul.article-info li h5,
-		.article-single .author-box ul.article-info li p,
-		.article-related-tabs {display:none;}
+		.article-single .author-box ul.article-info li p {display:none;}
 		.article-single .author-box ul.article-info li {margin-bottom:0;}
 		.article-single .author-box ul.article-info li.image p,
 		.article-single ul.article-info li p.social {display:block;}
@@ -3583,7 +3642,7 @@ ul.item-list li {
 			#wrapper .agenda-single section .movie .movie-table table tr td:first-child {border-left:0;}
 			#wrapper .agenda-single section .movie .movie-table table thead td {border-top:#dcdcdc solid 1px;}
 	
-	
+	#top h1 { margin-left: 3%; width: 197px;}
 
 }
 
