@@ -33,9 +33,11 @@
 
             </section><!-- / Main Section -->
 
-            <aside class="mobile-hide">
+            <aside>
 
 {{ include file="_tpl/sidebar-community.tpl" where="dialog" }}
+
+<div class="mobile-hide">
 
 {{ include file="_tpl/sidebar-facebook.tpl" }}
 
@@ -47,6 +49,8 @@
 {{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - {{ $gimme->section->name }}" }}
 
 {{ include file="_tpl/sidebar-debatte.tpl" }}
+
+</div>
 
             </aside><!-- / Sidebar -->
             
