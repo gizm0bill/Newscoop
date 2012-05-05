@@ -1,6 +1,6 @@
 <div class="mobile-list-view dossier-mobile-list clearfix">
 
-						<article class="desktop-hide">
+						<article class="desktop-hide header-only">
 						<header>
                 	<p>Dossiers<a class="mobile-arrow right" href="{{ local }}{{ set_publication identifier="1" }}{{ set_issue number="1" }}{{ set_section number="5" }}{{ url options="section" }}{{ /local }}"><span>&gt;</span></a></p>
                 </header>
