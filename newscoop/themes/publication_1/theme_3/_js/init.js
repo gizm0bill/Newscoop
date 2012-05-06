@@ -94,7 +94,7 @@ $(document).ready(function() {
 */
 	
 	$('#jetzt').click(function() {
-			omnibox.showHide();
+            omnibox.show();
 	});
 	
 	$('.agenda-mobile-top ul li a').click(function() {
