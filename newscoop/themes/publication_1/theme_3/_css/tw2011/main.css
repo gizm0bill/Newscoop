@@ -183,7 +183,7 @@ a.theme-subscribe {
 		display:block; position:relative;
 		padding-left:13px;
 		font-size:18px; color:#fff; text-decoration:none; line-height:36px;
-		background:#3b964c;
+		background:#008148;
 		}
 		.green-button:after {
 			content:"";
@@ -262,7 +262,7 @@ a.theme-subscribe {
 		.content-box {
 			padding:15px 0 0; margin-bottom:20px;
 			}
-			.top-content-box {margin-bottom:0;}
+			.top-content-box {margin-bottom:0; position:relative;}
 			.content-box section {
 				float:left;
 				width:648px;
@@ -681,14 +681,15 @@ article .related {
 			margin-bottom:15px;
 			font-family:Arial, Helvetica, sans-serif; font-size:20px; color:#333;
 			}
-			.profile-info h4 a.green-button {
+			.profile-info h4 .green-button {
 				display:inline-block; zoom:1; *display:inline;
 				overflow:hidden;
-				height:17px; width:117px;
+				height:17px; width:120px;
 				padding-left:5px; margin-left:10px;
 				font-size:9px; line-height:17px;
 				}
-				.profile-info h4 a.green-button:after {right:-13px;}
+				.profile-info h4 .green-button:after {right:-13px;}
+				.profile-info h4 .green-button:hover {color:#fff;}
 				
 		.abo-list ul,
 		.profile-info ul {margin:0 0 10px; list-style-type:none;}
@@ -1437,7 +1438,7 @@ article .related {
 				background-position: 15px 15px
 				}
 				.image-slideshow .img-content figure a:hover span {background-color:rgba(255, 255, 255, .4);}
-			.image-slideshow .img-content img, .image-slideshow .img-content a img {display:block; margin-bottom:0; width:100%; border:none;}
+			.image-slideshow .img-content img, .image-slideshow .img-content a img {display:block; margin-bottom:0; width:100%; border:none; height: auto;}
 			.image-slideshow .img-content p {
 				margin-bottom:5px;
 				font-size:13px;
@@ -1953,13 +1954,15 @@ ul.item-list li {
 		.article-single section article > h2 + .time + figure {margin-top:20px;}
 		.article-single article figure p {
 			margin:0; padding-top:5px;
-			font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:15px;
+			font-family:Arial, Helvetica, sans-serif; font-size:13px !important; line-height:16px;
 			}
 	span.time,
 	.article-single article span.time,
+	.article-single article p.time,
 	.agenda-single article span.time {
 		font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#999;
 		}
+	.article-single article header + p.time {margin:-10px 0 6px 0;}
 	.article-single article h2 {
 		margin-bottom:10px;
 		font-size:36px; font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif; font-weight:normal; line-height:42px;
@@ -2011,7 +2014,32 @@ ul.item-list li {
 		
 		.map-holder {border:#cdcdcd solid 1px;}
 			.map-holder iframe {display:block;}
-			
+	
+	
+	/* Article main content ---------------------- */
+	.article-main-front, .article-main-back {position:relative;}
+	.article-main-front a.article-switch, .article-main-back a.article-switch {
+		height:46px;
+		width:46px;
+		overflow:hidden;
+		margin:0;
+		}
+	.article-main-front a.article-switch span, .article-main-back a.article-switch span {
+		margin: 0;
+		height: 33px;
+		width: 37px;
+		padding: 0;
+		margin:4px 0 0 6px;
+		}
+		.article-main-front a.article-switch.article-view-rear span, .article-main-back a.article-switch.article-view-rear span {background-position:0 -100px;}
+		.article-main-front a.article-switch.article-view-front span, .article-main-back a.article-switch.article-view-front span {background-position:0 0; margin-left:3px;}
+	
+	.flip-button-container {
+		position:absolute;
+		top:0; right:0;
+		z-index:2;
+		width:46px;
+		}	
 		
 	
 	/* Comments */
@@ -2025,7 +2053,7 @@ ul.item-list li {
 		.comments-box a.button {width:207px; margin:auto;}
 		.comments-nav {
 			overflow:hidden;
-			width:480px;
+			width:90%;
 			margin:0 auto 20px auto;
 			list-style-type:none;
 			border:#d8d8d8 solid 1px;
@@ -2036,8 +2064,8 @@ ul.item-list li {
 				text-align:center; font-size:14px;
 				}
 					
-				.comments-nav li a,
-				.article-related-tabs ul li a {
+				.comments-nav > li a,
+				.article-related-tabs > ul > li a {
 					display:block; position:relative;
 					height:34px;
 					color:#000; text-decoration:none; line-height:34px;
@@ -2048,17 +2076,17 @@ ul.item-list li {
 					background-image: -webkit-linear-gradient(top, #ffffff, #e9e9e9);
 					background-image: linear-gradient(top, #ffffff, #e9e9e9);
 					}
-					.comments-nav li:last-child a:after {
+					.comments-nav > li:last-child a:after {
 						content:"";
 						position:absolute; top:0; left:0;
 						height:100%; width:1px;
 						background:#d8d8d8;
 						}
 						
-					.comments-nav li a:hover,
-					.comments-nav li.ui-tabs-selected a,
-					.article-related-tabs ul li a:hover,
-					.article-related-tabs ul li.ui-tabs-selected a {
+					.comments-nav > li a:hover,
+					.comments-nav > li.ui-tabs-selected a,
+					.article-related-tabs > ul > li a:hover,
+					.article-related-tabs > ul > li.ui-tabs-selected a {
 						background-color:#f3f3f3;
 						background-image: -moz-linear-gradient(top, #e9e9e9, #ffffff);
 						background-image: -o-linear-gradient(top, #e9e9e9, #ffffff);
@@ -2128,8 +2156,8 @@ ul.item-list li {
 				}
 				.comment-list ol li span.editorial {
 					float:right;
-					padding:0 2px;
-					font-size:9px; color:#fff; line-height:13px;
+					padding:0 10px;
+					font-size:9px; color:#fff; line-height:16px;
 					background:#008148;
 					}
 				.comment-list ol li img {
@@ -2154,20 +2182,20 @@ ul.item-list li {
 					}
 					
 					
-		.tabs.article-related-tabs ul {
+		.tabs.article-related-tabs > ul {
 			overflow:hidden;
 			margin:0 0 20px 0;
 			list-style-type:none;
 			}
-			.tabs.article-related-tabs ul li {
+			.tabs.article-related-tabs > ul > li {
 				float:left;
 				margin:0; padding:0;
 				font-size:12px; font-family:Arial, Helvetica, sans-serif;
 				background:none;
 				border:#d8d8d8 solid 1px; border-right:0;
 				}
-				.tabs.article-related-tabs ul li:last-child {border-right:#d8d8d8 solid 1px;}
-				.tabs.article-related-tabs ul li a {
+				.tabs.article-related-tabs > ul li:last-child {border-right:#d8d8d8 solid 1px;}
+				.tabs.article-related-tabs > ul li a {
 					display:block;
 					height:22px;
 					padding:0 20px;
@@ -2210,6 +2238,22 @@ article.header-only, .mobile-list-view article.header-only {
 		article.header-only header p, .mobile-list-view article.header-only header p {
 			line-height: normal;
 			padding: 15px 10px;
+			}
+
+/*
+= USER & AUTHOR POST LIST
+-------------------------------------------------------------------------------------- */
+.user-post-list {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	}
+	.user-post-list > li {
+		margin:0;
+		padding:0;
+		}
+		.user-post-list > li h5 a {
+			color:#000;
 			}
 
 				
@@ -2318,25 +2362,26 @@ article.header-only, .mobile-list-view article.header-only {
 	
 	.debatte-stat-list {
 		overflow:hidden;
-		margin:10px 0;
+		margin:10px 0 10px 0;
 		list-style-type:none;
 		}
 		.debatte-stat-list li {
 			float:left; position:relative;
-			width:14%; height:120px;
+			width:25%; height:120px;
+			margin-left:2.85%;
 			font-family:Arial, Helvetica, sans-serif;
 			}
-			.debatte-stat-list li:first-child {width:16%;}
+			.debatte-stat-list li:first-child {width:16%; margin-left:0;}
 			
 			.debatte-stat-list li p {
-				width:90%;
-				font-size:12px; text-align:center; line-height:20px;
+				width:99%;
+				font-size:12px; text-align:center; line-height:25px;
 				}
 			.debatte-stat-list li b:last-child {
 				position:absolute; bottom:22px; left:0;
 				}
 			.debatte-stat-list li dl {
-				width:90%; height:100px;
+				width:99%; height:100px;
 				font-size:12px; text-align:center;
 				background:#fff;
 				}
@@ -2901,7 +2946,7 @@ article.header-only, .mobile-list-view article.header-only {
 	.profile-edit-box ul li.profile-image div {padding-left:10px; overflow:hidden;}
 	.profile-edit-box ul li.buttons {padding-right:15px;}
 	
-	.tabs.article-related-tabs ul li a {padding:0 10px;}
+	.tabs.article-related-tabs > ul > li a {padding:0 10px;}
 	
 	ul.calendar-list li {
 		width:14%; height:auto;
@@ -2990,6 +3035,11 @@ article.header-only, .mobile-list-view article.header-only {
 
 	aside .profile-edit-box ul li input[type=password], aside .profile-edit-box ul li input[type="text"]  {width:98%;}
 }
+
+
+
+
+
 
 @media all and (max-width: 768px) {
 	
@@ -3143,6 +3193,7 @@ article.header-only, .mobile-list-view article.header-only {
 				.mobile-list-view article h2 {font-size:18px; line-height:140%;}
 				
 				.mobile-list-view article header {padding-left:30%; margin-left:10px;}
+				.mobile-list-view article.no-image header {padding-left:0; margin-left:0;}
 				.mobile-list-view article figure {margin-top:-19px;}
 		
 		.mobile-list-view.header-fix article header {padding-left:0; margin-left:0;}
@@ -3330,7 +3381,7 @@ article.header-only, .mobile-list-view article.header-only {
 	/* Article */
 	.article-single ul.article-info li {padding:0; background:none;}
 		.article-single ul.article-info li h5 {position:static; width:auto; line-height:normal; font-weight:bold;}
-		.article-single ul.article-info li img {position:relative; float:left; width:20%; margin-right:10px;}
+		.article-single ul.article-info li img {position:relative; float:left; width:20%; margin-right:10px; height:auto;}
 		
 		.article-single .author-box h4 {font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif; font-size:16px; font-weight:normal; padding-top:20px;}
 		.article-single .author-box ul.article-info li h5,
@@ -3343,7 +3394,9 @@ article.header-only, .mobile-list-view article.header-only {
 				.article-single ul.article-info li p.social span.fb {background-position:3px 11px;}
 				.article-single ul.article-info li p.social span.tw {width:50px; background-position:3px -30px;}
 		
-		a.article-switch span {width:160px; margin:0 auto; padding-left:43px; background-position:0 -94px;}
+		a.article-switch span {width:170px; margin:0 auto; padding-left:43px;}
+		a.article-switch.article-view-rear span {background-position:0 -94px;}
+		a.article-switch.article-view-front span {background-position:0 6px;}
 	
 	
 	/* Agenda content */
@@ -3605,15 +3658,40 @@ article.header-only, .mobile-list-view article.header-only {
 	#wrapper .agenda-single section .movie .movie-table,
 	#wrapper .agenda-content.agenda-single section .movie p {display:block;}
 	
-	
+
+.tabs.article-related-tabs {
+	margin:0 -10px -10px -10px;
+	padding:14px 12px;
+	background-color:#f8f8f8;
+	}
+	.tabs.article-related-tabs > ul {
+		width:99.9%;
+		}
+		.tabs.article-related-tabs > ul > li {
+			width:49.5%;
+			}
+			.tabs.article-related-tabs > ul > li a {
+				text-align:center;
+				font-size: 14px;
+				height:46px;
+				line-height:46px;
+				}
+				
+.user-post-list > li {
+	border-top:1px solid #dcdcdc;
+	padding-top:10px;
+	}
+	.user-post-list > li:first-child {padding-top:0; border:none;}
+	.user-post-list > li p {margin-bottom:12px;}		
+				
 }
 
 @media all and (max-width: 480px) {
 	
 	.comments-nav,
 	.profile-edit-box ul li.buttons input.button {width:100%;}
-		.comments-nav li a, 
-		.article-related-tabs ul li a {font-size:12px;}
+		.comments-nav > li a, 
+		.article-related-tabs > ul > li a {font-size:12px;}
 	.comments-box a.button {width:auto;}
 	
 	.mobile-list-view article p,
