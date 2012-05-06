@@ -17,7 +17,7 @@
                             {{ $recommendedEmpty=1 }}
 									 {{ list_article_comments order="bydate asc" recommended="true"  }}
                                 <li>
-                                		{{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<small class="redaktion">TagesWoche Redaktion</small>{{ /if }}
+                                    {{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<span class="editorial">TagesWoche Redaktion</span>{{ /if }}
                                     {{ $user=$gimme->comment->user }}
                                     {{ if $user->identifier }}
                                     <a{{ if $user->is_active }} href="{{ $view->url(['username' => $user->uname], 'user') }}"{{ /if }}><img src="{{ include file="_tpl/user-image.tpl" user=$user width=35 height=35 }}" width="35" height="35" /></a>{{ else }}<img src="{{ url static_file='pictures/avatar-small.png' }}" alt="" />{{ /if }}
@@ -40,7 +40,7 @@
                             <ol>
 									 {{ list_article_comments order="bydate asc"  }}
                                 <li id="comment_{{ $gimme->comment->identifier }}">
-                                		{{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<small class="redaktion">TagesWoche Redaktion</small>{{ /if }}
+                                    {{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<span class="editorial">TagesWoche Redaktion</span>{{ /if }}
                                     {{ $user=$gimme->comment->user }}
                                     {{ if $user->identifier }}
                                     <a{{ if $user->is_active }} href="{{ $view->url(['username' => $user->uname], 'user') }}"{{ /if }}><img src="{{ include file="_tpl/user-image.tpl" user=$user width=35 height=35 }}" width="35" height="35" /></a>{{ else }}<img src="{{ url static_file='pictures/avatar-small.png' }}" alt="" />{{ /if }}
