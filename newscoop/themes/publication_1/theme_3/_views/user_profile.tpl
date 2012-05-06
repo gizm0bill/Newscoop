@@ -76,11 +76,13 @@
         </article>
     </div>
 
-    <article>
+    <article class="mobile-hide">
         <header class="top-line">
             <p>Beiträge auf tageswoche.ch: {{ $user->posts_count }}</p>
         </header>
     </article>
+
+<div class="mobile-divider desktop-hide"></div>
 
     <div class="tabs article-related-tabs">
 
