@@ -42,7 +42,10 @@
             <div id="omniboxFeedback">
                 <fieldset>
                     <form id="omniboxFeedbackForm">
-                        <p class="top-info">eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a></p>
+                        <p class="top-info">
+                            eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a>
+                            <br><a style="float: right;" href="{{ $view->baseUrl('/auth/logout') }}">Ausloggen</a>
+                        </p>
                         <br>
                         <h3>An Redaktion schreiben</h3>
                         <ul>
@@ -84,7 +87,10 @@
             <div id="omniboxComment">
                 <fieldset>
                     <form id="omniboxCommentForm">
-                        <p class="top-info">eingeloggt als <a id="omniboxCommentUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a></p>
+                        <p class="top-info">
+                            eingeloggt als <a id="omniboxCommentUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a>
+                            <br><a style="float: right;" href="{{ $view->baseUrl('/auth/logout') }}">Ausloggen</a>
+                        </p>
                         <br>
                         <h3>Mein Kommentar</h3>
                         <ul>
