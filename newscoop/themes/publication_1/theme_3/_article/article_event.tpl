@@ -465,7 +465,7 @@ function load_events(ev_type) {
 {{ set_current_issue }}
 {{ set_section number="71" }}
                 <header class="mobile-header">
-                        <p><a href="{{ uri options="section" }}#/;type:{{ $event_type_link }};date:{{ $usedate_link }};region:{{ $region_link }};page:1" class="grey-button back-button">Zurück zur Veranstaltungen</a></p>
+                        <p><a href="{{ uri options="section" }}#/;type:{{ $event_type_link }};date:{{ $usedate_link }};region:{{ $region_link }};page:1" class="grey-button back-button">Zurück zu Veranstaltungen</a></p>
                 </header>
 {{ /local }}
 
@@ -516,7 +516,7 @@ function load_events(ev_type) {
 {{ set_current_issue }}
 {{ set_section number="71" }}
                 <div class="mobile-hide">
-                <a href="{{ uri options="section" }}#/;type:{{ $event_type_link }};date:{{ $usedate_link }};region:{{ $region_link }};page:1" class="grey-button back-button"><span>Zurück zur Veranstaltungen</span></a>
+                <a href="{{ uri options="section" }}#/;type:{{ $event_type_link }};date:{{ $usedate_link }};region:{{ $region_link }};page:1" class="grey-button back-button"><span>Zurück zu Veranstaltungen</span></a>
                 </div>
 {{ /local }}
                 

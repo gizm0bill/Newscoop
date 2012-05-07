@@ -171,7 +171,7 @@ function load_events(ev_type) {
 {{ set_current_issue }}
 {{ set_section number="72" }}
                 <header class="mobile-header first-header">
-                    <p><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button">Zurück zu Kinoübersicht</a></p>
+                    <p><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button">Zurück zur Kinoübersicht</a></p>
                 </header>
 {{ /local }}
 
@@ -592,7 +592,7 @@ function parse_date_text($date_time_text)
 {{ local }}
 {{ set_current_issue }}
 {{ set_section number="72" }}
-                <a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button"><span>Zurück zu Kinoübersicht</span></a>
+                <a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button"><span>Zurück zur Kinoübersicht</span></a>
 {{ /local }}
 
 {{*
