@@ -88,5 +88,9 @@
                     </ul>
                 </li>
             </ul>
+            <p class="desktop-hide mobile-footer-links">
+            {{ set_article number="3918" }}<a href="{{ url options="article" }}">{{ $gimme->article->name }}</a>&nbsp;
+            {{ set_article number="3917" }}<a href="{{ url options="article" }}">{{ $gimme->article->name }}</a>&nbsp;
+            {{ set_article number="3915" }}<a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></p>
             <p class="footer-text">All rights reserved</p>
         </div>
