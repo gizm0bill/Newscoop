@@ -2,7 +2,7 @@ $(document).ready(function() {
 	
 // this makes problems for js-based select/options manipulations
 //	$('select').dropdownized({fixed:true});
-    $('select').each(function(ind_elm, elm) {
+    $('select').not('#mobile-nav-box').each(function(ind_elm, elm) {
         var jq_elm = $(elm);
         if (!jq_elm.hasClass('omit_dropdown')) {
             jq_elm.dropdownized({fixed:true});
@@ -233,4 +233,8 @@ $(".fancybox-thumb").fancybox({
 			$('blockquote').prepend('&laquo;');
 			$('blockquote').append('&raquo;');	
 		}
+
+    $('#mobile-nav-box').change(function(e) {
+        window.location = $(e.target).val();
+    });
 });

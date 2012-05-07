@@ -1,0 +1,9 @@
+#mobile-nav-box {
+    height: 44px;
+    line-height: 44px;
+    border: none;
+}
+
+#mobile-nav-box > option {
+    color: #000;
+}

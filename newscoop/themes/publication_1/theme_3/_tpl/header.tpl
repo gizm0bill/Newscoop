@@ -19,7 +19,7 @@
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><p class="date">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</p>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
-                <a href="/" class="start">{{ if $gimme->default_section->defined }}{{ $gimme->default_section->name }}{{ else }}Startseite{{ /if }}</a>
+                {{ include file="_tpl/mobile-nav.tpl" }}
                 <ul id="mobile-nav">
                     <li class="search"><a href="#">Search</a>
                     	<ul class="search-mobile">
@@ -39,7 +39,7 @@
                         </ul>
                     </li>
                 </ul>
-                <nav>
+                <nav class="mobile-hide">
                     <ul>
                         {{ set_publication identifier="1" }}
                         {{ set_current_issue }}
@@ -85,7 +85,6 @@
                         <li><a href="{{ url options="section" }}"{{ if ((70 == $gimme->default_section->number) || (71 == $gimme->default_section->number) || (72 == $gimme->default_section->number)) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>Ausgehen</a></li>
                     </ul>
                 </nav>
-
 {{ /local }}
 
                 {{* SEARCH BOX *}}                

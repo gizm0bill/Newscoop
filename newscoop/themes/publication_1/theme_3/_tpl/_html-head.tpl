@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/main.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/skin.css" }}">
+    <link rel="stylesheet" href="{{ url static_file="_css/tw2011/fixes.css" }}">
     
     <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/jquery.fancybox.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/helpers/jquery.fancybox-thumbs.css" }}">
