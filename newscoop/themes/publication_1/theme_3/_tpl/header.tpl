@@ -7,7 +7,7 @@
                     <li>{{ weather }}</li>
                     {{ dynamic }}
                     {{ if $gimme->user->logged_in }}
-                    <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Meine Themen</a></li>
+                    <li><a href="/meine-themen">Meine Themen</a></li>
                     <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Profil bearbeiten</a></li>
                     {{ else }}
                     {{ set_article number="3918" }}
