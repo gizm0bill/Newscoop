@@ -52,7 +52,7 @@ div.geomap_open_large_map {
                         </header>
                         <p class="time desktop-hide">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr</p>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
-                        <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
+                        <span class="time mobile-hide">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr {{ if $gimme->article->updated }} (aktualisiert: {{ $gimme->article->updated }}){{ /if }}</span>
                         <h3>{{ if $gimme->article->lede }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->DataLead|strip_tags }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }} {{ /if }}{{ /list_article_authors }}</h3>
                         {{ include file="_tpl/article-figure.tpl" }}
 
@@ -225,12 +225,10 @@ div.geomap_open_large_map {
                             	<h5>Artikel-Webcode</h5>
                             	<p>tageswoche.ch/{{ $gimme->article->webcode }}</p>
                             </li>
-
-									{{ include file="_tpl/social-bookmarks.tpl" }}
-
-									 <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-front"><span>Zurück zum Artikel</span></a></div>
                             
                         </ul>
+
+								{{ include file="_tpl/social-bookmarks.tpl" }}
 
 {{* ARTICLE AUTHORS *}}
 {{ list_article_authors }} 
