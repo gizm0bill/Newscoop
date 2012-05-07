@@ -20,7 +20,7 @@
     <script type="text/javascript" src="{{ url static_file="_js/libs/jquery.socialshareprivacy.js" }}"></script>
     <script type="text/javascript">
 	jQuery(document).ready(function($) {
-	    $('#social_bookmarks').each(function() {
+	    $('.social_bookmarks').each(function() {
             $(this).socialSharePrivacy({
 		        services: {
 			        facebook: {
