@@ -225,12 +225,10 @@ div.geomap_open_large_map {
                             	<h5>Artikel-Webcode</h5>
                             	<p>tageswoche.ch/{{ $gimme->article->webcode }}</p>
                             </li>
-
-									{{ include file="_tpl/social-bookmarks.tpl" }}
-
-									 <div class="desktop-hide"><a href="#" class="grey-button article-switch article-view-front"><span>Zurück zum Artikel</span></a></div>
                             
                         </ul>
+
+								{{ include file="_tpl/social-bookmarks.tpl" }}
 
 {{* ARTICLE AUTHORS *}}
 {{ list_article_authors }} 
