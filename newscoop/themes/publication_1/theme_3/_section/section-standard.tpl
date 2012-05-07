@@ -52,13 +52,19 @@
                 </article>
 
 {{ else }}
+         
+{{ capture name="_noimg" assign="_noimg" }}
+{{ image rendition="rubrikenseite" }}
+<img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
+{{ /image }}
+{{ /capture }}
+{{ if trim($_noimg) }}<article>{{ else }}<article class="no-image">{{ /if }}         
                     
-                    <article>
                         <header>
                             <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
                         {{* img_170x115.tpl is checking if rendtion exists, and if it does, only then it puts <figure> and <a> tags around the image  *}}
-                        {{ include file="_tpl/renditions/img_170x115.tpl" where="sec-standard" }}
+                        {{ include file="_tpl/renditions/img_170x115.tpl" }}
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         <p>{{ strip }}<!-- {{ $gimme->article->type_name }} --> 
 {{ include file="_tpl/admin_frontpageedit.tpl" }}
