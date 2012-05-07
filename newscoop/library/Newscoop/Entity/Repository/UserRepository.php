@@ -180,6 +180,18 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Reposi
         return $qb->getQuery()->getResult();
     }
 
+    public function findVerifiedUsers($countOnly, $offset, $limit)
+    {
+        if ($countOnly) {
+            $qb = $this->getEntityManager()->createQuery('SELECT COUNT(u.id) FROM Newscoop\Entity\User u JOIN u.attributes a WHERE a.attribute = \'is_verified\' AND a.value = 1');
+            return $qb->getQuery()->getSingleScalarResult();
+        }
+
+        $qb = $this->getEntityManager()->createQuery('SELECT u FROM Newscoop\Entity\User u JOIN u.attributes a WHERE a.attribute = \'is_verified\' AND a.value = 1');
+
+        return $qb->getQuery()->getResult(); 
+    }
+
     /**
      * Create query builder for public users
      *

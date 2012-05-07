@@ -23,6 +23,7 @@
     <ul>
         <li><a href="{{ $view->url(['controller' => 'user', 'action' => 'index'], 'default', true) }}"{{ if $current == 'index' }} class="active"{{ /if }}>Alle</a></li>
         <li><a href="{{ $view->url(['controller' => 'user', 'action' => 'active'], 'default', true) }}"{{ if $current == 'active' }} class="active"{{ /if }}>Aktivste</a></li>
+        <li><a href="{{ $view->url(['controller' => 'user', 'action' => 'verified'], 'default', true) }}"{{ if $current == 'verified' }} class="active"{{ /if }}>Verifizierte</a></li>
         <li><a href="{{ $view->url(['controller' => 'user', 'action' => 'editors'], 'default', true) }}"{{ if $current == 'editors' }} class="active"{{ /if }}>Redaktion</a></li>
     </ul>
 

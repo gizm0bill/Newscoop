@@ -376,6 +376,12 @@ class UserService
         return $this->repository->findActiveUsers($countOnly, $offset, $limit, $this->config['communityExcludedRoles']);
     }
 
+    public function getVerifiedUsers($countOnly = false, $page = 1, $limit = 8)
+    {
+        $offset = ($page - 1) * $limit;
+        return $this->repository->findVerifiedUsers($countOnly, $offset, $limit);
+    }
+
     /**
      * Find user by string
      *
