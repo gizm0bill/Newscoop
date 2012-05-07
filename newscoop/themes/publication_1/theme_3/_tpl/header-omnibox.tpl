@@ -42,7 +42,7 @@
             <div id="omniboxFeedback">
                 <fieldset>
                     <form id="omniboxFeedbackForm">
-                        <p class="top-info">eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/user/profile/') }}{{ $gimme->user->uname }}">{{ $gimme->user->name }}</a></p>
+                        <p class="top-info">eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a></p>
                         <br>
                         <h3>An Redaktion schreiben</h3>
                         <ul>
@@ -84,7 +84,7 @@
             <div id="omniboxComment">
                 <fieldset>
                     <form id="omniboxCommentForm">
-                        <p class="top-info">eingeloggt als <a id="omniboxCommentUserLink" href="{{ $view->baseUrl('/user/profile/') }}{{ $gimme->user->uname }}">{{ $gimme->user->name }}</a></p>
+                        <p class="top-info">eingeloggt als <a id="omniboxCommentUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a></p>
                         <br>
                         <h3>Mein Kommentar</h3>
                         <ul>
@@ -392,8 +392,11 @@ var omnibox = {
     openWidth: 0,
     openHeight: 0,
     status: 0,
+    width: 0,
     
     initialize: function() {
+        omnibox.width = $(document).width();
+        
         if ('{{$gimme->user->logged_in}}' != '') {
             omnibox.loggedIn = true;
         }
