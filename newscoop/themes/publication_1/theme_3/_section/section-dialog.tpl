@@ -26,7 +26,7 @@
                 </article>
                 
                 <aside class="desktop-hide">
-                {{ include file="_tpl/sidebar-goodcomments.tpl" }}
+                {{ include file="_tpl/sidebar-goodcomments.tpl" where="mobile-dialog" }}
                 </aside>					
 					
 {{ include file="_tpl/dialog-article-comments.tpl" }}
