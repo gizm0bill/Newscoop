@@ -3048,6 +3048,8 @@ article.header-only, .mobile-list-view article.header-only {
 
 @media all and (max-width: 768px) {
 	
+	.top-werbung {display:none !important;}
+	
 	body {border:0; background:#e5e5e5;}
 
 	article header a.comments {display:block;}
@@ -3671,6 +3673,7 @@ article.header-only, .mobile-list-view article.header-only {
 	padding:14px 12px;
 	background-color:#f8f8f8;
 	}
+	.author-box .tabs.article-related-tabs {margin: 0 0 10px;}
 	.tabs.article-related-tabs > ul {
 		width:99.9%;
 		}
@@ -3686,10 +3689,12 @@ article.header-only, .mobile-list-view article.header-only {
 				
 .user-post-list > li {
 	border-top:1px solid #dcdcdc;
-	padding-top:10px;
+	padding-top:10px !important;
 	}
 	.user-post-list > li:first-child {padding-top:0; border:none;}
 	.user-post-list > li p {margin-bottom:12px;}		
+
+.article-info .geomap_container {margin-top:10px;}
 				
 }
 
