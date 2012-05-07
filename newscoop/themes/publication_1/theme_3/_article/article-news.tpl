@@ -1,5 +1,7 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+{{ include file="_tpl/youtube-sizes.tpl" }}
+
 <body>
 
 {{ include file="_tpl/_netmetrix-stats.tpl" }}
