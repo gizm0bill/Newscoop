@@ -110,14 +110,15 @@ class ArticleDatetimeRepository extends EntityRepository
         $insertValues = $this->buildInsertValues($timeSet, $recurring);
         $article = null;
 
+        if ($articleId instanceof \Article) {
+            $articleId = $articleId->getArticleNumber();
+        }
+
         $em = $this->getEntityManager();
         // check article
         if (is_numeric($articleId)) {
             $article = $em->getRepository('Newscoop\Entity\Article')->findOneBy(array('number' => $articleId));
             /* @var $article Newscoop\Entity\Article */
-        }
-        elseif ($articleId instanceof \Article) {
-            $article = $articleId;
         }
         if (is_null($article)) {
             return false;
