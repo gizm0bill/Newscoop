@@ -12,7 +12,6 @@
                     {{ else }}
                     {{ set_article number="3918" }}
                     <li><a href="{{ url options="article" }}">Kontakt</a></li>
-                    <li><a href="#email-popup-box" class="email-trigger">Email trigger</a></li>
                     <li><a href="#" onClick="omnibox.show()">Login</a></li>
                     {{ /if }}
                     {{ /dynamic }}
