@@ -16,7 +16,7 @@
                   {{ /if }}             	           	
             		{{ if $gimme->current_list->index == 1 }}<figure><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a></figure>{{ /if }}
 						{{ if $gimme->current_list->index == 2 || $gimme->current_list->index == 3 }}<figure><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a></figure>{{ /if }}
-						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}<figure class="left"><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_170x115.tpl" }}</a></figure>{{ /if }}
+						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}{{ include file="_tpl/renditions/img_170x115.tpl" }}{{ /if }}
 
 						{{ if $gimme->current_list->index < 4 }}	
                     <header>
