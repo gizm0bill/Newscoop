@@ -311,8 +311,8 @@
 	        $div = $('<div class="'+ns+'top"><h4>'+options.title+'</h4><h3></h3></div>');
         
         if (options.navigation === true) {
-        	html = html + '<li class="'+ns+'button-prev"><a class="grey-button">'+options.buttons.prev+'</a></li>';
-            html = html + '<li class="'+ns+'button-next"><a class="grey-button">'+options.buttons.next+'</a></li>';   
+        	html = html + '<li class="'+ns+'button-prev"><a href="#" class="grey-button">'+options.buttons.prev+'</a></li>';
+            html = html + '<li class="'+ns+'button-next"><a href="#" class="grey-button">'+options.buttons.next+'</a></li>';   
          
 	        $ul.append(html);
 	        
@@ -425,7 +425,7 @@
         
         function buildLI() {
             $li.removeClass()
-                .append("<a><h5></h5><span></span><img></img></a>");
+                .append("<a><h5></h5><span></span></a>");
         }
 
         function isCurrentMonth() {
@@ -490,7 +490,9 @@
         function setThumbnail(url) {
             _s_image = url;
             
-            $li.find("img").attr("src", url);
+            $li.find("span").after($("<img />", {
+            	"src": url
+            }));
         }
         
         function setUrl(url) {
