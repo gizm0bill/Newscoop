@@ -13,7 +13,7 @@
     <meta name="author" content="Ljuba Rankovic" >
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" {{*type="image/x-icon"*}} href="{{ uri static_file="favicon.ico" }}" />
     <link rel="apple-touch-icon" href="touch-icon.png">
     {{ dynamic }}{{block head_links}}{{/block}}{{ /dynamic }}
 
