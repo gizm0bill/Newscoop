@@ -18,7 +18,7 @@
 
 <h3>Hilfe</h3>
 <ul>
-    <li><em>Wie man neue Themen abonniert, steht eventuell hier in einer Hilfebox.</em></li>
+    <li><em>Auf dieser Seite sehen Sie alle aktuellen Artikel zu den Themen, die Sie abonniert haben. Um weitere Themen zu abonnieren, klicken Sie auf die entsprechende Funktion bei einem Artikel.</em></li>
 </ul>
 
 <script>
