@@ -2250,10 +2250,14 @@ article.header-only, .mobile-list-view article.header-only {
 	}
 	.user-post-list > li {
 		margin:0;
-		padding:0;
+		padding:0 !important;
 		}
 		.user-post-list > li h5 a {
 			color:#000;
+			}
+		.user-post-list > li .mother-article-link {
+			font-size: 16px;
+    		line-height: 24px;
 			}
 
 				
@@ -3025,7 +3029,7 @@ article.header-only, .mobile-list-view article.header-only {
 			#wrapper .agenda-single section .movie ul.top-list-details li.rating ul li {padding:0;}
 			#wrapper .agenda-single section .movie ul.top-list-details li.rating em {display:none;}
 			#wrapper .agenda-single section .movie img {width:30%; margin:0 10px 0 0;}
-			#wrapper .agenda-single section .movie #social_bookmarks img,
+			#wrapper .agenda-single section .movie #social_bookmarks img, #wrapper .agenda-single section .movie .social_bookmarks img,
 			#wrapper .agenda-single section .movie .image-slideshow img {width:auto; margin-right:0;}
 	
 	#wrapper .agenda-single section .movie .movie-trailer,
@@ -3482,7 +3486,7 @@ article.header-only, .mobile-list-view article.header-only {
 			#wrapper .agenda-content section article.movie ul, 
 			#wrapper .agenda-content section article.movie .movie-table {margin-right:0; overflow:hidden;}
 			#wrapper .agenda-content section img {width:90px; height:auto; margin:0 0 0 12px;}
-			#wrapper .agenda-content.agenda-single #social_bookmarks img {width:auto; margin:0;}
+			#wrapper .agenda-content.agenda-single #social_bookmarks img, #wrapper .agenda-content.agenda-single .social_bookmarks img {width:auto; margin:0;}
 			#wrapper .agenda-content section article h3 {font-size:16px; margin:0;}
 			#wrapper .agenda-content article .top-list-details li {padding-left:0; display:none;}
 				#wrapper .agenda-content article .top-list-details li.rating,
