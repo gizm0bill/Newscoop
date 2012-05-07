@@ -6,9 +6,9 @@
 
 	<div id="wrapper">
         
+{{ include file="_werbung/article-blog-header.tpl" }}        
+        
 {{ include file="_tpl/header-omnibox.tpl" }}
-
-{{ include file="_werbung/article-blog-header.tpl" }}
         
 {{ include file="_tpl/header.tpl" }}
 
