@@ -407,7 +407,8 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ assign var=condate_real "publish_date is $today_date" }}
 {{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" length=5 *}}
 {{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" length=5 *}}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc byname asc" movie_screening="$muldate" }}
+{{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc byname asc" movie_screening="$muldate" *}}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc byname asc" }}
     {{ if $lastmovname != $gimme->article->headline }}
         {{ if "" != $lastmovname }}
                     </ul>

@@ -23,7 +23,9 @@
 {{ if $gimme->current_list->at_end }} 
                         </div>
                         <footer>
-                            <a href="#" class="more">Zur Dialogseite »</a>
+                        	 {{ if !($where == "mobile-dialog") }}
+                            <a href="{{ set_current_issue }}{{ set_section number="80" }}{{ url options="section" }}" class="more">Zur Dialogseite »</a>
+                            {{ /if }}
                         </footer>
                     </div>
                 </article>

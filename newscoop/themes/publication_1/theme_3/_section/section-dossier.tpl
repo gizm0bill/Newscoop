@@ -19,7 +19,7 @@
 {{ list_articles ignore_issue="true" ignore_section="true" constraints="type is dossier active is on" order="bysection desc" }}
             
 {{ if $gimme->current_list->index == 2 }}                 
-                <div class="mobile-list-view clearfix">
+                 <div class="mobile-list-view clearfix header-fix">
 {{ /if }}            
  
 {{ if $gimme->current_list->index == 1 }}            
