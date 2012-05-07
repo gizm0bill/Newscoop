@@ -1,5 +1,5 @@
 <div class="social-network-box clearfix">
-    <div id="social_bookmarks" class="left"></div>
+    <div id="social_bookmarks" class="social_bookmarks left"></div>
     <p class="right mobile-hide">
         <span class="multiple">
             <a href="#" onclick="window.print();return false" class="grey-button print"><span>Print</span></a>

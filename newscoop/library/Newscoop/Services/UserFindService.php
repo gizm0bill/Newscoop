@@ -11,7 +11,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  */
-class UserSearchService
+class UserFindService
 {
     /** @var \Doctrine\Common\Persistence\ObjectManager */
     private $em;
