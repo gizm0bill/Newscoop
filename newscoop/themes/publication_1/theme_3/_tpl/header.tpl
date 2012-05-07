@@ -12,7 +12,6 @@
                     {{ else }}
                     {{ set_article number="3918" }}
                     <li><a href="{{ url options="article" }}">Kontakt</a></li>
-                    <li><a href="#email-popup-box" class="email-trigger">Email trigger</a></li>
                     <li><a href="#" onClick="omnibox.show()">Login</a></li>
                     {{ /if }}
                     {{ /dynamic }}
@@ -20,7 +19,7 @@
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><p class="date">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</p>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
-                <a href="/" class="start">{{ if $gimme->section->number }}{{ $gimme->section->name }}{{ else }}Startseite{{ /if }}</a>
+                <a href="/" class="start">{{ if $gimme->default_section->defined }}{{ $gimme->default_section->name }}{{ else }}Startseite{{ /if }}</a>
                 <ul id="mobile-nav">
                     <li class="search"><a href="#">Search</a>
                     	<ul class="search-mobile">

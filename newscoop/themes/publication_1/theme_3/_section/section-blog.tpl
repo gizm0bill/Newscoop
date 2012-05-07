@@ -38,6 +38,7 @@
 
 {{ if $gimme->section->number gte 200 }}
 {{ list_articles length="7" constraints="type is blog" }}
+								<article>
                         <header>
                             <p>{{ assign var="onedayback" value=$smarty.now-86400 }}
                                 {{ assign var="oneback" value=$onedayback|date_format:"%Y-%m-%d" }}
@@ -58,6 +59,7 @@ Vor
                         {{ list_article_images length="1" }}
                         <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" /></a>
                         {{ /list_article_images }} 
+                    </article>
 {{ if $gimme->current_list->at_end }}                
                     <ul class="paging content-paging">
                     		{{ if $gimme->current_list->has_previous_elements }}

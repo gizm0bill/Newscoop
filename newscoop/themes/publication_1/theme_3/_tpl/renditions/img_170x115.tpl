@@ -1,14 +1,17 @@
 {{ if $gimme->article->publish_date gt "2012-02-08 13:00:00" || $gimme->article->creation_date gt "2012-02-08 13:00:00"}}
 
 {{ strip }}
+{{ capture name="_img" assign="_img" }}
 {{ image rendition="rubrikenseite" width="170" height="115" }}
-<a href="{{ url options="article" }}"><img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" /></a>
+<img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
 {{ /image }}
+{{ /capture }}
+{{ if trim($_img) }}{{ if $where="sec-standard" }}<figure class="left">{{ /if }}<a href="{{ url options="article" }}">{{ $_img }}</a>{{ if $where="sec-standard" }}</figure>{{ /if }}{{ /if }}
 {{ /strip }}
 
 {{ else }}
 
-<!-- _tpl/img/img_170x115.tpl -->{{ strip }}
+{{ strip }}
 {{ if $gimme->article->has_image(10) }}
   <img src="{{ uri options="image 10" }}" width="170" height="115" rel="resizable" alt="{{ $gimme->article->image10->description }}" style="max-width: 100%">
 {{ elseif $gimme->article->has_image(9) }}
@@ -18,6 +21,6 @@
 {{ elseif $gimme->article->has_image(1) }}
   <img src="{{ uri options="image 1 width 170 height 115 crop center" }}" width="170" height="115" rel="resizable" alt="{{ $gimme->article->image1->description }}" style="max-width: 100%">
 {{ /if }}
-{{ /strip }}<!-- _tpl/img/img_170x115.tpl -->
+{{ /strip }}
 
 {{ /if }}
