@@ -166,7 +166,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('XMLExport', 'Newscoop\Services\XMLExportService')
             ->addArgument(new sfServiceReference('em'));
 
-        $container->register('user.search', 'Newscoop\Services\UserSearchService')
+        $container->register('user.find', 'Newscoop\Services\UserFindService')
             ->addArgument(new sfServiceReference('em'));
 
         $container->register('tree', 'Newscoop\Tree\TreeService')

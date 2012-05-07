@@ -94,7 +94,7 @@ class Admin_UserController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
 
         $q = $this->_getParam('q', null);
-        $this->view->users = $this->_helper->service('user.search')->find($q);
+        $this->view->users = $this->_helper->service('user.find')->find($q);
     }
 
     public function createAction()
