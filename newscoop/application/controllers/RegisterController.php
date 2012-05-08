@@ -67,7 +67,7 @@ class RegisterController extends Zend_Controller_Action
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $values = $form->getValues();
+            $values = $request->getParams();
             $users = $this->_helper->service('user')->findBy(array(
                 'email' => $values['email'],
             ));
@@ -196,6 +196,9 @@ class RegisterController extends Zend_Controller_Action
             'username' => $this->_helper->service('user')->generateUsername($userData->firstName, $userData->lastName),
             'email' => $userData->email,
         ));
+
+        $form->removeElement('password');
+        $form->removeElement('password_confirm')
 
         $this->handleConfirmForm($form, $user, $userData);
 

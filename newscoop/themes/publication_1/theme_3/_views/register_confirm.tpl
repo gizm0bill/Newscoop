@@ -46,6 +46,7 @@
                                     	<dd>Bitte verwenden Sie keine Bilder, an denen Sie die Rechte nicht besitzen oder auf denen andere Personen als Sie selber abgebildet sind.</dd>
                                     </dl></div>
                                 </li>
+                                {{ if empty($social) }}
                             	<li><dl>
                                     {{ $form->password->setLabel("Passwort*")->removeDecorator('Errors') }}
                                     {{ if $form->password->hasErrors() }}
@@ -60,6 +61,7 @@
                                     {{ /if }}
                                     <dd class="info"><p>Bitten geben Sie Ihr passwort erneut ein, um Tippfehler auszuschliesen.</p></dd>
                                 </dl></li>
+                                {{ /if }}
                                 <li class="terms-box">
                                 	<h4>Unsere Nutzungsbedingungen</h4>
                                     <div class="terms-content">

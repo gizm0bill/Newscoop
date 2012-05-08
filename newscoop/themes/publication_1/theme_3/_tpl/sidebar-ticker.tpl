@@ -4,7 +4,7 @@
         {{ $url = sprintf('%s?section=%s', $url, $gimme->section->url_name) }}
     {{ /if }}
     <header>
-        <p>Omniticker{{ if $gimme->section->number }} {{ $gimme->section->name }}{{ /if }}<a class="mobile-arrow desktop-hide right" href="{{ $url }}"><span>&gt;</span></a></p>
+        <p>Omniticker{{ if $gimme->section->number }} {{ $gimme->section->name }}{{ /if }}<a class="mobile-arrow desktop-hide right" href="{{ $url }}"><span></span></a></p>
     </header>
 
     <footer>

@@ -6,11 +6,11 @@
                     <div class="omni-corner-box comments-box tabs">
                     
                         <ul class="comments-nav">
-                            <li><a href="#ausgewählte-kommentare">Ausgewählte Kommentare {{ if $gimme->article->recommended_comment_count }}({{ $gimme->article->recommended_comment_count }}){{ /if }}</a></li>
+                            <li><a href="#ausgewahlte-kommentare">Ausgewählte Kommentare {{ if $gimme->article->recommended_comment_count }}({{ $gimme->article->recommended_comment_count }}){{ /if }}</a></li>
                             <li><a href="#alle-kommentare">Alle Kommentare ({{ $gimme->article->comment_count }})</a></li>
                         </ul>
                         
-                        <div id="ausgewählte-kommentare" class="comment-list">
+                        <div id="ausgewahlte-kommentare" class="comment-list">
                         
                             <ol>                            
                             
