@@ -3739,6 +3739,27 @@ article.header-only, .mobile-list-view article.header-only {
 .quote-list.slideshow ul.paging {float:right; clear:both; margin-top:10px;}
 .mobile-slider {clear:both;}
 	.mobile-slider div {width:100%;}
+
+
+/* Dossier single */
+.dossier-single {
+	position:relative; z-index:10;
+	margin-bottom: -2px !important;
+	}
+	.dossier-single section {
+		margin-bottom: 0 !important;
+		box-shadow:none !important;
+		padding-bottom:4px;
+
+		}
+		.dossier-single section figure {
+			margin-bottom: 0 !important;
+			background-color:#fff;
+			}
+			.dossier-single section figure img {
+				margin-bottom:0 !important;
+				}
+
 	
 }
 

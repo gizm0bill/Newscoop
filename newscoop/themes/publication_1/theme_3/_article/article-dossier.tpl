@@ -16,12 +16,10 @@
         
         <div class="content-box full-size clearfix dossier-single">
             <section>
-                <article class="top">
-		  <article class="desktop-hide">
-            <header class="mobile-header">
+	             <header class="mobile-header">
                 	<p><a href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}">Dossiers</a></p>
                 </header>
-        </article>                
+                <article class="top">              
                     <figure>
                         {{ include file="_tpl/renditions/img_990x330.tpl" }}
                         <big>Dossier:<br />
