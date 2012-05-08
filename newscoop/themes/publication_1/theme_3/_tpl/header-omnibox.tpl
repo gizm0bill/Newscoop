@@ -817,7 +817,7 @@ var omnibox = {
         if ('{{$gimme->user->logged_in}}' != '') {
             omnibox.loggedIn = true;
         }
-        if ('{{$gimme->article->number}}' != '' && '{{$gimme->article->comments_locked}}' == 0 && '{{$gimme->article->comments_enabled}}' == 1) {
+        if ('{{$gimme->article->number}}' != '' && '{{$gimme->article->comments_locked}}' == '0' && '{{$gimme->article->comments_enabled}}' == '1') {
             omnibox.commentable = true;
         }
         
