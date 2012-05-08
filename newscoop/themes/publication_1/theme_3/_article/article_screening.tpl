@@ -171,7 +171,7 @@ function load_events(ev_type) {
 {{ set_current_issue }}
 {{ set_section number="72" }}
                 <header class="mobile-header first-header">
-                    <p><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button">Zurück zur Kinoübersicht</a></p>
+                    <p><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $region_link }}" class="grey-button back-button" style="margin-bottom: 0px !important;">Zurück zur Kinoübersicht</a></p>
                 </header>
 {{ /local }}
 
@@ -182,27 +182,27 @@ function load_events(ev_type) {
                     <img src="{{ url options="image 1 width 188" }}" alt="{{ $gimme->article->image1->description|replace:'"':'\'' }}" class="thumbnail" />
                     {{ /if }}
 
-                    <ul class="top-list-details">
+                    <ul class="top-list-details mobile-hide" {{*style="display:block;"*}}>
                         {{ assign var="movie_rating_wv" $gimme->article->movie_rating_wv }}
                         {{ if $movie_rating_wv ne "" }}
                             {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                             {{ if $movie_rating_wv ne 0 }}
-                                <li><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
+                                <li class="rating" {{*style="display:list-item;"*}}><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
                             {{ /if }}
                         {{ /if }}
                         {{ if $gimme->article->movie_director ne "" }}
-                        <li><span class="movie_info_key">Regisseur:</span> {{ $gimme->article->movie_director|replace:",":", " }}</li>
+                        <li {{*style="display:block;"*}}><span class="movie_info_key">Regisseur:</span> {{ $gimme->article->movie_director|replace:",":", " }}</li>
                         {{ /if }}
                         {{ if $gimme->article->movie_cast ne "" }}
-                        <li><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
+                        <li {{*style="display:list-item;"*}}><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
                         {{ /if }}
                         {{ if "" != $gimme->article->minimal_age }}
-                            <li><span>Altersfreigabe:</span> ab {{ $gimme->article->minimal_age }}</li>
+                            <li style="display:list-item;"><span>Altersfreigabe:</span> ab {{ $gimme->article->minimal_age }}</li>
                         {{ /if }}
                         {{ if $gimme->article->movie_duration ne "" }}
                         {{ if $gimme->article->movie_duration ne "0" }}
                         {{ if $gimme->article->movie_duration ne 0 }}
-                        <li><span class="movie_info_key">Spielzeit:</span> {{ $gimme->article->movie_duration }} min.</li>
+                        <li {{*style="display:list-item;"*}}><span class="movie_info_key">Spielzeit:</span> {{ $gimme->article->movie_duration }} min.</li>
                         {{ /if }}
                         {{ /if }}
                         {{ /if }}
@@ -210,11 +210,31 @@ function load_events(ev_type) {
                         <li><span>Sprache:</span> E/d/f</li>
 *}}
                     </ul>
-                    <p>
+
+                    <ul class="top-list-details desktop-hide" {{*style="display:block;"*}}>
+                        {{ assign var="movie_rating_wv" $gimme->article->movie_rating_wv }}
+                        {{ if $movie_rating_wv ne "" }}
+                            {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
+                            {{ if $movie_rating_wv ne 0 }}
+                                <li class="rating" style="display:list-item;"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
+                            {{ /if }}
+                        {{ /if }}
+                        {{ if $gimme->article->movie_director ne "" }}
+                            <li class="desktop-hide" style="display:block;">Von {{ $gimme->article->movie_director|replace:",":", " }}</li>
+                        {{ /if }}
+                        {{ if $gimme->article->movie_cast ne "" }}
+                            <li class="desktop-hide" style="display:block;">Mit {{ $gimme->article->movie_cast|replace:",":", " }}</li>
+                        {{ /if }}
+                        {{ if "" != $gimme->article->minimal_age }}
+                            <li class="desktop-hide" style="display:block;margin-top:20px !important;">Ab {{ $gimme->article->minimal_age }} Jahren</li>
+                        {{ /if }}
+                    </ul>
+
+                    <p class="mobile-hide">
                     {{ $gimme->article->description }}
                     </p>
 {{ if $gimme->article->other }}
-                    <p>
+                    <p class="mobile-hide">
                     {{ $gimme->article->other|replace:"<a href=":"<a target='_blank' href="|replace:">http://":">" }}
                     </p>
 {{ /if }}
@@ -494,7 +514,7 @@ function parse_date_text($date_time_text)
         $template->assign('date_time_arr',$date_time_arr['dates']);
     {{ /php }}
 
-            <div style="margin-left:60px; float:left; width:580px;" class="movie-table">
+            <div style="margin-left:10px; float:left; width:580px;" class="movie-table">
 
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
