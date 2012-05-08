@@ -1,8 +1,11 @@
 newscoop (4.0.0-2) unstable; urgency=low
 
   * Make virtual host the default option for Apache setup
-
- -- Daniel James <daniel@64studio.com>  Thu, 26 Apr 2012 16:34:22 +0100
+  * Put DocumentRoot in /var/lib as /usr may be read-only
+  * Print helpful message in postinst for user to view browser installer
+  * Web server must have write access to the pdf directory (CS-4311)
+ 
+ -- Daniel James <daniel@64studio.com>  Tue, 08 May 2012 14:22:22 +0100
 
 newscoop (4.0.0-1) unstable; urgency=low
 

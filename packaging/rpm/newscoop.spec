@@ -49,8 +49,8 @@ and publishing system.
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/
-cp -a newscoop %{buildroot}/usr/share/
+mkdir -p %{buildroot}/var/lib/
+cp -a newscoop %{buildroot}/var/lib/
 
 # Copy config file
 mkdir -p %{buildroot}/etc/newscoop/4.0/
@@ -61,11 +61,11 @@ cp rpm/apache.conf %{buildroot}/etc/newscoop/4.0/
 
 cd $RPM_BUILD_ROOT
 rm -f %{manifest}
-find ./usr/share/ -type d \
+find ./var/lib/ -type d \
         | sed '1d;s,^\.,\%attr(-\,apache\,apache) \%dir ,' >> %{manifest}
-find ./usr/share/ -type f \
+find ./var/lib/ -type f \
         | sed 's,^\.,\%attr(-\,apache\,apache) ,' >> %{manifest}
-find ./usr/share/ -type l \
+find ./var/lib/ -type l \
         | sed 's,^\.,\%attr(-\,apache\,apache) ,' >> %{manifest}
 
 %clean
@@ -105,15 +105,15 @@ fi
 
 # .htaccess file
 #echo -ne "/RewriteBase/d\nwq\n\n" \
-#| ed /usr/share/newscoop/.htaccess &>/dev/null || true
+#| ed /var/lib/newscoop/.htaccess &>/dev/null || true
 #
 #if [ -n "${dohtaccess}" ]; then
 #	echo -ne "/RewriteEngine/\n+1i\n    RewriteBase ${dohtaccess}\n.\nwq\n" \
-#	| ed /usr/share/newscoop/.htaccess &>/dev/null || true
+#	| ed /var/lib/newscoop/.htaccess &>/dev/null || true
 #fi
 
 # Fix SELinux
-chcon -R -t httpd_cache_t /usr/share/newscoop
+chcon -R -t httpd_cache_t /var/lib/newscoop
 
 # restart Apache
 /etc/init.d/httpd restart
@@ -144,7 +144,7 @@ if [ -L /etc/cron.d/newscoop ]; then
 	rm -f /etc/cron.d/newscoop || true
 fi
 # delete generated templates and user-installed plugins
-rm -rf /usr/share/newscoop || true
+rm -rf /var/lib/newscoop || true
 #rm -f /etc/newscoop/4.0/newscoop.cron || true
 #rmdir /etc/newscoop/4.0 || true
 #rmdir /etc/newscoop/ || true
@@ -154,6 +154,9 @@ rm -rf /usr/share/newscoop || true
 
 
 %changelog
+* Tue May 8 2012 Daniel James <daniel@64studio.com>
+- Put DocumentRoot in /var/lib as /usr may be read-only
+
 * Mon Apr 30 2012 Daniel James <daniel@64studio.com>
 - Update for Newscoop 4.0.0
 

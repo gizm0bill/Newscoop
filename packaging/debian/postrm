@@ -18,7 +18,7 @@ if [ "$DPKG_DEBUG" = "developer" ]; then
 fi
 
 package_name="newscoop"
-datadir="/usr/share/${package_name}"
+datadir="/var/lib/${package_name}"
 configdir="/etc/newscoop/4.0"
 
 webserver="apache2"
@@ -76,7 +76,7 @@ case "$1" in
 
     if [ "$1" = "purge" ]; then
       rm -rf $datadir || true
-      rm -f /etc/newscoop/4.0/newscoop.cron || true
+      rm -f $configdir/newscoop.cron || true
       # newscoop-3.5 does not yet support that
       #rm -f ${dbconfigfile}
       #if which ucf >/dev/null 2>&1; then

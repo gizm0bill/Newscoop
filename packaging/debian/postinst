@@ -20,7 +20,7 @@ WEB_USER=www-data
 WEB_GROUP=www-data
 
 package_name="newscoop"
-datadir="/usr/share/${package_name}"
+datadir="/var/lib/${package_name}"
 configdir="/etc/newscoop/4.0"
 includefile="${configdir}/apache.conf"
 a2tplfile="${configdir}/apache.vhost.tpl"
@@ -90,11 +90,11 @@ case "$1" in
 
     # .htaccess file
     echo -ne "/RewriteBase/d\nwq\n\n" \
-    | ed /usr/share/newscoop/.htaccess &>/dev/null || true
+    | ed /var/lib/newscoop/.htaccess &>/dev/null || true
 
     if [ -n "${dohtaccess}" ]; then
       echo -ne "/RewriteEngine/\n+1i\n    RewriteBase ${dohtaccess}\n.\nwq\n" \
-      | ed /usr/share/newscoop/.htaccess &>/dev/null || true
+      | ed /var/lib/newscoop/.htaccess &>/dev/null || true
     fi
 
 # for now - use NS's installer to set up the cron-jobs
