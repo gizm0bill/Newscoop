@@ -1,6 +1,6 @@
 <article>
   <header>
-      <p>Bildstoff<a class="mobile-arrow desktop-hide right" href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ set_section number="200" }}{{ url options="section" }}{{ /local }}"><span>&gt;</span></a></p>
+      <p>Bildstoff<a class="mobile-arrow desktop-hide right" href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ set_section number="200" }}{{ url options="section" }}{{ /local }}"><span></span></a></p>
   </header>
   <ul class="flat-list">
   {{ list_articles length="5" ignore_publication="true" ignore_issue="true" ignore_section="true" order="byLastUpdate desc" constraints="type is blog issue is 3 section is 200" }}
