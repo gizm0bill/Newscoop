@@ -72,7 +72,7 @@ Vor
 {{ elseif $seclike == 1 }}
 
 {{ list_articles length="7" constraints="type is blog" }}						  
-						               
+				<div class="mobile-list-view clearfix">             
                     <article>
                         <header>
                             <p>{{ assign var="onedayback" value=$smarty.now-86400 }}
@@ -108,7 +108,8 @@ Vor
                         {{ if $gimme->current_list->has_next_elements }}
                         <li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     </ul>
-{{ /if }}                    
+{{ /if }}  
+					</div>                  
 {{ /list_articles }} 
 
 {{ else }}{{* if not seclike == 1 *}}

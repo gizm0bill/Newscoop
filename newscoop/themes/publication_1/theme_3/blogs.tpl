@@ -48,10 +48,10 @@
             <section>
             
             	<header class="mobile-header first-in-line">
-                	<p><a href="#">Unsere Blogs</a></p>
+                	<p>Unsere Blogs</p>
                 </header>
                 
-                <div class="two-columns mobile-list-view small-titles clearfix">
+                <div class=" two-columns mobile-list-view dossier-mobile-list small-titles clearfix">
 
 {{ list_articles ignore_issue="true" ignore_section="true" order="byName asc" constraints="type is bloginfo active is on" }}
                 
