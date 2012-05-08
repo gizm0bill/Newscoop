@@ -77,9 +77,10 @@ class ArticleDatetimeRepository extends EntityRepository
         $em = $this->getEntityManager();
         if(is_numeric($id)) {
             //$entry = $this->findBy(array('id' => $id));
-            $entry = $this->find($id);
-            $em->remove($entry); 
-            $em->flush();
+            //$entry = $this->find($id);
+            //$em->remove($entry); 
+            //$em->flush();
+            $em->createQuery('DELETE FROM Newscoop\Entity\ArticleDatetime adt WHERE adt.id = :id')->setParameter('id', $id)->execute();
         }
         
     }

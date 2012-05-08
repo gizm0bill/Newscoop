@@ -60,11 +60,12 @@
 }
 */
 .top-calendar-narrow {
-    width: 322px !important;
+    width: 280px !important;
 }
 
 .agenda-datepicker-narrow {
-    width: 320px !important;
+    width: 300px !important;
+    margin-left: -12px !important;
 }
 
 .place_selector_narrow {
@@ -91,7 +92,7 @@
 }
 
 .movie-table_narrow {
-    width: 330px !important;
+    width: 380px !important;
 }
 
 </style>

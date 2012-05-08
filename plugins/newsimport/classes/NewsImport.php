@@ -508,6 +508,8 @@ class NewsImport
             if ($scr_type == $art_type) {
                 // date_time_data => movie_screening
                 //$cur_screening_dates = array();
+                $md_removals = array();
+
                 $em = Zend_Registry::get('container')->getService('em');
                 $repository = $em->getRepository('Newscoop\Entity\ArticleDatetime');
                 foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'movie_screening')) as $one_screening_entry) {
@@ -515,8 +517,13 @@ class NewsImport
                     $cur_screening_date = date_format($one_screening_entry->getStartDate(), 'Y-m-d');
                     //$one_scr_start_date = $em->getStartDate();
                     //if ($one_screening_date >= $today_date_str) {
-                        $em->remove($one_screening_entry);
+                        //$em->remove($one_screening_entry);
+                        $md_removals[] = $one_screening_entry->getId();
                     //}
+                }
+
+                foreach ($md_removals as $one_md) {
+                    $repository->deleteById($one_md);
                 }
 
                 foreach ($one_event['date_time_data'] as $one_scr_date => $one_date_screenings) {
@@ -628,17 +635,25 @@ class NewsImport
                 //$repository = Zend_Registry::get('doctrine')->getEntityManager()->getRepository('Newscoop\Entity\ArticleDatetime');
                 //$repository->deleteByArticle($article->m_data['Number']);
 
+                $md_removals = array();
+
                 $cur_voided_dates = array();
                 $cur_postponed_dates = array();
                 //$cur_voided_dates = $article_data->getFieldValue('voided');
                 foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
                     $cur_voided_dates[] = date_format($one_void_entry->getStartDate(), 'Y-m-d');
-                    $em->remove($one_void_entry);
+                    //$em->remove($one_void_entry);
+                    $md_removals[] = $one_void_entry->getId();
                 }
                 foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'postponed')) as $one_postpone_entry) {
                     $cur_postponed_dates[] = date_format($one_postpone_entry->getStartDate(), 'Y-m-d');
-                    $em->remove($one_postpone_entry);
+                    //$em->remove($one_postpone_entry);
+                    $md_removals[] = $one_postpone_entry->getId();
+                }
+
+                foreach ($md_removals as $one_md) {
+                    $repository->deleteById($one_md);
                 }
 
                 // take all previously set dates
@@ -1252,18 +1267,22 @@ class NewsImport
                 $all_event_dates = array();
                 $rem_event_dates = array();
 
+                $md_removals = array();
+
                 $cur_voided_dates = array();
                 $cur_postponed_dates = array();
                 //$cur_voided_dates = $event_data_rem->getFieldValue('voided');
                 foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
                     $cur_voided_dates[] = date_format($one_void_entry->getStartDate(), 'Y-m-d');
-                    $em->remove($one_void_entry);
+                    //$em->remove($one_void_entry);
+                    $md_removals[] = $one_void_entry->getId();
                 }
                 foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'postponed')) as $one_postpone_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
                     $cur_postponed_dates[] = date_format($one_postpone_entry->getStartDate(), 'Y-m-d');
-                    $em->remove($one_postpone_entry);
+                    //$em->remove($one_postpone_entry);
+                    $md_removals[] = $one_postpone_entry->getId();
                 }
 
                 $new_voided_dates = array();
@@ -1274,7 +1293,8 @@ class NewsImport
                     $one_date_str = date_format($one_date_entry->getStartDate(), 'Y-m-d');
 
                     if ($passed_date && ($one_date_str < $passed_date)) {
-                        $em->remove($one_date_entry);
+                        //$em->remove($one_date_entry);
+                        $md_removals[] = $one_date_entry->getId();
                         continue;
                     }
 
@@ -1287,6 +1307,10 @@ class NewsImport
                     }
 
                     $all_event_dates[] = $one_date_str;
+                }
+
+                foreach ($md_removals as $one_md) {
+                    $repository->deleteById($one_md);
                 }
 
                 if (($event_data_rem->getFieldValue('date')) < $voided_limit_date) {

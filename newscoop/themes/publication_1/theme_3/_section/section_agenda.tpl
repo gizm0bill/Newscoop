@@ -436,7 +436,12 @@ function prepare_lang_time($date_time_text, $chosen_date)
                                 <li><span class="movie_info_key">Regisseur:</span> {{ $gimme->article->movie_director|replace:",":", " }}</li>
                                 {{ /if }}
                                 {{ if $gimme->article->movie_cast ne "" }}
-                                <li><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
+                                <li class="mobile-hide"><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
+                                {{ /if }}
+                            </ul>
+                            <ul style="display:inline;">
+                                {{ if $gimme->article->movie_cast ne "" }}
+                                <li class="desktop-hide">Mit {{ $gimme->article->movie_cast|replace:",":", " }}</li>
                                 {{ /if }}
                             </ul>
 
@@ -444,7 +449,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                             {{ $gimme->article->description|strip_tags|truncate:300 }}
                             <a href="{{ uri options="article" }}?region={{ $linkregion }}&date={{ $usedate_link }}">Details, Trailer & Bilder</a>
                             </p>
-                            <ul class="bottom-list-details {{*top-list-details*}} clearfix" style="display:block !important;">
+                            <ul class="bottom-list-details {{*top-list-details*}} clearfix" {{*style="display:block !important;"*}}>
         {{ /if }}
     {{ /if }}
     {{ assign var="lastmovname" $gimme->article->headline }}
