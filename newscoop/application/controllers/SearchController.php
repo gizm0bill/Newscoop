@@ -87,4 +87,9 @@ class SearchController extends AbstractSolrController
 
         return sprintf('type:(%s)', is_array($this->types[$type]) ? implode(' OR ', $this->types[$type]) : $this->types[$type]);
     }
+
+    public function errorAction()
+    {
+        $this->getResponse()->setHttpResponseCode(503);
+    }
 }

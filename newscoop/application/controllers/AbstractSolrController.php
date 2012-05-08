@@ -49,12 +49,13 @@ class AbstractSolrController extends Zend_Controller_Action
             $client->setParameterGet($this->buildSolrParams());
             $response = $client->request();
         } catch (\Exception $e) {
-            var_dump($e); exit;
+            $this->_forward('error', 'search', 'default');
+            return;
         }
 
         if (!$response->isSuccessful()) {
-            var_dump($this->buildSolrParams(), $response);
-            exit;
+            $this->_forward('error', 'search', 'default');
+            return;
         }
 
         if ($this->_helper->contextSwitch->getCurrentContext() === 'json') {
