@@ -135,12 +135,9 @@ div.geomap_open_large_map {
  
 {{ include file="_tpl/article-comments.tpl" }}                  
                 
-                <aside>
-
-<div  class="mobile-hide">
+                <aside  class="mobile-hide">
 {{*** WERBUNG ***}}                
 {{ include file="_werbung/article-sidebar-2.tpl" }}  
-</div>                
                 </aside>
             
             </div>
@@ -267,11 +264,12 @@ div.geomap_open_large_map {
                 <p>{{ $numArticles }}</p>
             </li>            
         </ul>
-    </div>
-    
+        
 	 {{ if $escapedName != "sda" }}                                
     {{ include file="_tpl/user-content.tpl" }}
-    {{ /if }}
+    {{ /if }}        
+        
+    </div>
                         
 {{ /list_article_authors }}
                                                 

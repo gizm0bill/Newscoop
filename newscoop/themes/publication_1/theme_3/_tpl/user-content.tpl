@@ -63,7 +63,7 @@
                                 </div>
                                 
                                 {{ if $gimme->author->user->defined }}
-                                <h4><a href="{{ $view->url(['username' => $gimme->author->user->uname], 'user') }}">Weitere Texte im Autorenprofil</a></h4>
+                                <p><a href="{{ $view->url(['username' => $gimme->author->user->uname], 'user') }}">Weitere Texte im Autorenprofil</a></p>
                                 {{ /if }}
                             
                             </div>

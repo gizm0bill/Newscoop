@@ -6,7 +6,7 @@
 <img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
 {{ /image }}
 {{ /capture }}
-{{ if trim($_img) }}{{ if $where="sec-standard" }}<figure class="left">{{ /if }}<a href="{{ url options="article" }}">{{ $_img }}</a>{{ if $where="sec-standard" }}</figure>{{ /if }}{{ /if }}
+{{ if trim($_img) }}<figure class="left">{{ /if }}<a href="{{ url options="article" }}">{{ $_img }}</a>{{ if $where="sec-standard" }}</figure>{{ /if }}
 {{ /strip }}
 
 {{ else }}
