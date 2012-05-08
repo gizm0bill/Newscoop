@@ -164,19 +164,21 @@ if ( $(window).width() < 641) {$('.mobile-carousel').jcarousel({visible: 1, scro
 	
 	// Mobile nav
 	$('#mobile-nav li a').click(function() {
-		if ($(this).parent().hasClass('active')) {
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav .start').removeClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$('#main-nav nav').slideUp();
-		} else {
-			$('#mobile-nav li').removeClass('active');
-			$('#main-nav .start').removeClass('active');
-			$(this).parent().addClass('active');
-			$('#mobile-nav li ul').slideUp();
-			$(this).next('ul').slideDown();
-			$('#main-nav nav').slideUp();
-		}
+        if (!$(this).parent().hasClass('login') && !$(this).parent().hasClass('settings')) {
+            if ($(this).parent().hasClass('active')) {
+                $('#mobile-nav li').removeClass('active');
+                $('#main-nav .start').removeClass('active');
+                $('#mobile-nav li ul').slideUp();
+                $('#main-nav nav').slideUp();
+            } else {
+                $('#mobile-nav li').removeClass('active');
+                $('#main-nav .start').removeClass('active');
+                $(this).parent().addClass('active');
+                $('#mobile-nav li ul').slideUp();
+                $(this).next('ul').slideDown();
+                $('#main-nav nav').slideUp();
+            }
+        }
 		return false;
 	});
 	
