@@ -23,7 +23,7 @@ class SearchServiceTest extends \TestCase
 
     public function setUp()
     {
-        $this->em = $this->setUpOrm();
+        $this->em = $this->setUpOrm('Newscoop\Entity\ArticleDatetime');
 
         $this->webcoder = new \Newscoop\Webcode\Mapper();
 
@@ -38,7 +38,7 @@ class SearchServiceTest extends \TestCase
         $this->service = new SearchService($this->webcoder, $this->renditionService, $this->linkService, array(
             'type' => array(self::TYPE),
             'rendition' => self::RENDITION,
-        ));
+        ), $this->em);
 
         $this->language = new Language();
     }
@@ -151,7 +151,10 @@ class SearchServiceTest extends \TestCase
         $datetime->setFieldName('schedule');
         $datetime->setStartDate(new \DateTime('2012-12-01'));
         $datetime->setStartTime(new \DateTime('11:00'));
-        $article->addDatetime($datetime);
+        $datetime->setArticleId(1);
+        $datetime->setArticleType('event');
+        $this->em->persist($datetime);
+        $this->em->flush();
 
         $doc = $this->service->getDocument($article);
         $this->assertEquals('org', $doc['event_organizer']);

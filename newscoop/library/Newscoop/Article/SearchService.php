@@ -37,17 +37,23 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     );
 
     /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
      * @param Newscoop\Webcode\Mapper $webcoder
      * @param Newscoop\Image\RenditionService $renditionService
      * @param Newscoop\Article\LinkService $linkService
      * @param array $config
      */
-    public function __construct(\Newscoop\Webcode\Mapper $webcoder, \Newscoop\Image\RenditionService $renditionService, LinkService $linkService, array $config)
+    public function __construct(\Newscoop\Webcode\Mapper $webcoder, \Newscoop\Image\RenditionService $renditionService, LinkService $linkService, array $config, \Doctrine\ORM\EntityManager $em)
     {
         $this->webcoder = $webcoder;
         $this->renditionService = $renditionService;
         $this->linkService = $linkService;
         $this->config = array_merge($this->config, $config);
+        $this->em = $em;
     }
 
     /**
@@ -131,7 +137,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
                 $doc['event_organizer'] = $article->getData('organizer');
                 $doc['event_town'] = $article->getData('town');
 
-                $date = $article->getDatetime('schedule');
+                $date = $this->getArticleDateTime($article);
                 if ($date !== null) {
                     $doc['event_date'] = $date->getStartDate()->format('d.m.Y');
                     $doc['event_time'] = $date->getStartTime()->format('H:i');
@@ -156,5 +162,19 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     public function getDocumentId($article)
     {
         return sprintf('article-%d-%d', $article->getNumber(), $article->getLanguageId());
+    }
+
+    /**
+     * Get event article datetime
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return ArticleDatetime
+     */
+    private function getArticleDatetime($article)
+    {
+        return $this->em->getRepository('Newscoop\Entity\ArticleDatetime')->findOneBy(array(
+            'articleId' => $article->getNumber(),
+            'fieldName' => 'schedule',
+        ));
     }
 }
