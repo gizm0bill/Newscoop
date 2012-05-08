@@ -150,12 +150,6 @@ class Article implements \Newscoop\Search\DocumentInterface
     private $keywords;
 
     /**
-     * @OneToMany(targetEntity="Newscoop\Entity\ArticleDatetime", mappedBy="article")
-     * @var Doctrine\Common\Collections\Collection
-     */
-    private $datetimes;
-
-    /**
      * @param int $number
      * @param Newscoop\Entity\Language $language
      */
@@ -167,8 +161,6 @@ class Article implements \Newscoop\Search\DocumentInterface
 
         $this->created = $this->date = date_create()->format(self::DATE_FORMAT); 
         $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
-
-        $this->datetimes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -632,32 +624,5 @@ class Article implements \Newscoop\Search\DocumentInterface
     public function getKeywords()
     {
         return $this->keywords;
-    }
-
-    /**
-     * Add datetime
-     *
-     * @param Newscoop\Entity\ArticleDatetime $datetime
-     * @return void
-     */
-    public function addDatetime(ArticleDatetime $datetime)
-    {
-        $this->datetimes->add($datetime);
-        $datetime->setArticleId($this->number);
-    }
-
-    /**
-     * Get specific datetime
-     *
-     * @param string $name
-     * @return Newscoop\Entity\ArticleDatetime|null
-     */
-    public function getDatetime($name)
-    {
-        foreach ($this->datetimes as $datetime) {
-            if ($datetime->getFieldName() === (string) $name) {
-                return $datetime;
-            }
-        }
     }
 }
