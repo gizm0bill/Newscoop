@@ -209,7 +209,7 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
         <div class="content-box full-width clearfix">
         
             <h3 class="title">Weitere Dossiers</h3>
-         <div class="dossier-mobile-list">
+            
         	<div class="three-columns clearfix">
         	
 {{ list_articles length="6" ignore_issue="true" ignore_section="true" constraints="type is dossier number not $curnum" order="bysection desc" }} 
@@ -224,7 +224,6 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
 
 {{ /list_articles }}
 
-            </div>
             </div>
         	
         </div>
