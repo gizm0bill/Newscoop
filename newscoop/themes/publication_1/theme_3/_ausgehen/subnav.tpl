@@ -92,7 +92,7 @@
 }
 
 .movie-table_narrow {
-    width: 380px !important;
+    //width: 380px !important;
 }
 
 </style>
@@ -100,8 +100,28 @@
 <script type="text/javascript">
 var closing_datepicker_text = 'Fertig';
 var desktop_view = true;
+window.movie_trailer_height = 0;
 
 function adapt_global_sizes(force) {
+    $("iframe").each(function(ind_elm, elm) {
+        var ar_str = $(elm).attr("ar");
+        if (ar_str && ("" != ar_str)) {
+            var ar_num = parseFloat(ar_str);
+            if (ar_num && (0 < ar_num)) {
+                var video_width = parseInt("" + $(elm).css("width"));
+                if (video_width && (0 < video_width)) {
+                    var video_height = video_width * ar_num;
+                    video_height = parseInt("" + (video_height + 0.5));
+                    if (window.movie_trailer_height != video_height) {
+                        window.movie_trailer_height = video_height;
+                        $(elm).css("height", video_height + "px");
+                    }
+                }
+            }
+        }
+    });
+
+
     //var doc_width = $(document).width();
     var doc_width = $(window).width();
     if (769 > doc_width) {
@@ -234,7 +254,7 @@ function close_calendar() {
 $(document).ready(function() {
 
     adapt_global_sizes();
-    setInterval("adapt_global_sizes();", 2000);
+    setInterval("adapt_global_sizes();", 1000);
 
   $.datepicker.regional['de'] = {
     closeText: 'schließen',

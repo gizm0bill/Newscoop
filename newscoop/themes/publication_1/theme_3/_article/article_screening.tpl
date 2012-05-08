@@ -255,14 +255,16 @@ function load_events(ev_type) {
 {{* assign var="vimeo_height_show" value="344" *}}
 {{ assign var="vimeo_width_show" value="648" }}
 {{ assign var="vimeo_height_show" value="359" }}
+{{ assign var="vimeo_aspect_ratio" value="0.75" }}
 {{ if $vimeo_width_orig gt 0 }}
     {{ if $vimeo_height_orig gt 0 }}
         {{ assign var="vimeo_height_show" value=$vimeo_width_show * $vimeo_height_orig / $vimeo_width_orig }}
+        {{ assign var="vimeo_aspect_ratio" value=$vimeo_height_orig / $vimeo_width_orig }}
     {{ /if }}
 {{ /if }}
 
                     <div class="movie-trailer">
-                        <iframe src="http://player.vimeo.com/video/{{ $vimeo_id }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width_show }}" height="{{ $vimeo_height_show }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>
+                        <iframe ar="{{ $vimeo_aspect_ratio }}" src="http://player.vimeo.com/video/{{ $vimeo_id }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width_show }}" height="{{ $vimeo_height_show }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>
                         </iframe>
 {{*
                         <iframe width="648" height="359" src="http://www.youtube.com/embed/JlBr-3aDTHg" frameborder="0" allowfullscreen></iframe>
@@ -573,7 +575,7 @@ function parse_date_text($date_time_text)
                                                         <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
 
                                                         {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
-                                                        <div {{*style="display:none;background-color: #ffffff;"*}}>
+                                                        <div style="display:none;background-color: #ffffff;">
                                                         <p>{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}&nbsp;&nbsp;&nbsp;</p>
                                                         </div>
                                                         {{ /if }}
