@@ -825,7 +825,6 @@ var omnibox = {
     },
     
     checkView: function() {
-        console.log('running checkView');
         if (omnibox.loggedIn == true) {
             if (omnibox.commentable == true) {
                 omnibox.switchView('omniboxComment');
@@ -880,7 +879,6 @@ var omnibox = {
     },
     
     switchView: function(view) {
-        console.log('switching view to: ' + view);
         if (view == 'omniboxLogin') {
             omnibox.openWidth = 319;
             omnibox.openHeight = 500;
