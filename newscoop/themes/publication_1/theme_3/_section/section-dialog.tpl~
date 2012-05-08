@@ -26,11 +26,6 @@
                     
 {{ /list_articles }}
 					 </div>
-					  <ul class="paging desktop-hide">
-                     <li><a href="#" class="grey-button prev">&laquo;</a></li>
-                     <li class="caption"></li>
-                     <li><a href="#" class="grey-button next">&raquo;</a></li>
-                 </ul>
                 </article>				
 					
 {{ include file="_tpl/dialog-article-comments.tpl" }}

@@ -1302,49 +1302,65 @@ article .related {
 					.agenda-content table a.info {height:14px;}
 				
 				.movie-table {
-					overflow:hidden;
 					margin:10px 0 18px;
 					font-family:Arial, Helvetica, sans-serif;
 					background:#f8f8f8;
-					border:#dcdcdc solid 1px;
+					border:#dcdcdc solid 1px; border-left:0;
 					}
 					article .movie-table:last-child {margin-bottom:36px;}
 					.movies-list section article:last-child .movie-table:last-child {margin-bottom:18px;}
 					
-					.movie-table ul {
-						float:left;
+					.movie-table td ul {padding:5px 0; margin:0 !important; list-style-type:none;}
+						.movie-table td ul li {height:24px; font-size:12px; padding-top:3px;}
+					
+					.movie-table td.table-info ul {
 						width:140px;
-						margin:0 !important; padding:10px 0 0 18px;
-						list-style-type:none;
+						padding:10px 0 10px 10px;
 						}
-						.movie-table ul li {margin-bottom:5px;}
-							.movie-table ul li h5 {font-size:14px;}
-							.movie-table ul li p {font-size:12px !important; line-height:16px;}
-								.movie-table ul li p a {color:#000;}
-							.movie-table ul li a.grey-button {
+						.movie-table td.table-info ul li {margin-bottom:5px; height:auto;}
+							.movie-table td.table-info ul li h5 {font-size:14px;}
+							.movie-table td.table-info ul li p {font-size:12px !important; line-height:16px;}
+								.movie-table td.table-info ul li p a {color:#000;}
+							.movie-table td.table-info ul li a.grey-button {
 								display:block;
 								width:93px; height:22px;
 								line-height:22px; font-size:12px; text-align:center;
 								}
 					
-					.movie-table table {
-						float:right;
-						width:426px;
-						}
+					.movie-table table {width:100%;}
 						.movie-table table td {
-							width:54px; height:24px;
+							width:54px;
 							padding-left:7px;
-							vertical-align:middle; font-size:12px;
+							vertical-align:top; font-size:12px;
 							border-left:#dcdcdc solid 1px;
 							}
-							.movie-table table thead td {
-								height:46px;
-								border-bottom:#dcdcdc solid 1px;
-								}
-							.movie-table table tbody tr:first-child td {padding-top:10px;}
-							.movie-table table tbody tr:last-child td {padding-bottom:10px;}
+						.movie-table table td.table-info {width:auto;}
+						.movie-table table td.cinema_screen_list {
+							height:46px;
+							vertical-align:middle;
+							border-bottom:#dcdcdc solid 1px;
+							}
 							
-							.movie-table table td.current {background:#fff;}
+						.movie-table table td.current {background:#fff;}
+						
+					.movie-table table a.info {position:relative; top:2px;}
+						.movie-table table a.info span {
+							display:none; position:absolute; left:-54px; top:25px; z-index:1000;
+							width:100px;
+							padding:10px;
+							font-size:12px; color:#000; line-height:18px; font-weight:normal; text-indent:0;
+							background:#fff;
+							border:#dadada solid 1px;
+							box-shadow:0 0 2px rgba(0,0,0,0.2);
+							cursor:default;
+							}
+							.movie-table table a.info span:before {
+								content:"";
+								position:absolute; left:50%; top:-10px;
+								width:17px; height:10px;
+								margin-left:-8px;
+								background:url(img/tooltip-arrow.png) 0 0 no-repeat;
+								}
 							
 							
 			/* Grid list */
@@ -1368,9 +1384,8 @@ article .related {
 				
 		
 		/* Agenda single pages - main section */
-		.agenda-single section {
-			width:648px;
-			}
+		.agenda-single section {width:648px;}
+			.agenda-single article.movie {overflow:visible;}
 			.agenda-single section article img {float:left; margin:0;}
 			
 			.agenda-single section article.movie h3,
@@ -3011,10 +3026,10 @@ article.header-only, .mobile-list-view article.header-only {
 		.filter-content aside ul li input[type=text] {width:99%; padding:0; text-indent:10px;}
 		.filter-content aside ul li input[type=submit] {width:99%; padding:0;}
 		
-	/* Agenda lists and single pages */
+	/* Agenda lists and single pages 
 	.movie-table  {padding-left:10px;}
 		.movie-table ul {width:30%; padding-left:0;}
-		.movie-table table {width:68%;}
+		.movie-table table {width:68%;}*/
 		
 	#wrapper .agenda-grid.agenda-content section article {width:32%; margin-right:2%;}
 	#wrapper .agenda-grid.agenda-content section article:nth-child(3n) {margin-right:0;}
@@ -3693,7 +3708,7 @@ article.header-only, .mobile-list-view article.header-only {
 				height:46px;
 				line-height:46px;
 				}
-				
+
 .user-post-list > li {
 	border-top:1px solid #dcdcdc;
 	padding-top:10px !important;
@@ -3715,6 +3730,15 @@ article.header-only, .mobile-list-view article.header-only {
 		font-size: 14px;
 		color:#000;
 	}
+	
+/* Mobile only slider styles */
+.quote-list.slideshow ul.paging {float:right; clear:both; margin-top:10px;}
+.mobile-slider {clear:both;}
+	.mobile-slider div {width:100%;}
+	
+}
+
+
 
 @media all and (max-width: 480px) {
 	
