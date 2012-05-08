@@ -16,7 +16,7 @@
 </div></div>
 <script type="text/javascript">
 $(function() {
-    $('#follow-topics').each(function() {
+    $('.follow-topics-link').each(function() {
         var popup = $('#theme-abonnieren-content');
         $(this).fancybox({'hideOnContentClick': false, 'type': 'inline',
             'onClosed': function() {
