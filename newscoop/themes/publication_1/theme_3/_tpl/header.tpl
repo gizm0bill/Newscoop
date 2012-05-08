@@ -11,8 +11,8 @@
                     <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Profil bearbeiten</a></li>
                     {{ else }}
                     {{ set_article number="3918" }}
-                    <li><a href="{{ url options="article" }}">Kontakt</a></li>
-                    <li><a href="#" onClick="omnibox.show()">Login</a></li>
+                    <li id="contact-link-holder"><a href="{{ url options="article" }}">Kontakt</a></li>
+                    <li id="login-link-holder"><a href="#" onClick="omnibox.show()">Login</a></li>
                     {{ /if }}
                     {{ /dynamic }}
                 </ul>
