@@ -53,12 +53,37 @@ $(document).ready(function() {
 			$(cap).html(caption);
 		}
     });	
-	
+
+	// Mobile slider
+	if ( $(window).width() < 768) {
+		$('.mobile-slider').each(function() {
+			var $this = $(this), $ss = $this.closest('.slideshow');
+			var prev = $ss.find('a.prev'), next = $ss.find('a.next'), cap = $ss.find('.caption');
+			$this.cycle({
+				prev: 		prev,
+				next: 		next,
+				fx: 		'scrollHorz',
+				fit:		true,
+				speed:		500,
+				timeout:	0,
+				after:     	onAfter
+			});
+			function onAfter(curr,next,opts) {
+				var caption = (opts.currSlide + 1) + '/' + opts.slideCount;
+				$(cap).html(caption);
+			}
+		});
+	}
+
+
 	// Tabs
 	$('.tabs').tabs();
 	
 // Carousel
- $('.carousel').jcarousel();	
+$('.carousel').jcarousel({visible: 6});
+ 
+if ( $(window).width() < 768) {$('.mobile-carousel').jcarousel({visible: 3, scroll: 1});}
+if ( $(window).width() < 641) {$('.mobile-carousel').jcarousel({visible: 1, scroll: 1});}	
 	
 	// Omni box and calendar slider
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
