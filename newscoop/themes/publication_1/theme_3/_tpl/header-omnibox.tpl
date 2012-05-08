@@ -203,6 +203,8 @@ $(document).ready(function() {
                     omnibox.checkView();
                     $('#omnibox').width(omnibox.openWidth);
                     $('#omnibox').height(omnibox.openHeight);
+                    $('#contact-link-holder').html('<a href="/meine-themen">Meine Themen</a>');
+                    $('#login-link-holder').html('<a href="/dashboard">Profil bearbeiten</a>');
                 }
                 else {
                     omnibox.setMessage(data.response);
