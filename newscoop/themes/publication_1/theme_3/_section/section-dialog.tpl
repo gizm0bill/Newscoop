@@ -14,20 +14,24 @@
             
             <section>
             
-                <article class="quote-list mobile-hide">            
+                <article class="quote-list slideshow"> 
+                <div class="mobile-slider">           
 {{ $weekbackdate=date_create("-1 week") }}
 {{ $weekback=$weekbackdate->format("Y-m-d") }}
 {{ list_articles length="4" ignore_issue="true" ignore_section="true" order="byLastUpdate desc" constraints="section is 85 type is good_comment publish_date greater_equal $weekback" }}                
-                
+                <div>
                     <blockquote>{{ $gimme->article->comment_community|strip_tags:false }}</blockquote>
                     <small class="quote-meta">{{ $gimme->article->comment_on_comment|replace:"<p>":""|replace:"</p>":""|strip }}</a></small>
+                </div>
                     
 {{ /list_articles }}
-                </article>
-                
-                <aside class="desktop-hide">
-                {{ include file="_tpl/sidebar-goodcomments.tpl" where="mobile-dialog" }}
-                </aside>					
+					 </div>
+					  <ul class="paging desktop-hide">
+                     <li><a href="#" class="grey-button prev">&laquo;</a></li>
+                     <li class="caption"></li>
+                     <li><a href="#" class="grey-button next">&raquo;</a></li>
+                 </ul>
+                </article>				
 					
 {{ include file="_tpl/dialog-article-comments.tpl" }}
 
