@@ -75,6 +75,7 @@ Vor
 				<div class="mobile-list-view clearfix">             
                     <article>
                         <header>
+                        {{ if $gimme->article->comment_count gt 0 }}<a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }}</a>{{ /if }}
                             <p>{{ assign var="onedayback" value=$smarty.now-86400 }}
                                 {{ assign var="oneback" value=$onedayback|date_format:"%Y-%m-%d" }}
                                 {{ if $gimme->article->publish_date lt $oneback }}
@@ -96,7 +97,7 @@ Vor
                         </figure>                        
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ if !($gimme->article->lede|strip_tags:false|strip == "") }}{{ $gimme->article->lede|strip_tags }}{{ else }}{{ $gimme->article->body|strip_tags:false|strip|truncate:200 }}{{ /if }} {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ include file="_tpl/author-name.tpl" author=$gimme->author }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} <a href="{{ url options="article" }}">Weiterlesen</a>
-                        {{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}  
+                        {{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments mobile-hide">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}  
                         </p>                       
                     </article>
                                         
