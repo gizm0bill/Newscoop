@@ -13,7 +13,7 @@
                         <figure>
                         	<big>Dossier:<br />
         <b>{{ $gimme->article->name }}</b></big>
-                        	{{ include file="_tpl/renditions/img_300x200.tpl" }}
+                        	{{ include file="_tpl/renditions/img_555x370.tpl" }}
                         </figure>
                         </a>
                         <p>{{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->teaser|strip_tags:false|strip }} <a href="{{ url options="article" }}">Weiterlesen</a> {{ if $gimme->article->comments_enabled }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar(e)</a>{{ /if }}</p>

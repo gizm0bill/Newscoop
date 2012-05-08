@@ -82,7 +82,12 @@
 
 {{ list_related_articles }}  
 {{ if $gimme->current_list->index lte "3" }}                          
-                    <article>
+                    {{ capture name="_noimg" assign="_noimg" }}
+{{ image rendition="rubrikenseite" }}
+<img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
+{{ /image }}
+{{ /capture }}
+{{ if trim($_noimg) }}<article>{{ else }}<article class="no-image">{{ /if }}
                         <header>
                         	{{ if $gimme->article->comment_count gt 0 }}<a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }}</a>{{ /if }}
                             <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
@@ -126,7 +131,7 @@
 {{ /if }}                    
                     <article>
                         <header>
-                            <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
+                            <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                     </article>
@@ -148,7 +153,7 @@
 {{ /list_related_articles }}
             
             </section>
-                
+            <aside>    
  {{ if $gimme->article->has_map }}                
                 <article>
                     <figure>
@@ -235,5 +240,5 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
 
     </div><!-- / Footer -->
 
-{{ include file="_tpl/_html-foot.tpl" }}         <aside>
+{{ include file="_tpl/_html-foot.tpl" }}
    
