@@ -294,6 +294,7 @@
                     <h3>Registrierung</h3>
                 </div>
                 <fieldset>
+                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <p>Mit Ihrem Benutzerkonto können Sie Ihr Abo verwalten, Artikel kommentieren und mit anderen Leserinnen und Lesern in Kontakt treten.</p>
@@ -333,6 +334,7 @@
                     <h3>Passwort wiederherstellen</h3>
                 </div>
                 <fieldset>
+                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <input type="text" id="omniboxForgotPasswordEmailMobile" placeholder="Ihre E-Mail-Adresse" />
