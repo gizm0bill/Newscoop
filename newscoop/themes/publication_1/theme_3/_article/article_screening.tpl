@@ -223,17 +223,6 @@ function load_events(ev_type) {
                     {{ include file="_tpl/social-bookmarks.tpl" }}
 {{ /if }}
 
-{{*
-                    <div class="social-network-box clearfix">
-                        <div id="social_bookmarks" class="left"></div>
-                        <p class="right">
-                            <a href="#" class="grey-button">In Kalender eintragen</a>
-                            <a href="#" onclick="window.print();return false" class="grey-button print"><span>Print</span></a>
-                            <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=sourcefabric"></script>
-                        </p>
-                    </div>
-*}}
-
 {{ if $gimme->article->movie_trailer_vimeo ne "" }}
 
 {{ assign var="vimeo_id" value=$gimme->article->movie_trailer_vimeo }}
