@@ -514,13 +514,13 @@ function parse_date_text($date_time_text)
         $template->assign('date_time_arr',$date_time_arr['dates']);
     {{ /php }}
 
-            <div style="margin-left:10px; float:left; width:580px;" class="movie-table">
+            <div {{*style="margin-left:0px; float:left; width:580px;"*}} class="movie-table">
 
                     <table cellpadding="0" cellspacing="0">
                         <tbody>
                         <tr>
-                        <td rowspan="2" style="width:164px;">
-                    <ul style="width:163px;">
+                        <td rowspan="2" {{*style="width:164px;"*}}>
+                    <ul {{*style="width:163px;"*}}>
                         <li><h5>{{ $gimme->article->organizer }}</h5></li>
                         <li>
                             <p>{{ $gimme->article->street }}<br />
@@ -563,7 +563,7 @@ function parse_date_text($date_time_text)
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
                                 {{ assign var="day_count" $day_count + 1 }}
                                     <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }} screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
-                                        <ul style="width:50px;margin-left:0px;padding-left:0px;">
+                                        <ul {{*style="width:50px;margin-left:0px;padding-left:0px;"*}}>
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
                                                     {{ assign var="scr_lang_k" $date_time_day_parts.has_k }}
@@ -573,7 +573,7 @@ function parse_date_text($date_time_text)
                                                         <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
 
                                                         {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
-                                                        <div style="display:none;background-color: #ffffff;">
+                                                        <div {{*style="display:none;background-color: #ffffff;"*}}>
                                                         <p>{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}&nbsp;&nbsp;&nbsp;</p>
                                                         </div>
                                                         {{ /if }}
@@ -638,8 +638,17 @@ function parse_date_text($date_time_text)
 
 <script type="text/javascript">
 
+function show_highlight(date) {
+//alert(date);
+    $('.date_hl_all').removeClass('current');
+    $('.date_hl_' + date).addClass('current');
+};
+
 $(document).ready(function() {
     window.set_title_boxes();
+
+    show_highlight("{{ $usedate_link }}");
+
 });
 
 window.set_title_boxes = function() {
