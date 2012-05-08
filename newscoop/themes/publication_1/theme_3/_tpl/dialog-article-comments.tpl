@@ -1,11 +1,11 @@
                <div class="omni-corner-box comments-box tabs">
                     
                         <ul class="comments-nav">
-                            <li><a href="#ausgewählte-kommentare">Ausgewählte Kommentare</a></li>
+                            <li><a href="#ausgewahlte-kommentare">Ausgewählte Kommentare</a></li>
                             <li><a href="#alle-kommentare">Alle Kommentare</a></li>
                         </ul>
                         
-                        <div id="ausgewählte-kommentare" class="comment-list">
+                        <div id="ausgewahlte-kommentare" class="comment-list">
                         
                             <ol>                            
                             
