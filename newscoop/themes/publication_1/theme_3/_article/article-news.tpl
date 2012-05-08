@@ -237,7 +237,11 @@ div.geomap_open_large_map {
     {{ /list_articles }}
     
     <div class="author-box">
-        <h4><span>{{ $gimme->author->type }}:</span> {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</h4>
+    	  <header class="desktop-hide">
+         <div class="mobile-divider"></div>
+         <p>{{ $gimme->author->type }}</p>
+ 		  </header>
+        <h4><span class="mobile-hide">{{ $gimme->author->type }}:</span> {{ include file="_tpl/author-name.tpl" author=$gimme->author }}</h4>
         <ul class="article-info">
             <li class="image">
                 {{ include file="_tpl/author-image.tpl" author=$gimme->author width=120 height=120 }}

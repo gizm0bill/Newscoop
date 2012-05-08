@@ -67,7 +67,7 @@ class RegisterController extends Zend_Controller_Action
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $values = $form->getValues();
+            $values = $request->getParams();
             $users = $this->_helper->service('user')->findBy(array(
                 'email' => $values['email'],
             ));
