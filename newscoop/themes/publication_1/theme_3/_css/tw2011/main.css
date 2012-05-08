@@ -2119,10 +2119,10 @@ ul.item-list li {
 				.article-single ul.article-info li p {margin:0;}
 					.article-single ul.article-info li p a {color:#000;}
 					
-		.author-box {overflow:hidden;}
+		.author-box {/*overflow:hidden;*/}
 			.article-single .author-box h4 {
 				padding-top:7px; margin-bottom:7px;
-				font-family:Arial, Helvetica, sans-serif; font-size:14px;
+				font-family:Arial, Helvetica, sans-serif; font-size:14px; font-weight:bold;
 				border-top:#dcdcdc solid 1px;
 				}
 				.article-single .author-box h4 span {font-weight:normal;}
@@ -2901,7 +2901,8 @@ article.header-only, .mobile-list-view article.header-only {
 				.debate-box ul.nav li:first-child a,
 				.debate-box ul.nav li a,
 				.debate-box ul.nav li span,
-				.content-box.debatte-page ul.debatte-top-nav li a {padding-left:10px; line-height:29px; font-size:12px !important;}
+				.content-box.debatte-page ul.debatte-top-nav li a,
+				.content-box.debatte-page ul.debatte-top-nav li span {padding-left:10px; line-height:29px; height:29px; font-size:12px !important;}
 					.debate-box ul.nav li a b,
 					.content-box.debatte-page ul.debatte-top-nav li a b {display:inline-block; zoom:1; *display:inline; width:145px;}
 					
@@ -3200,7 +3201,9 @@ article.header-only, .mobile-list-view article.header-only {
 				.mobile-list-view article h2 {font-size:18px; line-height:140%;}
 				
 				.mobile-list-view article header {padding-left:30%; margin-left:10px;}
+				.article.image-blog header,
 				.mobile-list-view article.no-image header {padding-left:0; margin-left:0;}
+				 
 				.mobile-list-view article figure {margin-top:-19px;}
 		
 		.mobile-list-view.header-fix article header {padding-left:0; margin-left:0;}
@@ -3390,7 +3393,10 @@ article.header-only, .mobile-list-view article.header-only {
 		.article-single ul.article-info li h5 {position:static; width:auto; line-height:normal; font-weight:bold;}
 		.article-single ul.article-info li img {position:relative; float:left; width:20%; margin-right:10px; height:auto;}
 		
-		.article-single .author-box h4 {font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif; font-size:16px; font-weight:normal; padding-top:20px;}
+		.article-single .author-box h4 {
+			font-family:'GeorgiaProW01-SemiBold', Georgia, 'Times New Roman', Times, serif; font-size:16px; font-weight:normal;
+			padding-top:10px; margin-bottom:0; border-top:none;
+			}
 		.article-single .author-box ul.article-info li h5,
 		.article-single .author-box ul.article-info li p {display:none;}
 		.article-single .author-box ul.article-info li {margin-bottom:0;}
@@ -3673,7 +3679,8 @@ article.header-only, .mobile-list-view article.header-only {
 	padding:14px 12px;
 	background-color:#f8f8f8;
 	}
-	.author-box .tabs.article-related-tabs {margin: 0 0 10px;}
+	.author-box .tabs.article-related-tabs {margin: 0 -10px 0 -10px; border-top:1px solid #e5e5e5;}
+	.author-box:last-child .tabs.article-related-tabs {margin-bottom: -35px;}
 	.tabs.article-related-tabs > ul {
 		width:99.9%;
 		}
@@ -3695,8 +3702,19 @@ article.header-only, .mobile-list-view article.header-only {
 	.user-post-list > li p {margin-bottom:12px;}		
 
 .article-info .geomap_container {margin-top:10px;}
-				
-}
+
+
+.article-main-back .author-box header {
+	margin:0 -10px;
+	border-bottom: 1px solid #DCDCDC;
+	padding:0;
+	}
+	.article-main-back .author-box header p {
+		line-height: normal;
+		padding: 12px 10px;
+		font-size: 14px;
+		color:#000;
+	}
 
 @media all and (max-width: 480px) {
 	
