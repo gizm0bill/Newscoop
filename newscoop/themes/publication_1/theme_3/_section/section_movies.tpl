@@ -287,13 +287,13 @@ window.show_less_text = function(rank)
 window.set_title_boxes = function() {
     $('.info-link').hover(
         function(){
-            $(this).children().children('div').fadeIn(200);
+            $(this).children('a').children('span').fadeIn('fast');
         },
         function(){
-            $(this).children().children('div').fadeOut(200);
+            $(this).children('a').children('span').fadeOut('fast');
         }
     );
-
+/*
     //last-child for MSIE
     if ( $.browser.msie ) {
         //$('span.title-box div').append('<div class="ietest"></div>');
@@ -306,6 +306,7 @@ window.set_title_boxes = function() {
             }
         );
     }
+*/
 };
 
 function outline_genre(genre) {
@@ -934,7 +935,7 @@ function parse_date_text($date_time_text)
         $template->assign('movie_lang_f',$date_time_arr['langs']['f']);
         $template->assign('movie_lang_t',$date_time_arr['langs']['t']);
     {{ /php }}
-            <div style="margin-right:50px; float:left; width:580px;" class="movie-table movie_lang{{ if 1 == $movie_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $movie_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $movie_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $movie_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
+            <div class="movie-table movie_lang{{ if 1 == $movie_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $movie_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $movie_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $movie_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
             <div class="data_movie data_movie_{{ $movie_rank }}" style="display:none;">
                 {{ if 1 == $movie_lang_d }}
                 d_{{ $movie_rank }};
@@ -954,11 +955,11 @@ function parse_date_text($date_time_text)
                 {{ /if }}
             </div>
 
-                    <table cellpadding="0" cellspacing="0">
-                        <tbody>
-                        <tr>
-                        <td rowspan="2" style="width:164px;">
-                    <ul style="width:163px;">
+            <table cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td rowspan="2" class="table-info">
+                    <ul>
                         <li><h5>{{ $gimme->article->organizer }}</h5></li>
                         <li>
                             <p>{{ $gimme->article->street }}<br />
@@ -982,41 +983,45 @@ function parse_date_text($date_time_text)
                             {{ /if }}
                         </li>
                     </ul>
+                    </td>
 
-                        </td>
-
-                        <!--<thead>-->
-                            <!--<tr>-->
                         {{ assign var="day_count" 0 }}
+                        {{ assign var="day_started" 0 }}
+                        {{ assign var="day_start" 0 }}
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
                             {{ assign var="day_count" $day_count + 1 }}
-                            <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }} <br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                            {{ if $day_started != 1 }}
+                                {{ foreach from=$date_time_day item=date_time_day_parts }}
+                                    {{ assign var="day_started" 1 }}
+                                    {{ assign var="day_start" (1-$day_count) }}
+                                {{ /foreach }}
+                            {{ /if }}
                         {{ /foreach }}
-                            </tr>
-                        <!--</thead>-->
 
-                        <!--<tbody>-->
-                            <tr>
-                            {{ assign var="day_count" 0 }}
+                        {{ assign var="day_count" $day_start }}
+                        {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
+                            {{ assign var="day_count" $day_count + 1 }}
+                            <td class="{{ if ((3 < $day_count) || (1 > $day_count)) }}mobile-hide {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }}<br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                        {{ /foreach }}
+                </tr>
+                <tr>
+                            {{ assign var="day_count" $day_start }}
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
-                                {{ assign var="day_count" $day_count + 1 }}
-                                    <td class="{{ if 3 < $day_count }}mobile-hide {{ /if }}screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
-                                        <ul style="width:50px;margin-left:0px;padding-left:0px;">
+                                    {{ assign var="day_count" $day_count + 1 }}
+                                    <td class="{{ if ((3 < $day_count) || (1 > $day_count)) }}mobile-hide {{ /if }}screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
+                                        <ul>
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
                                                     {{ assign var="scr_lang_k" $date_time_day_parts.has_k }}
                                                     {{ assign var="scr_lang_f" $date_time_day_parts.has_f }}
                                                     {{ assign var="scr_lang_t" $date_time_day_parts.has_t }}
-                                                        <li class="movie_lang{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
-                                                        <span class="info-link">{{ $date_time_day_parts.time }}<span class="title-box top_label">
-<!-- -->
+                                                        <li class="info-link movie_lang{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
+                                                        {{ $date_time_day_parts.time }}
                                                         {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
-                                                        <div style="display:none;background-color: #ffffff;">
-                                                        <p>{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}&nbsp;&nbsp;&nbsp;</p>
-                                                        </div>
+                                                        <a href="#" onClick="return false;">i
+                                                        <span style="display:none;{{*background-color: #ffffff;*}}">{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</span>
+                                                        </a>
                                                         {{ /if }}
-<!-- -->
-                                                        </span></span>
                                                         </li>
                                                     {{ /foreach }}
                                         </ul>
