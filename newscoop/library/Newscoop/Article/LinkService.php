@@ -54,6 +54,13 @@ class LinkService
     );
 
     /**
+     * @var array
+     */
+    private $sectionTypes = array(
+        'bloginfo',
+    );
+
+    /**
      * @var Doctrine\ORM\EntityManager
      */
     private $em;
@@ -74,15 +81,19 @@ class LinkService
      */
     public function getLink(\Newscoop\Entity\Article $article)
     {
-        $link = implode('/', array(
+        $link = array(
             trim($article->getPublication()->getAliasName(), '/'),
             $article->getLanguage()->getCode(),
             $this->getIssueShortName($article),
             $this->getSectionShortName($article),
-            $article->getNumber(),
-            $this->getSeo($article, $article->getPublication()->getSeo()),
-        ));
+        );
 
+        if (!in_array($article->getType(), $this->sectionTypes)) {
+            $link[] = $article->getNumber();
+            $link[] = $this->getSeo($article, $article->getPublication()->getSeo());
+        }
+
+        $link = implode('/', $link) . (in_array($article->getType(), $this->sectionTypes) ? '/' : '');
         return strpos($link, 'http') === 0 ? $link : 'http://' . $link;
     }
 
