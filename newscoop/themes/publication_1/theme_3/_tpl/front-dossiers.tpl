@@ -2,7 +2,7 @@
 
 						<article class="desktop-hide header-only">
 						<header>
-                	<p>Dossiers<a class="mobile-arrow right" href="{{ local }}{{ set_publication identifier="1" }}{{ set_issue number="1" }}{{ set_section number="5" }}{{ url options="section" }}{{ /local }}"><span>&gt;</span></a></p>
+                	<p>Dossiers<a class="mobile-arrow right" href="{{ local }}{{ set_publication identifier="1" }}{{ set_issue number="1" }}{{ set_section number="5" }}{{ url options="section" }}{{ /local }}"><span></span></a></p>
                 </header>
 						</article>
 

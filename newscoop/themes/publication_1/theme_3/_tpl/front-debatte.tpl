@@ -72,7 +72,7 @@ and then all is compared according to a matrix.
         {{ assign var="deadline" value=$closingdate->setTime(12, 0) }}
         {{ assign var="diff" value=date_diff($deadline, date_create('now')) }} 
                
-                	<h3>Die Wochendebatte: {{ $gimme->article->subject }}</h3>
+                	<h3><a href="{{ url options="section" }}?stage={{ $wdphase }}">Die Wochendebatte: {{ $gimme->article->subject }}</a></h3>
                     <ul class="nav">                    
                     	<li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>
                     	

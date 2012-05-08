@@ -33,8 +33,6 @@
                 {{ assign var="seclike" value=1 }}
                 {{ /if }}                
 {{ /list_articles }}
-                
-                <div class="mobile-list-view clearfix slideshow">
 
 {{ if $gimme->section->number gte 200 }}
 {{ list_articles length="7" constraints="type is blog" }}
@@ -57,7 +55,7 @@ Vor
                         </header>
 								<h2>{{ include file="_tpl/admin_frontpageedit.tpl" }}<a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                         {{ list_article_images length="1" }}
-                        <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" /></a>
+                        <a href="{{ url options="article" }}"><img alt="{{ $gimme->article->image->description }}" src="{{ url options="image width 640" }}" rel="resizable" /></a>
                         {{ /list_article_images }} 
                     </article>
 {{ if $gimme->current_list->at_end }}                
@@ -133,7 +131,6 @@ Vor
 {{ /if }}                   
 {{ /list_articles }}
 {{ /if }}               
-                </div>
 
             </section><!-- / Main Section -->
             
