@@ -47,7 +47,7 @@
 
 {{ include file="_tpl/sidebar-twitter.tpl" where="dialog" }}
 
-<div class="right"><a href="https://twitter.com/tageswoche" class="twitter-follow-button" data-show-count="false" data-lang="de" data-size="large">@tageswoche folgen</a>
+<div class="clearfix" style="text-align: right; padding-bottom: 20px"><a href="https://twitter.com/tageswoche" class="twitter-follow-button" data-show-count="false" data-lang="de" data-size="large">@tageswoche folgen</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
 
 {{ include file="_tpl/sidebar-blogs.tpl" blogpl="Blog teasers - {{ $gimme->section->name }}" }}
