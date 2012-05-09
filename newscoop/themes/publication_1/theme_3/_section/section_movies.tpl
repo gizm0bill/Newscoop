@@ -33,19 +33,13 @@
 {{ if !empty($smarty.get.vimeo) }}
     {{ assign var="make_vimeo" 1 }}
     {{ assign var="req_vimeo_key" $smarty.get.vimeo|replace:" ":"\\ "|replace:'"':"" }}
-    {{* assign var="req_vimeo_key" 24936756 *}}
 {{ /if }}
 {{ if $make_vimeo }}
-    {{ assign var="vimeo_height" 310 }}
-    {{ assign var="vimeo_width" 550 }}
-    <html><body style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px">
-    <!--<div>-->
-        <div id="vimeo_trailer" class="vimeo_trailer_block" style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px">
-        <!--<iframe src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width_show }}" height="{{ $vimeo_height_show }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>-->
-        <iframe style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px" src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width }}" height="{{ $vimeo_height }}" frameborder="0">
+    <html><body style="width:100%;margin:0px auto;background:#000000;">
+        <div id="vimeo_trailer" class="vimeo_trailer_block" style="width:100%;margin:0px auto;">
+        <iframe style="width:100%;margin:0px auto;" src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="600" height="400" frameborder="0">
         </iframe>
         </div>
-    <!--</div>-->
     </body></html>
 {{ else }}
 
@@ -878,7 +872,7 @@ function parse_date_text($date_time_text)
                                 {{ if $movie_rating_wv ne "" }}
                                     {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                                     {{ if $movie_rating_wv ne 0 }}
-                                        <li class="rating"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
+                                        <li class="rating" title="Bewertung von movies.ch"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
                                     {{ /if }}
                                 {{ /if }}
                                 {{ if $gimme->article->movie_director ne "" }}
@@ -1229,8 +1223,8 @@ window.set_list_content = function(data, direct) {
 
     $(".trailer-button").fancybox({
         type: 'iframe',
-        width: 570,
-        height: 330,
+        width: 600,
+        height: 400,
         modal: false,
         showCloseButton: true,
         hideOnContentClick: false

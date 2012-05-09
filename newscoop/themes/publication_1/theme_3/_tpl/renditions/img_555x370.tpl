@@ -2,7 +2,7 @@
 
 {{ strip }}
 {{ image rendition="artikel" }}
-<img src="{{ $image->src }}" width="555" height="370" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
+<img src="{{ $image->src }}" width="555" height="370" rel="resizable" style="max-width: 100%; height: auto" alt="{{ $image->photographer }}: {{ $image->caption }}" />
 {{ /image }}
 {{ /strip }}
 

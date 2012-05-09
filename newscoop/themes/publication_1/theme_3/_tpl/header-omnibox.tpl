@@ -196,7 +196,7 @@
                                         <input type="text" id="omniboxLoginEmailMobile" placeholder="Username" />
                                     </li>
                                     <li>
-                                        <input type="text" id="omniboxLoginPasswordMobile" placeholder="Password" />
+                                        <input type="password" id="omniboxLoginPasswordMobile" placeholder="Password" />
                                     </li>
                                     <li>
                                         <input id="omniboxLoginRememberMobile" type="checkbox" /> <label for="omniboxLoginRememberMobile" style="display: inline;">Eingeloggt bleiben</label>
@@ -378,6 +378,8 @@ $(document).ready(function() {
                     omnibox.checkView();
                     $('#omnibox').width(omnibox.openWidth);
                     $('#omnibox').height(omnibox.openHeight);
+                    $('#contact-link-holder').html('<a href="/meine-themen">Meine Themen</a>');
+                    $('#login-link-holder').html('<a href="/dashboard">Profil bearbeiten</a>');
                 }
                 else {
                     omnibox.setMessage(data.response);

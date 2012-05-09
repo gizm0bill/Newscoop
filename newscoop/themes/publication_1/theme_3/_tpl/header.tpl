@@ -5,7 +5,7 @@
                 <ul>
                     {{ dynamic }}
                     <li>{{ $smarty.now|camp_date_format:"%W, %e.%m.%Y" }}</li>
-                    <li>{{ weather }}</li>
+                    <li><a href="/wetter">{{ weather }}</a></li>
                     {{ if $gimme->user->logged_in }}
                     <li><a href="/meine-themen">Meine Themen</a></li>
                     <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Profil bearbeiten</a></li>
