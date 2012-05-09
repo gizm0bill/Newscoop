@@ -1,14 +1,14 @@
 /* IMG SLIDER
 ------------------------------------------------------------------------------------------ */
 .jcarousel-skin-img-slider .jcarousel-container {width:100%;}
-.jcarousel-skin-img-slider .jcarousel-clip {overflow: hidden; width:100%; height:72px;}
+.jcarousel-skin-img-slider .jcarousel-clip {overflow: hidden; width:100%; height:63px;}
 .jcarousel-skin-img-slider .jcarousel-item {margin-right:5px; padding:0; background-image:none;}
 .jcarousel-skin-img-slider .jcarousel-item-placeholder {}
 
 .jcarousel-skin-img-slider .jcarousel-next-horizontal,
 .jcarousel-skin-img-slider .jcarousel-prev-horizontal {
     position: absolute; top:0; right: 0px;
-    width:28px; height:70px; cursor: pointer;
+    width:28px; height:61px; cursor: pointer;
 	background-color:#f1f1f1;
 	background-image: -moz-linear-gradient(top, #ffffff, #f4f4f4);
 	background-image: -o-linear-gradient(top, #ffffff, #f4f4f4);
