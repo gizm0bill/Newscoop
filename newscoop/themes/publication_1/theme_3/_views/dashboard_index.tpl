@@ -135,13 +135,6 @@ function newSubscriber(firstName, lastName, email, productId) {
                     <p><a href="{{ $view->url([], 'my-topics') }}" title="Meine Themen">Neue Artikel zu diesen Themen lesen & Themen verwalten</a></p>
         </div>
         <div id="mein-abo" class="profile-edit-box" >
-            <script>
-                function newSubscription(userSubscriptionKey, productId) {
-                    var container = document.getElementById('new_subscription_box');
-                    var url = 'https://abo.tageswoche.ch/dmpro?type=abo&mode=new&userkey=' + userSubscriptionKey + '&product=' + productId;
-                    container.innerHTML = '<iframe src="'+url+'" width="600" height="300">';
-                }
-            </script>
             {{ if !empty($subscriptionService) }}
                 {{ if !empty($subscriber) }}
                     {{ if !empty($userSubscriptions) }}
@@ -151,6 +144,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                             $(".tabs").bind("tabsselect", function(e, tab) {
                                 if (tab.panel.id == 'mein-abo') {
                                     $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
+                                    $('#manage_subscription_box').show();
                                 }
                             });
                         </script>
