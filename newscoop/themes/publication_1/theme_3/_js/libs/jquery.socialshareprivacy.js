@@ -223,7 +223,7 @@
                 var gplus_code = '<div class="g-plusone" data-size="medium" data-href="' + gplus_uri + '"></div><script type="text/javascript">window.___gcfg = {lang: "' + options.services.gplus.language + '"}; (function() { var po = document.createElement("script"); po.type = "text/javascript"; po.async = true; po.src = "https://apis.google.com/js/plusone.js"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(po, s); })(); </script>';
                 var gplus_dummy_btn = '<img src="' + options.services.gplus.dummy_img + '" alt="&quot;Google+1&quot;-Dummy" class="gplus_one_dummy" />';
 
-                context.append('<li class="gplus help_info mobile-hide"><div class="gplusone dummy_btn">' + gplus_dummy_btn + '</div></li>');
+                context.append('<li class="gplus help_info mobile-hide-tablet-show"><div class="gplusone dummy_btn">' + gplus_dummy_btn + '</div></li>');
 
                 var $container_gplus = $('li.gplus', context);
 
@@ -239,19 +239,19 @@
             //
             // Der Info/Settings-Bereich wird eingebunden
             //
-            context.append('<li class="settings_info"><div class="settings_info_menu off perma_option_off"></div></li>');
+            context.append('<li class="settings_info"><div class="settings_info_menu off perma_option_off"><span class="help_info icon"><span class="info">' + options.txt_help + '</span></span></div></li>');
 
             // Info-Overlays mit leichter Verzoegerung einblenden
-            $('.help_info:not(.info_off)', context).live('mouseenter', function () {
-                var $info_wrapper = $(this);
+            $('.settings_info', context).live('mouseenter', function () {
+                var $info_wrapper = $('.help_info', $(this));
                 var timeout_id = window.setTimeout(function () { $($info_wrapper).addClass('display'); }, 500);
                 $(this).data('timeout_id', timeout_id);
             });
-            $('.help_info', context).live('mouseleave', function () {
+            $('.settings_info', context).live('mouseleave', function () {
                 var timeout_id = $(this).data('timeout_id');
                 window.clearTimeout(timeout_id);
-                if ($(this).hasClass('display')) {
-                    $(this).removeClass('display');
+                if ($('.help_info', $(this)).hasClass('display')) {
+                    $('.help_info', $(this)).removeClass('display');
                 }
             });
 
@@ -314,7 +314,7 @@
                     var perma_status_gplus = cookies.socialSharePrivacy_gplus === 'perma_on' ? checked : '';
                     $container_settings_info.find('form fieldset').append(
                         '<input type="checkbox" name="perma_status_gplus" id="perma_status_gplus"'
-                            + perma_status_gplus + ' class="mobile-hide" /><label for="perma_status_gplus" class="mobile-hide">'
+                            + perma_status_gplus + ' class="mobile-hide-tablet-show" /><label for="perma_status_gplus" class="mobile-hide-tablet-show">'
                             + options.services.gplus.display_name + '</label>'
                     );
                 }

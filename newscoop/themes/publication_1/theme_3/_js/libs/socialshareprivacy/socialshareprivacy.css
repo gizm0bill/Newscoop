@@ -99,13 +99,12 @@
     display: block;
 }
 .social_share_privacy_area li.help_info.info_off.display .info {
-    display: none;
+    display: block;
 }
 .social_share_privacy_area li .help_info.icon {
-	display:none;
-    background:url(images/socialshareprivacy_info.png) no-repeat center center scroll;
-    width: 16px;
-    height: 16px;
+	display:block;
+    width: 1px;
+    height: 1px;
     position: relative;
 	vertical-align: top;
 	/*border: 2px solid #e7e3e3;
