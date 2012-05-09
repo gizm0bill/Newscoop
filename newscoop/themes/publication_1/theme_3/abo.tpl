@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("a.green-button").fancybox({
+    $("a.green-button, a.grey-button").fancybox({
         'hideOnContentClick': false,
         'transitionIn'  : 'elastic',
         'transitionOut' : 'elastic',
@@ -53,8 +53,10 @@ function newSubscriber(productId, firstName, lastName, email) {
                                 {{ if $gimme->article->bullet_three }}<li>{{ $gimme->article->bullet_three }}</li>{{ /if }}
                             </ul>
                             <a href="#container_{{ $gimme->article->id_regular }}" class="green-button">Jetzt online bestellen</a>
+                            <a href="#container_{{ $gimme->article->id_regular }}" class="grey-button">Bestellen</a>
                             {{ if $gimme->article->id_gift }}
                             <a href="#container_{{ $gimme->article->id_gift }}" class="green-button">Verschenken</a>
+                            <a href="#container_{{ $gimme->article->id_gift }}" class="grey-button">Verschenken</a>
                             {{ /if }}
                             <div style="display: none">
                             {{ if $gimme->user->logged_in }}

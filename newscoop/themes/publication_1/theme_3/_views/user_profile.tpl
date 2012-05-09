@@ -86,7 +86,7 @@
 
     <div class="tabs article-related-tabs">
 
-        <ul>
+        <ul id="user-content-tabs">
             {{ if $user->isAuthor() }}
             <li><a href="#author-1">Artikel</a></li>
             <li><a href="#author-2">Blogbeiträge</a></li>
@@ -200,6 +200,18 @@
     {{ include file="_werbung/user-profile-sidebar.tpl" }}
 
 </aside>
+
+<script type="text/javascript">
+$(function() {
+    // remove tab switch if list is empty
+    $('#user-content-tabs a').each(function() {
+        var id = $(this).attr('href');
+        if ($(id).length == 0) {
+            $(this).closest('li').detach(); // detach element
+        }
+    });
+});
+</script>
 
 {{ if !empty($profile.email_public) }}
 <script type="text/javascript">

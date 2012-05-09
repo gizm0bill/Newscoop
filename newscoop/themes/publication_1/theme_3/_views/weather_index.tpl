@@ -11,7 +11,6 @@
 {{ include file="_tpl/header.tpl" }}
 
 {{ assign var="ch_city" value=$smarty.get.city }}
-
 {{ if  empty($ch_city) }}{{ $ch_city = 'Basel' }}{{ /if }}
         
         <div class="content-box agenda-mobile-top single-menu desktop-hide">
@@ -35,14 +34,14 @@
         <div class="content-box weather mobile-hide agenda-top">
         
             <ul class="nav">
-            	<li class="active"><a href="/wetter">Basel</a></li>
-            	<li><a href="/wetter?city=Liestal">Liestal</a></li>
-               <li><a href="/wetter?city=Gempen">Gempen</a></li>
-               <li><a href="/wetter?city=Passwang">Passwang</a></li>
-               <li><a href="/wetter?city=Zurich">Zürich</a></li>
-               <li><a href="/wetter?city=Bern">Bern</a></li>
-               <li><a href="/wetter?city=Genf">Genf</a></li>
-               <li><a href="/wetter?city=Lugano">Lugano</a></li>
+            	<li{{ if $ch_city == "Basel" }} class="active"{{ /if }}><a href="/wetter">Basel</a></li>
+            	<li{{ if $ch_city == "Liestal" }} class="active"{{ /if }}><a href="/wetter?city=Liestal">Liestal</a></li>
+               <li{{ if $ch_city == "Gempen" }} class="active"{{ /if }}><a href="/wetter?city=Gempen">Gempen</a></li>
+               <li{{ if $ch_city == "Passwang" }} class="active"{{ /if }}><a href="/wetter?city=Passwang">Passwang</a></li>
+               <li{{ if $ch_city == "Zurich" }} class="active"{{ /if }}><a href="/wetter?city=Zurich">Zürich</a></li>
+               <li{{ if $ch_city == "Bern" }} class="active"{{ /if }}><a href="/wetter?city=Bern">Bern</a></li>
+               <li{{ if $ch_city == "Genf" }} class="active"{{ /if }}><a href="/wetter?city=Genf">Genf</a></li>
+               <li{{ if $ch_city == "Lugano" }} class="active"{{ /if }}><a href="/wetter?city=Lugano">Lugano</a></li>
             </ul>
         
         </div>
@@ -74,9 +73,17 @@
                     <header>
                         <p>Artikel zum Thema Wetter</p>
                     </header>
-                    <p><strong>Gericht im Senegal erlaubt Wades Kandidatur</strong> Senegals Verfassungsgericht bestätigt umstrittene Kondidatenliste <a href="#" class="more">Weiterlesen</a> <span class="time">23.01.2012</span></p>
-                    <p><strong>RBS-Chef verzichtet nach Kritik auf Bonus</strong> Chef der Royal Bank of Scotland lehnt umstrittenen Bonus ab <a href="#" class="more">Weiterlesen</a> <span class="time">23.01.2012</span></p>
-                    <p><strong>RBS-Chef verzichtet nach Kritik auf Bonus</strong> Chef der Royal Bank of Scotland lehnt umstrittenen Bonus ab <a href="#" class="more">Weiterlesen</a> <span class="time">23.01.2012</span></p>
+                    {{ list_articles length="3" ignore_publication="true" ignore_issue="true" ignore_section="true" constraints="topic is Wetter:de" }}
+                    <p><strong>{{ if !($gimme->article->short_name == "") }}{{ $gimme->article->short_name }}{{ else }}{{ $gimme->article->name }}{{ /if }}</strong> 
+                    {{ if $gimme->article->type_name == "news" }}
+    					  		{{ $gimme->article->teaser|strip_tags|truncate:100:"..." }}
+    					  {{ elseif $gimme->article->type_name == "newswire" }}
+    							{{ $gimme->article->DataLead|strip_tags|truncate:100:"..." }}
+    					  {{ elseif $gimme->article->type_name == "blog" }}
+    							{{ $gimme->article->lede|strip_tags|truncate:100:"..." }}
+    					  {{ /if }}
+     <a href="{{ url options="article" }}" class="more">Weiterlesen</a> <span class="time">{{ $gimme->article->publish_date|camp_date_format:"%e.%m.%Y" }}</span></p>
+                    {{ /list_articles }}
                 </article>
                 
                 <article>
