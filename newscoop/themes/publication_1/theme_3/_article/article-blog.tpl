@@ -28,7 +28,7 @@
                     {{ include file="_tpl/admin_frontpageedit.tpl" }}{{ $gimme->article->body }}
                     {{ list_article_images }}
                     <figure style="margin-bottom: 15px">
-                      <img src="{{ uri options="image width 980" }}" rel="resizable" alt="">
+                      <img src="{{ url options="image width 980" }}" rel="resizable" alt="">
                       <p>{{ $gimme->article->image->description }} {{ if $gimme->article->image->photographer != "" }}({{ $gimme->article->image->photographer }}){{ /if }}</p>
                     </figure>
                     {{ /list_article_images }}

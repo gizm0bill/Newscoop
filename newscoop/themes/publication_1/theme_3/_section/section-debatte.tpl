@@ -76,9 +76,11 @@ phase 4 = currentdate > date_closing 12:00
         
         <div class="content-box debatte-page clearfix">
         
+         {{ if !($smarty.get.stage == 0) }}
         	<header class="mobile-header">
-                <p><a href="#">Zur Übersicht</a></p>
+                <p><a href="{{ url options="section" }}?stage=0">Zur Übersicht</a></p>
             </header>
+         {{ /if }}
 
 {{ list_articles length="1" constraints="type is deb_moderator" }}        
         	<h2><span class="green-button green-title">Die Wochendebatte</span>

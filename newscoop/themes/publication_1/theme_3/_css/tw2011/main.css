@@ -1676,7 +1676,10 @@ ul.item-list li {
 	ul.item-list li.tweet span.icon {background-image:url(img/icons_small/twitter.png);}
 	aside article section.comment span.icon,
 	.omniticker-main-content article section.comment span.icon,
-	ul.item-list li.comment span.icon {background-image:url(img/icons_small/comment.png);}
+	ul.item-list li.comment span.icon,
+	aside article section.comments span.icon,
+	.omniticker-main-content article section.comments span.icon,
+	ul.item-list li.comments span.icon {background-image:url(img/icons_small/comment.png);}
 	aside article section.omni span.icon,
 	.omniticker-main-content article section.omni span.icon,
 	ul.item-list li.omni span.icon {background-image:url(img/icons_small/omni.png);}
@@ -3145,6 +3148,7 @@ article.header-only, .mobile-list-view article.header-only {
 		margin:0 -10px 15px; padding:0;
 		border-bottom:1px solid #DCDCDC;
 		}
+		section > .mobile-header {margin-top:-10px;}
 		.content-box aside article:first-child header {margin-top:-10px;}
 		.first-in-line {margin-bottom:0; border:0;}
 		aside article:first-child header,
@@ -3157,10 +3161,10 @@ article.header-only, .mobile-list-view article.header-only {
 		article header ul.paging {right:10px; top:10px;}
 		aside article.community header p {padding:0;}
 		
-		.mobile-header p {padding:0;}
+		.mobile-header p {padding:10px;}
 		.link-back {padding:0 !important;}
 			.mobile-header p a,
-			.link-back a {display:block; padding:10px 10px 10px 30px; color:#333; background:url(img/mobile-arrow-prev.png) 15px 50% no-repeat;}
+			.link-back a {display:block; padding:0 0 0 20px; color:#333; background:url(img/mobile-arrow-prev.png) 5px 50% no-repeat;}
 	
 	.content-box aside article section,
 	.content-box .omniticker-main-content article section {padding:0 0 0 30px;}
@@ -3735,6 +3739,27 @@ article.header-only, .mobile-list-view article.header-only {
 .quote-list.slideshow ul.paging {float:right; clear:both; margin-top:10px;}
 .mobile-slider {clear:both;}
 	.mobile-slider div {width:100%;}
+
+
+/* Dossier single */
+.dossier-single {
+	position:relative; z-index:10;
+	margin-bottom: -2px !important;
+	}
+	.dossier-single section {
+		margin-bottom: 0 !important;
+		box-shadow:none !important;
+		padding-bottom:4px;
+
+		}
+		.dossier-single section figure {
+			margin-bottom: 0 !important;
+			background-color:#fff;
+			}
+			.dossier-single section figure img {
+				margin-bottom:0 !important;
+				}
+
 	
 }
 

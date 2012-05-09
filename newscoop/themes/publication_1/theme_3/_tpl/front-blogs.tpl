@@ -17,7 +17,7 @@
 {{ /list_articles }}
 
                 </ul>
-                <footer>
+                <footer class="mobile-hide">
                 	<a href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}" class="more">Zu den Blogs »</a>
                 </footer>
             </article>

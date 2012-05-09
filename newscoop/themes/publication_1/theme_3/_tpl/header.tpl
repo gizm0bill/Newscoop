@@ -31,12 +31,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="settings"><a href="#">Settings</a></li>
-                    <li class="login"><a href="#" onClick="omnibox.show()">Login</a>
-                    		<ul>
-                        	<li><a href="#">Profil bearbeiten</a></li>
-                        	<li><a href="#">Meine Themen</a></li>
-                        </ul>
+                    <li class="settings">
+                        <a href="#" onClick="omnibox.showContent();">Settings</a>
+                    </li>
+                    <li class="login">
+                        <a href="#" onClick="omnibox.showLogin();">Login</a>
                     </li>
                 </ul>
                 <nav class="mobile-hide">

@@ -14,14 +14,12 @@
 
 {{ assign var="curnum" value=$gimme->article->number }}       
         
-        <div class="content-box full-size clearfix">
+        <div class="content-box full-size clearfix dossier-single">
             <section>
-                <article class="top">
-		  <article class="desktop-hide">
-            <header>
-            	<p><a class="mobile-arrow left" href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}"><span>&lt;</span></a>Dossiers</p>
-            </header> 
-        </article>                
+	             <header class="mobile-header">
+                	<p><a href="{{ local }}{{ set_publication identifier="5" }}{{ set_current_issue }}{{ url options="issue" }}{{ /local }}">Dossiers</a></p>
+                </header>
+                <article class="top">              
                     <figure>
                         {{ include file="_tpl/renditions/img_990x330.tpl" }}
                         <big>Dossier:<br />
@@ -84,8 +82,14 @@
 
 {{ list_related_articles }}  
 {{ if $gimme->current_list->index lte "3" }}                          
-                    <article>
+                    {{ capture name="_noimg" assign="_noimg" }}
+{{ image rendition="rubrikenseite" }}
+<img src="{{ $image->src }}" width="{{ $image->width }}" height="{{ $image->height }}" rel="resizable" style="max-width: 100%" alt="{{ $image->photographer }}: {{ $image->caption }}" />
+{{ /image }}
+{{ /capture }}
+{{ if trim($_noimg) }}<article>{{ else }}<article class="no-image">{{ /if }}
                         <header>
+                        	{{ if $gimme->article->comment_count gt 0 }}<a class="comments" href="{{ url options="article" }}#comments">{{ $gimme->article->comment_count }}</a>{{ /if }}
                             <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
                         <figure class="left">
@@ -105,7 +109,7 @@
     {{ $gimme->article->lede|strip_tags }}{{* strip tags to make sure there is no line break between teaser and authors *}}
     {{ list_article_authors }}{{ if $gimme->current_list->at_beginning }}Von {{ /if }}{{ if $gimme->current_list->at_end }}{{ if $gimme->current_list->index > 1 }} und {{ /if }}{{ else }}{{ if $gimme->current_list->index > 1 }}, {{ /if }}{{ /if }}{{ $gimme->author->name }}{{ if $gimme->current_list->at_end }}. {{ /if }}{{ /list_article_authors }} 
   {{ /if }}
-{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}  
+{{ if $gimme->article->comment_count gt 0 }}<a href="{{ url options="article" }}#comments" class="comments mobile-hide">{{ $gimme->article->comment_count }} Kommentar{{ if $gimme->article->comment_count gt 1 }}e{{ /if }}</a>{{ /if }}  
   								</p>
                     </article>
 {{ /if }}                    
@@ -127,7 +131,7 @@
 {{ /if }}                    
                     <article>
                         <header>
-                            <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
+                            <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                         </header>
                         <h2><a href="{{ url options="article" }}">{{ $gimme->article->name|replace:'  ':'<br />' }}</a></h2>
                     </article>
@@ -149,9 +153,7 @@
 {{ /list_related_articles }}
             
             </section>
-            
-            <aside>
-                
+            <aside>    
  {{ if $gimme->article->has_map }}                
                 <article>
                     <figure>
@@ -210,7 +212,7 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
         <div class="content-box full-width clearfix">
         
             <h3 class="title">Weitere Dossiers</h3>
-            
+         <div class="dossier-mobile-list">
         	<div class="three-columns clearfix">
         	
 {{ list_articles length="6" ignore_issue="true" ignore_section="true" constraints="type is dossier number not $curnum" order="bysection desc" }} 
@@ -226,6 +228,7 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
 {{ /list_articles }}
 
             </div>
+            </div>
         	
         </div>
         
@@ -238,3 +241,4 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
     </div><!-- / Footer -->
 
 {{ include file="_tpl/_html-foot.tpl" }}
+   
