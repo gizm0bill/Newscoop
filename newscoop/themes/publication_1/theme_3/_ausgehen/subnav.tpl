@@ -101,7 +101,8 @@
     background: #ffffff;
     padding-left: 5px;
     padding-right: 5px;
-    margin-left: 5px;
+    margin-left: 2px;
+    text-decoration: none;
 }
 
 </style>
