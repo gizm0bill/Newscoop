@@ -1017,7 +1017,7 @@ function parse_date_text($date_time_text)
                                                         <li class="info-link movie_lang{{ if 1 == $scr_lang_d }} has_d{{ else }} has_not_d{{ /if }}{{ if 1 == $scr_lang_k }} has_k{{ else }} has_not_k{{ /if }}{{ if 1 == $scr_lang_f }} has_f{{ else }} has_not_f{{ /if }}{{ if 1 == $scr_lang_t }} has_t{{ else }} has_not_t{{ /if }}">
                                                         {{ $date_time_day_parts.time }}
                                                         {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
-                                                        <a href="#" onClick="return false;">i
+                                                        <a href="#" onClick="return false;" class="info">i
                                                         <span class="lang_info_label" style="display:none;{{*background-color: #ffffff;*}}">{{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</span>
                                                         </a>
                                                         {{ /if }}
