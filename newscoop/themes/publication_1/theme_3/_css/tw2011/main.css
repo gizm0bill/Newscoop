@@ -2922,7 +2922,9 @@ article.header-only, .mobile-list-view article.header-only {
 				.content-box.debatte-page ul.debatte-top-nav li a,
 				.content-box.debatte-page ul.debatte-top-nav li span {padding-left:10px; line-height:29px; height:29px; font-size:12px !important;}
 					.debate-box ul.nav li a b,
-					.content-box.debatte-page ul.debatte-top-nav li a b {display:inline-block; zoom:1; *display:inline; width:145px;}
+					.debate-box ul.nav li span b,
+					.content-box.debatte-page ul.debatte-top-nav li a b,
+					.content-box.debatte-page ul.debatte-top-nav li span b {display:inline-block; zoom:1; *display:inline; width:145px;}
 					
 				
 			.debate-box .debate-content {padding:0; border-bottom:0;}
@@ -2990,7 +2992,7 @@ article.header-only, .mobile-list-view article.header-only {
 	.facebook-article iframe {width:100% !important;}
 	
 	.agenda-single section article.event ul.top-list-details li.buy-button {position:static; padding-left:0;}
-	.social-network-box p.right {float:left; padding-top:10px; clear:both;}
+	.social-network-box p.right {}
 	
 	/* Search pages */
 	.top-filter {margin:0 0 10px;}
@@ -3760,12 +3762,15 @@ article.header-only, .mobile-list-view article.header-only {
 				margin-bottom:0 !important;
 				}
 
-	
+.image-slideshow .img-content figure a span {display: none !important;}
+
 }
 
 
 
 @media all and (max-width: 480px) {
+	
+	.mobile-hide-tablet-show {display:none; !important}
 	
 	.comments-nav,
 	.profile-edit-box ul li.buttons input.button {width:100%;}
