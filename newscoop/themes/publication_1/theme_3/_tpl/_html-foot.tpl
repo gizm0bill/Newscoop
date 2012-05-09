@@ -39,8 +39,9 @@
                 'cookie_domain': document.location.host,
                 'cookie_expires': 365,
                 'css_path' : '{{ url static_file="_js/libs/socialshareprivacy/socialshareprivacy.css" }}',
-                'txt_help': 'Die nebenstehenden Sharing-Buttons können Benutzungsdaten an Facebook, Twitter oder Google übermitteln. Wir haben sie deshalb standardmässig deaktiviert. Bitte aktivieren Sie sie, um sie zu nutzen. ',
-                'settings_perma': 'Button dauerhaft aktivieren'
+                'txt_help': 'Die nebenstehenden Sharing-Buttons können Benutzungsdaten an Facebook, Twitter oder Google übermitteln. Wir haben sie deshalb standardmässig deaktiviert. Bitte aktivieren Sie sie, um sie zu nutzen.',
+                'settings_perma': 'Button dauerhaft aktivieren',
+                'info_button': ' Die Sharing-Buttons können Benutzungsdaten an Facebook, Twitter oder Google übermitteln. Wir haben sie deshalb standardmässig deaktiviert. Bitte aktivieren Sie sie, um sie zu nutzen.'
             });
         });
         
