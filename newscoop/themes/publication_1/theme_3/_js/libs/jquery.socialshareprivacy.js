@@ -167,7 +167,7 @@
             //
             if (facebook_on) {
                 var fb_enc_uri = encodeURIComponent(uri + options.services.facebook.referrer_track);
-                var fb_code = '<iframe src="http://www.facebook.com/plugins/like.php?locale=' + options.services.facebook.language + '&amp;href=' + fb_enc_uri + '&amp;send=false&amp;layout=button_count&amp;width=120&amp;show_faces=false&amp;action=' + options.services.facebook.action + '&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:145px; height:21px;" allowTransparency="true"></iframe>';
+                var fb_code = '<iframe src="http://www.facebook.com/plugins/like.php?locale=' + options.services.facebook.language + '&amp;href=' + fb_enc_uri + '&amp;send=false&amp;layout=button_count&amp;width=145&amp;show_faces=false&amp;action=' + options.services.facebook.action + '&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:145px; height:21px;" allowTransparency="true"></iframe>';
                 var fb_dummy_btn = '<img src="' + options.services.facebook.dummy_img + '" alt="Facebook &quot;Like&quot;-Dummy" class="fb_like_privacy_dummy" />';
 
                 context.append('<li class="facebook help_info"><div class="fb_like dummy_btn">' + fb_dummy_btn + '</div></li>');
@@ -223,7 +223,7 @@
                 var gplus_code = '<div class="g-plusone" data-size="medium" data-href="' + gplus_uri + '"></div><script type="text/javascript">window.___gcfg = {lang: "' + options.services.gplus.language + '"}; (function() { var po = document.createElement("script"); po.type = "text/javascript"; po.async = true; po.src = "https://apis.google.com/js/plusone.js"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(po, s); })(); </script>';
                 var gplus_dummy_btn = '<img src="' + options.services.gplus.dummy_img + '" alt="&quot;Google+1&quot;-Dummy" class="gplus_one_dummy" />';
 
-                context.append('<li class="gplus help_info"><div class="gplusone dummy_btn">' + gplus_dummy_btn + '</div></li>');
+                context.append('<li class="gplus help_info mobile-hide"><div class="gplusone dummy_btn">' + gplus_dummy_btn + '</div></li>');
 
                 var $container_gplus = $('li.gplus', context);
 
@@ -287,7 +287,7 @@
                 $container_settings_info.find('.settings_info_menu').removeClass('perma_option_off');
 
                 // Perma-Optionen-Icon (.settings) und Formular (noch versteckt) einbinden
-                $container_settings_info.find('.settings_info_menu').append('<span class="settings">Einstellungen</span><form><fieldset><legend>' + options.settings_perma + '</legend></fieldset></form>');
+                $container_settings_info.find('.settings_info_menu').append('<span class="settings">Aktivieren</span><form><fieldset><legend>' + options.settings_perma + '</legend></fieldset></form>');
 
 
                 // Die Dienste mit <input> und <label>, sowie checked-Status laut Cookie, schreiben
@@ -314,7 +314,7 @@
                     var perma_status_gplus = cookies.socialSharePrivacy_gplus === 'perma_on' ? checked : '';
                     $container_settings_info.find('form fieldset').append(
                         '<input type="checkbox" name="perma_status_gplus" id="perma_status_gplus"'
-                            + perma_status_gplus + ' /><label for="perma_status_gplus">'
+                            + perma_status_gplus + ' class="mobile-hide" /><label for="perma_status_gplus" class="mobile-hide">'
                             + options.services.gplus.display_name + '</label>'
                     );
                 }

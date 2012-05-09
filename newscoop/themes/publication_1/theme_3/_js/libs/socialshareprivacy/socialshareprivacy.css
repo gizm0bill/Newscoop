@@ -209,10 +209,10 @@
 }
 
 
-.fb_like iframe {width:83px !important;}
-.twitter iframe {width:55px !important;}
+.fb_like iframe {width:120px !important;}
+.twitter iframe {width:80px !important;}
 .gplusone iframe,
-.gplusone div {width:32px !important;}
+.gplusone div {width:60px !important;}
 
 
 /* Settings/Info end */
