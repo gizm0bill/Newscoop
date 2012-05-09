@@ -45,6 +45,8 @@
 
 {{ include file="_tpl/sidebar-facebook.tpl" }}
 
+{{ include file="_werbung/dialog-sidebar.tpl" }}
+
 {{ include file="_tpl/sidebar-twitter.tpl" where="dialog" }}
 
 <div class="clearfix" style="text-align: right; padding-bottom: 20px"><a href="https://twitter.com/tageswoche" class="twitter-follow-button" data-show-count="false" data-lang="de" data-size="large">@tageswoche folgen</a>

@@ -4,6 +4,8 @@
 
 {{ include file="_tpl/_netmetrix-stats.tpl" }}
 
+{{ include file="_werbung/debate-header.tpl" }} 
+
 {{**************************************************
 {{ $wdphase }} first, we decide what phase the Wochendebatte is in. the links and pages will
 be loaded accordingly. 
@@ -167,6 +169,9 @@ already at that stage in the proceedings *}}
                     </header>
                     <p>Jede Woche lädt die TagesWoche zum Thema der Woche zwei Debattanten ein. Eine Wochendebatte dauert jeweils vom Freitag bis am darauffolgenden Donnerstag und geht über drei Runden. Zum Auftakt, der auch in der Zeitung erscheint, legen beide Debattanten ihren Standpunkt dar. In der Replik gehen sie jeweils auf die Argumente des Gegenübers sowie Kommentare aus dem Publikum ein. Im Schlussplädoyer haben sie nochmals die Gelegenheit, das Publikum von ihrem Standpunkt zu überzeugen. Das Publikum kann während der gesamten Debatte mitdiskutieren, Fragen stellen und abstimmen, auf welche Seite es sich schlagen möchte.</p>
                 </article>
+                
+{{*** werbung ***}}                
+{{ include file="_werbung/debate-sidebar.tpl" }}                
 
 {{ list_articles length="1" constraints="type is deb_moderator" }}      
 {{ assign var="curdeb" value=$gimme->article->number }}
