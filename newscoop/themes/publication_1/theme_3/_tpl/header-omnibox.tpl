@@ -183,7 +183,7 @@
                     <h3>Login</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxLoginMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxLoginMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <form id="omniboxLoginFormMobile">
                         <ul class="omnilogin">
                             <li>
@@ -227,7 +227,7 @@
                     <a href="#" id="omniboxFeedbackSubmitMobile" class="button-top no-arrow right">Senden</a>
                 </div>
                 <fieldset>
-                    <div id="omniboxFeedbackMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxFeedbackMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <div id="omniboxFeedbackInnerSwitchMobile">
                         <li>
@@ -253,7 +253,7 @@
                     <a href="#" id="omniboxCommentSubmitMobile" class="button-top no-arrow right">Senden</a>
                 </div>
                 <fieldset>
-                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxCommentMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <input type="radio" id="omniboxCommentRadioCommentMobile" name="omnibox-2" class="styled" checked="checked">
@@ -292,7 +292,7 @@
                     <h3>Registrierung</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxCommentMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <p>Mit Ihrem Benutzerkonto können Sie Ihr Abo verwalten, Artikel kommentieren und mit anderen Leserinnen und Lesern in Kontakt treten.</p>
@@ -331,7 +331,7 @@
                     <a href="#" id="omniboxForgotPasswordSubmitMobile" class="button-top arrow right">Senden</a>
                 </div>
                 <fieldset>
-                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxCommentMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <input type="text" id="omniboxForgotPasswordEmailMobile" placeholder="Ihre E-Mail-Adresse" />
