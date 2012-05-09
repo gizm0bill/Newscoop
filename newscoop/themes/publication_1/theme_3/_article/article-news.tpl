@@ -167,7 +167,7 @@ div.geomap_open_large_map {
                         {{ /if }}
                             	<a href="{{ url options="template section_topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
-                        		<span class="desktop-hide"><a href="#theme-abonnieren-content" class="theme-subscribe theme-abonnieren-trigger follow-topics-link"><br />Themen abonnieren</a></span></p>
+                        		<span class="desktop-hide"><br /><a href="#theme-abonnieren-content" class="theme-subscribe theme-abonnieren-trigger follow-topics-link">Themen abonnieren</a></span></p>
                             </li>                            	
                         {{ /if }}
                         {{ /list_article_topics }}

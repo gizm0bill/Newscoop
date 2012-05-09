@@ -42,7 +42,7 @@
     </ul>
 </div></aside>
 
-<section>
+<section class="clearfix">
     <ul class="filter-list">
         {{ foreach $users as $user }}
         <li>

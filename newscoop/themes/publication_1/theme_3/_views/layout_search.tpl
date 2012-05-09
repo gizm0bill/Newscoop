@@ -97,7 +97,7 @@ $(function() {
     </ul>
     {{/block}}
 </div></aside>
-<section>
+<section class="clearfix">
     {{block section}}{{/block}}
     <ul id="results" class="filter-list"></ul>
 

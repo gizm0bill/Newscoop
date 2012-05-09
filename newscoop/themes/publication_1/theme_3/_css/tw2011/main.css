@@ -1484,7 +1484,8 @@ article .related {
 			height:12px;
 			border:1px solid #c2c2c2;
 			border-width:0;
-		}
+			}
+			header .mobile-divider {margin:0;}
 		
 	
 
@@ -3022,7 +3023,7 @@ article figure.mobile-pull-left img {
 		.top-filter li {float:right; width:auto; padding:0;}
 	
 		.top-filter li.title {width:80%;}
-			.top-filter li.title fieldset {border:0; float:none; width:auto; box-shadow:none;}
+			.top-filter li.title fieldset {border:0; float:none; width:auto; box-shadow:none; background:transparent;}
 			.top-filter li.title input[type=text] {
 				float:left;
 				width:73%;
@@ -3670,7 +3671,7 @@ article figure.mobile-pull-left img {
 	
 	
 	/* Search pages */
-	.top-filter {margin:0;}
+	.top-filter {margin:0; background:#fff; position: relative; z-index: 2; border-top:none; }
 	.top-filter li.title {float:none; width:auto;padding:0 10px;}
 	.filter-list li {
 		padding:0 0 10px 30px; margin-bottom:10px;
@@ -3728,6 +3729,7 @@ article figure.mobile-pull-left img {
 	margin:0 -10px -10px -10px;
 	padding:14px 12px;
 	background-color:#f8f8f8;
+	overflow:hidden;
 	}
 	.author-box .tabs.article-related-tabs {margin: 0 -10px 0 -10px; border-top:1px solid #e5e5e5;}
 	.author-box:last-child .tabs.article-related-tabs {margin-bottom: -35px;}
@@ -3793,6 +3795,18 @@ article figure.mobile-pull-left img {
 
 .image-slideshow .img-content figure a span {display: none !important;}
 
+.fancybox-wrap {position:absolute; top:0 !important; bottom:0 !important; left:0 !important; bottom:0 !important; right:0 !important; height:100% !important; width:auto !important;}
+
+.fancybox-inner {
+	position:absolute; top:0 !important; bottom:0 !important; left:0 !important; bottom:0 !important; right:0 !important;
+	height:100% !important; width:auto !important;
+	background:#fff;}
+	
+.popup-box {
+    padding: 20px;
+    position: absolute; top:0; bottom:0; left:0; bottom:0; right:0;
+    width: auto; height:100%; 
+}
 }
 
 
@@ -3809,6 +3823,7 @@ article figure.mobile-pull-left img {
 	
 	.mobile-list-view article p,
 	.social-network-box a.print {display:none;}
+	.mobile-list-view article.desktop-hide p {display: block;}
 	.mobile-list-view article header p,
 	.mobile-list-view.dossier-mobile-list article p,
 	.mobile-list-view.plain-list p {display:block;}
