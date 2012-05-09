@@ -198,7 +198,7 @@ class RegisterController extends Zend_Controller_Action
         ));
 
         $form->removeElement('password');
-        $form->removeElement('password_confirm')
+        $form->removeElement('password_confirm');
 
         $this->handleConfirmForm($form, $user, $userData);
 
