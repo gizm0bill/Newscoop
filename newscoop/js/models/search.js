@@ -224,9 +224,9 @@ var DocumentCollection = Backbone.Collection.extend({
     toggleTopic: function(topic) {
         var index = _.indexOf(this.topics, topic);
         if (index !== -1) {
-            this.topics.splice(index, 1);
+            this.topics = [];
         } else {
-            this.topics.push(topic);
+            this.topics = [topic];
         }
     }
 });
