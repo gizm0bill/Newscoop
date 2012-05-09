@@ -202,7 +202,7 @@ if ( $(window).width() < 641) {$('.mobile-carousel').jcarousel({visible: 1, scro
 	});
 	
 	// Info icon hover
-	$('.top-filter li a.info').hover(
+	$('.top-filter li a.info, .movie-table table a.info').hover(
 		function(){
 			$(this).children('span').fadeIn('fast');
 		},
