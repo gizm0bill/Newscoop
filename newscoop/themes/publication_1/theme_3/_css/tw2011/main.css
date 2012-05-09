@@ -7,7 +7,7 @@
 /*
 = FONTS
 -------------------------------------------------------------------------------------- */
-@import url("http://fast.fonts.com/t/1.css?apiType=css&projectid=846306eb-084f-4750-82a9-0739c032edb0");
+
 @font-face{
 	font-family:"GeorgiaProW01-Regular";
 	src:url("fonts/3b97520d-a722-45ce-b985-2fe0a48b5c1a.eot?iefix") format("eot");}
@@ -361,6 +361,15 @@ a.theme-subscribe {
 					padding-bottom:2px;
 					font-size: 14px;
 					}
+					.omnibox-content .message.mobile-message {
+						padding:10px 12px;
+						margin-bottom:10px;
+						border:1px solid #dcdcdc;
+						box-shadow:0 1px 2px rgba(0, 0, 0, 0.1) inset;
+						-webkit-box-shadow:0 1px 2px rgba(0, 0, 0, 0.1) inset;
+						-moz-box-shadow:0 1px 2px rgba(0, 0, 0, 0.1) inset;
+						
+						}
 					.omnibox-content .message.error {color:#990000;}
 					.omnibox-content .message.success {color:#0ca701;}
 				.omnibox-content fieldset h3,
@@ -2259,6 +2268,14 @@ article.header-only, .mobile-list-view article.header-only {
 			padding: 15px 10px;
 			}
 
+
+/* Image widths for tablets ---------------------- */
+article figure.mobile-pull-left img {
+	max-width:100%;
+	height:auto;
+	}
+
+
 /*
 = USER & AUTHOR POST LIST
 -------------------------------------------------------------------------------------- */
@@ -3070,6 +3087,17 @@ article.header-only, .mobile-list-view article.header-only {
 
 @media screen and (max-width: 768px) {
 	
+	
+	article figure.mobile-pull-left {
+		margin-bottom:10px !important;
+		}
+		article figure.mobile-pull-left img {
+			max-width:100%;
+			height:auto;
+			float:left;
+			margin-bottom:0;
+			}
+	
 	.top-werbung {display:none !important;}
 	
 	body {border:0; background:#e5e5e5;}
@@ -3637,7 +3665,7 @@ article.header-only, .mobile-list-view article.header-only {
 	
 	
 	.dossier-mobile-list article figure {float:none; width:100%; margin:0;}
-		.dossier-mobile-list article figure img {width:100%; height:auto;}
+		/*.dossier-mobile-list article figure img {width:100%; height:auto;}*/
 		.dossier-mobile-list article figure big br {display:none;}
 	
 	

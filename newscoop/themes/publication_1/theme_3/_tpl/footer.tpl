@@ -9,6 +9,9 @@
             {{ list_articles ignore_issue="true" ignore_section="true" constraints="issue is 1 section is 10 type is static_page number not 3919" }}
             {{ if $gimme->current_list->index == 2 }}
             				<li><a href="/user/editors">Redaktion</a></li>        
+            {{ /if }}
+            {{ if $gimme->current_list->index == 4 }}
+            				<li><a href="/de/pages/abos">Abos</a></li>        
             {{ /if }}            
 								<li><a href="{{ url options="article" }}">{{ $gimme->article->name }}</a></li>
 				{{ /list_articles }}   				                     
