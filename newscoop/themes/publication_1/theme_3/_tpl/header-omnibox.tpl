@@ -193,10 +193,10 @@
                             <li>
                                 <ul>
                                     <li>
-                                        <input type="text" id="omniboxLoginEmailMobile" placeholder="Username" />
+                                        <input type="text" id="omniboxLoginEmailMobile" placeholder="E-Mail-Adresse" />
                                     </li>
                                     <li>
-                                        <input type="password" id="omniboxLoginPasswordMobile" placeholder="Password" />
+                                        <input type="password" id="omniboxLoginPasswordMobile" placeholder="Passwort" />
                                     </li>
                                     <li>
                                         <input id="omniboxLoginRememberMobile" type="checkbox" /> <label for="omniboxLoginRememberMobile" style="display: inline;">Eingeloggt bleiben</label>
