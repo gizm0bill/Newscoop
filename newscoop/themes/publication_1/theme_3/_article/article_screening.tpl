@@ -556,7 +556,7 @@ function parse_date_text($date_time_text)
             {{ /if }}
         {{ /list_article_topics }}
 
-        <div class="movie-table {{ $cur_kanton_inner }}" {{ if empty($useregion) }}style="display:none;"{{ /if }}>
+        <div class="movie-table {{ $cur_kanton_inner }}" {{ if empty($useregion) }} style="display:none;"{{ /if }}>
 
             <table cellpadding="0" cellspacing="0">
                 <tbody>
@@ -735,9 +735,11 @@ $(document).ready(function() {
 
     show_highlight("{{ $usedate_link }}");
 
+{{ if empty($useregion) }}
     $("#kanton_list_place").after($("#kanton_list"));
     $("#kanton_list").show();
     show_movie_cantons();
+{{ /if }}
 
 });
 
