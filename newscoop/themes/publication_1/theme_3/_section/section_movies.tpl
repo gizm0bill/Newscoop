@@ -881,12 +881,16 @@ function parse_date_text($date_time_text)
                                         <li class="rating"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
                                     {{ /if }}
                                 {{ /if }}
+                                {{ if $gimme->article->movie_director ne "" }}
+                                <li><span class="movie_info_key">Regisseur:</span> {{ $gimme->article->movie_director|replace:",":", " }}</li>
+                                {{ /if }}
                                 {{ if $gimme->article->movie_cast ne "" }}
                                 <li><span class="movie_info_key">Schauspieler:</span> {{ $gimme->article->movie_cast|replace:",":", " }}</li>
                                 {{ /if }}
                                 {{ if "" != $gimme->article->minimal_age }}
                                     <li><span>Altersfreigabe:</span> ab {{ $gimme->article->minimal_age }}</li>
                                 {{ /if }}
+{{*
                                 {{ if $gimme->article->movie_duration ne "" }}
                                 {{ if $gimme->article->movie_duration ne "0" }}
                                 {{ if $gimme->article->movie_duration ne 0 }}
@@ -894,6 +898,7 @@ function parse_date_text($date_time_text)
                                 {{ /if }}
                                 {{ /if }}
                                 {{ /if }}
+*}}
 {{*
                                 <!--<li><span>Sprache:</span> E/d/f</li>-->
 *}}

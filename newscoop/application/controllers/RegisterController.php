@@ -85,8 +85,6 @@ class RegisterController extends Zend_Controller_Action
                 $this->view->response = 'OK';
             }
         }
-
-        $this->view->form = $form;
     }
     
     public function createUserAction()
