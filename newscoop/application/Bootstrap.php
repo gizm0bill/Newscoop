@@ -343,16 +343,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'action' => 'profile',
         )));
 
-        $router->addRoute('topic', new Zend_Controller_Router_Route('@topic/:topic', array(
+        $router->addRoute('topic', new Zend_Controller_Router_Route('themen/:topic', array(
             'module' => 'default',
             'controller' => 'topic',
             'action' => 'index',
             'topic' => null,
         )));
 
-        $router->addRoute('my-topics', new Zend_Controller_Router_Route('@my-topics', array(
+        $router->addRoute('my-topics', new Zend_Controller_Router_Route_Static('meine-themen', array(
             'module' => 'default',
             'controller' => 'my-topics',
+            'action' => 'index',
+        )));
+
+        $router->addRoute('weather', new Zend_Controller_Router_Route_Static('wetter', array(
+            'module' => 'default',
+            'controller' => 'weather',
             'action' => 'index',
         )));
 
@@ -371,28 +377,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                      'slideshow-rest',
                  ),
              )));
-    }
-
-    protected function _initRouteTranslator()
-    {
-        $translator = new Zend_Translate(array(
-            'adapter' => 'array',
-            'content' => array(),
-            'locale' => 'en',
-            'disableNotices' => true,
-        ));
-
-        $translator->addTranslation(array(
-            'content' => array(
-                'topic' => 'themen',
-                'my-topics' => 'meine-themen',
-            ),
-            'locale' => 'de',
-        ));
-
-        $translator->setLocale('de');
-
-        Zend_Controller_Router_Route::setDefaultTranslator($translator);
     }
 
     protected function _initActionHelpers()
