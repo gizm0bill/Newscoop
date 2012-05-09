@@ -33,19 +33,13 @@
 {{ if !empty($smarty.get.vimeo) }}
     {{ assign var="make_vimeo" 1 }}
     {{ assign var="req_vimeo_key" $smarty.get.vimeo|replace:" ":"\\ "|replace:'"':"" }}
-    {{* assign var="req_vimeo_key" 24936756 *}}
 {{ /if }}
 {{ if $make_vimeo }}
-    {{ assign var="vimeo_height" 310 }}
-    {{ assign var="vimeo_width" 550 }}
-    <html><body style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px">
-    <!--<div>-->
-        <div id="vimeo_trailer" class="vimeo_trailer_block" style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px">
-        <!--<iframe src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width_show }}" height="{{ $vimeo_height_show }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen>-->
-        <iframe style="width:{{ $vimeo_width }}px;height:{{ $vimeo_height }}px" src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="{{ $vimeo_width }}" height="{{ $vimeo_height }}" frameborder="0">
+    <html><body style="width:100%;margin:0px auto;background:#000000;">
+        <div id="vimeo_trailer" class="vimeo_trailer_block" style="width:100%;margin:0px auto;">
+        <iframe style="width:100%;margin:0px auto;" src="http://player.vimeo.com/video/{{ $req_vimeo_key }}?title=0&amp;byline=0&amp;portrait=0" width="600" height="400" frameborder="0">
         </iframe>
         </div>
-    <!--</div>-->
     </body></html>
 {{ else }}
 
@@ -1229,8 +1223,8 @@ window.set_list_content = function(data, direct) {
 
     $(".trailer-button").fancybox({
         type: 'iframe',
-        width: 570,
-        height: 330,
+        width: 600,
+        height: 400,
         modal: false,
         showCloseButton: true,
         hideOnContentClick: false
