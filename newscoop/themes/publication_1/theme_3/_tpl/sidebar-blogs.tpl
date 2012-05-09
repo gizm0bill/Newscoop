@@ -2,7 +2,7 @@
 {{ if $gimme->current_list->at_beginning }}
                 <article>
                     <header>
-                        <p>Blogs</p>
+                        <p>{{ if $blogpl="Blog teasers - Kino" }}Filmblog Lichtspiele{{ else }}Blogs{{ /if }}</p>
                     </header>
                     <ul class="post-list"> 
 {{ /if }}       
@@ -25,9 +25,11 @@
                         
 {{ if $gimme->current_list->at_end }}                        
                     </ul>
+                    {{ if $blogpl != "Blog teasers - Kino" }}
                     <footer>
                         <a href="{{ url options="issue" }}" class="more">Zu den Blogs »</a>
                     </footer>
+                    {{ /if }}
                 </article>
 {{ /if }}
 {{ /list_playlist_articles }}                
