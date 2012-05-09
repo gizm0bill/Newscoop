@@ -52,49 +52,9 @@
                 
                 <aside>                              
 
-<ul class="article-info">
-        
-                            <li>
-                            	<h5>veröffentlicht</h5>
-                            	<p>{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y - %H:%i" }}</p>
-                            </li>
-                            <li>
-                            	<h5>zuletzt geändert</h5>
-                            	<p>{{ $gimme->article->last_update|camp_date_format:"%e.%c.%Y - %H:%i" }}</p>
-                            </li>
-                            
-                            {{ if $gimme->article->history != "" }}
-                            <li>
-                            	<h5>Artikelgeschichte</h5>
-                            	<p>{{ $gimme->article->history }}</p>
-                            </li>
-                            {{ /if }}
-                            
-                            {{ list_article_attachments }}
-									 {{ if $gimme->current_list->at_beginning }}
-                            <li>
-                            	<h5>Downloads</h5>
-                            {{ /if }}
-                            	<p><a href="{{ url options="articleattachment" }}">{{ $gimme->attachment->description }}</a> ({{ $gimme->attachment->extension|upper }}, {{ $gimme->attachment->size_kb }}kb)</p>
-									 {{ if $gimme->current_list->at_end }}
-                            </li>
-                            {{ /if }}
-                            {{ /list_article_attachments }}                            
-                            
-                            {{ if $gimme->article->sources != "" }}
-                            <li>
-                            	<h5>Quellen</h5>
-                            	<p>{{ $gimme->article->sources }}</p>
-                            </li>
-                            {{ /if }}
-									
-									 <li>
-                            	<h5>Artikel-Webcode</h5>
-                            	<p>tageswoche.ch/{{ $gimme->article->webcode }}</p>
-                            </li>                            
-                        </ul>
+{{ include file="_tpl/sidebar-cover.tpl" }}
 
-                         
+<span class="mobile-hide">{{ include file="_tpl/sidebar-community.tpl" }}</span>
                 
                 </aside><!-- / Sidebar -->
                 

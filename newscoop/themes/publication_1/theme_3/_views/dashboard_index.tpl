@@ -148,7 +148,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                         Bestellte und verschenkte Abos:
                         <div id="manage_subscription_box"></div>
                         <script>
-                        $('#meinAbo').click(function() {
+                        $('#author-3').click(function() {
                             $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
                         });
                         </script>

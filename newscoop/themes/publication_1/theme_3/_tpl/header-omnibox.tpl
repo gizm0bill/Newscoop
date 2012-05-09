@@ -183,7 +183,7 @@
                     <h3>Login</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxLoginMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxLoginMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <form id="omniboxLoginFormMobile">
                         <ul class="omnilogin">
                             <li>
@@ -193,10 +193,10 @@
                             <li>
                                 <ul>
                                     <li>
-                                        <input type="text" id="omniboxLoginEmailMobile" placeholder="Username" />
+                                        <input type="text" id="omniboxLoginEmailMobile" placeholder="E-Mail-Adresse" />
                                     </li>
                                     <li>
-                                        <input type="password" id="omniboxLoginPasswordMobile" placeholder="Password" />
+                                        <input type="password" id="omniboxLoginPasswordMobile" placeholder="Passwort" />
                                     </li>
                                     <li>
                                         <input id="omniboxLoginRememberMobile" type="checkbox" /> <label for="omniboxLoginRememberMobile" style="display: inline;">Eingeloggt bleiben</label>
@@ -225,10 +225,9 @@
                 <div class="top-title-line">
                     <a href="#" id="omniboxFeedbackCloseMobile" class="button-top no-arrow left">Cancel</a>
                     <a href="#" id="omniboxFeedbackSubmitMobile" class="button-top no-arrow right">Senden</a>
-                    <h3>An Redaktion schreiben</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxFeedbackMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxFeedbackMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <div id="omniboxFeedbackInnerSwitchMobile">
                         <li>
@@ -252,10 +251,9 @@
                 <div class="top-title-line">
                     <a href="#" id="omniboxCommentCloseMobile" class="button-top no-arrow left">Cancel</a>
                     <a href="#" id="omniboxCommentSubmitMobile" class="button-top no-arrow right">Senden</a>
-                    <h3>Mein Kommentar</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxCommentMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <input type="radio" id="omniboxCommentRadioCommentMobile" name="omnibox-2" class="styled" checked="checked">
@@ -294,7 +292,7 @@
                     <h3>Registrierung</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxCommentMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <p>Mit Ihrem Benutzerkonto können Sie Ihr Abo verwalten, Artikel kommentieren und mit anderen Leserinnen und Lesern in Kontakt treten.</p>
@@ -331,10 +329,9 @@
                 <div class="top-title-line">
                     <a href="#" id="omniboxForgotPasswordCloseMobile" class="button-top arrow left">Zurück</a>
                     <a href="#" id="omniboxForgotPasswordSubmitMobile" class="button-top arrow right">Senden</a>
-                    <h3>Passwort wiederherstellen</h3>
                 </div>
                 <fieldset>
-                    <div id="omniboxCommentMessageMobile" class="message" style="display: none;"></div>
+                    <div id="omniboxCommentMessageMobile" class="message mobile-message" style="display: none;"></div>
                     <ul class="radios-list">
                         <li>
                             <input type="text" id="omniboxForgotPasswordEmailMobile" placeholder="Ihre E-Mail-Adresse" />

@@ -251,6 +251,9 @@ function load_events(ev_type) {
 {{ /if }}
 
 {{ if $moviekey_canon }}
+                    <p class="mobile-hide">
+                    <a class="movie_direktlink mobile-hide" href="{{ $view->baseUrl('movie/search?key=') }}{{ $moviekey_canon }}">Direktlink zum Film</a>
+                    </p>
                     {{ include file="_tpl/social-bookmarks.tpl" }}
 {{ /if }}
 
