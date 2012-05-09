@@ -136,7 +136,7 @@ Vor
 
             </section><!-- / Main Section -->
             
-            <aside>
+            <aside class="mobile-hide">
                 
 {{ include file="_tpl/sidebar-partnerbuttons.tpl" }}
                 
