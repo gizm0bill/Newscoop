@@ -582,7 +582,7 @@ function parse_date_text($date_time_text)
                                                         {{ $date_time_day_parts.time }}
                                                         {{ if ("" != $date_time_day_parts.lang) || ("" != $date_time_day_parts.flag) }}
                                                         <a href="#" onClick="return false;">i
-                                                        <span style="display:none;{{*background-color: #ffffff;*}}"> {{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</span>
+                                                        <span class="lang_info_label" style="display:none;{{*background-color: #ffffff;*}}"> {{ if "" != $date_time_day_parts.lang }}&nbsp;{{ $date_time_day_parts.lang }}{{ /if }}{{ if "" != $date_time_day_parts.flag }}&nbsp;{{ $date_time_day_parts.flag }}{{ /if }}</span>
                                                         </a>
                                                         {{ /if }}
                                                         </li>
