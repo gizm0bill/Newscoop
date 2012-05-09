@@ -43,7 +43,7 @@
                 <fieldset>
                     <form id="omniboxFeedbackForm">
                         <p class="top-info">
-                            eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a>
+                            eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->first_name }} {{ $gimme->user->last_name }}</a>
                             <br><a style="float: right;" href="{{ $view->baseUrl('/auth/logout') }}">Ausloggen</a>
                         </p>
                         <br>
@@ -88,7 +88,7 @@
                 <fieldset>
                     <form id="omniboxCommentForm">
                         <p class="top-info">
-                            eingeloggt als <a id="omniboxCommentUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->name }}</a>
+                            eingeloggt als <a id="omniboxFeedbackUserLink" href="{{ $view->baseUrl('/dashboard') }}">{{ $gimme->user->first_name }} {{ $gimme->user->last_name }}</a>
                             <br><a style="float: right;" href="{{ $view->baseUrl('/auth/logout') }}">Ausloggen</a>
                         </p>
                         <br>
@@ -278,7 +278,7 @@
                 </div>
                 <fieldset>
                     <ul class="radios-list">
-                        <li><b>eingeloggt als <span id="omniboxUserNameMobile">{{ $gimme->user->name }}</span></b></li>
+                        <li><b>eingeloggt als <span id="omniboxUserNameMobile">{{ $gimme->user->first_name }} {{ $gimme->user->last_name }}</span></b></li>
                         <li><a href="{{ $view->baseUrl('/dashboard') }}" style="text-decoration: none;">Profil bearbeiten</a></li>
                         <li><a href="{{ $view->baseUrl('/meine-themen') }}" style="text-decoration: none;">Meine Themen</a></li>
                         <li><a href="{{ $view->baseUrl('/auth/logout') }}" style="text-decoration: none;">Ausloggen</a></li>
