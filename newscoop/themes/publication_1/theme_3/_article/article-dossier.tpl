@@ -218,8 +218,8 @@ document.write("<iframe title=\"YouTube video player\" width=\"300\" height=\"22
 {{ list_articles length="6" ignore_issue="true" ignore_section="true" constraints="type is dossier number not $curnum" order="bysection desc" }} 
        	
                 <article>
-                    <figure>
-                        <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a>
+                    <figure class="mobile-pull-left clearfix">
+                        <a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_555x370.tpl" }}</a>
                         <big>Dossier:<br />
                         <b>{{ $gimme->article->name|strip }}</b></big>
                     </figure>

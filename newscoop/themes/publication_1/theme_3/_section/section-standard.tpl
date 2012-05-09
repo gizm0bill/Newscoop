@@ -24,7 +24,7 @@
  
 {{ if $gimme->current_list->index == 1 }}           
             	<article>
-                    <figure>
+                    <figure class="mobile-pull-left clearfix">
                     	<a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a>
                     </figure>
                     <header>

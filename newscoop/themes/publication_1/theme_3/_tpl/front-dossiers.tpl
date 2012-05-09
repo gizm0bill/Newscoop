@@ -10,7 +10,7 @@
 {{ list_articles length="2" order="bysection desc" constraints="issue is 1 section is 5 type is dossier" }}                
                 	<article>
                 			<a href="{{ url options="article" }}">
-                        <figure>
+                        <figure class="mobile-pull-left clearfix">
                         	<big>Dossier:<br />
         <b>{{ $gimme->article->name }}</b></big>
                         	{{ include file="_tpl/renditions/img_555x370.tpl" }}

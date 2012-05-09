@@ -9,7 +9,7 @@
 {{ /if }}                    
                     <section>
                     	  <a href="{{ url options="article" }}">
-                        <figure>
+                        <figure class="mobile-pull-left clearfix">
                         	<big><b>{{ $gimme->article->name }}</b></big>
                         	{{ include file="_tpl/renditions/img_300x133.tpl" }}
                         </figure>

@@ -14,7 +14,7 @@
                         <p>{{ if $gimme->article->type_name == "blog" }}{{ $gimme->section->name }}{{ elseif $gimme->article->type_name == "news" }}{{ if !($gimme->article->dateline == "")}}{{ $gimme->article->dateline }}{{ else }}{{ $gimme->section->name }}{{ /if }}{{ elseif $gimme->article->type_name == "newswire" }}{{ if !($gimme->article->dateline == "")}}{{ else }}{{ $gimme->article->Newslinetext }}{{ /if }}{{ /if }}&nbsp;</p>
                     </header>
                   {{ /if }}             	           	
-            		{{ if $gimme->current_list->index == 1 }}<figure><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a></figure>{{ /if }}
+            		{{ if $gimme->current_list->index == 1 }}<figure class="mobile-pull-left clearfix"><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_640x280.tpl" }}</a></figure>{{ /if }}
 						{{ if $gimme->current_list->index == 2 || $gimme->current_list->index == 3 }}<figure><a href="{{ url options="article" }}">{{ include file="_tpl/renditions/img_300x200.tpl" }}</a></figure>{{ /if }}
 						{{ if $gimme->current_list->index == 4 || $gimme->current_list->index == 5 }}{{ include file="_tpl/renditions/img_170x115.tpl" }}{{ /if }}
 

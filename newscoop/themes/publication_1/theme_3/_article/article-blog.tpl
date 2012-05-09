@@ -51,7 +51,7 @@
 {{ list_articles length="1" constraints="type is bloginfo" }}            
                 <article class="featured">
                 	  <a href="{{ url options="section" }}">
-                    <figure>
+                    <figure class="mobile-pull-left clearfix">
                         {{ include file="_tpl/renditions/img_640x280.tpl" }}
                         <big>{{ $gimme->article->name }}</big>
                     </figure>

@@ -56,9 +56,9 @@
 {{ list_articles ignore_issue="true" ignore_section="true" order="byName asc" constraints="type is bloginfo active is on" }}
                 
                     <article>
-                        <figure>
+                        <figure class="mobile-pull-left clearfix">
                             <big>{{ $gimme->article->name }}</big>
-                            <a href="{{ url options="section" }}">{{ include file="_tpl/renditions/img_300x200.tpl" where="blogs" }}</a>
+                            <a href="{{ url options="section" }}">{{ include file="_tpl/renditions/img_555x370.tpl" where="blogs" }}</a>
                         </figure>
                         <p>{{ $gimme->article->motto }}</p>
                     </article>
