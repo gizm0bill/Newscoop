@@ -86,14 +86,8 @@
                     {{ /list_articles }}
                 </article>
                 
-                <article>
-                    <header>
-                        <p><em>Werbung</em></p>
-                    </header>
-                    <span class="werbung">
-                        <img src="pictures/werbung-sidebar.jpg"  rel="resizable" alt="" />
-                    </span>
-                </article>
+                {{*** werbung ***}}                
+					 {{ include file="_werbung/weather-sidebar.tpl" }}
             
             </aside>
         	
