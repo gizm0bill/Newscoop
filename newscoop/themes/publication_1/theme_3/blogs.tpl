@@ -37,7 +37,7 @@
             
             <article class="single-title">
             	<header>
-                	<p>Unsere Blogs</p>
+                	<p><span class="mobile-hide">Unsere </span>Blogs</p>
                 </header>
             </article>
         	
