@@ -182,13 +182,11 @@ already at that stage in the proceedings *}}
                 	<header>
                     	<p>Abgeschlossene Debatten</p>
                     </header>
-{{ /if }}           
-						  <article> 
+{{ /if }}            
 						  <figure class="mobile-pull-left clearfix">        
                     <a href="{{ url options="section" }}">{{ include file="_tpl/renditions/img_300x133.tpl" }}</a>
                     </figure>
                     <h3><a href="{{ url options="section" }}">{{ $gimme->article->name }}</a></h3>                    
-                    </article>
 {{ if $gimme->current_list->at_end }}
                 </article>
 {{ /if }}    

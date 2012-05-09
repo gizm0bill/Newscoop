@@ -2481,7 +2481,7 @@ article figure.mobile-pull-left img {
 				#top ul li:first-child:before {display:none;}
 			#top ul li img {float:left; margin-right:5px;}
 			#top ul li a {color:#7f7f7f; text-decoration:none;}
-				#top ul li a:hover {text-decoration:underline;}
+				#top ul li a:hover, #top ul li a:hover span {text-decoration:underline;}
 
 
 /* Weather widget */
@@ -3223,7 +3223,7 @@ article figure.mobile-pull-left img {
 		}
 	
 	.debatte-page figure {margin:0 10px 10px 0; overflow:hidden;}
-		.debatte-page figure img {width:15%; height:auto;}
+		.debatte-page .two-columns figure img {width:15%; height:auto;}
 		.debatte-page figure h4 {font-size:14px;}
 	
 	.debatte-stat-box {background:none; padding:10px; margin:-10px -10px 0; border:0;}
