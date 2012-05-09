@@ -95,6 +95,15 @@
     //width: 380px !important;
 }
 
+.lang_info_label {
+    z-index: 1000;
+    position: absolute;
+    background: #ffffff;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+}
+
 </style>
 
 <script type="text/javascript">
