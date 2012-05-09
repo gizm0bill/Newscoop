@@ -64,10 +64,23 @@
             
             <aside class="mobile-hide">
                 
-                <article class="regular-box">
-                    <img src="{{ url static_file="pictures/author-img-1.jpg" }}" alt="" />
-                    <p>Das Wetter wird präsentiert von Karl Gutbrod von Meteoblug</p>
+{{ list_articles length="1" ignore_publication="true" ignore_issue="true" ignore_section="true" order="bypublishdate desc" constraints="type is weather" }} 
+{{ list_article_authors }}                
+                <article class="regular-box">                
+                    {{ if $gimme->author->user->defined }}
+                    <img src="{{ include file="_tpl/user-image.tpl" user=$gimme->author->user width=120 height=130 }}" width="120" height="130" alt="Portrait {{ $gimme->author->user->uname }}" />
+                    {{ if !empty($gimme->author->user['bio']) }}
+                    <p>{{ $gimme->author->user['bio']|bbcode }}</p>
+                    {{ else }}
+                    <p>...</p>
+                    {{ /if }}
+                    {{ else }}
+                    <img src="{{ $gimme->author->picture->imageurl }}" alt="Portrait {{ $gimme->author->name }}" width="120" />
+                    <p>{{ $gimme->author->biography->text|bbcode }}</p>
+                    {{ /if }}
                 </article>
+{{ /list_article_authors }}
+{{ /list_articles }}                
                 
                 <article>
                     <header>
