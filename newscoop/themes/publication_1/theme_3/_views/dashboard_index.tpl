@@ -27,7 +27,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                     <ul class="profile-tab-nav">
                         <li><a href="#author-1">Mein Profil</a></li>
                         <li><a href="#author-2">Meine Themen</a></li>
-                        <li><a href="#author-3">Mein Abo</a></li>
+                        <li><a href="#mein-abo">Mein Abo</a></li>
                     </ul>
 
         <div id="author-1" class="profile-edit-box">
@@ -134,7 +134,7 @@ function newSubscriber(firstName, lastName, email, productId) {
 
                     <p><a href="{{ $view->url([], 'my-topics') }}" title="Meine Themen">Neue Artikel zu diesen Themen lesen & Themen verwalten</a></p>
         </div>
-        <div id="author-3" class="profile-edit-box" >
+        <div id="mein-abo" class="profile-edit-box" >
             <script>
                 function newSubscription(userSubscriptionKey, productId) {
                     var container = document.getElementById('new_subscription_box');
@@ -146,12 +146,9 @@ function newSubscriber(firstName, lastName, email, productId) {
                 {{ if !empty($subscriber) }}
                     {{ if !empty($userSubscriptions) }}
                         Bestellte und verschenkte Abos:
-                        <div id="manage_subscription_box"></div>
-                        <script>
-                        $('#author-3').click(function() {
-                            $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
-                        });
-                        </script>
+                        <div id="manage_subscription_box" style="display: none;">
+                            <iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>
+                        </div>
                     {{ else }}
                         Sie haben noch kein Abo der TagesWoche.
                     {{ /if }}

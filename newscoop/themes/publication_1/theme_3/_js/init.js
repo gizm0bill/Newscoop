@@ -78,6 +78,11 @@ $(document).ready(function() {
 
 	// Tabs
 	$('.tabs').tabs();
+    $(".tabs").bind("tabsselect", function(e, tab) {
+        if (tab.panel.id == 'mein-abo') {
+            $('#manage_subscription_box').show();
+        }
+    });
 	
 // Carousel
 $('.carousel').jcarousel({visible: 6});
