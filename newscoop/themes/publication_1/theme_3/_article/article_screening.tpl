@@ -198,7 +198,7 @@ function load_events(ev_type) {
                         {{ if $movie_rating_wv ne "" }}
                             {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                             {{ if $movie_rating_wv ne 0 }}
-                                <li class="rating" {{*style="display:list-item;"*}}><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
+                                <li class="rating" {{*style="display:list-item;"*}} title="Bewertung von movies.ch"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
                             {{ /if }}
                         {{ /if }}
                         {{ if $gimme->article->movie_director ne "" }}
@@ -227,7 +227,7 @@ function load_events(ev_type) {
                         {{ if $movie_rating_wv ne "" }}
                             {{ assign var="movie_rating_wv" 0+$movie_rating_wv }}
                             {{ if $movie_rating_wv ne 0 }}
-                                <li class="rating" style="display:list-item;"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
+                                <li class="rating" style="display:list-item;" title="Bewertung von movies.ch"><span>Bewertung:</span> <ul class="rating"><li{{ if $movie_rating_wv > 0 }} class="on"{{ /if }}>1</li><li{{ if $movie_rating_wv > 1 }} class="on"{{ /if }}>2</li><li{{ if $movie_rating_wv > 2 }} class="on"{{ /if }}>3</li><li{{ if $movie_rating_wv > 3 }} class="on"{{ /if }}>4</li><li{{ if $movie_rating_wv > 4 }} class="on"{{ /if }}>5</li></ul></li>
                             {{ /if }}
                         {{ /if }}
                         {{ if $gimme->article->movie_director ne "" }}
