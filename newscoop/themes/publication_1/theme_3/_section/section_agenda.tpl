@@ -399,7 +399,11 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
 {{ if 1 eq $load_list }}
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="72" }}
                 <h2><a href="{{ uri options="section" }}#/;type:kino;date:{{ $usedate_link }};region:{{ $linkregion }}">Kino</a></h2>
+{{ /local }}
 
 {{ assign var=today_date "2011-11-01" }}
 {{ assign var=today_date $smarty.now|date_format:"%Y-%m-%d" }}
@@ -488,7 +492,11 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ /local }}
 {{ /if }}
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="71" }}
                 <h2 class="mobile-top-separator"><a href="{{ uri options="section" }}#/;type:theater;date:{{ $usedate_link }};region:{{ $linkregion }};page:1">Theater</a></h2>
+{{ /local }}
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -550,7 +558,11 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{ /list_articles }}
 
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="71" }}
                 <h2 class="mobile-top-separator"><a href="{{ uri options="section" }}#/;type:musik;date:{{ $usedate_link }};region:{{ $linkregion }};page:1">Konzerte</a></h2>
+{{ /local }}
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
@@ -585,7 +597,11 @@ function prepare_lang_time($date_time_text, $chosen_date)
 
 {{ /if }}
 
+{{ local }}
+{{ set_current_issue }}
+{{ set_section number="71" }}
                 <h2 class="mobile-top-separator"><a href="{{ uri options="section" }}#/;type:ausstellung;date:{{ $usedate_link }};region:{{ $linkregion }};page:1">Ausstellungen</a></h2>
+{{ /local }}
 
 {{ assign var="colcount" 3 }}
 {{ assign var="event_rank" 0 }}
