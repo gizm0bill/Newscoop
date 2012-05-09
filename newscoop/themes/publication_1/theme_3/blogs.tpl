@@ -37,7 +37,7 @@
             
             <article class="single-title">
             	<header>
-                	<p>Unsere Blogs</p>
+                	<p><span class="mobile-hide">Unsere </span>Blogs</p>
                 </header>
             </article>
         	
@@ -48,7 +48,7 @@
             <section>
             
             	<header class="mobile-header first-in-line">
-                	<p>Unsere Blogs</p>
+                	<p><span class="mobile-hide">Unsere </span>Blogs</p>
                 </header>
                 
                 <div class=" two-columns mobile-list-view dossier-mobile-list small-titles clearfix">

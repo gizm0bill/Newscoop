@@ -220,7 +220,7 @@ div.geomap_open_large_map {
 {{ /if }}
 									 <li>
                             	<h5>Artikel-Webcode</h5>
-                            	<p>tageswoche.ch/{{ $gimme->article->webcode }}</p>
+                            	<p><a href="{{ $gimme->url->base }}/{{ $gimme->article->webcode }}">tageswoche.ch/{{ $gimme->article->webcode }}</a></p>
                             </li>
                             
                         </ul>

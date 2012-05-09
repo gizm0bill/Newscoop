@@ -39,6 +39,9 @@ function newSubscriber(productId, firstName, lastName, email) {
         <div class="content-box clearfix">
             <section>
                 <div class="mobile-list-view abo-list-view">
+                <article class="desktop-hide">
+                	<p>Sie können Ihr Abo natürlich auch telefonisch bestellen. Montag bis Freitag, 8:30-12:30 und 13:30-17:30 Uhr.</p> 
+                </article>
                 {{ list_articles ignore_issue="true" ignore_section="true" constraints="issue is 1 section is 20 type is subscription" }}
                     <article>
                         <figure class="left">

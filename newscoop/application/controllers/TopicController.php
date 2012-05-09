@@ -56,7 +56,7 @@ class TopicController extends AbstractSolrController
             ))),
             'sort' => 'published desc',
             'spellcheck' => 'false',
-            'rows' => $this->_getParam('format') === 'xml' ? 20 : null,
+            'rows' => $this->_getParam('format') === 'xml' ? 20 : 12,
         ));
     }
 

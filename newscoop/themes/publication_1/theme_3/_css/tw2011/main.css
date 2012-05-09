@@ -1442,6 +1442,7 @@ article .related {
 		.image-slideshow .img-content {
 			margin-bottom:15px;
 			border-bottom:#e5e5e5 solid 2px;
+			overflow: hidden;
 			}
 			.image-slideshow .img-content figure {display:block; margin-bottom:7px; width:100%;}
 			.image-slideshow .img-content figure a {position:relative; display:block; }
@@ -2839,7 +2840,7 @@ article.header-only, .mobile-list-view article.header-only {
 /*
 = Size adjustments
 -------------------------------------------------------------------------------------- */
-@media all and (max-width: 1160px) {
+@media screen and (max-width: 1160px) {
 	#omni-box-placeholder {left:0; width:100%; margin-left:0;}
 			#omnibox {right:1%;}
 	#top ul {
@@ -2850,7 +2851,7 @@ article.header-only, .mobile-list-view article.header-only {
 
 
 
-@media all and (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
 	
 	
 	#wrapper,
@@ -3067,7 +3068,7 @@ article.header-only, .mobile-list-view article.header-only {
 
 
 
-@media all and (max-width: 768px) {
+@media screen and (max-width: 768px) {
 	
 	.top-werbung {display:none !important;}
 	
@@ -3246,8 +3247,8 @@ article.header-only, .mobile-list-view article.header-only {
 			.abo-list a.green-button {display:none;}
 			.abo-list a.grey-button {
 				display:block;float:left;
-				width:47%; height:30px;
-				margin-right:4%;
+				width:44%; height:30px;
+				margin-right:3%;
 				text-align:center; line-height:30px; font-weight:bold;
 				}
 				.abo-list a.grey-button:last-child {margin-right:0;}
@@ -3768,7 +3769,7 @@ article.header-only, .mobile-list-view article.header-only {
 
 
 
-@media all and (max-width: 480px) {
+@media screen and (max-width: 480px) {
 	
 	.mobile-hide-tablet-show {display:none; !important}
 	
