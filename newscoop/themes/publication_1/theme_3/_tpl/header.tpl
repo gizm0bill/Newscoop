@@ -48,7 +48,7 @@
 {{ set_publication identifier="1" }}
 {{ set_current_issue }}
 {{ list_sections constraints="number smaller_equal 60" }}                    
-                        <li><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
+                        <li><a href="{{ url options="section" }}"{{ if ($gimme->section->number == $gimme->default_section->number) && ($gimme->template->name != "search.tpl") && ($gimme->template->name != "abo.tpl") }} class="active"{{ /if }}>{{ $gimme->section->name }}</a></li>
 {{ /list_sections }}
 
                     </ul>
