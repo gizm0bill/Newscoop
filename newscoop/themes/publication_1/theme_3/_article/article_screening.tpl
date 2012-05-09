@@ -19,6 +19,17 @@ $(document).ready(function() {
 {{ /if }}
 
 <style type="text/css">
+.single_movie_kanton_list {
+    border: #cdcdcd solid 1px;
+    background-color: #f1f1f1;
+    height: 25px;
+    width: 136px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 20px;
+    height: 28px;
+    font-size: 86%;
+}
 
 span span.title-box {
     position: absolute;
@@ -501,6 +512,15 @@ function parse_date_text($date_time_text)
     {{ assign var="contopic_region" "topic is $useregion$topic_suffix" }}
 {{ /if }}
 
+{{ assign var=movie_cantons "" }}
+{{ php }}
+    $template->assign('movie_cantons', array());
+{{ /php }}
+
+<div class="mobile-hide">
+    <div id="kanton_list_place" style="display:hidden;"></div>
+</div>
+
 {{ list_articles ignore_issue="true" ignore_section="true" constraints="$contopic_region $art_constraints section is 72 type is screening " order="byname asc" }}
     {{ if $gimme->article->recommended }}
     <script type="text/javascript">
@@ -516,7 +536,27 @@ function parse_date_text($date_time_text)
         $template->assign('date_time_arr',$date_time_arr['dates']);
     {{ /php }}
 
-        <div class="movie-table">
+        {{ assign var="cur_kanton" "" }}
+        {{ assign var="cur_kanton_inner" "" }}
+        {{ list_article_topics }}
+            {{ assign var="cur_topic" $gimme->topic->name }}
+            {{ assign var="cur_topic_start" $cur_topic|truncate:6:"" }}
+            {{ if $cur_topic_start eq "Kanton" }}
+                {{ assign var="cur_kanton" $cur_topic|replace:"Kanton ":"" }}
+                {{ assign var="cur_kanton_inner" $cur_kanton|replace:" ":"-"|replace:".":"-" }}
+                {{ php }}
+                    $cur_kanton = $template->get_template_vars('cur_kanton');
+                    $cur_kanton_inner = $template->get_template_vars('cur_kanton_inner');
+                    $movie_cantons = $template->get_template_vars('movie_cantons');
+                    if (!array_key_exists($cur_kanton_inner, $movie_cantons)) {
+                        $movie_cantons[$cur_kanton_inner] = $cur_kanton;
+                    }
+                    $template->assign('movie_cantons', $movie_cantons);
+                {{ /php }}
+            {{ /if }}
+        {{ /list_article_topics }}
+
+        <div class="movie-table {{ $cur_kanton_inner }}" {{ if empty($useregion) }}style="display:none;"{{ /if }}>
 
             <table cellpadding="0" cellspacing="0">
                 <tbody>
@@ -598,6 +638,31 @@ function parse_date_text($date_time_text)
 
 {{ /list_articles }}
 
+{{ assign var="sel_cantons" "" }}
+{{ php }}
+    $movie_cantons = $template->get_template_vars('movie_cantons');
+    ksort($movie_cantons);
+
+    if (0 < count($movie_cantons)) {
+        $sel_html = '<select id="kanton_list" class="omit_dropdown single_movie_kanton_list" onChange="show_movie_cantons(); return true;" style="display:hidden;">' . "\n";
+
+        foreach ($movie_cantons as $canton_inn => $canton_ext) {
+            $cur_selected = "";
+            if ("Basel-Stadt" == $canton_inn) {
+                $cur_selected = " selected";
+            }
+
+            $sel_html .= '<option value="' . $canton_inn . '"' . $cur_selected . '>' . $canton_ext . '</option>' . "\n";
+        }
+        $sel_html .= '</select>' . "\n";
+
+        $template->assign('sel_cantons', $sel_html);
+    }
+{{ /php }}
+{{ if empty($useregion) }}
+    {{ $sel_cantons }}
+{{ /if }}
+
                 </article>
 
             </section>
@@ -644,6 +709,21 @@ function parse_date_text($date_time_text)
 
 <script type="text/javascript">
 
+function show_movie_cantons() {
+    var canton_cur = $("#kanton_list").val();
+
+    $(".movie-table").each(function(ind_elm, elm) {
+        var jq_elm = $(elm);
+        if (!jq_elm.hasClass(canton_cur)) {
+            jq_elm.hide();
+        }
+        else {
+            jq_elm.show();
+        }
+    });
+
+};
+
 function show_highlight(date) {
 //alert(date);
     $('.date_hl_all').removeClass('current');
@@ -654,6 +734,10 @@ $(document).ready(function() {
     window.set_title_boxes();
 
     show_highlight("{{ $usedate_link }}");
+
+    $("#kanton_list_place").after($("#kanton_list"));
+    $("#kanton_list").show();
+    show_movie_cantons();
 
 });
 
