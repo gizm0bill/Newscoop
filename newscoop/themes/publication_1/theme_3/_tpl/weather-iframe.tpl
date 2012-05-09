@@ -1,0 +1,1 @@
+<iframe src="http://www.meteoblue.com/de_DE/customer/tageswoche/index/{{ $citycode }}" height="1900" width="650" frameborder="0" scrolling="NO"></iframe><div><a href="http://www.meteoblue.com/de_DE/wetter/vorhersage/woche/{{ $citycode }}?utm_source=tageswoche&utm_medium=linkus&utm_campaign=CustomWidget" title="Wetter Basel - meteoblue" target="_blank">meteoblue.com</a></div> 
