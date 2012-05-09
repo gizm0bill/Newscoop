@@ -412,8 +412,8 @@ function prepare_lang_time($date_time_text, $chosen_date)
 {{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" length=5 *}}
 {{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints="$condate $contopic_region $contopic_type section is 72 type is screening matchalltopics " order="byname asc" length=5 *}}
 {{* list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc byname asc" *}}
-{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc byname asc" movie_screening="$muldate" }}
-    {{ if $lastmovname != $gimme->article->headline }}
+{{ list_articles columns="$colcount" ignore_issue="true" ignore_section="true" constraints=" $contopic_region section is 72 type is screening matchalltopics " order="bycustom.num.movie_rating_wv.0 desc bycustom.ci.movie_key.no_key asc" movie_screening="$muldate" }}
+    {{ if $lastmovname != $gimme->article->movie_key }}
         {{ if "" != $lastmovname }}
                     </ul>
                       </article>
@@ -456,7 +456,7 @@ function prepare_lang_time($date_time_text, $chosen_date)
                             <ul class="bottom-list-details {{*top-list-details*}} clearfix" {{*style="display:block !important;"*}}>
         {{ /if }}
     {{ /if }}
-    {{ assign var="lastmovname" $gimme->article->headline }}
+    {{ assign var="lastmovname" $gimme->article->movie_key }}
         {{ if 4 > $movie_rank }}
                         <li class="schedule">
                         <div class="data_movie data_movie_{{ $movie_rank }}" style="display:none;">
