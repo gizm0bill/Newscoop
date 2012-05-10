@@ -5,7 +5,7 @@
                     <span class="werbung">
 <!-- BEGIN ADITIONTAG -->
 <script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
-<div id="adition_tag_66334"></div>
+<div id="adition_tag_460084"></div>
 <!-- END ADITIONTAG -->
                     </span>
                 </article>              
