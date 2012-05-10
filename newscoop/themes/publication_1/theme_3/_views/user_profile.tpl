@@ -24,7 +24,7 @@
                 {{ /if }}
                 <ul class="links">
                     {{ if $user->logged_in }}
-                    <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Edit profile</a>.</li>
+                    <li><a href="{{ $view->url(['controller' => 'dashboard', 'action' => 'index'], 'default') }}">Profil bearbeiten</a></li>
                     {{ /if }}
                     {{ if !empty($profile.organisation) }}
                     <li>Firma/Organisation: {{ $profile.organisation|escape }}</li>
