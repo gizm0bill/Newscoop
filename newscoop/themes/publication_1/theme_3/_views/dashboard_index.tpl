@@ -13,21 +13,21 @@ $(document).ready(function(){
         'speedOut'    : 200, 
         'overlayShow' : false        
       });
+    
+    $(".tabs").bind("tabsselect", function(e, tab) {
+        console.log('qwe');
+        if (tab.index == 2) {
+            console.log('asd');
+            $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
+            console.log('zxc');
+        }
+    });
 });
 
 function newSubscriber(firstName, lastName, email, productId) {
     var url = 'https://abo.tageswoche.ch/dmpro?type=abo&mode=new&name=' + escape(lastName) + '&firstname=' + escape(firstName) + '&email=' + escape(email) + '&jscallback=afterRegistration&product=' + productId;
     document.getElementById('iframe_subs').src = url;
 }
-
-$(".tabs").bind("tabsselect", function(e, tab) {
-    console.log('qwe');
-    if (tab.index == 2) {
-        console.log('asd');
-        $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
-        console.log('zxc');
-    }
-});
 </script>
 
 <section>
