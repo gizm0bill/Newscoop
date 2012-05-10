@@ -43,6 +43,6 @@ $(function() {
 {{block datefilter_script}}{{/block}}
 {{block no_results}}
 <script type="text/template" id="empty-search-list-template">
-{{ dynamic }}{{ if !empty($noTopics) }}<p>You have no topics. What can I do?</p>{{ else }}<p>No articles for given topics message.</p>{{ /if }}{{ /dynamic }}
+{{ dynamic }}{{ if !empty($noTopics) }}<p>Sie haben noch keine Themen abonniert. Um ein Thema zu abonnieren, klicken Sie auf die entsprechende Funktion bei einem Artikel.</p>{{ else }}<p>No articles for given topics message.</p>{{ /if }}{{ /dynamic }}
 </script>
 {{/block}}
