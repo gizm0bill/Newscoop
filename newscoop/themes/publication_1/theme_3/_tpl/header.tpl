@@ -16,6 +16,7 @@
                     {{ /if }}
                     {{ /dynamic }}
                 </ul>
+                <h1 class="print-logo"><img src="{{ url static_file="_css/tw2011/img/logo-beta.png" }}" width="510" height="68" alt="TagesWoche"></h1>
                 <h1><a href="{{ set_publication identifier="1" }}{{ set_current_issue }}{{ url options="issue" }}">Tages Woche</a></h1><p class="date">{{ $smarty.now|camp_date_format:"wday_name"|truncate:2:"" }}, {{ $smarty.now|camp_date_format:"%e.%m.%Y" }}</p>
             </div><!-- / Top -->
             <div id="main-nav" class="clearfix">
