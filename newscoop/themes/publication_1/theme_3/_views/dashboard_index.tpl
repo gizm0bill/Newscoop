@@ -19,14 +19,6 @@ function newSubscriber(firstName, lastName, email, productId) {
     var url = 'https://abo.tageswoche.ch/dmpro?type=abo&mode=new&name=' + escape(lastName) + '&firstname=' + escape(firstName) + '&email=' + escape(email) + '&jscallback=afterRegistration&product=' + productId;
     document.getElementById('iframe_subs').src = url;
 }
-
-$(".tabs").bind("tabsselect", function(e, tab) {
-    if (tab.panel.id == 'mein-abo') {
-        console.log('bind');
-        $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
-        $('#manage_subscription_box').show();
-    }
-});
 </script>
 
 <section>
@@ -147,7 +139,9 @@ $(".tabs").bind("tabsselect", function(e, tab) {
                 {{ if !empty($subscriber) }}
                     {{ if !empty($userSubscriptions) }}
                         Bestellte und verschenkte Abos:
-                        <div id="manage_subscription_box"></div>
+                        <div id="manage_subscription_box">
+                            <iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>
+                        </div>
                     {{ else }}
                         Sie haben noch kein Abo der TagesWoche.
                     {{ /if }}
