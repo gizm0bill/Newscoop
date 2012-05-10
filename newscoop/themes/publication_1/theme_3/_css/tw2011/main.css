@@ -1034,7 +1034,7 @@ article .related {
 					text-indent:-9999px;
 					background-position:50% 50%; background-repeat:no-repeat;
 					}
-					.filter-list li.omni span.icon {background-image:url(img/icons_small/omni.png);}
+					.filter-list li.omni span.icon {background-image:url(img/icons_small/omni-article.png);}
 					.filter-list li.article span.icon {background-image:url(img/icons_small/article.png);}
 					.filter-list li.twitter span.icon {background-image:url(img/icons_small/twitter.png);}
 					.filter-list li.link span.icon {background-image:url(img/icons_small/link.png);}
@@ -1042,6 +1042,8 @@ article .related {
 					.filter-list li.user span.icon {background-image:url(img/icons_small/user.png);}
 					.filter-list li.movie span.icon {background-image:url(img/icons_small/movie.png);}
 					.filter-list li.event span.icon {background-image:url(img/icons_small/event.png);}
+					.filter-list li.comments span.icon {background-image:url(img/icons_small/comment.png);}
+					.filter-list li.comment span.icon {background-image:url(img/icons_small/comment.png);}
 					
 			
 			/* Community page fixes */
@@ -1693,7 +1695,18 @@ ul.item-list li {
 	ul.item-list li.comments span.icon {background-image:url(img/icons_small/comment.png);}
 	aside article section.omni span.icon,
 	.omniticker-main-content article section.omni span.icon,
-	ul.item-list li.omni span.icon {background-image:url(img/icons_small/omni.png);}
+	ul.item-list li.omni span.icon {background-image:url(img/icons_small/omni-article.png);}
+	aside article section.dossier span.icon,
+	.omniticker-main-content article section.dossier span.icon,
+	ul.item-list li.dossier span.icon {background-image:url(img/icons_small/dossier.png);}
+	
+	aside article section.event span.icon,
+	.omniticker-main-content article section.event span.icon,
+	ul.item-list li.event span.icon {background-image:url(img/icons_small/event.png);}
+	
+	aside article section.movie span.icon,
+	.omniticker-main-content article section.movie span.icon,
+	ul.item-list li.movie span.icon {background-image:url(img/icons_small/movie.png);}
 	
 	
 	aside article section.recommend,
@@ -1918,6 +1931,7 @@ ul.item-list li {
 		.reverse-columns.agenda-content aside h3 {
 			margin-bottom:8px;
 			font-weight:bold; font-size:14px;
+			font-family:Arial, Helvetica, sans-serif; 
 			}
 		.reverse-columns.agenda-content aside a {color:#333; font-size:14px;}
 		.reverse-columns.agenda-content aside ul {
@@ -2462,6 +2476,7 @@ article figure.mobile-pull-left img {
 			height:54px;
 			outline:none;
 			}
+		#top h1.print-logo {display:none;}	
 	#top p.date {display:none;}
 	#top ul {
 		position:absolute; top:15px; right:0;
@@ -3858,42 +3873,71 @@ article figure.mobile-pull-left img {
 @media print {
   * {color: #444 !important; text-shadow: none !important; }
   a, a:visited { color: #444 !important; text-decoration: underline; }
-  a:after { content: " (" attr(href) ")"; font-size:10px !important; }
+  /*a:after { content: " (" attr(href) ")"; font-size:10px !important; }*/
   figure a:after {content:"" !important;}
   abbr:after { content: " (" attr(title) ")"; }
   .ir a:after { content: ""; }
-  pre, blockquote {page-break-inside: avoid; }
+  pre, blockquote, table {page-break-inside: avoid; }
   thead { display: table-header-group; }
   tr, img { page-break-inside: avoid; }
   @page { margin: 0.5cm; }
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3{ page-break-after: avoid; }
   
-  #top h1,
-  #top h1 span {width:auto !important; height:auto !important; text-indent:inherit !important; font-size:30px;}
+  /* #top h1 {display:none;}
+ #top h1 span {width:auto !important; height:auto !important; text-indent:inherit !important; font-size:30px;}
   #top h1 a {text-decoration:none !important;}
-  #top h1 a:after {content:"" !important;}
+  #top h1 a:after {content:"" !important;}*/
+  #top {height:68px;}
+  #top h1.print-logo, #top h1.print-logo img {display:inline-block !important; float:left; height:68px; width:510px;}
+  
   
   body {border:0 !important;}
   #top ul,
   #main-nav,
   aside,
+  .calendar-list,
   .footer-holder,
   .jcarousel-prev,
   .jcarousel-next,
-  .social-network-box {display:none !important;}
-  .content-box {border:0 !important;}
+  .social-network-box,
+  .image-slideshow .img-content figure a span,
+  .jcarousel-skin-img-slider,
+  .comments-box,
+  .article-related-tabs,
+  .article-single ul.article-info li p.social,
+  .top-filter li.filter,
+  .top-filter fieldset,
+  .top-filter li a.info,
+  .button,
+  a.info,
+  .movie-trailer,
+  .grey-button {display:none !important;}
+  .content-box,
+  .top-filter {border:0 !important;}
   section {width:100% !important; float:none !important;}
+  
+  .image-slideshow {clear:both; padding:30px 0; border:0;}
+  
+  article figure big {padding:0; position:static; background:none;}
+  
+  #article-rear {display:block !important;}
   
   h3 {font-size:16px !important; line-height:normal !important;}
   .theme-list li p,
   .theme-list li p a {font-size:11px !important;}
   figure a {text-decoration:none !important;}
-  #top time {font-size:14px !important;}
   
   .jcarousel-clip,
   .jcarousel-list {overflow:visible !important; width:100% !important;}
   .jcarousel-item {float:none !important; width:100% !important; height:auto !important; margin-bottom:10px !important;}
   .jcarousel-item img {width:auto !important;}
+  
+  .agenda-single section,
+  .debatte-page section {float:left !important; width:70% !important;}
+  .agenda-single aside,
+  .debatte-page aside {display:block !important; width:27% !important;}
+
+  article.article-main-back h2, article.article-main-back > header {display:none !important;}  
   
 }
