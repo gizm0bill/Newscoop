@@ -29,7 +29,8 @@
                                 </li>
 									 {{ $recommendedEmpty=0 }}
 									 {{ if $gimme->current_list->at_end }}
-									 </ol>               
+									 </ol>
+									 <div class="nav-prev-next clearfix">               
                             <ul class="paging content-paging">
                     				{{ if $gimme->current_list->has_previous_elements }}
                         		<li><a class="grey-button prev" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
@@ -37,6 +38,7 @@
                         		{{ if $gimme->current_list->has_next_elements }}
                         		<li><a class="grey-button next" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     			 </ul>
+                    			 </div>
 {{ /if }}
 								    {{ /list_article_comments }}
 								    
@@ -63,13 +65,15 @@
                                 </li>
                             {{ if $gimme->current_list->at_end }}
 									 </ol>
+									 <div class="nav-prev-next clearfix">
                             <ul class="paging content-paging">
                     				{{ if $gimme->current_list->has_previous_elements }}
                         		<li><a class="grey-button prev" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
                         		<li class="caption"></li>
                         		{{ if $gimme->current_list->has_next_elements }}
                         		<li><a class="grey-button next" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="next_items" }}">»</a></li>{{ /if }}
-                    			 </ul>									 
+                    			 </ul>
+                    			 </div>									 
 									 {{ /if }}
 								    {{ /list_article_comments }}
                         
