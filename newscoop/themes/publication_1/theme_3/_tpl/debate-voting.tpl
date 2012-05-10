@@ -9,7 +9,6 @@
     <ul class="buttons">
         {{ list_debate_answers order="bynumber asc" }}
         <li class="{{ if $gimme->debateanswer->number % 2}}left{{ else }}right{{ /if }}">
-            {{ math equation="round(x)" x=$gimme->debateanswer->percentage format="%d"}}% f&uuml;r
             <a onclick="$('#answer-{{ $gimme->debateanswer->number }}').attr('checked','checked');$(this).parents('form:eq(0)').submit(); return false;" href="javascript:void(0)" class="grey-button{{ if $gimme->debateanswer->voted }} active"{{ else }}"{{ /if }}>{{ $gimme->debateanswer->answer }}</a>
             <!-- f_debateanswer_nr name mandatory -->
             <input type="radio" name="f_debateanswer_nr"
@@ -22,7 +21,7 @@
     {{ /debate_form }}
     {{/if}}
 
-    {{ if $gimme->debatejustvoted->number }}<small style="font-weight: bold">Ihre Stimme: {{ $gimme->debatejustvoted->answer }}</small><br />{{ /if }}
+    {{* if $gimme->debatejustvoted->number }}<small style="font-weight: bold">Ihre Stimme: {{ $gimme->debatejustvoted->answer }}</small><br />{{ /if *}}
     {{ if $gimme->debate->is_votable }}<p>Sie können Ihre Meinung bis zum Ende der Debatte am Mittwoch um 12:00 Uhr ändern, wenn Sie die Gegenseite doch mehr überzeugt.</p>
     {{ elseif $gimme->user->logged_in or !$gimme->debate->is_current }}<p>Die Debatte ist abgeschlossen. Das Endresultat steht fest.</p>{{ /if }}
 
