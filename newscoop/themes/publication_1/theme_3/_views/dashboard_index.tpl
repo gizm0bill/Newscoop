@@ -22,6 +22,7 @@ function newSubscriber(firstName, lastName, email, productId) {
 
 $(".tabs").bind("tabsselect", function(e, tab) {
     if (tab.panel.id == 'mein-abo') {
+        console.log('bind');
         $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
         $('#manage_subscription_box').show();
     }
