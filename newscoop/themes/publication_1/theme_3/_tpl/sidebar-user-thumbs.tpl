@@ -5,4 +5,15 @@
 </ul>
 
 <p>Die TagesWoche-Community hat bereits {{ number_format($gimme->getUserCount(), 0, '.', '\'') }} Mitglieder.</p>
-{{ if !$gimme->user->logged_in }}<a href="{{ $view->url(['controller' => 'register', 'action' => 'index'], 'default') }}" class="button">Jetzt mitmachen!</a>{{ /if }}
+{{ if !$gimme->user->logged_in }}
+<a href="#" class="omnibox-register-link button">Jetzt mitmachen!</a>
+<script>
+$(function() {
+    $('.omnibox-register-link').click(function(e) {
+        omnibox.show();
+        omnibox.switchView('omniboxRegister');
+        return false;
+    });
+});
+</script>
+{{ /if }}
