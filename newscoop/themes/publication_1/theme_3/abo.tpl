@@ -15,7 +15,13 @@ $(document).ready(function(){
         'speedIn'   : 600, 
         'speedOut'    : 200, 
         'overlayShow' : false        
-      });
+    });
+
+    $('.abo-register-link').click(function() {
+        $.fancybox.close();
+        omnibox.show();
+        omnibox.switchView('omniboxRegister');
+    });
 });
 
 var userKey = '{{user_key}}';
@@ -40,7 +46,7 @@ function newSubscriber(productId, firstName, lastName, email) {
             <section>
                 <div class="mobile-list-view abo-list-view">
                 <article class="desktop-hide">
-                	<p>Sie können Ihr Abo natürlich auch telefonisch bestellen. Montag bis Freitag, 8:30-12:30 und 13:30-17:30 Uhr.</p> 
+                        <p>Sie können Ihr Abo natürlich auch telefonisch bestellen. Montag bis Freitag, 8:30-12:30 und 13:30-17:30 Uhr.</p>
                 </article>
                 {{ list_articles ignore_issue="true" ignore_section="true" constraints="issue is 1 section is 20 type is subscription" }}
                     <article>
@@ -77,13 +83,18 @@ function newSubscriber(productId, firstName, lastName, email) {
                             </script>
                             </div>
                             {{ else }}
-                            <div id="container_{{ $gimme->article->id_regular }}" class="popup-content" style="width: 440px; overflow-x: hidden;">
-                                <a href="{{ $view->baseUrl('/auth') }}">Login</a><br>
-                                <a href="{{ $view->baseUrl('/register') }}">Benutzerkonto anlegen</a><br>
-                                <a href="javascript:newSubscriptionAnonymous({{ $gimme->article->id_regular }})">Abo bestellen (ohne Profil auf der Website)</a>
-                                <p style="margin-top: 0.3em; font-family: sans-serif; font-size: 1.5em; color: red;">
-                                    Bis Mittwoch, 15:00 bestellen. <br>Freitags im Briefkasten.
+                            <div id="container_{{ $gimme->article->id_regular }}" class="popup-box" style="width: 440px; overflow-x: hidden;">
+                                <h3>Abo des TagesWoche bestellen</h3>
+
+                                <p>Bitte wählen Sie den gewünschten Bestellprozess:</p>
+
+                                <p>
+                                - <a href="{{ $view->baseUrl('/auth') }}">Profil bei tageswoche.ch bereits vorhanden</a><br/>
+                                - <a href="#" class="abo-register-link">Zeitungabo bestellen und gleichzeitig Profil anlegen</a><br/>
+                                - <a href="javascript:newSubscriptionAnonymous({{ $gimme->article->id_regular }})">Nur Zeitungsabo bestellen</a>
                                 </p>
+
+                                <p style="margin-top: 0.3em;">Bis Mittwoch, 15 Uhr bestellt = am Freitag im Briefkasten</p>
                                 <iframe id="iframe_{{ $gimme->article->id_regular }}" width="440" height="500" style="display: none; overflow-x: hidden;"></iframe>
                             </div>
                             {{ /if }}
@@ -105,13 +116,17 @@ function newSubscriber(productId, firstName, lastName, email) {
                                 </script>
                             </div>
                             {{ else }}
-                            <div id="container_{{ $gimme->article->id_gift }}" class="popup-content" style="width: 440px; overflow-x: hidden;">
-                                <a href="{{ $view->baseUrl('/auth') }}">Login</a><br>
-                                <a href="{{ $view->baseUrl('/register') }}">Benutzerkonto anlegen</a><br>
-                                <a href="javascript:newSubscriptionAnonymous({{ $gimme->article->id_gift }})">Abo bestellen (ohne Profil auf der Website)</a>
-                                <p style="margin-top: 0.3em; font-family: sans-serif; font-size: 1.5em; color: red;">
-                                    Bis Mittwoch, 15:00 bestellen. <br>Freitags im Briefkasten.
+                            <div id="container_{{ $gimme->article->id_gift }}" class="popup-box" style="width: 440px; overflow-x: hidden;">
+                                <h3>Abo des TagesWoche bestellen</h3>
+
+                                <p>Bitte wählen Sie den gewünschten Bestellprozess:</p>
+
+                                <p>
+                                - <a href="{{ $view->baseUrl('/auth') }}">Profil bei tageswoche.ch bereits vorhanden</a><br/>
+                                - <a href="#" class="abo-register-link">Zeitungabo bestellen und gleichzeitig Profil anlegen</a><br/>
+                                - <a href="javascript:newSubscriptionAnonymous({{ $gimme->article->id_gift }})">Nur Zeitungsabo bestellen</a>
                                 </p>
+                                <p style="margin-top: 0.3em;">Bis Mittwoch, 15 Uhr bestellt = am Freitag im Briefkasten</p>
                                 <iframe id="iframe_{{ $gimme->article->id_gift }}" width="440" height="500" style="display: none; overflow-x: hidden;"></iframe>
                             </div>
                             {{ /if }}
@@ -158,6 +173,7 @@ function newSubscriber(productId, firstName, lastName, email) {
             </aside>
         </div>
     </div>
+
     <div id="footer">
     {{ include file="_tpl/footer.tpl" }}
     </div><!-- / Footer -->

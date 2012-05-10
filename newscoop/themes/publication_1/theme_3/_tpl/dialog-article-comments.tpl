@@ -7,10 +7,11 @@
                         
                         <div id="ausgewahlte-kommentare" class="comment-list">
                         
-                            <ol>                            
-                            
                             {{ $recommendedEmpty=1 }}
 									 {{ list_article_comments length="10" ignore_article="true" order="bydate desc" recommended="true" }}
+									 {{ if $gimme->current_list->at_beginning }}
+									 <ol>
+									 {{ /if }}									 
                                 <li>
                                     {{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<span class="editorial">TagesWoche Redaktion</span>{{ /if }}
                                     {{ $user=$gimme->comment->user }}
@@ -22,9 +23,20 @@
                                     <small style="margin-top: 10px"><a href="{{ url options="article" }}#comment_{{ $gimme->comment->identifier }}">Direktlink zum Kommentar</a></small></p>
                                 </li>
 									 {{ $recommendedEmpty=0 }}
+									 {{ if $gimme->current_list->at_end }}
+									 </ol>
+									 <div class="nav-prev-next clearfix">               
+                            <ul class="paging content-paging">
+                    				{{ if $gimme->current_list->has_previous_elements }}
+                        		<li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
+                        		<li class="caption"></li>
+                        		{{ if $gimme->current_list->has_next_elements }}
+                        		<li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                    			 </ul>
+                    			 </div>
+{{ /if }}									 
 								    {{ /list_article_comments }}
 								    
-                            </ol>
 {{ if $recommendedEmpty }}
 <p>Bisher wurden keine Kommentare zu diesem Artikel von der Redaktion hervorgehoben.</p>
 {{ /if }}                         
@@ -32,8 +44,10 @@
                         
                         <div id="alle-kommentare" class="comment-list">
                         
-                            <ol>
 									 {{ list_article_comments length="10" ignore_article="true" order="bydate desc"  }}
+									 {{ if $gimme->current_list->at_beginning }}
+									 <ol>
+									 {{ /if }}									 
                                 <li id="comment_{{ $gimme->comment->identifier }}">
                                     {{ if $gimme->comment->user->identifier && $gimme->comment->user->is_author }}<span class="editorial">TagesWoche Redaktion</span>{{ /if }}
                                     {{ $user=$gimme->comment->user }}
@@ -44,8 +58,19 @@
                                     <p>{{ $gimme->comment->content|create_links|nl2br|truncate:400 }}<br />
                                     <small style="margin-top: 10px"><a href="{{ url options="article" }}#comment_{{ $gimme->comment->identifier }}">Direktlink zum Kommentar</a></small></p>
                                 </li>
+									 {{ if $gimme->current_list->at_end }}
+									 </ol>
+									 <div class="nav-prev-next clearfix">               
+                            <ul class="paging content-paging">
+                    				{{ if $gimme->current_list->has_previous_elements }}
+                        		<li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
+                        		<li class="caption"></li>
+                        		{{ if $gimme->current_list->has_next_elements }}
+                        		<li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                    			 </ul>
+                    			 </div>
+									 {{ /if }}		                                
 								    {{ /list_article_comments }}
-								    </ol>
                         
                         </div>
                     
