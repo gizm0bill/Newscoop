@@ -25,13 +25,17 @@
 									 {{ $recommendedEmpty=0 }}
 									 {{ if $gimme->current_list->at_end }}
 									 </ol>
-									 <div class="nav-prev-next clearfix">               
+									 <div class="nav-prev-next clearfix">    
+									 
+{{ $recpages=ceil($gimme->current_list->count/10) }}
+{{ $reccurpage=ceil(intval($gimme->url->get_parameter($gimme->current_list_id()))/10+1) }}					 
+									            
                             <ul class="paging content-paging">
                     				{{ if $gimme->current_list->has_previous_elements }}
-                        		<li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
-                        		<li class="caption"></li>
+                        		<li><a class="grey-button prev" href="{{ unset_article }}{{ set_default_issue }}{{ set_default_section }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
+                        		<li class="caption">{{ $reccurpage }}/{{ $recpages }}</li>
                         		{{ if $gimme->current_list->has_next_elements }}
-                        		<li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                        		<li><a class="grey-button next" href="{{ unset_article }}{{ set_default_issue }}{{ set_default_section }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     			 </ul>
                     			 </div>
 {{ /if }}									 
@@ -60,13 +64,17 @@
                                 </li>
 									 {{ if $gimme->current_list->at_end }}
 									 </ol>
-									 <div class="nav-prev-next clearfix">               
+									 <div class="nav-prev-next clearfix">     
+
+{{ $pages=ceil($gimme->current_list->count/10) }}
+{{ $curpage=ceil(intval($gimme->url->get_parameter($gimme->current_list_id()))/10+1) }}									 
+									           
                             <ul class="paging content-paging">
                     				{{ if $gimme->current_list->has_previous_elements }}
-                        		<li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
-                        		<li class="caption"></li>
+                        		<li><a class="grey-button prev" href="{{ unset_article }}{{ set_default_issue }}{{ set_default_section }}{{ url options="previous_items" }}#alle-kommentare">«</a></li>{{ /if }}
+                        		<li class="caption">{{ $curpage }}/{{ $pages }}</li>
                         		{{ if $gimme->current_list->has_next_elements }}
-                        		<li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                        		<li><a class="grey-button next" href="{{ unset_article }}{{ set_default_issue }}{{ set_default_section }}{{ url options="next_items" }}#alle-kommentare">»</a></li>{{ /if }}
                     			 </ul>
                     			 </div>
 									 {{ /if }}		                                

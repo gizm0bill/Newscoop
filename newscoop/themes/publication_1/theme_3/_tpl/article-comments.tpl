@@ -1,4 +1,3 @@
-
 {{ if $gimme->article->comments_enabled || $gimme->article->comments_locked  }}  
 
                 <section>
@@ -30,11 +29,15 @@
 									 {{ $recommendedEmpty=0 }}
 									 {{ if $gimme->current_list->at_end }}
 									 </ol>
-									 <div class="nav-prev-next clearfix">               
+									 <div class="nav-prev-next clearfix"> 
+									 
+{{ $recpages=ceil($gimme->current_list->count/10) }}
+{{ $reccurpage=ceil(intval($gimme->url->get_parameter($gimme->current_list_id()))/10+1) }}					 
+									               
                             <ul class="paging content-paging">
                     				{{ if $gimme->current_list->has_previous_elements }}
                         		<li><a class="grey-button prev" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
-                        		<li class="caption"></li>
+                        		<li class="caption">{{ $reccurpage }}/{{ $recpages }}</li>
                         		{{ if $gimme->current_list->has_next_elements }}
                         		<li><a class="grey-button next" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     			 </ul>
@@ -66,12 +69,16 @@
                             {{ if $gimme->current_list->at_end }}
 									 </ol>
 									 <div class="nav-prev-next clearfix">
+									 
+{{ $pages=ceil($gimme->current_list->count/10) }}
+{{ $curpage=ceil(intval($gimme->url->get_parameter($gimme->current_list_id()))/10+1) }}		
+							 
                             <ul class="paging content-paging">
                     				{{ if $gimme->current_list->has_previous_elements }}
-                        		<li><a class="grey-button prev" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
-                        		<li class="caption"></li>
+                        		<li><a class="grey-button prev" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="previous_items" }}#alle-kommentare">«</a></li>{{ /if }}
+                        		<li class="caption">{{ $curpage }}/{{ $pages }}</li>
                         		{{ if $gimme->current_list->has_next_elements }}
-                        		<li><a class="grey-button next" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="next_items" }}">»</a></li>{{ /if }}
+                        		<li><a class="grey-button next" href="{{ if $gimme->section->number == "81" }}{{ unset_article }}{{ /if }}{{ url options="next_items" }}#alle-kommentare">»</a></li>{{ /if }}
                     			 </ul>
                     			 </div>									 
 									 {{ /if }}
