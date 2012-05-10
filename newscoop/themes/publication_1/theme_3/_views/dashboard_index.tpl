@@ -32,15 +32,17 @@ function newSubscriber(firstName, lastName, email, productId) {
                             
                     <ul class="profile-tab-nav">
                         <li><a href="#author-1">Mein Profil</a></li>
+                        <div class="mobile-hide-tablet-show">
                         <li><a href="#author-2">Meine Themen</a></li>
                         <li><a href="#mein-abo">Mein Abo</a></li>
+                        </div>
                     </ul>
 
         <div id="author-1" class="profile-edit-box">
             <form action="{{ $form->getAction() }}" method="{{ $form->getMethod() }}" enctype="multipart/form-data">
                 <fieldset>
                     {{ if empty($subscriber) }}
-                    <div class="gift-box">
+                    <div class="gift-box mobile-hide-tablet-show">
                         <p>Willkommen in der TagesWoche-Community. Erzählen Sie uns ein bisschen was über sich.<br />Das Profil ist Ihre Visitenkarte auf tageswoche.ch.<br /> 
                         Wenn Sie Ihr Profil ausgefüllt haben, schenken wir Ihnen ein Schnupperabo der gedruckten TagesWoche.</p>
                         <a href="#container_subs" class="side-green-box">Zwei Ausgaben geschenkt</a>
@@ -83,19 +85,19 @@ function newSubscriber(firstName, lastName, email, productId) {
                     <ul>
                         <li class="profile-image">
                             <img src="{{ include file="_tpl/user-image.tpl" user=$user width=125 height=125 }}" />
-                            <div>
+                            <div class="mobile-hide">
                                 <dl>{{ $form->image->setLabel("Neues Profilbild hochladen") }}</dl>
                                 <p>Bitte verwenden Sie keine Bilder, an denen Sie die Rechte nicht besitzenoder auf denen andere Personen als Sie selber abgebildet sind.</p>
                             </div>
                         </li>
                         <li><dl>{{ $form->attributes->bio->setLabel("Über mich")->setAttrib('placeholder', 'Lassen Sie die Community wissen, wer Sie sind und was Sie interessiert.') }}</dl></li>
-                        <li>
+                        <li class="mobile-hide-tablet-show">
                             <label>Geburtsdatum</label>
                             <div class="date">
                                 <input type="text" value="Bitte auswählen" class="datepicker" value="{{ $user['birth_date'] }}" />
                             </div>
                         </li>
-                        <li>
+                        <li class="mobile-hide-tablet-show">
                             <label for="geschlecht">Geschlecht</label>
                             <select id="geschlecht" name="gender" class="cutom-dropdown" style="z-index:0;">
                                 <option value="">Bitte auswählen</option>
@@ -103,21 +105,21 @@ function newSubscriber(firstName, lastName, email, productId) {
                                 <option value="female" {{ if !empty($user['gender']) && $user['gender'] == 'female' }}selected="selected"{{ /if }}>Frau</option>
                             </select>
                         </li>
-                        <li><dl>{{ $form->attributes->facebook->setLabel("facebook.com/") }}</dl></li>
-                        <li><dl>{{ $form->attributes->google->setLabel("plus.google.com/") }}</dl></li>
-                        <li><dl>{{ $form->attributes->twitter->setLabel("twitter.com/") }}</dl></li>
-                        <li><dl>{{ $form->attributes->website->setLabel("http://") }}</dl></li>
-                        <li><dl>{{ $form->attributes->organisation->setLabel("Firma") }}</dl></li>
-                        <li>
+                        <li class="mobile-hide-tablet-show"><dl>{{ $form->attributes->facebook->setLabel("facebook.com/") }}</dl></li>
+                        <li class="mobile-hide-tablet-show"><dl>{{ $form->attributes->google->setLabel("plus.google.com/") }}</dl></li>
+                        <li class="mobile-hide-tablet-show"><dl>{{ $form->attributes->twitter->setLabel("twitter.com/") }}</dl></li>
+                        <li class="mobile-hide-tablet-show"><dl>{{ $form->attributes->website->setLabel("http://") }}</dl></li>
+                        <li class="mobile-hide-tablet-show"><dl>{{ $form->attributes->organisation->setLabel("Firma") }}</dl></li>
+                        <li class="mobile-hide-tablet-show">
                             <dl>{{ $form->attributes->geolocation->setLabel("Aktueller Wohnort") }}</dl>
                             <input type="text" id="address" value="" class="search" />
                             <input type="submit" id="location-search" class="grey-button" value="Suchen" />
                         </li>
-                        <li class="map">
+                        <li class="map mobile-hide-tablet-show">
                             <label id="remove-geolocation">Markierung entfernen</label>
                             <div id="map_canvas" class="map-holder" style="width:409px; height:180px"></div>
                         </li>
-                        <li class="buttons">
+                        <li class="buttons mobile-hide-tablet-show">
                             <a href="{{ $view->url(['username' => $user->uname], 'user') }}" target="_blank" title="Profil ansehen" class="grey-button">Profil ansehen</a>
                             <input type="submit" value="Speichern" class="grey-button" />
                         </li>
@@ -128,7 +130,7 @@ function newSubscriber(firstName, lastName, email, productId) {
             </form>
         </div>
 
-        <div id="author-2" class="profile-edit-box">
+        <div id="author-2" class="profile-edit-box mobile-hide-tablet-show">
             <h3>Meine Themen</h3>
                     <p class="simple-txt">
                     {{ foreach $user->topics as $id => $topic }}
@@ -140,7 +142,8 @@ function newSubscriber(firstName, lastName, email, productId) {
 
                     <p><a href="{{ $view->url([], 'my-topics') }}" title="Meine Themen">Neue Artikel zu diesen Themen lesen & Themen verwalten</a></p>
         </div>
-        <div id="mein-abo" class="profile-edit-box" >
+        
+        <div id="mein-abo" class="profile-edit-box mobile-hide-tablet-show">
             {{ if !empty($subscriptionService) }}
                 {{ if !empty($subscriber) }}
                     {{ if !empty($userSubscriptions) }}
