@@ -21,8 +21,11 @@ function newSubscriber(firstName, lastName, email, productId) {
 }
 
 $(".tabs").bind("tabsselect", function(e, tab) {
+    console.log('qwe');
     if (tab.index == 2) {
+        console.log('asd');
         $('#manage_subscription_box').html('<iframe src="https://abo.tageswoche.ch/dmpro?type=abo&mode=update&userkey={{ $userSubscriptionKey }}" width="634" height="600"></iframe>');
+        console.log('zxc');
     }
 });
 </script>
