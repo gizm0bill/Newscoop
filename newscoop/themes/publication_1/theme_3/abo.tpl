@@ -151,7 +151,7 @@ function newSubscriber(productId, firstName, lastName, email) {
                     <header>
                         <p>Aboservice</p>
                     </header>
-                    <p>Sie können Ihr Abo natürlich auch telefonisch bestellen. Montag bis Freitag, 8:30-12:30 und 13:30-17:30 Uhr.</p>
+                    <p>Sie können Ihr Abo natürlich auch per <a href="mailto:abo@tageswoche.ch">E-Mail</a> oder telefonisch bestellen. Montag bis Freitag, 8:30-12:30 und 13:30-17:30 Uhr.</p>
                     <p><strong>061 561 61 61</strong></p>
                 </article>
 
