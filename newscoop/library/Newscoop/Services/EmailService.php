@@ -140,10 +140,6 @@ class EmailService
             $mail->addTo($to);
         }
         
-        var_dump($mail);
-
-        $test = $mail->send();
-        var_dump($test);
-        die;
+        $mail->send();
     }
 }
