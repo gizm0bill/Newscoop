@@ -20,9 +20,22 @@
     <link rel="shortcut icon" {{*type="image/x-icon"*}} href="{{ uri static_file="favicon.ico" }}" />
     <link rel="apple-touch-icon" href="touch-icon.png">
 
+    {{*  RSS  *}}
+    <link rel="alternate" type="application/rss+xml" title="TagesWoche" href="{{ url options="root_level" }}de/pages/rss_all" />
+    {{ local }}{{ set_publication identifier="1" }}{{ set_current_issue }}{{ list_sections constraints="number smaller 60" }}
+    <link rel="alternate" type="application/rss+xml" title="TagesWoche | {{ $gimme->section->name }}" href="{{ url options="root_level" }}de/pages/rss_{{ $gimme->section->url_name }}" />
+    {{ /list_sections }}{{ /local }}
+    {{ if $gimme->publication->identifier == "5" }}
+    {{ if $gimme->section->defined }}
+    <link rel="alternate" type="application/rss+xml" title="{{ $gimme->section->name }} | TagesWoche Blogs" href="{{ url options="root_level" }}de/rss/{{ $gimme->section->url_name }}" />
+    {{ /if }}
+    {{ /if }}
+
+	 {{ dynamic }}
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/main.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/skin.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/fixes.css" }}">
+    {{ /dynamic }}
     
     <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/jquery.fancybox.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_js/libs/fancybox/helpers/jquery.fancybox-thumbs.css" }}">
