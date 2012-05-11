@@ -70,7 +70,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                         </li>
                         <li>
                             <dl>{{ $form->username->setLabel("Benutzername") }}</dl>
-                            <div class="info"><p>Dieser Name wird bei Ihren Beiträgen auf tageswoche.ch angezeigt. Wir empfehlen, dass Sie Ihren echten Namen verwenden, erlauben aber auch Pseudonyme.</p></div>
+                            <div class="info mobile-hide-tablet-show"><p>Dieser Name wird bei Ihren Beiträgen auf tageswoche.ch angezeigt. Wir empfehlen, dass Sie Ihren echten Namen verwenden, erlauben aber auch Pseudonyme.</p></div>
                         </li>
                         <li><dl>{{ $form->password->setLabel("Passwort ändern")->setAttrib('placeholder', '******') }}</dl></li>
                         <li class="buttons">
@@ -81,7 +81,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                         
                 <fieldset>
                     <h3 class="mobile-hide-tablet-show">Profil</h3>
-                    <p>Sämtliche nachfolgenden Angaben sind optional. Bitte beachten Sie, dass jene Angaben, die Sie ausfüllen, für alle in Ihrem Profil sichtbar sind und von Suchmaschinen gefunden werden können.</p>
+                    <p class="mobile-hide-tablet-show">Sämtliche nachfolgenden Angaben sind optional. Bitte beachten Sie, dass jene Angaben, die Sie ausfüllen, für alle in Ihrem Profil sichtbar sind und von Suchmaschinen gefunden werden können.</p>
                     <ul>
                         <li class="profile-image">
                             <img src="{{ include file="_tpl/user-image.tpl" user=$user width=125 height=125 }}" />
