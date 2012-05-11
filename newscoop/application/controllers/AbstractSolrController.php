@@ -60,8 +60,14 @@ abstract class AbstractSolrController extends Zend_Controller_Action
 
         if ($this->_helper->contextSwitch->getCurrentContext() === 'json') {
             $this->_helper->json($this->decodeSolrResponse($response));
-        } else {
-            $this->view->result = $this->decodeSolrResponse($response);
+            return;
+        }
+
+        $this->view->result = $this->decodeSolrResponse($response);
+
+        if ($this->_helper->contextSwitch->getCurrentContext() === 'xml') {
+            $this->getResponse()->setHeader('Content-Type', 'application/rss-xml', true);
+            $this->render('xml');
         }
     }
 

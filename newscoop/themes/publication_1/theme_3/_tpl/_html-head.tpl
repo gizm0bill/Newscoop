@@ -22,6 +22,7 @@
 
     {{*  RSS  *}}
     <link rel="alternate" type="application/rss+xml" title="TagesWoche" href="{{ url options="root_level" }}de/pages/rss_all" />
+    <link rel="alternate" type="application/rss+xml" title="TagesWoche Omniticker" href="{{ $view->serverUrl() }}{{ $view->url(['controller' => 'omniticker', 'action' => 'index'], 'default') }}?format=xml" />
     {{ local }}{{ set_publication identifier="1" }}{{ set_current_issue }}{{ list_sections constraints="number smaller 60" }}
     <link rel="alternate" type="application/rss+xml" title="TagesWoche | {{ $gimme->section->name }}" href="{{ url options="root_level" }}de/pages/rss_{{ $gimme->section->url_name }}" />
     {{ /list_sections }}{{ /local }}

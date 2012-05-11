@@ -39,7 +39,7 @@ var SearchFormView = Backbone.View.extend({
 
         this.collection.query = $(this.el).find('input').val();
         if (this.collection.query.match(this.webcode)) {
-            window.location = window.location.origin + window.location.pathname.replace('search/', this.collection.query);
+            window.location = this.options.webcodeUrl + this.collection.query;
         }
 
         this.collection.type = null;

@@ -21,6 +21,13 @@ class OmnitickerController extends AbstractSolrController
         'link' => 'link',
     );
 
+    public function init()
+    {
+        $this->_helper->contextSwitch
+            ->addActionContext('index', 'xml');
+        parent::init();
+    }
+
     /**
      * Build solr params array
      *
