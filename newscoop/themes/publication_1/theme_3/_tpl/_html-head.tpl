@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>{{ dynamic }}{{block title}}Tages Woche{{/block}}{{ /dynamic }}</title>
+    <title>Tages Woche</title>
     <meta name="description" content="">
     <meta name="author" content="Ljuba Rankovic" >
 
@@ -19,7 +19,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <link rel="shortcut icon" {{*type="image/x-icon"*}} href="{{ uri static_file="favicon.ico" }}" />
     <link rel="apple-touch-icon" href="touch-icon.png">
-    {{ dynamic }}{{block head_links}}{{/block}}{{ /dynamic }}
 
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/main.css" }}">
     <link rel="stylesheet" href="{{ url static_file="_css/tw2011/skin.css" }}">

@@ -129,4 +129,22 @@ class DashboardController extends Zend_Controller_Action
         $this->_helper->flashMessenger("Topic added to followed");
         $this->_helper->redirector->gotoUrl($_SERVER['HTTP_REFERER']);
     }
+
+    public function addTopicByNameAction()
+    {
+        if (!$this->_getParam('topic')) {
+            $this->_helper->json(array());
+            return;
+        }
+
+        $topic = $this->_helper->service('em')->getRepository('Newscoop\Entity\Topic')->findOneBy(array(
+            'name' => $this->_getParam('topic'),
+        ));
+
+        if ($topic !== null) {
+            $this->_helper->service('user.topic')->followTopic($this->user, $topic);
+        }
+
+        $this->_helper->json(array());
+    }
 }
