@@ -18,6 +18,7 @@
     <script>
     $(function() {
         var livedesk = new LivedeskView({el: $('#livedesk')});
+        livedesk.collection.url = {{ json_encode($view->url(['controller' => 'livedesk', 'action' => 'update'], 'default')) }} + '?format=json';
         livedesk.reset({{ $posts }});
     });
     </script>
