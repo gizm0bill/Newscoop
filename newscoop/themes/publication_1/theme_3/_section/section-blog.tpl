@@ -102,10 +102,14 @@ Vor
                     </article>
                                         
 {{ if $gimme->current_list->at_end }}                
+
+{{ $pages=ceil($gimme->current_list->count/10) }}
+{{ $curpage=ceil(intval($gimme->url->get_parameter($gimme->current_list_id()))/10+1) }}
+
                     <ul class="paging content-paging">
                     		{{ if $gimme->current_list->has_previous_elements }}
                         <li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
-                        <li class="caption"></li>
+                        <li class="caption">{{ $curpage }}/{{ $pages }}</li>
                         {{ if $gimme->current_list->has_next_elements }}
                         <li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     </ul>
@@ -123,10 +127,14 @@ Vor
                     <p><a href="{{ url options="article" }}">Kommentieren & Teilen</a></p>
                   </article>
 {{ if $gimme->current_list->at_end }}                
+
+{{ $pages=ceil($gimme->current_list->count/10) }}
+{{ $curpage=ceil(intval($gimme->url->get_parameter($gimme->current_list_id()))/10+1) }}
+
                     <ul class="paging content-paging">
                     		{{ if $gimme->current_list->has_previous_elements }}
                         <li><a class="grey-button prev" href="{{ unset_article }}{{ url options="previous_items" }}">«</a></li>{{ /if }}
-                        <li class="caption"></li>
+                        <li class="caption">{{ $curpage }}/{{ $pages }}</li>
                         {{ if $gimme->current_list->has_next_elements }}
                         <li><a class="grey-button next" href="{{ unset_article }}{{ url options="next_items" }}">»</a></li>{{ /if }}
                     </ul>
@@ -194,7 +202,7 @@ Vor
 {{ /list_articles }}
                 </ul>
                 <footer>
-                	<a href="{{ url options="issue" }}" class="more">Zur den Blogs»</a>
+                	<a href="{{ url options="issue" }}" class="more mobile-hide">Zur den Blogs»</a>
                 </footer>
             </article>
         	
