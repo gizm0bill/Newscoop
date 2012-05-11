@@ -429,7 +429,7 @@ $(document).ready(function() {
             data: data,
             dataType: 'json',
             success: function(data) {
-                if (data.response == 'OK') {
+                if (data == 'OK') {
                     omnibox.setMessage('');
                     omnibox.switchView('omniboxAfterRegister');
                 }
@@ -453,7 +453,7 @@ $(document).ready(function() {
             data: data,
             dataType: 'json',
             success: function(data) {
-                if (data.response == 'OK') {
+                if (data == 'OK') {
                     omnibox.setMessage('');
                     omnibox.switchView('omniboxAfterRegister');
                 }
