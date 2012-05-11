@@ -11,14 +11,48 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>Tages Woche</title>
-    <meta name="description" content="">
+    <title>{{ strip }}
+        {{ if $gimme->article->defined }}
+          {{ if $gimme->article->SEO_title|trim !== "" }}
+              {{ $gimme->article->SEO_title|escape:'html'|trim }} |
+          {{ else }}
+              {{ $gimme->article->name|escape:'html'|trim }} |
+          {{ /if }}&nbsp;
+        {{ /if }}
+        {{ $gimme->publication->name }}
+        {{ /strip }}</title>
+        
+    {{ include file="_tpl/_meta-description.tpl" }}
+    
+    {{ include file="_tpl/_meta-keywords.tpl" }}
+    
     <meta name="author" content="Ljuba Rankovic" >
+    
+    {{ if $gimme->article->defined }}
+    <link rel="canonical" href="{{ url options="root_level" }}{{ $gimme->language->code }}/{{ $gimme->issue->url_name }}/{{ $gimme->section->url_name }}/{{ $gimme->article->number }}/" />
+    {{ elseif $gimme->section->defined }}
+    <link rel="canonical" href="{{ url options="section" }}" />
+    {{ /if }}
 
     <meta name="viewport" content = "user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <link rel="shortcut icon" {{*type="image/x-icon"*}} href="{{ uri static_file="favicon.ico" }}" />
     <link rel="apple-touch-icon" href="touch-icon.png">
+
+{{*  OPEN GRAPH TAGS FOR FACEBOOK  *}}
+{{ if $gimme->article->defined }}
+  {{*<meta property="og:locale" content="de_CH" /> *}}
+  <meta property="og:title" content="{{$gimme->article->name|html_entity_decode|regex_replace:'/&(.*?)quo;/':'&quot;'}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="http://{{ $gimme->publication->site }}/{{ $gimme->language->code }}/{{ $gimme->issue->url_name }}/{{ $gimme->section->url_name }}/{{ $gimme->article->number }}/" />
+  <meta property="og:site_name" content="{{ $gimme->publication->name }}" />
+  <meta property="og:description" content="{{ if $gimme->article->type_name == "news" || $gimme->article->type_name == "dossier" || $gimme->article->type_name == "eventnews" }}{{$gimme->article->lede|strip_tags:false|strip|escape:'html':'utf-8' }}{{ elseif $gimme->article->type_name == "newswire" }}{{$gimme->article->DataLead|strip_tags:false|strip|escape:'html':'utf-8' }}{{ elseif $gimme->article->type_name == "static_page" }}{{$gimme->article->body|strip_tags:false|strip|escape:'html':'utf-8'|truncate:200 }}{{ elseif $gimme->article->type_name == "deb_moderator" }}{{$gimme->article->teaser|strip_tags:false|strip|escape:'html':'utf-8' }}{{ elseif $gimme->article->type_name == "event" }}{{$gimme->article->description|strip_tags:false|strip|escape:'html':'utf-8' }}{{ /if }}" />
+  {{ for $i=0 to 99 }}
+  {{ if $gimme->article->has_image($i) }}
+  <meta property="og:image" content="{{ $gimme->article->image($i)->imageurl }}" />
+  {{ /if }}
+  {{ /for }}
+{{ /if }}
 
     {{*  RSS  *}}
     <link rel="alternate" type="application/rss+xml" title="TagesWoche" href="{{ url options="root_level" }}de/pages/rss_all" />
