@@ -89,7 +89,7 @@ if ( $(window).width() < 641) {$('.mobile-carousel').jcarousel({visible: 1, scro
 	$('#omnibox, #top-calendar').after('<div class="overlay"></div>');
 	$('#omnibox a.trigger, a.omni-box-trigger').click(
 		function(){
-			if (omnibox) {
+			if (typeof(omnibox) != 'undefined') {
                 omnibox.toggle();
             }
 		}
@@ -97,7 +97,7 @@ if ( $(window).width() < 641) {$('.mobile-carousel').jcarousel({visible: 1, scro
 	
 	$('#omnibox a.comm-trigger').click(
 		function(){
-			if (omnibox) {
+			if (typeof(omnibox) != 'undefined') {
                 omnibox.toggle();
             }
 		}

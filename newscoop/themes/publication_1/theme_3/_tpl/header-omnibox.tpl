@@ -26,7 +26,7 @@
                                         <input id="omniboxLoginRemember" type="checkbox" /> <label for="omniboxLoginRemember" style="display: inline;">Eingeloggt bleiben</label>
                                     </li>
                                     <li>
-                                        <button class="button">Login</button>
+                                        <button class="button" type="submit">Login</button>
                                         <a href="#" id="omniboxRegisterLink">Benutzerkonto anlegen</a><br>
                                         <a href="#" id="omniboxForgotPasswordLink">Passwort vergessen</a>
                                         <span class="sep"><em>oder</em></span>
@@ -77,7 +77,7 @@
                                 </div>
                             </li>
                             <li>
-                                <button class="button right">Senden</button>
+                                <button type="submit" class="button right">Senden</button>
                             </li>
                         </ul>
                     </form>
@@ -115,7 +115,7 @@
                                 <textarea id="omniboxCommentContent" placeholder=""></textarea>
                             </li>
                             <li>
-                                <button class="button right">Senden</button>
+                                <button type="submit" class="button right">Senden</button>
                             </li>
                         </ul>
                     </form>
@@ -135,7 +135,7 @@
                             </li>
                             <li class="clearfix">
                                 <a href="#" class="left" id="omniboxLoginLink">Lieber doch nicht</a>
-                                <button class="button right">Ja, ich will.</button>
+                                <button type="submit" class="button right">Ja, ich will.</button>
                             </li>
                         </ul>
                     </form>
@@ -161,7 +161,7 @@
                                 <input type="text" id="omniboxForgotPasswordEmail" placeholder="Ihre E-Mail-Adresse" />
                             </li>
                             <li class="clearfix">
-                                <button class="button right">Neues Passwort anfordern</button>
+                                <button type="submit" class="button right">Neues Passwort anfordern</button>
                                 <a href="#" class="left" id="omniboxForgotPasswordBackLink">Zurück</a>
                             </li>
                         </ul>
