@@ -44,7 +44,7 @@ class LivedeskController extends Zend_Controller_Action
             'X-Filter' => 'Content, PublishedOn, Creator.Name',
         ))->send();
 
-        $this->view->posts = $posts->getBody(TRUE);
+        $this->_helper->json(json_decode($posts->getBody(TRUE)));
     }
 
     /**
