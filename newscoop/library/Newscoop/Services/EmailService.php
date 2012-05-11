@@ -52,7 +52,6 @@ class EmailService
             'token' => $this->tokenService->generateToken($user, 'email.confirm'),
             'format' => null,
         ));
-        var_dump($message);die;
 
         $this->send($this->view->placeholder(self::PLACEHOLDER_SUBJECT), $message, $user->getEmail(), !empty($this->config['from_confirmation']) ? $this->config['from_confirmation'] : null);
     }
@@ -140,7 +139,11 @@ class EmailService
         foreach ((array) $tos as $to) {
             $mail->addTo($to);
         }
+        
+        var_dump($mail);
 
-        $mail->send();
+        $test = $mail->send();
+        var_dump($test);
+        die;
     }
 }
