@@ -56,7 +56,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                     </div>
                     {{ /if }}
                     
-                    <h3>Login</h3>
+                    <h3 class="mobile-hide-tablet-show">Login</h3>
                     <ul>
                         <li><dl>{{ $form->first_name->setLabel("Vorname") }}</dl></li>
                         <li><dl>{{ $form->last_name->setLabel("Nachname") }}</dl></li>
@@ -80,7 +80,7 @@ function newSubscriber(firstName, lastName, email, productId) {
                 </fieldset>
                         
                 <fieldset>
-                    <h3>Profil</h3>
+                    <h3 class="mobile-hide-tablet-show">Profil</h3>
                     <p>Sämtliche nachfolgenden Angaben sind optional. Bitte beachten Sie, dass jene Angaben, die Sie ausfüllen, für alle in Ihrem Profil sichtbar sind und von Suchmaschinen gefunden werden können.</p>
                     <ul>
                         <li class="profile-image">
@@ -162,7 +162,7 @@ function newSubscriber(firstName, lastName, email, productId) {
     </div>
 </section>
 
-<aside>
+<aside class="mobile-hide">
     {{ include file="_tpl/sidebar-community.tpl" }}
 
     {{ include file="_werbung/user-profile-sidebar.tpl" }}
