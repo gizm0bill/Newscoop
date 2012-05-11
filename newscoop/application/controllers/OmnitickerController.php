@@ -69,7 +69,7 @@ class OmnitickerController extends AbstractSolrController
     {
         $section = $this->_getParam('section');
         if (!empty($section)) {
-            return sprintf('section:("%s")', rawurlencode($section));
+            return sprintf('section:("%s")', json_encode($section));
         }
     }
 }

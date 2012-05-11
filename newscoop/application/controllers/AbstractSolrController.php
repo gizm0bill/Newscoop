@@ -7,7 +7,7 @@
 
 /**
  */
-class AbstractSolrController extends Zend_Controller_Action
+abstract class AbstractSolrController extends Zend_Controller_Action
 {
     const LIMIT = 12;
 

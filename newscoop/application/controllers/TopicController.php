@@ -49,11 +49,8 @@ class TopicController extends AbstractSolrController
     protected function buildSolrParams()
     {
         return array_merge(parent::buildSolrParams(), array(
-            'q' => '*:*',
-            'fq' => implode(' AND ', array_filter(array(
-                $this->buildSolrSourceParam(),
-                $this->buildSolrTopicParam(),
-            ))),
+            'q' => $this->buildSolrTopicParam(),
+            'fq' => $this->buildSolrSourceParam(),
             'sort' => 'published desc',
             'spellcheck' => 'false',
             'rows' => $this->_getParam('format') === 'xml' ? 20 : 12,
@@ -79,7 +76,7 @@ class TopicController extends AbstractSolrController
     {
         if ($this->_getParam('topic')) {
             $this->view->topic = $this->_getParam('topic');
-            return sprintf('topic:("%s")', rawurlencode($this->_getParam('topic')));
+            return sprintf('topic:("%s")', json_encode($this->_getParam('topic')));
         }
     }
 

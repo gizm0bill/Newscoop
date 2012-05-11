@@ -40,7 +40,7 @@ class MyTopicsController extends TopicController
     protected function buildSolrTopicParam()
     {
         if ($this->_getParam('topic')) {
-            $topics = array_map('rawurlencode', explode(',', $this->_getParam('topic')));
+            $topics = array_map('json_encode', explode(',', $this->_getParam('topic')));
         } else {
             $topics = array_map(function($topic) {
                 return $topic->getName();
