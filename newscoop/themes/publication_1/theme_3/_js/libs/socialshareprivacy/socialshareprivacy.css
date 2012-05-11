@@ -198,3 +198,12 @@
 
 
 /* Settings/Info end */
+#social_bookmarks .settings_info {
+    padding-left: 0;
+}
+
+@media screen and (max-width: 480px) {
+    .mobile-hide-tablet-show { display: none !important; }
+    .fb_like iframe { width: 90px !important; }
+    .twitter iframe { width: 58px !important; }
+}
