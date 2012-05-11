@@ -30,7 +30,6 @@ class RegisterController extends Zend_Controller_Action
             ->addActionContext('check-email', 'json')
             ->addActionContext('pending', 'json')
             ->addActionContext('create-user', 'json')
-            ->addActionContext('register', 'json')
             ->initContext();
     }
 
@@ -79,10 +78,10 @@ class RegisterController extends Zend_Controller_Action
             }
 
             if (!$user->isPending()) {
-                $this->view->response = "User with email '$values[email]' is registered already.";
+                $this->_helper->json("User with email '$values[email]' is registered already.");
             } else {
                 $this->_helper->service('email')->sendConfirmationToken($user);
-                $this->view->response = 'OK';
+                $this->_helper->json("OK");
             }
         }
     }
