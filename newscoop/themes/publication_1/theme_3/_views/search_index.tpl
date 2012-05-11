@@ -15,7 +15,7 @@
 <script>
 $(function() {
     window.router = new SearchRouter();
-    searchFormView = new SearchFormView({collection: documents, el: $('#search-form') });
+    searchFormView = new SearchFormView({collection: documents, webcodeUrl: {{ json_encode(sprintf('%s%s/', $view->serverUrl(), $view->baseUrl())) }}, el: $('#search-form') });
     typeFilterView = new TypeFilterView({collection: documents, el: $('#type-filter') });
     sortView = new SortView({collection: documents, el: $('#sort-latest') });
     Backbone.history.start({pushState: true, silent: window.location.hash.length == 0, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'search']), '/')) }} });

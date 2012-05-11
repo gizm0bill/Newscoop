@@ -66,7 +66,7 @@
 {{/dynamic}}{{/block}}</script>
 
 <script src="{{ url static_file="_js/libs/underbackbone.js" }}"></script>     
-<script src="{{ url static_file="_js/searchapp-503fa.js" }}"></script>
+<script src="{{ url static_file="_js/searchapp-8f141.js" }}"></script>
 <script>
 $(function() {
     window.documents = new DocumentCollection();
