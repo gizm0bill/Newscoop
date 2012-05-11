@@ -32,15 +32,6 @@ class TopicController extends AbstractSolrController
         }
     }
 
-    public function indexAction()
-    {
-        parent::indexAction();
-        if ($this->_helper->contextSwitch->getCurrentContext() === 'xml') {
-            $this->getResponse()->setHeader('Content-Type', 'application/rss-xml', true);
-            $this->render('xml');
-        }
-    }
-
     /**
      * Build solr params array
      *
