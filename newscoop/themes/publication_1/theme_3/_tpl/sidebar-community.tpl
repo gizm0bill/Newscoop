@@ -14,7 +14,7 @@
         {{ elseif $gimme->community_feed->type == 'blog-published' && $gimme->community_feed->article }}
         <li class="omni"><a href="{{ $gimme->community_feed->article->url}}{{ $gimme->community_feed->article->seo_url_end }}"><span title="Omni">Omni</span>Neuer Blogeintrag {{ $gimme->community_feed->article->title }}</a></li>
         {{ elseif $user->defined }}
-        <li class="omni"><a{{ if $user->is_active }} href="{{ $view->url(['username' => $user->uname], 'user') }}"{{ /if }}><span title="Omni">Omni</span>{{ include file="_tpl/relative_date.tpl" date=$created short=1 }} {{ include file="_tpl/user-name.tpl" user=$user }} hat gerade ein Photo hochgeladen</a></li>
+        <li class="omni"><a{{ if $user->is_active }} href="{{ $view->url(['username' => $user->uname], 'user') }}"{{ /if }}><span title="Omni">Omni</span>{{ include file="_tpl/user-name.tpl" user=$user }} hat gerade ein Photo hochgeladen</a></li>
         {{ /if }}
         {{ /list_community_feeds }}
     </ul>
