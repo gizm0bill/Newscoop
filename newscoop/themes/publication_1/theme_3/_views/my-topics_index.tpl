@@ -25,6 +25,7 @@
 $(function() {
     window.router = new SearchRouter();
     topicFilterView = new TopicFilterView({collection: documents, el: $('#topic-filter'), url: {{ json_encode($view->url(['controller' => 'dashboard', 'action' => 'update-topics'], 'default')) }} });
+    topicSelectView = new TopicSelectView({collection: documents, el: $('#topics-box')});
     Backbone.history.start({pushState: true, silent: window.location.hash.length == 0, root: {{ json_encode(sprintf('%s/', $view->url(['controller' => 'my-topics']), '/')) }} });
 });
 </script>
@@ -39,10 +40,27 @@ $(function() {
 </ul>
 {{/block}}
 
+{{block section}}
+<div class="desktop-hide">
+<select id="topics-box" name="topic">
+    <option value="">Alle Themen</option>
+    {{ dynamic }}
+    {{ if $gimme->user->logged_in }}
+    {{ foreach $gimme->user->topics as $topic }}
+    <option value="{{ $topic|escape }}">{{ $topic|escape }}</option>
+    {{ /foreach }}
+    {{ /if }}
+    {{ /dynamic }}
+</select>
+</div>
+{{/block}}
+
 {{block datefilter_wrap}}{{/block}}
 {{block datefilter_script}}{{/block}}
 {{block no_results}}
-<script type="text/template" id="empty-search-list-template">
-{{ dynamic }}{{ if !empty($noTopics) }}<p>Sie haben noch keine Themen abonniert. Um ein Thema zu abonnieren, klicken Sie auf die entsprechende Funktion bei einem Artikel.</p>{{ else }}<p>No articles for given topics message.</p>{{ /if }}{{ /dynamic }}
-</script>
+{{ dynamic }}{{ if !empty($noTopics) }}
+<p>Sie haben noch keine Themen abonniert. Um ein Thema zu abonnieren, klicken Sie auf die entsprechende Funktion bei einem Artikel.</p>
+{{ else }}
+<p>Wir haben keine Resultate zu diesem Themen gefunden.</p>
+{{ /if }}{{ /dynamic }}
 {{/block}}

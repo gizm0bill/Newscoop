@@ -20,11 +20,6 @@ $(function() {
 
 {{block datefilter_wrap}}{{/block}}
 {{block datefilter_script}}{{/block}}
-{{block no_results}}
-<script type="text/template" id="empty-search-list-template">
-<p>No articles for given topic message.</p>
-</script>
-{{/block}}
 
 {{block head_links}}<link rel="alternate" type="application/rss-xml" href="{{ sprintf('%s%s?format=xml', $view->serverUrl(), $view->url(['topic' => $topic], 'topic')) }}" title="Tageswoche | Thema {{ $topic|escape }} [RSS]">{{/block}}
 {{block title append}} | Thema {{ $topic|escape }}{{/block}}

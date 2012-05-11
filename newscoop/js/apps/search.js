@@ -264,6 +264,36 @@ var TopicFilterView = FilterView.extend({
 });
 
 /**
+ * Topic select view
+ */
+var TopicSelectView = FilterView.extend({
+    events: {
+        'change': 'filter'
+    },
+
+    initialize: function() {
+        this.collection.bind('reset', this.render, this);
+    },
+
+    render: function() {
+        $(this.el).find('option:selected').removeAttr('selected');
+        for (var i = 0; i < this.collection.topics.length; i++) {
+            $(this.el).find('option[value="' + this.collection.topics[i] + '"]').prop('selected', true);
+        }
+    },
+
+    filter: function(e) {
+        if (e.target.value != '') {
+            this.collection.toggleTopic(e.target.value);
+        } else {
+            this.collection.topics = [];
+        }
+        this.collection.start = null;
+        router.navigate(this.collection.nav(), {trigger: true});
+    }
+});
+
+/**
  * Pagination view
  */
 var PaginationView = Backbone.View.extend({

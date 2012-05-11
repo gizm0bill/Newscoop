@@ -61,14 +61,12 @@
 <span class="info"><%= doc.relDate('published') %></span>
 </script>
 
-{{block no_results}}
-<script type="text/template" id="empty-search-list-template">
+<script type="text/template" id="empty-search-list-template">{{block no_results}}{{dynamic}}
 <p>Wir haben keine Resultate zu diesem Suchbegriff gefunden.<br />Bitte versuchen Sie einen anderen oder grenzen Sie Ihre Suche weniger stark ein.</p>
-</script>
-{{/block}}
+{{/dynamic}}{{/block}}</script>
 
 <script src="{{ url static_file="_js/libs/underbackbone.js" }}"></script>     
-<script src="{{ url static_file="_js/searchapp.js" }}"></script>
+<script src="{{ url static_file="_js/searchapp-503fa.js" }}"></script>
 <script>
 $(function() {
     window.documents = new DocumentCollection();
