@@ -82,7 +82,6 @@ class RegisterController extends Zend_Controller_Action
                 $this->view->response = "User with email '$values[email]' is registered already.";
             } else {
                 $this->_helper->service('email')->sendConfirmationToken($user);
-                echo('test');die;
                 $this->view->response = 'OK';
             }
         }
