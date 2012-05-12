@@ -264,4 +264,12 @@ $(".fancybox-thumb").fancybox({
     $('#mobile-nav-box').change(function(e) {
         window.location = $(e.target).val();
     });
+
+    $('.loader').each(function() {
+        $(this).load(function() {
+            $(this).find('> .loading').fadeOut().detach();
+            $(this).css('height', 'auto');
+        });
+    });
 });
+

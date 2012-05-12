@@ -6,6 +6,7 @@
 {{ foreach $gimme->article->slideshows as $slideshow name=slideshowlist }}
 {{ foreach $slideshow->items as $item name=insideslideshow }}
 {{ if $smarty.foreach.insideslideshow.first }}
+<div class="loader" style="height:534px">
 <div class="image-slideshow tabs">
 {{ /if }}   
 {{ assign var="i" value=$i+1 }}          
@@ -44,6 +45,7 @@
 {{ if $smarty.foreach.insideslideshow.last }}
                         </ul>                      
                     </div>
+<div class="loading" style="height:534px"></div></div><!-- /.loader -->
 {{ /if }}
 {{ /foreach }}                    
 
