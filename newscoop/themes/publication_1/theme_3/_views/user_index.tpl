@@ -27,7 +27,7 @@
         <li><a href="{{ $view->url(['controller' => 'user', 'action' => 'editors'], 'default', true) }}"{{ if $current == 'editors' }} class="active"{{ /if }}>Redaktion</a></li>
     </ul>
 
-    <ul>
+    <ul class="mobile-hide">
         <li><a href="#">Alphabetisch</a></li>
         <li>
             <ul class="alphabet-list">
