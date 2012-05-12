@@ -22,3 +22,11 @@
 #mobile-nav-box > option {
     color: #000;
 }
+
+#user-topic-list {
+    margin-bottom: 1em;
+}
+
+#user-topic-list > a {
+    margin-right: 5px;
+}

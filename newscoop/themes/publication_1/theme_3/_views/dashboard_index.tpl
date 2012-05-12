@@ -32,10 +32,8 @@ function newSubscriber(firstName, lastName, email, productId) {
                             
                     <ul class="profile-tab-nav">
                         <li><a href="#author-1">Mein Profil</a></li>
-                        <div class="mobile-hide-tablet-show">
-                        <li><a href="#author-2">Meine Themen</a></li>
-                        <li><a href="#mein-abo">Mein Abo</a></li>
-                        </div>
+                        <li class="mobile-hide-tablet-show"><a href="#author-2">Meine Themen</a></li>
+                        <li class="mobile-hide-tablet-show"><a href="#mein-abo">Mein Abo</a></li>
                     </ul>
 
         <div id="author-1" class="profile-edit-box">
@@ -132,13 +130,13 @@ function newSubscriber(firstName, lastName, email, productId) {
 
         <div id="author-2" class="profile-edit-box mobile-hide-tablet-show">
             <h3>Meine Themen</h3>
-                    <p class="simple-txt">
+                    <div id="user-topic-list">
                     {{ foreach $user->topics as $id => $topic }}
                     {{ local }}{{ set_topic identifier=$id }}
                     <a href="{{ $view->url(['topic' => $topic], 'topic') }}">{{ $topic }}</a>
                     {{ /local }}
                     {{ /foreach }}
-                    </p>
+                    </div>
 
                     <p><a href="{{ $view->url([], 'my-topics') }}" title="Meine Themen">Neue Artikel zu diesen Themen lesen & Themen verwalten</a></p>
         </div>
