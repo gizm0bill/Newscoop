@@ -489,7 +489,8 @@ var SortView = Backbone.View.extend({
  */
 var SearchRouter = Backbone.Router.extend({
     routes: {
-        "?*params": "search"
+        '?*params': 'search',
+        '*params': 'search'
     },
 
     map: {
@@ -505,11 +506,8 @@ var SearchRouter = Backbone.Router.extend({
     first: true,
 
     search: function(params) {
-        if (this.first) {
-            this.first = false;
-            if (window.location.hash.length != 0) {
-                this.setCollectionParams(window.documents, params);
-            }
+        if (history.pushState == undefined && params.length != 0) {
+            this.setCollectionParams(window.documents, params);
         }
 
         window.documents.fetch();
@@ -522,7 +520,7 @@ var SearchRouter = Backbone.Router.extend({
             if (param[0] in this.map) {
                 collection[this.map[param[0]]] = param[1];
             } else if (param[0] == 'topic') {
-                collection.topic = param[1].split(',');
+                collection.topics = param[1].split(',');
             }
         }
     }

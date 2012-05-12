@@ -5,6 +5,7 @@ var Document = Backbone.Model.extend({
     day: 3600 * 24,
     month: 3600 * 24 * 30,
     year: 3600 * 24 * 365,
+    date: /(20[0-2][0-9])-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])Z/,
 
     types: {
         'news': 'omni',
@@ -25,9 +26,9 @@ var Document = Backbone.Model.extend({
      * @return {string}
      */
     relDate: function(property) {
-        var date = new Date(this.get(property));
-        var now = new Date();
-        var diff = Math.ceil(Math.abs(now.getTime() - date.getTime()) / 1000);
+        var published = this.parseUtcDate(this.get(property)).getTime();
+        var now = (new Date()).getTime();
+        var diff = Math.ceil(Math.abs(now - published) / 1000);
 
         if (diff < 60) {
             return 'vor ' + diff + ' Sek.';
@@ -45,6 +46,24 @@ var Document = Backbone.Model.extend({
             var years = (diff / this.year).toFixed();
             return 'vor ' + years + ' ' + (years == 1 ? 'Jahr' : 'Jahren');
         }
+    },
+
+    /**
+     * Parse given utc time and returns date object
+     *
+     * @param {string} datestring
+     * @return {Date}
+     */
+    parseUtcDate: function(datestring) {
+        var utc = this.date.exec(datestring);
+        var date = new Date();
+        date.setUTCFullYear(utc[1]);
+        date.setUTCMonth(utc[2] - 1);
+        date.setUTCDate(utc[3]);
+        date.setUTCHours(utc[4]);
+        date.setUTCMinutes(utc[5]);
+        date.setUTCSeconds(utc[6]);
+        return date;
     },
 
     /**

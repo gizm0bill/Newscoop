@@ -66,7 +66,7 @@
 {{/dynamic}}{{/block}}</script>
 
 <script src="{{ url static_file="_js/libs/underbackbone.js" }}"></script>     
-<script src="{{ url static_file="_js/searchapp-8f141.js" }}"></script>
+<script src="{{ url static_file="_js/searchapp-a7aa7.js" }}"></script>
 <script>
 $(function() {
     window.documents = new DocumentCollection();
@@ -107,9 +107,9 @@ $(function() {
 </section>
 <script>
 $(function() {
-    {{ dynamic }}if (window.location.hash.length == 0) {
-        documents.reset(documents.parse({{ json_encode($result) }}));
-    }{{ /dynamic }}
+    {{ dynamic }}
+    documents.reset(documents.parse({{ json_encode($result) }}));
+    {{ /dynamic }}
 });
 </script>
 {{/block}}
