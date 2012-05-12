@@ -265,8 +265,8 @@ $(".fancybox-thumb").fancybox({
         window.location = $(e.target).val();
     });
 
-    $('.loader').each(function() {
-        $(this).load(function() {
+    $(window).load(function() {
+        $('.loader').each(function() {
             $(this).find('> .loading').fadeOut().detach();
             $(this).css('height', 'auto');
         });
