@@ -1,7 +1,7 @@
 {{extends file="layout_search.tpl"}}
 
 {{block aside}}
-<h3>Themen wählen</h3>
+{{* <h3>Themen wählen</h3>*}}
 {{ dynamic }}
 <ul id="topic-filter" class="user-topics">
     <li class="main"><a href="#">Alle Themen</a></li>

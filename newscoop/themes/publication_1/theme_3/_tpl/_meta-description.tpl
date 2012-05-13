@@ -18,7 +18,7 @@ Aktuelle Sportnachrichten, Hintergründe, Interviews, Spielberichte, Fussball un
 Aktuelle Kultur-Nachrichten, Interviews, Konzertkritiken, Musik, Film, Literatur, Kunst. 
 {{ /if }}
 {{ if $gimme->section->number == 60 }}
- 
+Menschen und ihr Leben. Aktuelle Berichte und Hintergründe zu Gesellschaft, Bildung, Wissenschaft, Lifestyle und Konsum 
 {{ /if }}
 {{ if $gimme->section->number == 71 }}
 Die Veranstaltungsagenda der TagesWoche mit tausenden Veranstaltungen aus der ganzen Schweiz.
