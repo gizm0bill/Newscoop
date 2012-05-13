@@ -241,6 +241,12 @@ $(".fancybox-thumb").fancybox({
 	  $in.prev().html($in.val());
 	});
 	
+	// MSIE7 classes
+	if ($.browser.msie  && parseInt($.browser.version) == 7) {
+			$('ul.post-list li:nth-child(3n)').addClass('last');
+		}
+	
+		
 	//last-child for MSIE
 	    if ( $.browser.msie ) {
 			$('span.title-box div').append('<div class="ietest"></div>');
@@ -258,18 +264,13 @@ $(".fancybox-thumb").fancybox({
 		
 		if ($.browser.msie  && parseInt($.browser.version) == 7) {
 			$('blockquote').prepend('&laquo;');
-			$('blockquote').append('&raquo;');	
+			$('blockquote').append('&raquo;');
+			$('body').addClass('ie7');	
 		}
-
-    $('#mobile-nav-box').change(function(e) {
-        window.location = $(e.target).val();
-    });
-
-    $(window).load(function() {
-        $('.loader').each(function() {
-            $(this).find('> .loading').fadeOut().detach();
-            $(this).css('height', 'auto');
-        });
-    });
+		
+		if ($.browser.msie  && parseInt($.browser.version) == 8) {
+			$('body').addClass('ie8');	
+		}
+		
 });
 
