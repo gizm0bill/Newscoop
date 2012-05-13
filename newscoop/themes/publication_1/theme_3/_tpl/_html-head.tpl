@@ -23,9 +23,9 @@
         {{ elseif !($gimme->publication->identifier == "1") }}
         		  {{ $gimme->publication->name }} |&nbsp;
         {{ /if }}&nbsp;
-        {{ if $gimme->template->name == "_views/layout.tpl" }}
-             Community |&nbsp;
-          {{ /if }}
+        {{ if $smarty.get.topic != "" }}
+             {{ $smarty.get.topic }} |&nbsp;
+        {{ /if }}
         TagesWoche&nbsp;
         {{ if $gimme->template->name == "front.tpl" }}
              | Die Wochenzeitung, die täglich erscheint
