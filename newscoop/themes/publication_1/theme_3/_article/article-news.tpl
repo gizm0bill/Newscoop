@@ -159,18 +159,25 @@ div.geomap_open_large_map {
                         <p class="time desktop-hide">{{ $gimme->article->publish_date|camp_date_format:"%e.%c.%Y, %H:%i" }} Uhr</p>
                         <h2>{{ $gimme->article->name|replace:'  ':'<br />' }}</h2>
                         <ul class="article-info">
+                        
+                        
+                        
+                        
 								{{ list_article_topics }}
                         {{ if $gimme->current_list->at_beginning }}                        
                         	<li>
                             	<h5>Themen</h5>
                             	<p>
                         {{ /if }}
-                            	<a href="{{ url options="template section_topic.tpl" }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
+                            	<a href="{{ $view->url(['topic' => $gimme->topic->name], 'topic') }}">{{ $gimme->topic->name }}</a>{{ if !$gimme->current_list->at_end }}, {{ /if }}
                         {{ if $gimme->current_list->at_end }}
                         		<span class="desktop-hide"><br /><a href="#theme-abonnieren-content" class="theme-subscribe theme-abonnieren-trigger follow-topics-link">Themen abonnieren</a></span></p>
                             </li>                            	
                         {{ /if }}
                         {{ /list_article_topics }}
+                        
+                        
+                       
                         
                         {{ if $gimme->prev_list_empty }}
                         <li><p>Keine Themen verknüpft</p></li>
