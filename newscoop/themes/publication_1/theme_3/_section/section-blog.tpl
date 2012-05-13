@@ -14,7 +14,7 @@
         
         <div class="content-box clearfix">
             
-            <section>
+            <section class="clearfix">
             
             	<header class="mobile-header">
                 	<p><a href="{{ url options="issue" }}">Blogs</a></p>
