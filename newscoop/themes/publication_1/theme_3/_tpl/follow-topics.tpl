@@ -1,9 +1,9 @@
-{{ if empty($topics) }}
+{{ dynamic }}{{ if empty($topics) }}
     {{ $topics = array() }}
     {{ list_article_topics }}
     {{ $topics[$gimme->topic->id] = $gimme->topic->name }}
     {{ /list_article_topics }}
-{{ /if }}
+{{ /if }}{{ /dynamic }}
 
 <div style="display:none"><div class="follow-topics-popup popup-box" id="theme-abonnieren-content">
     <h3>Diesen Themen folgen</h3>
@@ -42,8 +42,20 @@ $(function() {
         });
 
         $.post("{{ $view->url(['controller' => 'dashboard', 'action' => 'update-topics'], 'default') }}", {'topics': topics, 'format': 'json'}, function(data, textStatus, jqXHR) {
+            {{ dynamic }}{{ if !empty($my) }}
+            for (id in topics) {
+                if (!topics[id]) {
+                    $('#theme-abonnieren-content .topics').find('#ft_' + id).closest('li').detach();
+                    $('#topic-filter').find('#topic-' + id).detach();
+                }
+            }
+
+            $.fancybox.close();
+
+            {{ else }}
             $('> *', context).not('h3').hide();
-            $('h3', context).after('<p class="after">Neue Artikel zu allen Themen, denen Sie folgen, finden Sie unter <a href="{{ $view->url([], 'my-topics') }}">Meine Themen</a>.</p>');
+            $('h3', context).after('<p class="after">Neue Artikel zu allen Themen, denen Sie folgen, finden Sie unter <a href="{{ $view->url([], 'my-topics') }}?t={{ substr(sha1(uniqid()), 0, 5) }}">Meine Themen</a>.</p>');
+            {{ /if }}{{ /dynamic }}
         }, 'json');
     });
 });

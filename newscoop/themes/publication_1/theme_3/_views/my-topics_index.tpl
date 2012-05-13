@@ -2,17 +2,20 @@
 
 {{block aside}}
 <h3>Themen wählen</h3>
-<ul id="topic-filter">
+{{ dynamic }}
+<ul id="topic-filter" class="user-topics">
     <li class="main"><a href="#">Alle Themen</a></li>
-    {{ dynamic }}
+    {{ $topics = array() }}
     {{ if $gimme->user->logged_in }}
-    {{ foreach $gimme->user->topics as $topic }}
-    <li><a href="#{{ $topic|escape }}">{{ $topic|escape }}</a><br />
-    <em id="topic-{{ $topic@key }}">entfernen</em></li>
+    {{ foreach $gimme->user->topics as $id => $topic }}{{ $topics[$id] = $topic }}
+    <li id="topic-{{ $id }}"><a href="#{{ $topic|escape }}">{{ $topic|escape }}</a><br />
     {{ /foreach }}
+    <li style="margin-top:1em"><a href="#theme-abonnieren-content" class="theme-abonnieren-trigger follow-topics-link">Themen bearbeiten</a></li>
     {{ /if }}
-    {{ /dynamic }}
 </ul>
+
+{{ include file="_tpl/follow-topics.tpl" topics=$topics my=true }}
+{{ /dynamic }}
 
 </div><div class="filter-aside">
 

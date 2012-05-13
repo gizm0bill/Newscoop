@@ -28,10 +28,6 @@ class MyTopicsController extends TopicController
         }
     }
 
-    public function emptyAction()
-    {
-    }
-
     /**
      * Build solr topic filter
      *
