@@ -1,12 +1,19 @@
+{{ if empty($topics) }}
+    {{ $topics = array() }}
+    {{ list_article_topics }}
+    {{ $topics[$gimme->topic->id] = $gimme->topic->name }}
+    {{ /list_article_topics }}
+{{ /if }}
+
 <div style="display:none"><div class="follow-topics-popup popup-box" id="theme-abonnieren-content">
     <h3>Diesen Themen folgen</h3>
     {{ dynamic }}
     {{ if $gimme->user->logged_in }}{{ $userTopics=array_keys($gimme->user->topics) }}
         <p>Bitte wählen Sie die Themen aus, die Sie weiter verfolgen möchten. Sie finden dann alles zu diesen Themen unter Ihrer Rubrik "Meine Themen".</p>
         <ul class="topics form check-list">
-            {{ list_article_topics }}
-            <li><input type="checkbox" class="topic-to-follow" id="ft_{{ $gimme->topic->id }}" name="topic[]" value="{{ $gimme->topic->id }}" {{ if in_array($gimme->topic->id, $userTopics) }}checked="checked"{{ /if }} /> <label for="ft_{{ $gimme->topic->id }}">{{ $gimme->topic->name }}</label></li>
-            {{ /list_article_topics }}
+            {{ foreach $topics as $id => $topic }}
+            <li><input type="checkbox" class="topic-to-follow" id="ft_{{ $id }}" name="topic[]" value="{{ $id }}" {{ if in_array($id, $userTopics) }}checked="checked"{{ /if }} /> <label for="ft_{{ $id }}">{{ $topic }}</label></li>
+            {{ /foreach }}
             <li class="clearfix"><input type="submit" value="Speichern" class="button right" /></li>
         </ul>
     {{ else }}

@@ -12,6 +12,11 @@ require_once __DIR__ . '/AbstractSolrController.php';
 class TopicController extends AbstractSolrController
 {
     /**
+     * @var Newscoop\Entity\Topic
+     */
+    private $topic;
+
+    /**
      * @var array
      */
     protected $sources = array(
@@ -27,8 +32,20 @@ class TopicController extends AbstractSolrController
 
     public function preDispatch()
     {
-        if ($this->_getParam('topic') === null && $this->getRequest()->getActionName() === 'index') {
-            $this->_forward('empty');
+        if ($this->getRequest()->getActionName() === 'index') {
+            if (!$this->_getParam('topic')) {
+                $this->_forward('empty');
+                return;
+            }
+
+            $this->topic = $this->_helper->service('em')->getRepository('Newscoop\Entity\Topic')->findOneBy(array(
+                'name' => $this->_getParam('topic'),
+            ));
+
+            if ($this->topic === null) {
+                $this->_forward('notfound');
+                return;
+            }
         }
     }
 
@@ -65,13 +82,20 @@ class TopicController extends AbstractSolrController
      */
     protected function buildSolrTopicParam()
     {
-        if ($this->_getParam('topic')) {
-            $this->view->topic = $this->_getParam('topic');
-            return sprintf('topic:("%s")', json_encode($this->_getParam('topic')));
-        }
+        $this->view->topic = (object) array(
+            'id' => $this->topic->getTopicId(),
+            'name' => $this->topic->getName(),
+        );
+
+        return sprintf('topic:("%s")', json_encode($this->_getParam('topic')));
     }
 
     public function emptyAction()
     {
+    }
+
+    public function notfoundAction()
+    {
+        $this->getResponse()->setHttpResponseCode(404);
     }
 }
