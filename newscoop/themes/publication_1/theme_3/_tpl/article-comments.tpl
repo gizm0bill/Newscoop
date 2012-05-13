@@ -1,6 +1,4 @@
 {{ if $gimme->article->comments_enabled || $gimme->article->comments_locked  }}  
-
-                <section>
                 
                     <div class="omni-corner-box comments-box tabs">
                     
@@ -97,7 +95,7 @@
                     <div class="comments-box">   
                         <p>Für diesen Artikel wurde die Kommentarfunktion deaktiviert, Sie können aber eine <a href="#" onClick="omnibox.show()">Mitteilung</a> an die Redaktion senden.</p>       
                     </div>
-    </section>
+
 {{ /if }}
 
 <script>
