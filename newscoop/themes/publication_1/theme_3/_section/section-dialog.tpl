@@ -39,7 +39,9 @@
 
             <aside>
 
-{{ include file="_tpl/sidebar-community.tpl" where="dialog" }}
+{{* include file="_tpl/sidebar-community.tpl" where="dialog" *}}
+
+{{ include file="_tpl/sidebar-users.tpl" }}
 
 <div class="mobile-hide">
 
