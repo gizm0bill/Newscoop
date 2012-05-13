@@ -18,8 +18,18 @@
           {{ else }}
               {{ $gimme->article->name|escape:'html'|trim }} |
           {{ /if }}&nbsp;
-        {{ /if }}
-        {{ $gimme->publication->name }}
+        {{ elseif $gimme->section->defined }}
+        		  {{ $gimme->section->name|escape:'html'|trim }} |
+        {{ elseif !($gimme->publication->identifier == "1") }}
+        		  {{ $gimme->publication->name }} |&nbsp;
+        {{ /if }}&nbsp;
+        {{ if $gimme->template->name == "_views/layout.tpl" }}
+             Community |&nbsp;
+          {{ /if }}
+        TagesWoche&nbsp;
+        {{ if $gimme->template->name == "front.tpl" }}
+             | Die Wochenzeitung, die täglich erscheint
+          {{ /if }}
         {{ /strip }}</title>
         
     {{ include file="_tpl/_meta-description.tpl" }}
