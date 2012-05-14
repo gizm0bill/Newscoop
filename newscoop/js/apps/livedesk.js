@@ -15,6 +15,10 @@ var ItemCollection = Backbone.Collection.extend({
     model: Item,
 
     parse: function(response) {
+        if (!response) { // workaround for 304 responses
+            return this.toJSON();
+        }
+
         if ('BlogPostList' in response) {
             return response.BlogPostList;
         }
@@ -61,7 +65,7 @@ var ListView = Backbone.View.extend({
  * Livedesk view
  */
 var LivedeskView = Backbone.View.extend({
-    wait: 8000, // ms
+    wait: 21000, // ms
     length: 0,
 
     events: {
@@ -74,6 +78,7 @@ var LivedeskView = Backbone.View.extend({
         this.collection.bind('reset', this.render, this);
         this.collection.view = this;
         this.timer = _.delay(this.fetch, this.wait, this);
+        this.updated = (new Date()).toUTCString();
     },
 
     /**
@@ -91,6 +96,8 @@ var LivedeskView = Backbone.View.extend({
         this.length = this.collection.length;
         $(this.el).html(this.list.render().el);
         this.timer = _.delay(this.fetch, this.wait, this);
+
+        $('<p id="last-updated"></p>').text('updated on ' + (new Date()).toLocaleTimeString()).prependTo($(this.el));
         return this;
     },
 
@@ -114,7 +121,16 @@ var LivedeskView = Backbone.View.extend({
         var newPostsCount = collection.length - collection.view.length;
         if (newPostsCount > 0) {
             $(collection.view.el).prepend('<a href="#" id="update-livedesk">There are ' + newPostsCount + ' new items.</a>');
+        } else {
+            console.log(collection.length);
         }
+
+        $('#last-updated').fadeOut(function() {
+            $(this).text('updated on ' + (new Date()).toLocaleTimeString()).fadeIn();
+        });
+
+        collection.view.timer = _.delay(collection.view.fetch, collection.view.wait, collection.view);
+        collection.view.updated = (new Date()).toUTCString();
     },
 
     /**
@@ -123,7 +139,9 @@ var LivedeskView = Backbone.View.extend({
      * @param {object} view
      */
     fetch: function(view) {
-        view.collection.fetch({silent: true, success: view.update});
-        view.timer = _.delay(view.fetch, view.wait, view);
+        $('#last-updated').text('updating...');
+        view.collection.fetch({silent: true, success: view.update, headers: {
+            'If-Modified-Since': view.updated
+        }});
     }
 });
