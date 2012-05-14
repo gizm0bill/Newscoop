@@ -960,10 +960,12 @@ function parse_date_text($date_time_text)
                     <td rowspan="2" class="table-info">
                     <ul>
                         <li><h5>{{ $gimme->article->organizer }}</h5></li>
-                        <li>
-                            <p>{{ $gimme->article->street }}<br />
+                        <li class="mobile-hide-tablet-show">
+                            <p class="mobile-hide">{{ $gimme->article->street }}<br />
                             {{ $gimme->article->zipcode }} {{ $gimme->article->town }}</p>
-                            <p>
+                            <span class="desktop-hide">{{ $gimme->article->street }}<br />
+                            {{ $gimme->article->zipcode }} {{ $gimme->article->town }}</span>
+                            <p class="mobile-hide">
                             {{ list_article_locations length="1" }}
                                 <a href="http://maps.google.com/maps?hl=de&t=k&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Auf Karte anzeigen</a><br />
                             {{ /list_article_locations }}
@@ -973,12 +975,24 @@ function parse_date_text($date_time_text)
                             &nbsp;
                             {{ /if }}
                             </p>
-                        </li>
-                        <li>
-                            {{ if  "" != $gimme->article->phone }}
-                            <p>Tel  {{ $gimme->article->phone }}{{* <a href="#" class="info" onClick="alert('wtf here?'); return false;">i</a>*}}</p>
+                            <span class="desktop-hide">
+                            {{ list_article_locations length="1" }}
+                                <a href="http://maps.google.com/maps?hl=de&t=k&q={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}+({{ $gimme->article->organizer|escape:'url' }})&z=17&ll={{ $gimme->location->latitude }},{{ $gimme->location->longitude }}" target="_blank">Auf Karte anzeigen</a><br />
+                            {{ /list_article_locations }}
+                            {{ if  "" != $gimme->article->web }}
+                            <a href="{{ $gimme->article->web }}" target="_blank">{{ $gimme->article->web|replace:"http://":"" }}</a>
                             {{ else }}
-                            <p>&nbsp;</p>
+                            &nbsp;
+                            {{ /if }}
+                            </span>
+                        </li>
+                        <li class="mobile-hide-tablet-show">
+                            {{ if  "" != $gimme->article->phone }}
+                            <p class="mobile-hide">Tel  {{ $gimme->article->phone }}{{* <a href="#" class="info" onClick="alert('wtf here?'); return false;">i</a>*}}</p>
+                            <span class="desktop-hide">Tel  {{ $gimme->article->phone }}{{* <a href="#" class="info" onClick="alert('wtf here?'); return false;">i</a>*}}</span>
+                            {{ else }}
+                            <p class="mobile-hide">&nbsp;</p>
+                            <span class="desktop-hide">&nbsp;</span>
                             {{ /if }}
                         </li>
                     </ul>
