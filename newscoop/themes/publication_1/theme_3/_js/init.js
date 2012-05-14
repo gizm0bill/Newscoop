@@ -155,9 +155,7 @@ if ( $(window).width() < 641) {$('.mobile-carousel').jcarousel({visible: 1, scro
     });
     
     $('.article-view-rear').click(function(){
-        if (document.location.hash != '#hintergrund') {
-            document.location.hash = '#hintergrund';
-        }
+        document.location.hash = '#hintergrund';
     });
     
     if (document.location.hash == '#hintergrund') {
