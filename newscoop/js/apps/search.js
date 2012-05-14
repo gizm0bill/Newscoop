@@ -89,7 +89,8 @@ var DocumentListView = Backbone.View.extend({
 
     didYouMean: function(e) {
         e.preventDefault();
-        $('#search-query').val(this.collection.getSuggestion()).blur();
+        $('#search-query').val(this.collection.getSuggestion());
+        $('#search-query').next('button').click();
     }
 });
 
@@ -506,7 +507,7 @@ var SearchRouter = Backbone.Router.extend({
     first: true,
 
     search: function(params) {
-        if (history.pushState == undefined && params.length != 0) {
+        if (history.pushState == undefined && window.documents.query == undefined) {
             this.setCollectionParams(window.documents, params);
         }
 
@@ -518,7 +519,7 @@ var SearchRouter = Backbone.Router.extend({
         for (var i = 0; i < doubles.length; i++) {
             var param = doubles[i].split('=', 2);
             if (param[0] in this.map) {
-                collection[this.map[param[0]]] = param[1];
+                collection[this.map[param[0]]] = param[1].replace('/\+/g', ' ');
             } else if (param[0] == 'topic') {
                 collection.topics = param[1].split(',');
             }
