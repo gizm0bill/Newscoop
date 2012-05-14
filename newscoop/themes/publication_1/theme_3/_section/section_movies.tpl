@@ -1000,14 +1000,14 @@ function parse_date_text($date_time_text)
                         {{ assign var="day_count" $day_start }}
                         {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
                             {{ assign var="day_count" $day_count + 1 }}
-                            <td class="{{ if ((3 < $day_count) || (1 > $day_count)) }}mobile-hide {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }}<br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
+                            <td class="{{ if ((3 < $day_count) || (1 > $day_count)) }}mobile-hide-tablet-show {{ /if }}cinema_screen_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">{{ $date_time_key|camp_date_format:"%W"|truncate:2:'' }}<br />{{ $date_time_key|camp_date_format:"%e.%m" }}</td>
                         {{ /foreach }}
                 </tr>
                 <tr>
                             {{ assign var="day_count" $day_start }}
                             {{ foreach from=$date_time_arr key=date_time_key item=date_time_day }}
                                     {{ assign var="day_count" $day_count + 1 }}
-                                    <td class="{{ if ((3 < $day_count) || (1 > $day_count)) }}mobile-hide {{ /if }}screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
+                                    <td class="{{ if ((3 < $day_count) || (1 > $day_count)) }}mobile-hide-tablet-show {{ /if }}screen_time_list date_hl_all date_hl_{{$date_time_key|camp_date_format:"%Y-%m-%d"}}">
                                         <ul>
                                                     {{ foreach from=$date_time_day item=date_time_day_parts }}
                                                     {{ assign var="scr_lang_d" $date_time_day_parts.has_d }}
