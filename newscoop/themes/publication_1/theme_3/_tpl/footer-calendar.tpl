@@ -1,1 +1,0 @@
-{{ wobs_calendar firstDay=1 showDayNames=false earliestMonth='2011/10' latestMonth='current' }}   
