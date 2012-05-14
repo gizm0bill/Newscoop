@@ -104,17 +104,17 @@ phase 4 = currentdate > date_closing 12:00
                         {{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}</a></li>
             *}}
             
-                     <li><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>   
-                    	<li{{ if $wdphase == "1" }} class="active"{{ /if }}>{{ if $wdphase > 0 }}<a href="{{ url options="section" }}?stage=1">{{ else }}<span>{{ /if }}<b>Standpunkte</b>
+                     <li{{ if $wdstage == "0"}} class="selected"{{ /if }}><a href="{{ url options="section" }}?stage=0"><b>Übersicht</b></a></li>   
+                    	<li{{ if $wdphase == "1" }} class="active{{ if $wdstage == "1" }} selected{{ /if }}"{{ elseif $wdstage == "1" }} class="selected"{{ /if }}>{{ if $wdphase > 0 }}<a href="{{ url options="section" }}?stage=1">{{ else }}<span>{{ /if }}<b>Standpunkte</b>
                     	{{ $gimme->article->date_opening|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 0 }}</a>{{ else }}</span>{{ /if }}</li>                    	
                     	
-                    	<li{{ if $wdphase == "2"}} class="active"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Repliken</b>
+                    	<li{{ if $wdphase == "2"}} class="active{{ if $wdstage == "2"}} selected{{ /if }}"{{ elseif $wdstage == "2" }} class="selected"{{ /if }}>{{ if $wdphase > 1 }}<a href="{{ url options="section" }}?stage=2">{{ else }}<span>{{ /if }}<b>Repliken</b>
                     	{{ $gimme->article->date_rebuttal|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 1 }}</a>{{ else }}</span>{{ /if }}</li>              	
                     	
-                     <li{{ if $wdphase == "3"}} class="active"{{ /if }}>{{ if $wdphase > 2 }}<a href="{{ url options="section" }}?stage=3">{{ else }}<span>{{ /if }}<b>Schlussworte</b>
+                     <li{{ if $wdphase == "3"}} class="active{{ if $wdstage == "3"}} selected{{ /if }}"{{ elseif $wdstage == "3" }} class="selected"{{ /if }}>{{ if $wdphase > 2 }}<a href="{{ url options="section" }}?stage=3">{{ else }}<span>{{ /if }}<b>Schlussworte</b>
                      {{ $gimme->article->date_final|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 2 }}</a>{{ else }}</span>{{ /if }}</li>
                      
-        					<li{{ if $wdphase == "4" }} class="active"{{ /if }}>{{ if $wdphase > 3 }}<a href="{{ url options="section" }}?stage=4">{{ else }}<span>{{ /if }}<b>Fazit</b>
+        					<li{{ if $wdphase == "4" }} class="active{{ if $wdstage == "4"}} selected{{ /if }}"{{ elseif $wdstage == "4" }} class="selected"{{ /if }}>{{ if $wdphase > 3 }}<a href="{{ url options="section" }}?stage=4">{{ else }}<span>{{ /if }}<b>Fazit</b>
         					{{ $gimme->article->date_closing|camp_date_format:"%W %d.%m." }}{{ if $wdphase > 3 }}</a>{{ else }}</span>{{ /if }}</li>                        
                         
                         
