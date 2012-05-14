@@ -201,6 +201,9 @@ a.theme-subscribe {
 			width:22px; height:22px;
 			background:url(img/green-box-corner.png) 0 0 no-repeat;
 			}
+		.green-button:hover {
+			 color:#fff; text-decoration:none; 
+			}
 	
 	a.article-switch,
 	a.reward-button {
@@ -699,6 +702,7 @@ article .related {
 		.profile-info h4 {
 			margin-bottom:15px;
 			font-family:Arial, Helvetica, sans-serif; font-size:20px; color:#333;
+			vertical-align:text-top;
 			}
 			.profile-info h4 .green-button {
 				display:inline-block; zoom:1; *display:inline;
@@ -1659,7 +1663,19 @@ article .related {
 								overflow: visible;
 								padding: 0;
 								}
-						
+	.gift-box {
+		border:2px solid #008148; 
+		padding:10px; margin-bottom:20px; 
+		background:#fff;
+		}
+		.gift-box p {
+			color:#333;
+			font-size:13px;
+			line-height:140%;
+			}
+		.gift-box .green-button {
+			max-width:300px;
+			}		
 			
 	
 	
@@ -3888,12 +3904,12 @@ article figure.mobile-pull-left img {
 .fancybox-inner {
 	position:absolute; top:0 !important; bottom:0 !important; left:0 !important; bottom:0 !important; right:0 !important;
 	height:100% !important; width:auto !important;
-	background:#fff;}*/
+	background:#fff;}
 	
 .popup-box {
     padding: 20px;
     position: absolute; top:0; bottom:0; left:0; bottom:0; right:0;
-    width: auto; height:100%; 
+    width: auto; height:100%;*/ 
 }
 }
 @media screen and (max-width: 640px) {
