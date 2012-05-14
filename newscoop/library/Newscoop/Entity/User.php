@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection,
  *      })
  *  @HasLifecycleCallbacks
  */
-class User implements \Zend_Acl_Role_Interface
+class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\DocumentInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -38,31 +38,31 @@ class User implements \Zend_Acl_Role_Interface
     private $id;
 
     /**
-     * @Column(type="string", length="80", name="EMail")
+     * @Column(type="string", length=80, name="EMail")
      * @var string
      */
     private $email;
 
     /**
-     * @Column(type="string", length="80", nullable=TRUE, name="UName")
+     * @Column(type="string", length=80, nullable=TRUE, name="UName")
      * @var string
      */
     private $username;
 
     /**
-     * @Column(type="string", length="60", nullable=TRUE, name="Password")
+     * @Column(type="string", length=60, nullable=TRUE, name="Password")
      * @var string
      */
     private $password;
 
     /**
-     * @Column(type="string", length="80", nullable=TRUE, name="Name")
+     * @Column(type="string", length=80, nullable=TRUE, name="Name")
      * @var string
      */
     private $first_name;
 
     /**
-     * @Column(type="string", length="80", nullable=TRUE)
+     * @Column(type="string", length=80, nullable=TRUE)
      * @var string
      */
     private $last_name;
@@ -80,7 +80,7 @@ class User implements \Zend_Acl_Role_Interface
     private $updated;
 
     /**
-     * @Column(type="integer", length="1")
+     * @Column(type="integer", length=1)
      * @var int
      */
     private $status = self::STATUS_INACTIVE;
@@ -104,7 +104,7 @@ class User implements \Zend_Acl_Role_Interface
     private $points;
 
     /**
-     * @Column(type="string", length="255", nullable=TRUE)
+     * @Column(type="string", length=255, nullable=TRUE)
      * @var string
      */
     private $image;
@@ -148,6 +148,12 @@ class User implements \Zend_Acl_Role_Interface
      * @var Newscoop\Entity\Author
      */
     private $author;
+
+    /**
+     * @Column(type="datetime", nullable=True)
+     * @var DateTime
+     */
+    private $indexed;
 
     /**
      * @param string $email
@@ -783,5 +789,26 @@ class User implements \Zend_Acl_Role_Interface
     public function preUpdate()
     {
         $this->updated = new \DateTime();
+    }
+
+    /**
+     * Set indexed
+     *
+     * @param DateTime $indexed
+     * @return void
+     */
+    public function setIndexed(\DateTime $indexed = null)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
     }
 }

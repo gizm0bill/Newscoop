@@ -17,9 +17,10 @@ class EmailController extends Zend_Controller_Action
         $this->view = new Newscoop\SmartyView();
         $this->view
             ->addScriptPath(APPLICATION_PATH . '/views/scripts/')
-            ->addScriptPath(realpath(APPLICATION_PATH . "/../themes/$themePath"));
+            ->addScriptPath(realpath(APPLICATION_PATH . "/../themes/$themePath/_views"));
 
         $this->view->addPath(realpath(APPLICATION_PATH . "/../themes/$themePath"));
+        $this->view->addPath(realpath(APPLICATION_PATH . "/../themes/$themePath/_views"));
 
         $this->getHelper('viewRenderer')
             ->setView($this->view)

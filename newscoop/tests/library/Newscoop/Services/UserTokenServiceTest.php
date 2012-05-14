@@ -10,7 +10,7 @@ namespace Newscoop\Services;
 use Newscoop\Entity\User,
     Newscoop\Entity\UserToken;
 
-class UserTokenServiceTest extends \RepositoryTestCase
+class UserTokenServiceTest extends \TestCase
 {
     /** @var Newscoop\Services\UserTokenService */
     protected $service;
@@ -23,13 +23,18 @@ class UserTokenServiceTest extends \RepositoryTestCase
 
     public function setUp()
     {
-        parent::setUp('Newscoop\Entity\UserToken', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\User');
+        $this->em = $this->setUpOrm('Newscoop\Entity\UserToken', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\User');
         $this->service = new UserTokenService($this->em);
 
         $this->user = new User('test');
         $this->user->setEmail('petr@localhost');
         $this->em->persist($this->user);
         $this->em->flush();
+    }
+
+    public function tearDown()
+    {
+        $this->tearDownOrm($this->em);
     }
 
     public function testService()

@@ -9,6 +9,8 @@ class ArticleofthedayController extends Zend_Controller_Action
 {
     public function init()
     {
+        $this->_helper->viewRenderer->setViewSuffix('tpl');
+
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('article-of-the-day', 'json')
                     ->initContext();
@@ -16,11 +18,7 @@ class ArticleofthedayController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/public/js/jquery.qtip.min.js'));
         $this->view->headScript()->appendFile($this->view->baseUrl('/public/js/jquery.wobscalendar.js'));
-
-        $this->view->headLink()->appendStylesheet($this->view->baseUrl('/public/css/jquery.qtip.css'));
-        $this->view->headLink()->appendStylesheet($this->view->baseUrl('/public/css/wobs_calendar.css'));
 
         $request = $this->getRequest();
 
@@ -33,20 +31,22 @@ class ArticleofthedayController extends Zend_Controller_Action
         $today = date("Y/m/d");
         $today = explode("/", $today);
         $this->view->today = $today;
-
-        if (isset($date[0])) {
-            $this->view->year = $date[0];
+        
+        //TagesWoche wants the previous month shown instead of the current month now as a default.
+        $startDate = array();
+        
+        if ($today[1] == "1") {
+            $startDate[0] = $today[0] - 1;
+            $startDate[1] = 12;
         }
-        if (isset($date[1])) {
-            $this->view->month = $date[1]-1;
+        else {
+            $startDate[0] = $today[0];
+            $startDate[1] = $today[1] - 1;
         }
-        if (isset($date[2])) {
-            $this->view->day = $date[2];
-        }
-        else if (!isset($date[2]) && ($view === "month")) {
-            $this->view->day = 1;
-        }
-
+        
+        $this->view->year = $startDate[0];
+        $this->view->month = $startDate[1] - 1;
+        
         $now = new DateTime("$today[0]-$today[1]");
 
         //oldest month user can scroll to YYYY/mm
@@ -71,7 +71,7 @@ class ArticleofthedayController extends Zend_Controller_Action
 
         //most recent month user can scroll to YYYY/mm
         $latestMonth = $request->getParam('latestMonth', null);
-        if (isset($latestMonth) && $latestMonth == "current") {
+        if (isset($latestMonth) && $latestMonth == "current") { 
             $this->view->latestMonth = $today;
         }
         else if (isset($latestMonth)) {
@@ -88,9 +88,9 @@ class ArticleofthedayController extends Zend_Controller_Action
             $this->view->latestMonth = null;
         }
 
-        $imageWidth = $request->getParam('imageWidth', 128);
+        $imageWidth = $request->getParam('imageWidth', 140);
         if (!is_int($imageWidth)) {
-            $imageWidth = 128;
+            $imageWidth = 140;
         }
         $this->view->imageWidth = $imageWidth;
 
@@ -108,7 +108,7 @@ class ArticleofthedayController extends Zend_Controller_Action
         $start_date = $request->getParam('start');
         $end_date = $request->getParam('end');
 
-        $imageWidth = $request->getParam('image_width', 128);
+        $imageWidth = $request->getParam('image_width', 140);
 
         $articles = Article::GetArticlesOfTheDay($start_date, $end_date);
 
@@ -121,12 +121,12 @@ class ArticleofthedayController extends Zend_Controller_Action
             $json = array();
 
             $json['title'] = $article->getTitle();
+            
+            $image = $this->_helper->service('image.rendition')->getArticleRenditionImage($article_number, 'rubrikenseite', 140, 94);
 
-            $images = ArticleImage::GetImagesByArticleNumber($article_number);
-
-            if (count($images) > 0) {
-                $image = $images[0];
-                $json['image'] = $this->view->baseUrl("/get_img?ImageWidth=$imageWidth&ImageId=".$image->getImageId());
+            $image_relpath = trim(urldecode($this->view->url(array('src' => $image['src']), 'image', true, false)), '/');
+            if (isset($image) && is_file($image_relpath)) {
+                $json['image'] = $this->view->url(array('src' => $image['src']), 'image', true, false);
             }
             else {
                 $json['image'] = null;
@@ -137,7 +137,7 @@ class ArticleofthedayController extends Zend_Controller_Action
             $YMD = explode("-", $date[0]);
 
             //month-1 is for js, months are 0-11.
-            $json['date'] = array("year"=>intval($YMD[0]), "month"=>intval($YMD[1]-1), "day"=>intval($YMD[2]));
+            $json['date'] = array("year"=>intval($YMD[0]), "month"=>intval($YMD[1]), "day"=>intval($YMD[2]));
 
             $json['url'] = ShortURL::GetURL($article->getPublicationId(), $article->getLanguageId(), null, null, $article_number);
 

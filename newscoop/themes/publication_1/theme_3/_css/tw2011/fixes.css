@@ -1,0 +1,32 @@
+.loader {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.loader .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fafafa url('img/loading_big.gif') no-repeat 50% 50%;
+    z-index: 1000;
+}
+
+#mobile-nav-box {
+    height: 44px;
+    line-height: 44px;
+    border: none;
+}
+
+#mobile-nav-box > option {
+    color: #000;
+}
+
+#user-topic-list {
+    margin-bottom: 1em;
+}
+
+#user-topic-list > a {
+    margin-right: 5px;
+}

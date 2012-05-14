@@ -67,9 +67,10 @@ class UsersList extends ListObject
 	 */
 	protected function ProcessConstraints(array $p_constraints)
 	{
-        return $p_constraints + array(
-            'is_public' => true,
-        );
+            return $p_constraints + array(
+                'is_public' => true,
+                'status' => \Newscoop\Entity\User::STATUS_ACTIVE,
+            );
 	}
 
 	/**

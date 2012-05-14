@@ -9,6 +9,8 @@
  *
  */
 
+use Newscoop\Annotations\Acl;
+
 /**
  * @Acl(resource="printdesk")
  */

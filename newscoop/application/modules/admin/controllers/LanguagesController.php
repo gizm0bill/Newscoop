@@ -6,7 +6,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Newscoop\Entity\Language;
+use Newscoop\Entity\Language,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="language", action="manage")

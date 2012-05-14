@@ -7,7 +7,9 @@
  *
  *
  */
-use Newscoop\Entity\Feedback;
+
+use Newscoop\Entity\Feedback,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="feedback", action="manage")

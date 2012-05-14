@@ -35,6 +35,7 @@ class FileLoad
             'U&#38;&#35;776&#59;',
             'O&#38;&#35;776&#59;',
             'A&#38;&#35;776&#59;',
+            '&#38;&#35;65279&#59;',
         );
         $replace_to = array(
             'Ä',
@@ -51,6 +52,7 @@ class FileLoad
             'Ü',
             'Ö',
             'Ä',
+            '',
         );
 
         $content = str_replace($replace_from, $replace_to, $content);

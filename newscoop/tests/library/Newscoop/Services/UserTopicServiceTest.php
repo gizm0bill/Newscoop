@@ -9,7 +9,9 @@ namespace Newscoop\Services;
 
 use Newscoop\Entity\User,
     Newscoop\Entity\Topic,
-    Newscoop\Entity\UserTopic;
+    Newscoop\Entity\UserTopic,
+    Newscoop\Entity\Language,
+    Newscoop\Entity\TopicTree;
 
 class UserTopicServiceTest extends \RepositoryTestCase
 {
@@ -21,12 +23,19 @@ class UserTopicServiceTest extends \RepositoryTestCase
 
     public function setUp()
     {
-        parent::setUp('Newscoop\Entity\User', 'Newscoop\Entity\Topic', 'Newscoop\Entity\UserTopic', 'Newscoop\Entity\Acl\Role');
+        parent::setUp('Newscoop\Entity\User', 'Newscoop\Entity\Topic', 'Newscoop\Entity\UserTopic', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\Language', 'Newscoop\Entity\TopicTree');
 
         $this->service = new UserTopicService($this->em);
 
+        $this->language = new Language();
+        $this->em->persist($this->language);
+
         $this->user = new User('name');
         $this->em->persist($this->user);
+
+        $this->topic = new TopicTree(1, 1);
+        $this->em->persist($this->topic);
+
         $this->em->flush();
     }
 
@@ -42,7 +51,7 @@ class UserTopicServiceTest extends \RepositoryTestCase
 
     public function testFollow()
     {
-        $topic = new Topic(1, 1, 'name');
+        $topic = new Topic($this->topic, $this->language, 'name');
         $this->em->persist($topic);
 
         $this->service->followTopic($this->user, $topic);
@@ -54,9 +63,15 @@ class UserTopicServiceTest extends \RepositoryTestCase
 
     public function testUpdateTopics()
     {
-        $this->em->persist($topic = new Topic(1, 1, '1'));
-        $this->em->persist(new Topic(2, 1, '2'));
-        $this->em->persist(new Topic(3, 1, '3'));
+        $tt2 = new TopicTree(2, 3);
+        $tt3 = new TopicTree(3, 5);
+        $this->em->persist($tt2);
+        $this->em->persist($tt3);
+        $this->em->flush();
+
+        $this->em->persist($topic = new Topic($this->topic, $this->language, '1'));
+        $this->em->persist(new Topic($tt2, $this->language, '2'));
+        $this->em->persist(new Topic($tt3, $this->language, '3'));
         $this->em->flush();
 
         $this->service->followTopic($this->user, $topic);
@@ -74,14 +89,19 @@ class UserTopicServiceTest extends \RepositoryTestCase
 
     public function testUpdateTopicsIfDeleted()
     {
-        $topic = new Topic(1, 1, 'deleted');
+        $topic = new Topic($this->topic, $this->language, 'deleted');
         $this->em->persist($topic);
-        $this->em->flush();
+        $this->em->flush($topic);
 
         $this->service->followTopic($this->user, $topic);
 
+        $tt2 = new TopicTree(2, 3);
+        $this->em->persist($tt2);
+        $this->em->flush($tt2);
+
         $this->em->remove($topic);
-        $this->em->persist(new Topic(2, 2, 'next'));
+
+        $this->em->persist(new Topic($tt2, $this->language, 'next'));
         $this->em->flush();
         $this->em->clear();
 
@@ -95,9 +115,9 @@ class UserTopicServiceTest extends \RepositoryTestCase
 
     public function testGetTopicsDeleted()
     {
-        $topic = new Topic(1, 1, 'test');
+        $topic = new Topic($this->topic, $this->language, 'test');
         $this->em->persist($topic);
-        $this->em->flush();
+        $this->em->flush($topic);
 
         $this->service->followTopic($this->user, $topic);
 

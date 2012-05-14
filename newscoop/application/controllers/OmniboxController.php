@@ -39,6 +39,9 @@ class OmniboxController extends Zend_Controller_Action
             $result = $this->auth->authenticate($adapter);
 
             if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
+                $user = $this->_helper->service('user')->getCurrentUser();
+                $this->view->userData = array('realName' => $user->getRealName(), 'userName' => $user->getUsername());
+                
                 if ($params['remember'] == '1') {
                     $seconds  = 60 * 60 * 24 * 7; // 7 days
                     Zend_Session::RememberMe($seconds);

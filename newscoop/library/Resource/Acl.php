@@ -336,7 +336,6 @@ class Resource_Acl extends Zend_Application_Resource_ResourceAbstract
         if ($this->reader === NULL) {
             AnnotationRegistry::registerAutoloadNamespace('Newscoop\Annotations\\', APPLICATION_PATH . '/../library/');
             $this->reader = new AnnotationReader();
-            $this->reader->setDefaultAnnotationNamespace('Newscoop\Annotations\\');
         }
 
         return $this->reader;

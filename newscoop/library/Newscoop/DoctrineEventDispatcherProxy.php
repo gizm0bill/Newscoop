@@ -40,9 +40,8 @@ class DoctrineEventDispatcherProxy implements EventSubscriber
     {
         return array(
             Events::postPersist,
-            //Events::preUpdate, @todo temporary fix for CS-3817
             Events::postUpdate,
-            Events::preRemove,
+            Events::postRemove,
         );
     }
 
@@ -58,6 +57,7 @@ class DoctrineEventDispatcherProxy implements EventSubscriber
         $this->dispatcher->notify(new \sfEvent($this, "{$entityName}.create", array(
             'id' => $this->getEntityId($args->getEntity(), $args->getEntityManager()),
             'title' => $this->getEntityTitle($args->getEntity()),
+            'entity' => $args->getEntity(),
         )));
     }
 
@@ -74,6 +74,7 @@ class DoctrineEventDispatcherProxy implements EventSubscriber
             'id' => $this->getEntityId($args->getEntity(), $args->getEntityManager()),
             'diff' => $args->getEntityChangeSet(),
             'title' => $this->getEntityTitle($args->getEntity()),
+            'entity' => $args->getEntity(),
         ));
     }
 
@@ -85,24 +86,28 @@ class DoctrineEventDispatcherProxy implements EventSubscriber
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
-        foreach ($this->events as $event) {
-            $this->dispatcher->notify($event);
-        }
+        $entityName = $this->getEntityName($args->getEntity());
+        $this->dispatcher->notify(new \sfEvent($this, "{$entityName}.update", array(
+            'id' => $this->getEntityId($args->getEntity(), $args->getEntityManager()),
+            'title' => $this->getEntityTitle($args->getEntity()),
+            'entity' => $args->getEntity(),
+        )));
     }
 
     /**
-     * Dispatch entity.delete on preRemove.
+     * Dispatch entity.delete on postRemove.
      *
      * @param Doctrine\ORM\Event\LifecycleEventArgs $args
      * @return void
      */
-    public function preRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args)
     {
         $entityName = $this->getEntityName($args->getEntity());
         $this->dispatcher->notify(new \sfEvent($this, "{$entityName}.delete", array(
             'id' => $this->getEntityId($args->getEntity(), $args->getEntityManager()),
             'diff' => $this->getEntityProperties($args->getEntity(), $args->getEntityManager()),
             'title' => $this->getEntityTitle($args->getEntity()),
+            'entity' => $args->getEntity(),
         )));
     }
 

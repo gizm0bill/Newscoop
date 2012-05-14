@@ -6,7 +6,8 @@
  */
 
 use Newscoop\Entity\Subscription,
-    Newscoop\Entity\User\Subscriber;
+    Newscoop\Entity\User\Subscriber,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(action="manage")

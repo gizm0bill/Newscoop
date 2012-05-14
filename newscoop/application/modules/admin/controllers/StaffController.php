@@ -5,7 +5,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Newscoop\Entity\User\Staff;
+use Newscoop\Entity\User\Staff,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="user", action="manage")

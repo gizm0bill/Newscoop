@@ -1,0 +1,44 @@
+/* Smaller screens */
+
+@media only screen and (max-width: 1023px) {
+
+        body {
+        font-size: 0.8em;
+        line-height: 1.2em;
+        }
+        
+        }
+
+
+/* Mobile */
+
+@media handheld, only screen and (max-width: 755px) {
+
+      body {
+        font-size: 16px;
+        -webkit-text-size-adjust: none;
+        }
+        
+      body, .container_3,
+      .container_wrapper, .container_outside {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        }
+      .container_3 .grid_1, 
+      .container_3 .grid_2, 
+      .container_3 .grid_3 {
+        display: block;
+        background: red;
+        width: auto;
+        float: none;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        }
+
+}

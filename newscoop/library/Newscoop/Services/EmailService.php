@@ -139,7 +139,7 @@ class EmailService
         foreach ((array) $tos as $to) {
             $mail->addTo($to);
         }
-
+        
         $mail->send();
     }
 }

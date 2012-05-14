@@ -47,7 +47,7 @@ class PlaylistRepository extends EntityRepository
             $query->setFirstResult($offset);
         }
 
-        $query->setParameter(1, $playlist);
+        $query->setParameter(1, $playlist->getId());
         if (!is_null($lang)) {
             $query->setParameter(2, $lang->getId());
         }

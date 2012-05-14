@@ -92,4 +92,19 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $tool = new SchemaTool($orm);
         $tool->dropDatabase();
     }
+
+    /**
+     * Invokes protected/private object methods
+     *
+     * @param object $object
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
+    protected function invoke($object, $method, array $args = array())
+    {
+        $reflection = new \ReflectionMethod($object, $method); 
+        $reflection->setAccessible(true);
+        return $reflection->invokeArgs($object, $args);
+    }
 }

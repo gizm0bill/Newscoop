@@ -16,14 +16,14 @@ class UserTopicTest extends \RepositoryTestCase
 
     public function setUp()
     {
-        parent::setUp('Newscoop\Entity\User', 'Newscoop\Entity\UserTopic', 'Newscoop\Entity\Topic', 'Newscoop\Entity\Acl\Role');
+        parent::setUp('Newscoop\Entity\User', 'Newscoop\Entity\UserTopic', 'Newscoop\Entity\Topic', 'Newscoop\Entity\Acl\Role', 'Newscoop\Entity\TopicTree', 'Newscoop\Entity\Language');
         $this->repository = $this->em->getRepository('Newscoop\Entity\UserTopic');
     }
 
     public function testUserToken()
     {
         $user = new User('uname');
-        $topic = new Topic(1, 1, 'name');
+        $topic = new Topic(new TopicTree(1, 1), new Language(), 'name');
         $userTopic = new UserTopic($user, $topic);
         $this->assertInstanceOf('Newscoop\Entity\UserTopic', $userTopic);
     }
@@ -33,8 +33,14 @@ class UserTopicTest extends \RepositoryTestCase
      */
     public function testSave()
     {
+        $language = new Language();
+        $tt = new TopicTree(1, 1);
+        $this->em->persist($language);
+        $this->em->persist($tt);
+        $this->em->flush();
+
         $user = new User('uname');
-        $topic = new Topic(1, 1, 'name');
+        $topic = new Topic($tt, $language, 'name');
         $this->em->persist($user);
         $this->em->persist($topic);
         $this->em->flush();

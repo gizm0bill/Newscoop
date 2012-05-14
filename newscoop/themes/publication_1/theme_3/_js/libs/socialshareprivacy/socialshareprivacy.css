@@ -1,0 +1,209 @@
+
+.social_share_privacy_area {
+    clear: both;
+	list-style-type: none;
+	padding: 0 !important;
+	width: auto;
+	height: 34px;
+	display: block;
+}
+.social_share_privacy_area li {
+	margin: 0 !important;
+	padding: 0;
+	height: 34px;
+	float: left;
+}
+.social_share_privacy_area li .dummy_btn {
+    cursor: pointer;
+    padding: 0;
+    height: inherit;
+}
+.social_share_privacy_area li div iframe {
+    overflow: hidden;
+    height: inherit;
+    width: inherit;
+}
+
+.social_share_privacy_area .facebook,
+.social_share_privacy_area .twitter,
+.social_share_privacy_area .gplus {float:left;}
+/* Facebook begin */
+.social_share_privacy_area .facebook {
+}
+/* Facebook end */
+/* Twitter begin */
+.social_share_privacy_area .twitter {
+}
+.social_share_privacy_area li div.tweet {
+	width: auto;
+}
+/* Twitter end */
+/* Google+ begin */
+.social_share_privacy_area .gplus {
+}
+/* Google+ end */
+/* Switch begin */
+.social_share_privacy_area li .switch {
+    display:none;
+    text-indent: -9999em;
+    background: transparent url(images/socialshareprivacy_on_off.png) no-repeat 0 0 scroll;
+    width: 23px;
+    height: 12px;
+    overflow: hidden;
+    float: left;
+    margin: 4px 0 0;
+    padding: 0;
+    cursor: pointer;
+}
+.social_share_privacy_area li .switch.on {
+    background-position: 0 -12px; 
+}
+/* Switch end */
+/* Tooltips begin */
+.social_share_privacy_area li.help_info {
+    position: relative; float:left;
+	height:27px;
+	padding:7px 10px 0;
+	text-align:center;
+	border-right:#cdcdcd solid 1px;
+}
+.social_share_privacy_area li.help_info .info, 
+.social_share_privacy_area li .help_info.icon .info {
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+	font-family:Arial, Helvetica, sans-serif;
+    width: 350px;
+    padding: 10px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+    border: 1px solid #ccc;
+    -moz-box-shadow:1px 1px 1px #333;
+    -webkit-box-shadow:1px 1px 1px #333;
+    box-shadow:1px 1px 1px #333;
+    background-color: #fff;
+    color: #000;
+    z-index: 500;
+    text-align: left;
+}
+.social_share_privacy_area li.gplus.help_info .info {
+    left: -60px;
+}
+.social_share_privacy_area li .help_info.icon .info {
+    left: -233px;
+    width: 350px;
+}
+.social_share_privacy_area li.help_info.display .info, 
+.social_share_privacy_area li .help_info.icon.display .info {
+    display: block;
+}
+.social_share_privacy_area li.help_info.info_off.display .info {
+    display: block;
+}
+.social_share_privacy_area li .help_info.icon {
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.on .help_info.icon {
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.perma_option_off .help_info.icon {
+}
+/* Tooltips end */
+/* Settings/Info begin */
+.social_share_privacy_area li.settings_info {
+	position: relative;
+}
+.social_share_privacy_area li.settings_info a {
+	text-decoration: none;
+	margin: 0 !important;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu {
+    background-color: #fff;
+    border: 1px solid #b4b4b4;
+	-moz-box-shadow:1px 1px 1px #333;
+	-webkit-box-shadow:1px 1px 1px #333;
+    box-shadow:1px 1px 1px #333;
+    left: 0;
+    position: absolute;
+    top: -1px;
+    width: 135px;
+    z-index: 1000;
+    margin: 0;
+    padding:0 0 0 10px;
+	font-family:Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.off {
+	position:relative;
+	width:auto; height:34px;
+	padding:0 10px;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	background:none;
+	border:transparent solid 1px;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.off form {
+	display: none;
+	margin: 0;
+	padding: 0;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu .settings {
+	display:block;
+	height:34px;
+	margin: 0; padding: 0; padding-left:23px;
+	line-height:34px;
+	background:url(images/settings.png) no-repeat left center scroll;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.on .settings {
+	border-top-width: 0;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset {
+    border-width: 0;
+    margin: 0;
+    padding: 0 10px 10px;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset legend {
+    font-size: 11px;
+    line-height: 14px;
+    margin: 0;
+    padding: 10px 0;
+	width: 115px;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset input {
+	clear: both;
+    float: left;
+    margin: 4px 10px 4px 0;
+    padding: 0;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset label {
+    display: inline-block;
+    float: left;
+    font-size: 12px;
+    line-height: 24px;
+	-moz-transition: color .5s ease-in;
+	-webkit-transition: color .5s ease-in;
+	transition: color .5s ease-in;
+	margin: 0;
+	padding: 0;
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset label.checked {
+	color: #090;
+}
+
+
+.fb_like iframe {width:120px !important;}
+.twitter iframe {width:80px !important;}
+.gplusone iframe,
+.gplusone div {width:60px !important;}
+
+
+/* Settings/Info end */
+#social_bookmarks .settings_info {
+    padding-left: 0;
+}
+
+@media screen and (max-width: 480px) {
+    .mobile-hide-tablet-show { display: none !important; }
+    .fb_like iframe { width: 90px !important; }
+    .twitter iframe { width: 58px !important; }
+}

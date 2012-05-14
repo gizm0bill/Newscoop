@@ -1,5 +1,7 @@
 <?php
 
+use Newscoop\Annotations\Acl;
+
 require_once($GLOBALS['g_campsiteDir'].'/classes/User.php');
 
 require_once($GLOBALS['g_campsiteDir'].'/template_engine/classes/CampSite.php');

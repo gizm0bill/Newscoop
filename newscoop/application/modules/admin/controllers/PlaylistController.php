@@ -6,16 +6,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
+use Newscoop\Service\Implementation\ArticleTypeServiceDoctrine,
+    Newscoop\Utils\Exception,
+    Newscoop\Service\Implementation\var_hook,
+    Newscoop\Entity\Language,
+    Newscoop\Entity\Playlist,
+    Newscoop\Annotations\Acl;
+
 /**
  * PlaylistController
  * @Acl(resource="playlist", action="manage")
  */
-use Newscoop\Service\Implementation\ArticleTypeServiceDoctrine;
-use Newscoop\Utils\Exception;
-use Newscoop\Service\Implementation\var_hook;
-use Newscoop\Entity\Language;
-use Newscoop\Entity\Playlist;
-
 class Admin_PlaylistController extends Zend_Controller_Action
 {
     /**
@@ -55,7 +56,11 @@ class Admin_PlaylistController extends Zend_Controller_Action
     public function popupAction()
     {
         $this->_helper->layout->setLayout('iframe');
-        $playlist = $this->playlistRepository->find($this->_request->getParam('id', null));
+
+        $playlist = null;
+        if ($this->_getParam('id', false)) {
+            $playlist = $this->playlistRepository->find($this->_request->getParam('id', null));
+        }
 
         if ($playlist instanceof \Newscoop\Entity\Playlist)
         {

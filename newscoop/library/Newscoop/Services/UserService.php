@@ -9,13 +9,12 @@ namespace Newscoop\Services;
 
 use Doctrine\Common\Persistence\ObjectManager,
     Newscoop\Entity\User,
-    Newscoop\Entity\UserAttribute,
-    Newscoop\Persistence\ObjectRepository;
+    Newscoop\Entity\UserAttribute;
 
 /**
  * User service
  */
-class UserService implements ObjectRepository
+class UserService
 {
     /** @var array */
     private $config = array();
@@ -350,6 +349,23 @@ class UserService implements ObjectRepository
     }
 
     /**
+     * Check if user is an editor
+     *
+     * @param MetaUser $user
+     * @return bool
+     */
+    public function isEditor($user)
+    {
+        foreach ($this->findEditors() as $editor) {
+            if ($user->getId() == $editor->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * List active users
      *
      * @return array
@@ -358,6 +374,12 @@ class UserService implements ObjectRepository
     {
         $offset = ($page - 1) * $limit;
         return $this->repository->findActiveUsers($countOnly, $offset, $limit, $this->config['communityExcludedRoles']);
+    }
+
+    public function getVerifiedUsers($countOnly=false, $page=1, $limit=8)
+    {
+        $offset = ($page - 1) * $limit;
+        return $this->repository->findVerifiedUsers($countOnly, $offset, $limit);
     }
 
     /**

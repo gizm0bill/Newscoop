@@ -29,8 +29,8 @@ theme_path = APPLICATION_PATH "/../themes"
 ; doctrine resource
 resources.doctrine.cache = "Doctrine\Common\Cache\ArrayCache";
 resources.doctrine.entity.dir = APPLICATION_PATH "/../library/Newscoop/Entity"
-resources.doctrine.proxy.dir = APPLICATION_PATH "/../library/Newscoop/Entity/Proxy"
-resources.doctrine.proxy.namespace = "Newscoop\Entity\Proxy"
+resources.doctrine.proxy.dir = APPLICATION_PATH "/../library/Proxy"
+resources.doctrine.proxy.namespace = "Proxy"
 resources.doctrine.proxy.autogenerate = false
 resources.doctrine.functions.rand = "Newscoop\Query\MysqlRandom"
 resources.doctrine.functions.dayofweek = "Newscoop\Query\MysqlDayOfWeek"
@@ -89,9 +89,13 @@ resourceNames.Translations = translation
 listener[] = audit
 listener[] = comment
 listener[] = community_feed
-listener[] = user_points
 listener[] = user_attributes
 listener[] = comment_notification
+listener[] = search_indexer_article
+listener[] = search_indexer_comment
+listener[] = search_indexer_user
+
+subscriber = 0
 
 ; audit events
 audit.events[] = comment.update
@@ -153,8 +157,6 @@ community_feed.events[] = topic.follow
 community_feed.events[] = document.approved
 community_feed.events[] = blog.published
 
-user_points.events[] = image.published
-
 user_attributes.events[] = image.delivered
 user_attributes.events[] = image.approved
 user_attributes.events[] = image.published
@@ -167,6 +169,10 @@ comment.events[] = comment.recommended
 comment.events[] = comment.delete
 
 comment_notification.events[] = comment.create
+
+search_indexer_article.events[] = article.delete
+search_indexer_comment.events[] = comment.delete
+search_indexer_user.events[] = user.delete
 
 ; autoloader dirs
 autoloader.dirs[] = APPLICATION_PATH "/../classes"
@@ -249,6 +255,19 @@ image.cache_path = APPLICATION_PATH "/../images/cache"
 image.cache_url = "images/cache"
 image.cache_path = APPLICATION_PATH "/../images/cache"
 
+index.update_url = "http://localhost:8983/solr/update/json?commit=true"
+index.select_url = "http://localhost:8983/solr/select/"
+search.article.type[] = "news"
+search.article.type[] = "newswire"
+search.article.type[] = "dossier"
+search.article.type[] = "event"
+search.article.type[] = "link"
+search.article.type[] = "blog"
+search.article.type[] = "bloginfo"
+search.article.rendition = "rubrikenseite"
+
+twitter.id = "tageswoche"
+
 [staging : production]
 
 [testing : production]
@@ -264,6 +283,9 @@ resources.doctrine.functions.rand = "Newscoop\Query\SqliteRandom"
 ; disable listeners during testing
 audit.events = 0
 community_feed.events = 0
+comment.events = 0
+comment_notification.events = 0
+subscriber = 0
 
 ingest.path = APPLICATION_PATH "/../tests/ingest"
 ingest_publisher.image_path = APPLICATION_PATH "/../tests/ingest"
