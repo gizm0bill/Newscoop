@@ -3,8 +3,8 @@
                     <div class="omni-corner-box comments-box tabs">
                     
                         <ul class="comments-nav">
-                            <li><a href="#ausgewahlte-kommentare">Ausgewählte Kommentare {{ if $gimme->article->recommended_comment_count }}({{ $gimme->article->recommended_comment_count }}){{ /if }}</a></li>
-                            <li><a href="#alle-kommentare">Alle Kommentare ({{ $gimme->article->comment_count }})</a></li>
+                            <li>{{ strip }}<a href="#ausgewahlte-kommentare"><span class="mobile-hide">Ausgewählte Kommentare</span><span class="desktop-hide">Beste</span> {{ if $gimme->article->recommended_comment_count }}({{ $gimme->article->recommended_comment_count }}){{ /if }}</a>{{ /strip }}</li>
+                            <li>{{ strip }}<a href="#alle-kommentare">Alle<span class="mobile-hide"> Kommentare</span> ({{ $gimme->article->comment_count }})</a>{{ /strip }}</li>
                         </ul>
                         
                         <div id="ausgewahlte-kommentare" class="comment-list">
