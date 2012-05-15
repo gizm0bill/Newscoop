@@ -20,6 +20,7 @@ var DocumentView = Backbone.View.extend({
 var SearchFormView = Backbone.View.extend({
     events: {
         'blur input': 'search',
+        'keypress input': 'search',
         'click button': 'search',
         'send': 'search'
     },
@@ -35,6 +36,10 @@ var SearchFormView = Backbone.View.extend({
     },
 
     search: function(e) {
+        if (e.keyCode && e.keyCode !== 13) {
+            return e;
+        }
+
         e.preventDefault();
 
         this.collection.query = $(this.el).find('input').val();
