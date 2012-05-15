@@ -20,7 +20,7 @@ class BlogFacade
      * @var array
      */
     private $postsHeaders = array(
-        'X-Filter' => 'Content, PublishedOn, Creator.Name',
+        'X-Filter' => 'Id, Content, PublishedOn, UpdatedOn, Creator.Name',
     );
 
     /**
@@ -79,7 +79,6 @@ class BlogFacade
             $response = $this->client->get(array(self::POSTS_UPDATE_PATH, array(
                 'lastmod' => $lastModified->format(\DateTime::W3C),
             )), $this->postsHeaders)->send();
-
             return json_decode($response->getBody(TRUE))->BlogPostList;
         } catch (\Exception $e) {
             $this->handleException($e);

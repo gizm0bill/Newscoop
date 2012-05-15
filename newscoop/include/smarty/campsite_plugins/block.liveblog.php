@@ -45,7 +45,7 @@ EOT;
             $view->baseUrl('/js/backbone.js'),
             $view->baseUrl('/js/apps/livedesk.js'),
             !empty($params['el']) ? $params['el'] : '#liveblog-posts',
-            json_encode($view->url(array('controller' => 'livedesk', 'action' => 'get-posts-after', 'id' => (int) $params['id']), 'default')),
+            json_encode($view->url(array('controller' => 'livedesk', 'action' => 'update', 'id' => (int) $params['id']), 'default')),
             json_encode($blog->posts)
         );
     }
