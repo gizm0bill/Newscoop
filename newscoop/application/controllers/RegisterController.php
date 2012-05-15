@@ -78,7 +78,7 @@ class RegisterController extends Zend_Controller_Action
             }
 
             if (!$user->isPending()) {
-                $this->_helper->json("User with email '$values[email]' is registered already.");
+                $this->_helper->json("Die E-Mail-Adresse '$values[email]' ist bei uns bereits registriert.");
             } else {
                 $this->_helper->service('email')->sendConfirmationToken($user);
                 $this->_helper->json("OK");

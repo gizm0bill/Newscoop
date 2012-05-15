@@ -174,9 +174,9 @@ class AuthController extends Zend_Controller_Action
             if (!empty($user) && $user->isActive()) {
                 $this->_helper->service('email')->sendPasswordRestoreToken($user);
                 
-                $this->view->response = "E-mail with instructions was sent to given email address.";
+                $this->view->response = "Wir haben Ihnen eine E-Mail zum Wiederherstellen Ihres Passworts geschickt.";
             } else if (empty($user)) {
-                $this->view->response = "Given email not found.";
+                $this->view->response = "Diese E-Mail-Adresse ist bei uns nicht registriert. Ist es die richtige?";
             }
         }
     }
