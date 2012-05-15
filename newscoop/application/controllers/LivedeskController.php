@@ -14,116 +14,45 @@ use Guzzle\Http\Plugin\CachePlugin;
  */
 class LivedeskController extends Zend_Controller_Action
 {
-    const IF_MODIFIED_SINCE_HEADER = 'If-Modified-Since';
-    const BLOG_POSTS_PATH = '/resources/LiveDesk/Blog/{id}/BlogPost/Published';
-    const BLOG_INFO_PATH = '/resources/LiveDesk/Blog/{id}';
-    const RFC1123_DATE = 'D, d M Y H:i:s \G\M\T';
-
     public function init()
     {
         $this->_helper->contextSwitch
             ->addActionContext('update', 'json')
-            ->initContext();
+            ->initContext('json');
     }
 
     public function indexAction()
     {
-        try {
-            $client = $this->getClient(1);
-            list($blog, $posts) = $client->send(array(
-                $client->get(self::BLOG_INFO_PATH),
-                $client->get(self::BLOG_POSTS_PATH, $this->getPostsHeaders()),
-            ));
-
-            $this->view->blog = json_decode($blog->getBody(TRUE));
-            $this->view->posts = $posts->getBody(TRUE);
-        } catch (Guzzle\Http\Exception\BadResponseException $e) {
-            $this->getResponse()->setHttpResponseCode(500);
-            echo 'Error!', ' ' , $e->getMessage();
-        }
     }
 
     public function updateAction()
     {
-        $this->_helper->viewRenderer->setNoRender();
+        $id = $this->_getParam('id');
+        $lastModified = $this->_getParam('lastmod');
+
+        if (!is_numeric($id)) {
+            throw new InvalidArgumentException("Parameter 'id' is not a valid identifier.");
+        }
+
+        if (!date_create($lastModified)) {
+            throw new InvalidArgumentException("Parameter 'lastmod' is not a valid datetime.");
+        }
+
         try {
-            $client = $this->getClient(1);
-            $posts = $client->get(self::BLOG_POSTS_PATH, $this->getPostsHeaders())->send();
-            if (!$this->isUpdated($posts)) {
-                $this->getResponse()->setHttpResponseCode(304);
+            $lastModified = new \DateTime($lastModified);
+            $posts = $this->_helper->service('livedesk.blog')->findPostsAfter($lastModified, $id);
+            if (empty($posts)) {
+                $this->getResponse()->setHttpResponseCode(204);
                 $this->getResponse()->clearBody();
                 $this->getResponse()->sendResponse();
             } else {
-                $this->_helper->json(json_decode($posts->getBody(TRUE)));
+                $this->_helper->json($posts);
             }
-        } catch (Exception $e) {
-            $this->getResponse()->setHttpResponseCode(500);
+        } catch (\Exception $e) {
             $this->_helper->json(array(
+                'errorCode' => $e->getCode(),
                 'errorMessage' => $e->getMessage(),
             ));
         }
-    }
-
-    /**
-     * Get configured http client
-     *
-     * @param int $id
-     * @return Guzzle\Http\Client
-     */
-    private function getClient($id)
-    {
-        $client = new Client('http://localhost:8080/', array(
-            'id' => (int) $id,
-        ));
-
-        $adapter = new DoctrineCacheAdapter(new Cache());
-        $cache = new CachePlugin($adapter, TRUE);
-        $client->getEventDispatcher()->addSubscriber($cache);
-
-        return $client;
-    }
-
-    /**
-     * Get headers for posts request
-     *
-     * @return array
-     */
-    private function getPostsHeaders()
-    {
-        return array_filter(array(
-            'X-Filter' => 'Content, PublishedOn, Creator.Name',
-            self::IF_MODIFIED_SINCE_HEADER => $this->getIfModifiedSinceHeader(),
-        ));
-    }
-
-    /**
-     * Test if posts are updated after last mod header
-     *
-     * @return bool
-     */
-    private function isUpdated($posts)
-    {
-        if (!$this->getIfModifiedSinceHeader()) {
-            return TRUE;
-        }
-
-        $items = json_decode($posts->getBody(TRUE))->BlogPostList;
-        if (empty($items)) {
-            return FALSE;
-        }
-
-        $now = new DateTime($this->getIfModifiedSinceHeader());
-        $lastPublished = new DateTime($items[0]->PublishedOn);
-        return $now->getTimestamp() <= $lastPublished->getTimestamp();
-    }
-
-    /**
-     * Get If-Modified-Since header
-     *
-     * @return string
-     */
-    private function getIfModifiedSinceHeader()
-    {
-        return $this->getRequest()->getHeader(self::IF_MODIFIED_SINCE_HEADER) ? $this->getRequest()->getHeader(self::IF_MODIFIED_SINCE_HEADER) : null;
     }
 }
