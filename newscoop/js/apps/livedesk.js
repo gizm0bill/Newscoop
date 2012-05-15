@@ -2,6 +2,8 @@
  * Item model
  */
 var Item = Backbone.Model.extend({
+    idAttribute: 'Id',
+
     getPublished: function() {
         var date = new Date(this.get('PublishedOn'));
         return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.getHours() + ':' + date.getMinutes();
@@ -14,16 +16,31 @@ var Item = Backbone.Model.extend({
 var ItemCollection = Backbone.Collection.extend({
     model: Item,
 
-    parse: function(response) {
-        if (!response) { // workaround for 304 responses
-            return this.toJSON();
-        }
+    sync: function(method, collection, options) {
+        $.getJSON(collection.url, {
+            'lastmod': collection.getLastModified()
+        }, function(data, textStatus, jqXHR) {
+            for (var i = data.length - 1; i >= 0; i--) {
+                if (model = collection.get(data[i].Id)) {
+                    model.set(data[i]);
+                } else {
+                    collection.unshift(data[i]);
+                }
+            }
+            collection.view.update(collection);
+        });
+    },
 
-        if ('BlogPostList' in response) {
-            return response.BlogPostList;
-        }
+    getLastModified: function() {
+        var values = this.map(function(model) {
+            var date = new Date(model.has('UpdatedOn') ? model.get('UpdatedOn') : model.get('PublishedOn'));
+            return date.getTime();
+        });
 
-        return response;
+        var max = _.max(values);
+        var date = new Date();
+        date.setTime(max);
+        return date.toUTCString();
     }
 });
 
@@ -34,9 +51,18 @@ var ItemView = Backbone.View.extend({
     tagName: 'li',
     template: _.template($('#item-template').html()),
 
+    initialize: function() {
+        this.model.bind('change', this.update, this);
+    },
+
     render: function() {
         $(this.el).html(this.template({item: this.model}));
         return this;
+    },
+
+    update: function() {
+        this.render();
+        $(this.el).addClass('updated');
     }
 });
 
@@ -114,15 +140,12 @@ var LivedeskView = Backbone.View.extend({
      * Update view after fetching new items
      *
      * @param {object} collection
-     * @param {object} response
      */
-    update: function(collection, response) {
+    update: function(collection) {
         $('#update-livedesk').detach();
         var newPostsCount = collection.length - collection.view.length;
         if (newPostsCount > 0) {
             $(collection.view.el).prepend('<a href="#" id="update-livedesk">There are ' + newPostsCount + ' new items.</a>');
-        } else {
-            console.log(collection.length);
         }
 
         $('#last-updated').fadeOut(function() {
@@ -140,8 +163,6 @@ var LivedeskView = Backbone.View.extend({
      */
     fetch: function(view) {
         $('#last-updated').text('updating...');
-        view.collection.fetch({silent: true, success: view.update, headers: {
-            'If-Modified-Since': view.updated
-        }});
+        view.collection.fetch();
     }
 });
