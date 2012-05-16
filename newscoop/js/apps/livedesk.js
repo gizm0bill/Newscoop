@@ -16,31 +16,55 @@ var Item = Backbone.Model.extend({
 var ItemCollection = Backbone.Collection.extend({
     model: Item,
 
+    /**
+     * Update collection - add new items and update rest
+     */
     sync: function(method, collection, options) {
         $.getJSON(collection.url, {
             'lastmod': collection.getLastModified()
         }, function(data, textStatus, jqXHR) {
-            for (var i = data.length - 1; i >= 0; i--) {
-                if (model = collection.get(data[i].Id)) {
-                    model.set(data[i]);
-                } else {
-                    collection.unshift(data[i]);
+            if (data) {
+                for (var i = data.length - 1; i >= 0; i--) {
+                    var model = collection.get(data[i].Id);
+                    if (model) {
+                        model.set(data[i]);
+                    } else {
+                        collection.add(data[i]);
+                    }
                 }
             }
+
             collection.view.update(collection);
         });
     },
 
+    /**
+     * Get last modified date for sync call
+     *
+     * last modified is max of publishedOn + updatedOn of all the items
+     *
+     * @return {string}
+     */
     getLastModified: function() {
-        var values = this.map(function(model) {
-            var date = new Date(model.has('UpdatedOn') ? model.get('UpdatedOn') : model.get('PublishedOn'));
+        var values = this.map(function(item) {
+            var date = new Date(item.has('UpdatedOn') ? item.get('UpdatedOn') : item.get('PublishedOn'));
             return date.getTime();
         });
 
-        var max = _.max(values);
-        var date = new Date();
-        date.setTime(max);
-        return date.toUTCString();
+        var maxTime = _.max(values);
+        var maxDate = new Date();
+        maxDate.setTime(maxTime);
+        return maxDate.toUTCString();
+    },
+
+    /**
+     * Return value for collection ordering
+     *
+     * @return {int}
+     */
+    comparator: function(item) {
+        var date = new Date(item.get('PublishedOn'));
+        return - date.getTime();
     }
 });
 
@@ -70,7 +94,7 @@ var ItemView = Backbone.View.extend({
  * List view
  */
 var ListView = Backbone.View.extend({
-    tagName: 'ul',
+    tagName: 'ol',
 
     initialize: function() {
         this.collection.bind('reset', this.render, this);
@@ -91,7 +115,7 @@ var ListView = Backbone.View.extend({
  * Livedesk view
  */
 var LivedeskView = Backbone.View.extend({
-    wait: 21000, // ms
+    wait: 13000, // ms
     length: 0,
 
     events: {
@@ -133,7 +157,7 @@ var LivedeskView = Backbone.View.extend({
      * @param {object} data
      */
     reset: function(data) {
-        this.collection.reset(this.collection.parse(data));
+        this.collection.reset(data);
     },
 
     /**
@@ -143,17 +167,15 @@ var LivedeskView = Backbone.View.extend({
      */
     update: function(collection) {
         $('#update-livedesk').detach();
+
         var newPostsCount = collection.length - collection.view.length;
         if (newPostsCount > 0) {
-            $(collection.view.el).prepend('<a href="#" id="update-livedesk">There are ' + newPostsCount + ' new items.</a>');
+            $(collection.view.el).prepend('<a href="#" id="update-livedesk">New items: ' + newPostsCount + '</a>');
         }
 
         $('#last-updated').fadeOut(function() {
             $(this).text('updated on ' + (new Date()).toLocaleTimeString()).fadeIn();
         });
-
-        collection.view.timer = _.delay(collection.view.fetch, collection.view.wait, collection.view);
-        collection.view.updated = (new Date()).toUTCString();
     },
 
     /**
@@ -164,5 +186,7 @@ var LivedeskView = Backbone.View.extend({
     fetch: function(view) {
         $('#last-updated').text('updating...');
         view.collection.fetch();
+        view.timer = _.delay(view.fetch, view.wait, view);
+        view.updated = (new Date()).toUTCString();
     }
 });
