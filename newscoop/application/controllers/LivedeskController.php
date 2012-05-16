@@ -5,11 +5,6 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Doctrine\Common\Cache\ApcCache as Cache;
-use Guzzle\Http\Client;
-use Guzzle\Common\Cache\DoctrineCacheAdapter;
-use Guzzle\Http\Plugin\CachePlugin;
-
 /**
  */
 class LivedeskController extends Zend_Controller_Action
@@ -21,6 +16,9 @@ class LivedeskController extends Zend_Controller_Action
             ->initContext('json');
     }
 
+    /**
+     * @todo: remove action
+     */
     public function indexAction()
     {
     }
@@ -41,6 +39,14 @@ class LivedeskController extends Zend_Controller_Action
         try {
             $lastModified = new \DateTime($lastModified);
             $posts = $this->_helper->service('livedesk.blog')->findPostsAfter($lastModified, $id);
+            $posts = array(array(
+                'Content' => 'New post ' . sha1(uniqid()),
+                'PublishedOn' => date_create()->format(DateTime::W3C),
+                'Id' => mt_rand(0, 21),
+                'Creator' => array(
+                    'Name' => 'Petr',
+                ),
+            ));
             if (empty($posts)) {
                 $this->getResponse()->setHttpResponseCode(204);
                 $this->getResponse()->clearBody();
