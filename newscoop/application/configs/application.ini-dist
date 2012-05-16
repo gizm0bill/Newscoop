@@ -154,7 +154,7 @@ community_feed.events[] = print.subscribe
 community_feed.events[] = comment.recommended
 community_feed.events[] = topic.follow
 ;community_feed.events[] = image.approved
-community_feed.events[] = document.approved
+;community_feed.events[] = document.approved
 community_feed.events[] = blog.published
 
 user_attributes.events[] = image.delivered
