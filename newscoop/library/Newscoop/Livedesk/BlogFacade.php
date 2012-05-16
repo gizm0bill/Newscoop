@@ -7,6 +7,9 @@
 
 namespace Newscoop\Livedesk;
 
+use Guzzle\Http\Client,
+    Guzzle\Http\Message\Response;
+
 /**
  * Blog facade
  */
@@ -14,7 +17,7 @@ class BlogFacade
 {
     const BLOG_PATH = '/resources/LiveDesk/Blog/{id}';
     const POSTS_PATH = '/resources/LiveDesk/Blog/{id}/BlogPost/Published';
-    const POSTS_UPDATE_PATH = '/resources/LiveDesk/Blog/{id}/BlogPost/Published'; //?Modified={lastmod}';
+    const POSTS_UPDATE_PATH = '/resources/LiveDesk/Blog/{id}/BlogPost/Published'; //?ModifiedAfter={lastmod}';
 
     /**
      * @var array
@@ -36,7 +39,7 @@ class BlogFacade
     /**
      * @param Guzzle\Http\Client $client
      */
-    public function __construct(\Guzzle\Http\Client $client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }
@@ -49,6 +52,10 @@ class BlogFacade
      */
     public function find($id)
     {
+        if (!empty($id) && isset($this->blogs[$id])) {
+            return $this->blogs[$id];
+        }
+
         try {
             $this->setClientId($id);
             list($blogResponse, $postsResponse) = $this->client->send(array(
@@ -56,9 +63,10 @@ class BlogFacade
                 $this->client->get(self::POSTS_PATH, $this->postsHeaders),
             ));
 
-            $blog = array_change_key_case(json_decode($blogResponse->getBody(TRUE), TRUE));
-            $blog['posts'] = array_pop(json_decode($postsResponse->getBody(TRUE), TRUE));
-            return $this->blogs[$id] = (object) $blog;
+            $blog = $this->getBlog($blogResponse);
+            $blog->posts = $this->getPosts($postsResponse);
+            $this->blogs[$id] = $blog;
+            return $blog;
         } catch (\Exception $e) {
             $this->handleException($e);
             return NULL;
@@ -76,10 +84,12 @@ class BlogFacade
     {
         try {
             $this->setClientId($id);
-            $response = $this->client->get(array(self::POSTS_UPDATE_PATH, array(
-                'lastmod' => $lastModified->format(\DateTime::W3C),
-            )), $this->postsHeaders)->send();
-            return json_decode($response->getBody(TRUE))->BlogPostList;
+            $response = $this->client->get(array(
+                self::POSTS_UPDATE_PATH, array(
+                    'lastmod' => $lastModified->format(\DateTime::W3C),
+                ),
+            ), $this->postsHeaders)->send();
+            return $this->getPosts($response);
         } catch (\Exception $e) {
             $this->handleException($e);
             return NULL;
@@ -114,5 +124,27 @@ class BlogFacade
         if (APPLICATION_ENV === 'development') {
             echo 'Error:', ' ' , $e->getMessage();
         }
+    }
+
+    /**
+     * Get posts from response
+     *
+     * @param Guzzle\Http\Message\Response $response
+     * @return array
+     */
+    private function getPosts(Response $response)
+    {
+        return (array) json_decode($response->getBody(TRUE))->BlogPostList;
+    }
+
+    /**
+     * Get blog from response
+     *
+     * @param Guzzle\Http\Message\Response $response
+     * @return object
+     */
+    private function getBlog(Response $response)
+    {
+        return (object) array_change_key_case(json_decode($response->getBody(TRUE), TRUE));
     }
 }
