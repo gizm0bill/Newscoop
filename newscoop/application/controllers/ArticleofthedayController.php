@@ -124,8 +124,8 @@ class ArticleofthedayController extends Zend_Controller_Action
             
             $image = $this->_helper->service('image.rendition')->getArticleRenditionImage($article_number, 'rubrikenseite', 140, 94);
 
-            $image_relpath = trim(urldecode($this->view->url(array('src' => $image['src']), 'image', true, false)), '/');
-            if (isset($image) && is_file($image_relpath)) {
+            //$image_relpath = ltrim(urldecode($this->view->url(array('src' => $image['src']), 'image', true, false)), '/');
+            if (isset($image)) { // && is_file($image_relpath)) {
                 $json['image'] = $this->view->url(array('src' => $image['src']), 'image', true, false);
             }
             else {
