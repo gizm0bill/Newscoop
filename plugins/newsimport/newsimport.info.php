@@ -320,6 +320,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             'languages' => array('type' => 'text', 'params' => array(), 'hidden' => false), // usually empty
             'prices' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), // some textual or numerical info, if available
             'minimal_age' => array('type' => 'text', 'params' => array(), 'hidden' => false), // textual or numerical info, if any, but usually empty
+            'minimal_age_category' => array('type' => 'text', 'params' => array(), 'hidden' => false), // minimal age info categorized
             // other details - fixed form
             'canceled' => array('type' => 'switch', 'params' => array(), 'hidden' => false), // if event was canceled
             'rated' => array('type' => 'switch', 'params' => array(), 'hidden' => false), // if of some restricted (hot/explicit) kind
@@ -327,6 +328,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             // category available as article topic
             // images as article images
             // geolocation as map POIs
+            'recommended' => array('type' => 'switch', 'params' => array(), 'hidden' => false), // recommended by TW staff
         );
 
         $evt_fields = array(
@@ -338,6 +340,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
 
         $scr_fields = array(
             'movie_key' => array('type' => 'text', 'params' => array(), 'hidden' => true), // outer movie identifier, but can be empty
+            'movie_screening' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
             // date/time - json
             // 'date_time_tree' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => true), // puts several date, time, flags, into a single field
             'movie_imdb' => array('type' => 'text', 'params' => array(), 'hidden' => false), //

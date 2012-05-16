@@ -1217,6 +1217,10 @@ class KinoData_Parser_SimpleXML {
                     }
                     $one_movie_key = trim('' . $one_movie->filmkey); // connector to the movies data, but can be empty!
                     $one_movie_title = trim('' . $one_movie->filmtitle);
+                    if ('' == $one_movie_key) {
+                        $one_movie_key = 'tw_' . str_replace(array(' '. '_', '-', '"', '\'', '\\', '/'), '', iconv('UTF-8', 'ASCII//TRANSLIT', strtolower($one_movie_title)));
+                    }
+
                     $one_movie_desc = trim('' . $one_movie->filmcig_d);
                     $one_movie_desc_mini = trim('' . $one_movie->filmminitext);
                     if (strlen($one_movie_desc_mini) > strlen($one_movie_desc)) {
@@ -1232,6 +1236,7 @@ class KinoData_Parser_SimpleXML {
 
                     $one_movie_rating_wv = trim('' . $one_movie->film20rate_d);
                     $one_movie_age = trim('' . $one_movie->movcatnam);
+                    $one_movie_age_orig = $one_movie_age;
                     $one_movie_age_matches = array();
                     if (preg_match('/^([^\s]+)[\s]*J$/i', $one_movie_age, $one_movie_age_matches)) {
                         $one_movie_age = $one_movie_age_matches[1];
@@ -1295,6 +1300,7 @@ class KinoData_Parser_SimpleXML {
 
                         'rating_wv' => $one_movie_rating_wv,
                         'allowed_age' => $one_movie_age,
+                        'allowed_age_orig' => $one_movie_age_orig,
                     );
                 }
 
@@ -1580,7 +1586,7 @@ class KinoData_Parser_SimpleXML {
             ksort($set_date_times);
 
             //$one_event['date'] = $one_date_max; // for the newer (but not used) way of dealing with old data
-            $one_event['date_time_tree'] = json_encode($set_date_times);
+            $one_event['date_time_data'] = $set_date_times;
             $one_event['date_time_text'] = $this->formatDateText($set_date_times);
 
 
@@ -1650,6 +1656,8 @@ hh.mm:langs:flags
                 $one_event['languages'] = '';
                 $one_event['prices'] = '';
                 $one_event['minimal_age'] = $one_screen['allowed_age'];
+                $one_event['minimal_age_category'] = $this->getMinAge($one_screen['allowed_age_orig']);
+
                 $one_event['rating_wv'] = $one_screen['rating_wv'];
 
                 $one_event['canceled'] = false;
@@ -1664,6 +1672,10 @@ hh.mm:langs:flags
                 $one_event['images'] = $one_mov_images;
 
                 $one_event['topics'] = $event_topics;
+
+                //$one_event['uses_multidates'] = true;
+                //$screening_datetimes = null;
+                //$one_event['datetimes'] = $screening_datetimes;
 
                 $screen_events_all[$one_event['event_id']] = $one_event;
 
@@ -1713,6 +1725,239 @@ hh.mm:langs:flags
 
         return $link;
     } // fn makeLink
+
+    private function getMinAge($p_minAge) {
+
+        $age_categories = array(
+
+            '00' => array(
+                'name_de' => '3-6 Jahre', 
+                'name_fr' => '3-6 ans', 
+                'name_it' => '3-6 anni', 
+                'keys' => array(
+                    //be
+                    '6/4 J',
+                    '7/4 J',
+                    '7/5 J',
+                    '8/5 J',
+                    //zh
+                    'SB',
+                    //bs
+                    '6/3',
+                    '7/4',
+                    '8/5',
+                    '4 J',
+                    '5 J',
+                    //romandie
+                    '0/4',
+                    '0/5',
+                    '0/6',
+                    '0/7',
+                    '0/8',
+                    '0/9',
+                    '0/10',
+                    '0/11',
+                    '0/12',
+                    '4/6',
+                    '5/5',
+                    '5/7',
+                    '5 anni',
+                ),
+            ),
+
+            '06' => array(
+                'name_de' => 'ab 6 Jahren', 
+                'name_fr' => 'à partir de 6 ans', 
+                'name_it' => 'da 6 anni', 
+                'keys' => array(
+                    //be
+                    '6/6 J',
+                    '8/6 J',
+                    '10/6 J',
+                    //zh
+                    'K/6',
+                    'K/8',
+                    'K/10',
+                    '6/8 J',
+                    '6/10 J',
+                    //bs
+                    '9/6',
+                    '6 J',
+                    //romandie
+                    '6/6',
+                    '6/8',
+                    '6/10',
+                    '6 anni',
+                ),
+            ),
+
+            '08' => array(
+                'name_de' => 'ab 8 Jahren', 
+                'name_fr' => 'à partir de 8 ans', 
+                'name_it' => 'da 8 anni', 
+                'keys' => array(
+                    //be
+                    '9/7 J',
+                    '10/8 J',
+                    '11/8 J',
+                    //zh
+                    //bs
+                    '10/7',
+                    '7 J',
+                    '11/8',
+                    '8 J',
+                    //romandie
+                    '7/7',
+                    '7/8',
+                    '7/9',
+                    '7/10',
+                    '7/11',
+                    '7/12',
+                    '7/13',
+                    '7/14',
+                    '7/16',
+                    '8/8',
+                    '8/10',
+                    '8 anni',
+                ),
+            ),
+
+            '10' => array(
+                'name_de' => 'ab 10 Jahren', 
+                'name_fr' => 'à partir de 10 ans', 
+                'name_it' => 'da 10 anni', 
+                'keys' => array(
+                    //be
+                    '12/10 J',
+                    '13/10 J',
+                    //zh
+                    //bs
+                    '12/9',
+                    '12/9 J',
+                    '9 J',
+                    '13/10',
+                    '10 J',
+                    //romandie
+                    '9/9',
+                    '10/10',
+                    '10/12',
+                    '10/14',
+                    '10/16',
+                    '10 anni',
+                ),
+            ),
+
+            '12' => array(
+                'name_de' => 'ab 12 Jahren', 
+                'name_fr' => 'à partir de 12 ans', 
+                'name_it' => 'da 12 anni', 
+                'keys' => array(
+                    //be
+                    '12/12 J',
+                    '14/12 J',
+                    //zh
+                    'J/12',
+                    'J/14',
+                    '12/14 J',
+                    //bs
+                    '14/11',
+                    '11 J',
+                    '15/12',
+                    '15/12 J',
+                    '12 J',
+                    //romandie
+                    '11/11',
+                    '12/12',
+                    '12/14',
+                    '12/15',
+                    '12/16',
+                    '12/18',
+                    '12 anni',
+                ),
+            ),
+
+            '14' => array(
+                'name_de' => 'ab 14 Jahren', 
+                'name_fr' => 'à partir de 14 ans', 
+                'name_it' => 'da 14 anni', 
+                'keys' => array(
+                    //be
+                    '14/14 J',
+                    '16/14 J',
+                    //zh
+                    //bs
+                    '16/13',
+                    '16/13 J',
+                    '13 J',
+                    '14 J',
+                    //romandie
+                    '14/14',
+                    '14/16',
+                    '14/18',
+                    '14 anni',
+                ),
+            ),
+
+            '16' => array(
+                'name_de' => 'ab 16 Jahren', 
+                'name_fr' => 'à partir de 16 ans', 
+                'name_it' => 'da 16 anni', 
+                'keys' => array(
+                    //be
+                    '16/16 J',
+                    '18/16 J',
+                    //zh
+                    'E',
+                    //bs
+                    '15 J',
+                    '16 J',
+                    //romandie
+                    '16/16',
+                    '16/18',
+                    '16 anni',
+                ),
+            ),
+
+            '18' => array(
+                'name_de' => 'ab 18 Jahren', 
+                'name_fr' => 'à partir de 18 ans', 
+                'name_it' => 'da 18 anni', 
+                'keys' => array(
+                    //be
+                    '18/18 J',
+                    //zh
+                    '18 J',
+                    //bs
+                    '17 J',
+                    '18 J',
+                    //romandie
+                    '18/18',
+                    '18 anni',
+                ),
+            ),
+
+            '99' => array(
+                'name_de' => 'unbekannt',
+                'name_fr' => 'inconnu',
+                'name_it' => 'sconosciuto',
+                'keys' => array(
+                    '',
+                ),
+            ),
+
+        );
+
+        $cat_spec = '99';
+        foreach ($age_categories as $cat_idx => $cat_info) {
+            if (in_array($p_minAge, $cat_info['keys'])) {
+                $cat_spec = $cat_idx;
+            }
+        }
+
+        return $cat_spec;
+    }
+
+
 
 } // class KinoData_Parser_SimpleXML
 
