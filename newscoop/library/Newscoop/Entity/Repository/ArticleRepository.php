@@ -26,6 +26,7 @@ class ArticleRepository extends DatatableSource implements \Newscoop\Search\Repo
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.indexed IS NULL OR a.indexed < a.date')
+            ->orderBy('a.number', 'DESC')
             ->getQuery()
             ->setMaxResults(50)
             ->getResult();
