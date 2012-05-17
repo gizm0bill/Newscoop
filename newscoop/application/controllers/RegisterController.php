@@ -313,8 +313,9 @@ class RegisterController extends Zend_Controller_Action
      */
     private function handleConfirmForm(Application_Form_Confirm $form, User $user, $userData = null)
     {
-        if (!empty($_POST) && !isset($_POST['image'])) {
+        if (!empty($_POST) && empty($_FILES)) {
             $form->removeElement('image');
+            unset($_POST['MAX_FILE_SIZE']);
         }
 
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
