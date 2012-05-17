@@ -313,6 +313,10 @@ class RegisterController extends Zend_Controller_Action
      */
     private function handleConfirmForm(Application_Form_Confirm $form, User $user, $userData = null)
     {
+        if (!empty($_POST) && !isset($_POST['image'])) {
+            $form->removeElement('image');
+        }
+
         if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
             try {
                 $values = $form->getValues();
