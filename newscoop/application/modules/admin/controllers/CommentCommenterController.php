@@ -7,7 +7,9 @@
  *
  *
  */
-use Newscoop\Entity\Comment\Commenter;
+
+use Newscoop\Entity\Comment\Commenter,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="comment", action="moderate")

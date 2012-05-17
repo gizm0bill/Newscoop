@@ -6,7 +6,8 @@
  */
 
 use Newscoop\Image\Rendition,
-    Newscoop\Package\PackageService;
+    Newscoop\Package\PackageService,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(ignore=True)

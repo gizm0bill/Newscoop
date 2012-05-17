@@ -41,6 +41,12 @@ class Section extends Entity
     private $issue;
 
     /**
+     * @Column(type="integer", name="NrIssue", nullable=True)
+     * @var int
+     */
+    private $issueNumber;
+
+    /**
      * @ManyToOne(targetEntity="Newscoop\Entity\Language")
      * @JoinColumn(name="IdLanguage", referencedColumnName="Id")
      * @var Newscoop\Entity\Language
@@ -74,6 +80,12 @@ class Section extends Entity
     private $articleTemplate;
 
     /**
+     * @Column(name="ShortName", nullable=True)
+     * @var string
+     */
+    private $shortName;
+
+    /**
      * @param int $number
      * @param string $name
      */
@@ -81,6 +93,17 @@ class Section extends Entity
     {
         $this->number = (int) $number;
         $this->name = (string) $name;
+    }
+
+    /**
+     * Set language
+     *
+     * @param Newscoop\Entity\Language $language
+     * @return void
+     */
+    public function setLanguage(Language $language)
+    {
+        $this->language = $language;
     }
 
     /**
@@ -158,6 +181,18 @@ class Section extends Entity
     }
 
     /**
+     * Set issue
+     *
+     * @param Newscoop\Entity\Issue $issue
+     * @return void
+     */
+    public function setIssue(Issue $issue)
+    {
+        $this->issue = $issue;
+        $this->issueNumber = $issue->getNumber();
+    }
+
+    /**
      * Get the issue assigned to this section
      *
      * @return Newscoop\Entity\Issue
@@ -175,5 +210,37 @@ class Section extends Entity
     public function getId()
     {
         return (int) $this->id;
+    }
+
+    /**
+     * Set short name
+     *
+     * @param string $shortName
+     * @return void
+     */
+    public function setShortName($shortName)
+    {
+        $this->shortName = (string) $shortName;
+    }
+
+    /**
+     * Get short name
+     *
+     * @return string
+     */
+    public function getShortName()
+    {
+        return $this->shortName;
+    }
+
+    /**
+     * Set publication
+     *
+     * @param Newscoop\Entity\Publication $publication
+     * @return void
+     */
+    public function setPublication(Publication $publication)
+    {
+        $this->publication = $publication;
     }
 }

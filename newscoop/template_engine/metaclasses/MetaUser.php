@@ -47,6 +47,7 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
         $this->m_customProperties['is_author'] = 'isAuthor';
         $this->m_customProperties['is_active'] = 'isActive';
         $this->m_customProperties['is_blogger'] = 'isBlogger';
+        $this->m_customProperties['is_editor'] = 'isEditor';
         $this->m_customProperties['author'] = 'getAuthor';
 
         $this->m_skipFilter[] = "name";
@@ -181,6 +182,17 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
     }
 
     /**
+     * Check if user is editor
+     *
+     * @return bool
+     */
+    public function isEditor()
+    {
+        return (bool) \Zend_Registry::get('container')->getService('user')
+            ->isEditor($this->m_dbObject);
+    }
+
+    /**
      * Test if user is logged in
      *
      * @return bool
@@ -261,14 +273,7 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
             return 0;
         }
 
-        $sum = 0;
-        $sum += $GLOBALS['controller']->getHelper('entity')->getRepository('Newscoop\Entity\Comment')
-            ->countByUser($this->m_dbObject);
-
-        $sum += $GLOBALS['controller']->getHelper('service')->getService('user')
-            ->getUserPostsCount($this->m_dbObject);
-
-        return $sum;
+        return $this->m_dbObject->getPoints();
     }
 
     /**

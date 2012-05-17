@@ -38,7 +38,7 @@ function manageSubscription(userSubscriptionKey) {
 
 -- <br>
 
-{{ if $subscriber }}
+{{ if !empty($subscriber) }}
     {{ if $userSubscriptions }}
 
         subscriptions:<br>

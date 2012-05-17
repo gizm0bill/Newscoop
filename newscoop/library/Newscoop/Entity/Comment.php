@@ -16,7 +16,7 @@ use Newscoop\Entity\Comment\Commenter;
  * @table(name="comment")
  * @entity(repositoryClass="Newscoop\Entity\Repository\CommentRepository")
  */
-class Comment
+class Comment implements \Newscoop\Search\DocumentInterface
 {
     private $allowedEmpty = array( 'br', 'input', 'image' );
 
@@ -91,7 +91,7 @@ class Comment
     /**
      * TODO get rid of this when the composite key stuff is done.
      *
-     * @column(type="integer", name="fk_thread_id")
+     * @column(type="integer", name="fk_thread_id", nullable=True)
      * @var int
      */
     private $article_num;
@@ -102,6 +102,16 @@ class Comment
      * @var Newscoop\Entity\Article
      */
     private $thread;
+
+    /**
+     * @ManyToOne(targetEntity="Newscoop\Entity\Article")
+     * @JoinColumns({
+     *      @JoinColumn(name="fk_thread_id", referencedColumnName="Number"),
+     *      @JoinColumn(name="fk_language_id", referencedColumnName="IdLanguage")
+     *      })
+     * @var Newscoop\Entity\Article
+     */
+    private $article;
 
     /**
      * @ManyToOne(targetEntity="Newscoop\Entity\Language")
@@ -123,13 +133,13 @@ class Comment
     private $message;
 
     /**
-     * @column(length=4)
+     * @column(length=4, nullable=True)
      * @var int
      */
     private $thread_level;
 
     /**
-     * @column(length=4)
+     * @column(length=4, nullable=True)
      * @var int
      */
     private $thread_order;
@@ -141,7 +151,7 @@ class Comment
     private $status;
 
     /**
-     * @column(length=39)
+     * @column(length=39, nullable=True)
      * @var int
      */
     private $ip;
@@ -152,7 +162,7 @@ class Comment
      */
     private $time_created;
 
-    /*
+    /**
      * @column(type="datetime")
      * @var DateTime
      */
@@ -175,6 +185,20 @@ class Comment
      * @var int
      */
     private $recommended = 0;
+
+    /**
+     * @Column(type="datetime", nullable=True)
+     * @var DateTime
+     */
+    private $indexed;
+
+    /**
+     */
+    public function __construct()
+    {
+        $this->setStatus('pending');
+        $this->time_created = $this->time_updated = new \DateTime();
+    }
 
     /**
      * Set id
@@ -449,7 +473,9 @@ class Comment
      */
     public function setThread(Article $p_thread)
     {
+        $this->article_num = $p_thread->getNumber();
         $this->thread = $p_thread;
+        $this->article = $p_thread;
         // return this for chaining mechanism
         return $this;
     }
@@ -733,4 +759,55 @@ class Comment
         return $return;
     }
 
+    /**
+     * Set indexed
+     *
+     * @param DateTime $indexed
+     * @return void
+     */
+    public function setIndexed(\DateTime $indexed = null)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Test if comment is approved
+     *
+     * @return bool
+     */
+    public function isApproved()
+    {
+        return $this->getStatus() === 'approved';
+    }
+
+    /**
+     * Set article
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return void
+     */
+    public function setArticle(Article $article)
+    {
+        $this->article = $article;
+    }
+
+    /**
+     * Get article
+     *
+     * @return Newscoop\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
 }

@@ -1,7 +1,8 @@
 <?php
 
-use Newscoop\ArticleDatetime;
-use Doctrine\Common\Util\Debug;
+use Doctrine\Common\Util\Debug,
+    Newscoop\ArticleDatetime,
+    Newscoop\Annotations\Acl;
 
 /**
  * @Acl(resource="article", action="edit")

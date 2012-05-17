@@ -21,7 +21,7 @@ class Playlist extends Entity
     protected $id;
 
     /**
-     * @Column(length="256", name="name")
+     * @Column(length=256, name="name")
      * @var string
      */
     protected $name;
@@ -30,6 +30,16 @@ class Playlist extends Entity
      * @OneToMany(targetEntity="Newscoop\Entity\PlaylistArticle", mappedBy="playlist", cascade={"all"})
      */
     private $articles;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Returns the name of the playlist

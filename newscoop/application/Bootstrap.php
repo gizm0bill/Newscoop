@@ -32,7 +32,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }, 'ADO');
 
         $autoloader->pushAutoloader(function($class) {
-            require_once 'smarty3/sysplugins/' . strtolower($class) . '.php';
+            if ($class === 'Smarty') {
+                require_once APPLICATION_PATH . '/../library/smarty3/Smarty.class.php';
+            } else {
+                require_once APPLICATION_PATH . '/../library/smarty3/sysplugins/' . strtolower($class) . '.php';
+            }
         }, 'Smarty');
 
         $GLOBALS['g_campsiteDir'] = realpath(APPLICATION_PATH . '/../');
@@ -70,6 +74,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $this->bootstrap('view');
         $container->setService('view', $this->getResource('view'));
+
+        $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
+            ->addMethodCall('setListeners', array($container))
+            ->addMethodCall('setSubscribers', array($container));
+
+        $container->register('article', 'Newscoop\Services\ArticleService')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('section', 'Newscoop\Services\SectionService')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('publication', 'Newscoop\Services\PublicationService')
+            ->addArgument(new sfServiceReference('em'));
 
         $container->register('image', 'Newscoop\Image\ImageService')
             ->addArgument('%image%')
@@ -111,17 +128,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('audit.maintenance', 'Newscoop\Services\AuditMaintenanceService')
             ->addArgument(new sfServiceReference('em'));
 
-        $container->register('dispatcher', 'Newscoop\Services\EventDispatcherService')
-            ->setConfigurator(function($service) use ($container) {
-                foreach ($container->getParameter('listener') as $listener) {
-                    $listenerService = $container->getService($listener);
-                    $listenerParams = $container->getParameter($listener);
-                    foreach ((array) $listenerParams['events'] as $event) {
-                        $service->connect($event, array($listenerService, 'update'));
-                    }
-                }
-            });
-
         $container->register('user.topic', 'Newscoop\Services\UserTopicService')
             ->addArgument(new sfServiceReference('em'))
             ->addArgument(new sfServiceReference('dispatcher'));
@@ -160,7 +166,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('XMLExport', 'Newscoop\Services\XMLExportService')
             ->addArgument(new sfServiceReference('em'));
 
-        $container->register('user.search', 'Newscoop\Services\UserSearchService')
+        $container->register('user.find', 'Newscoop\Services\UserFindService')
             ->addArgument(new sfServiceReference('em'));
 
         $container->register('tree', 'Newscoop\Tree\TreeService')
@@ -187,6 +193,66 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('package.search', 'Newscoop\Package\PackageSearchService')
             ->addArgument(new sfServiceReference('em'));
 
+        $container->register('solr.client.update', 'Zend_Http_Client')
+            ->addArgument('http://localhost:8983/solr/update/json?commit=true');
+
+        $container->register('solr.client.select', 'Zend_Http_Client')
+            ->addArgument('http://localhost:8983/solr/select/');
+
+        $container->register('search.index', 'Newscoop\Search\Index')
+            ->addArgument(new sfServiceReference('solr.client.update'));
+
+        $container->register('article.link', 'Newscoop\Article\LinkService')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('article.search', 'Newscoop\Article\SearchService')
+            ->addArgument(new sfServiceReference('webcoder'))
+            ->addArgument(new sfServiceReference('image.rendition'))
+            ->addArgument(new sfServiceReference('article.link'))
+            ->addArgument($container['search']['article'])
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('comment.search', 'Newscoop\Comment\SearchService')
+            ->addArgument(new sfServiceReference('article.link'));
+
+        $container->register('user.search', 'Newscoop\User\SearchService')
+            ->addArgument(new sfServiceReference('image'));
+
+        $container->register('twitter.search', 'Newscoop\Twitter\SearchService');
+
+        $container->register('twitter.client', 'Zend_Http_Client')
+            ->addArgument('https://api.twitter.com/1/favorites.json');
+
+        $container->register('tweet.repository', 'Newscoop\Twitter\TweetRepository')
+            ->addArgument(new sfServiceReference('twitter.client'))
+            ->addArgument(new sfServiceReference('solr.client.select'))
+            ->addArgument('%twitter%');
+
+        $container->register('search_indexer_article', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('article.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\Article'));
+
+        $container->register('search_indexer_comment', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('comment.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\Comment'));
+
+        $container->register('search_indexer_user', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('user.search'))
+            ->addMethodCall('initRepository', array($container, 'Newscoop\Entity\User'));
+
+        $container->register('search_indexer_twitter', 'Newscoop\Search\Indexer')
+            ->addArgument(new sfServiceReference('search.index'))
+            ->addArgument(new sfServiceReference('twitter.search'))
+            ->addArgument(new sfServiceReference('tweet.repository'));
+        
+        $container->register('link', 'Newscoop\Article\LinkService')
+            ->addArgument(new sfServiceReference('em'));
+
+        $container->register('webcoder', 'Newscoop\Webcode\Mapper');
+
         Zend_Registry::set('container', $container);
         return $container;
     }
@@ -202,9 +268,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         DatabaseObject::setEventDispatcher($container->getService('dispatcher'));
         DatabaseObject::setResourceNames($container->getParameter('resourceNames'));
 
-        $container->getService('em')
-            ->getEventManager()
-            ->addEventSubscriber(new DoctrineEventDispatcherProxy($container->getService('dispatcher')));
+        $eventManager = $container->getService('em')->getEventManager();
+        $eventManager->addEventSubscriber(new DoctrineEventDispatcherProxy($container->getService('dispatcher')));
+        $eventManager->addEventSubscriber($container->getService('image'));
     }
 
     protected function _initPlugins()
@@ -271,13 +337,30 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'action' => 'confirm',
             )));
 
-        $router->addRoute(
-            'user',
-            new Zend_Controller_Router_Route('user/profile/:username/:action', array(
-                'module' => 'default',
-                'controller' => 'user',
-                'action' => 'profile',
-            )));
+        $router->addRoute('user', new Zend_Controller_Router_Route('user/profile/:username/:action', array(
+            'module' => 'default',
+            'controller' => 'user',
+            'action' => 'profile',
+        )));
+
+        $router->addRoute('topic', new Zend_Controller_Router_Route('themen/:topic', array(
+            'module' => 'default',
+            'controller' => 'topic',
+            'action' => 'index',
+            'topic' => null,
+        )));
+
+        $router->addRoute('my-topics', new Zend_Controller_Router_Route_Static('meine-themen', array(
+            'module' => 'default',
+            'controller' => 'my-topics',
+            'action' => 'index',
+        )));
+
+        $router->addRoute('weather', new Zend_Controller_Router_Route_Static('wetter', array(
+            'module' => 'default',
+            'controller' => 'weather',
+            'action' => 'index',
+        )));
 
         $router->addRoute('image',
             new Zend_Controller_Router_Route_Regex($options['image']['cache_url'] . '/(.*)', array(

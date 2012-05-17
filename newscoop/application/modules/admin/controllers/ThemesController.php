@@ -21,8 +21,8 @@ use Newscoop\Service\IArticleTypeService,
     Newscoop\Entity\Theme\Loader\LocalLoader,
     Newscoop\Service\IOutputService,
     Newscoop\Service\Exception\DuplicateNameException,
-    Newscoop\Entity\Output
-    ;
+    Newscoop\Entity\Output,
+    Newscoop\Annotations\Acl;
 
 /**
  * Themes Controller
@@ -666,9 +666,16 @@ class Admin_ThemesController extends Zend_Controller_Action
                     die($erro_msg);
                 }
 
+                // the Content-Type header would be set wrongly at ContentType.php
+                $GLOBALS['header_content_type_set'] = true;
+
+                // Chrome complains when the Content-Disposition header is set by Zend.
+                $theme_name = trim(str_replace(array('"', ' '), array('_', '_'), $themeEntity->getName()));
+                header('Content-Disposition: attachment; filename="' . $theme_name . '.zip"');
+
                 $this->getResponse()
                     ->setHeader( 'Content-type', 'application/zip' )
-                    ->setHeader( 'Content-Disposition', 'attachment; filename="'.$themeEntity->getName().'.zip"' )
+                    //->setHeader( 'Content-Disposition', 'attachment; filename="'.$themeEntity->getName().'.zip"' )
                     ->setHeader( 'Content-length', filesize( $exportPath ) )
                     ->setHeader( 'Cache-control', 'private' );
 

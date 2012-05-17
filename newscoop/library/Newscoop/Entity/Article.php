@@ -13,12 +13,14 @@ namespace Newscoop\Entity;
  * @Entity(repositoryClass="Newscoop\Entity\Repository\ArticleRepository")
  * @Table(name="Articles")
  */
-class Article
+class Article implements \Newscoop\Search\DocumentInterface
 {
     const STATUS_PUBLISHED = 'Y';
     const STATUS_NOT_PUBLISHED = 'N';
     const STATUS_SUBMITTED = 'S';
-    
+
+    const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @Id
      * @ManyToOne(targetEntity="Newscoop\Entity\Language")
@@ -121,6 +123,33 @@ class Article
     private $authors;
 
     /**
+     * @ManyToMany(targetEntity="Newscoop\Entity\TopicTree")
+     * @JoinTable(name="ArticleTopics",
+     *      joinColumns={@JoinColumn(name="NrArticle", referencedColumnName="Number")},
+     *      inverseJoinColumns={@JoinColumn(name="TopicId", referencedColumnName="id")}
+     *  )
+     * @var Doctrine\Common\Collections\Collection
+     */
+    private $topics;
+
+    /**
+     * @Column(type="datetime", nullable=True)
+     * @var DateTime
+     */
+    private $indexed;
+
+    /**
+     * @var array
+     */
+    private $data;
+
+    /**
+     * @Column(nullable=True, name="Keywords")
+     * @var string
+     */
+    private $keywords;
+
+    /**
      * @param int $number
      * @param Newscoop\Entity\Language $language
      */
@@ -129,6 +158,9 @@ class Article
         $this->number = (int) $number;
         $this->language = $language;
         $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->created = $this->date = date_create()->format(self::DATE_FORMAT); 
+        $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -198,6 +230,18 @@ class Article
     }
 
     /**
+     * Set section
+     *
+     * @param Newscoop\Entity\Section $section
+     * @return void
+     */
+    public function setSection(Section $section)
+    {
+        $this->section = $section;
+        $this->sectionId = $section->getNumber();
+    }
+
+    /**
      * Get section
      *
      * @return Newscoop\Entity\Section
@@ -218,11 +262,63 @@ class Article
     }
 
     /**
+     * Get section number
+     *
+     * @return int
+     */
+    public function getSectionNumber()
+    {
+        return $this->sectionId;
+    }
+
+    /**
+     * Get section name
+     *
+     * @return string
+     */
+    public function getSectionName()
+    {
+        return $this->section !== null ? $this->section->getName() : null;
+    }
+
+    /**
+     * Set issue
+     *
+     * @param Newscoop\Entity\Issue $issue
+     * @return void
+     */
+    public function setIssue(Issue $issue)
+    {
+        $this->issue = $issue;
+        $this->issueId = $issue->getNumber();
+    }
+
+    /**
+     * Get issue
+     *
+     * @return Newscoop\Entity\Issue
+     */
+    public function getIssue()
+    {
+        return $this->issue;
+    }
+
+    /**
      * Get issue id
      *
      * @return int
      */
     public function getIssueId()
+    {
+        return $this->issueId;
+    }
+
+    /**
+     * Get issue number
+     *
+     * @return int
+     */
+    public function getIssueNumber()
     {
         return $this->issueId;
     }
@@ -269,6 +365,17 @@ class Article
     public function getNumber()
     {
         return $this->number;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return void
+     */
+    public function setTitle($title)
+    {
+        $this->name = (string) $title;
     }
 
     /**
@@ -331,6 +438,18 @@ class Article
     {
         return $this->published;
     }
+
+    /**
+     * Set published
+     *
+     * @param DateTime $published
+     * @return void
+     */
+    public function setPublished(\DateTime $published)
+    {
+        $this->setStatus(self::STATUS_PUBLISHED);
+        $this->published = $published->format(self::DATE_FORMAT);
+    }
     
     /**
      * Set creator
@@ -367,6 +486,16 @@ class Article
     }
 
     /**
+     * Get authors
+     *
+     * @return array
+     */
+    public function getAuthors()
+    {
+        return $this->authors->toArray();
+    }
+
+    /**
      * Set status
      *
      * @param string $status
@@ -375,5 +504,125 @@ class Article
     public function setStatus($status)
     {
         $this->workflowStatus = (string) $status;
+    }
+
+    /**
+     * Set indexed
+     *
+     * @return void
+     */
+    public function setIndexed(\DateTime $indexed = null)
+    {
+        $this->indexed = $indexed;
+    }
+
+    /**
+     * Get indexed
+     *
+     * @return DateTime
+     */
+    public function getIndexed()
+    {
+        return $this->indexed;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param DateTime $updated
+     * @return void
+     */
+    public function setUpdated(\DateTime $updated)
+    {
+        $this->date = $updated->format(self::DATE_FORMAT);
+    }
+
+    /**
+     * Set data
+     *
+     * @param array $data
+     * @return void
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * Get data
+     *
+     * @param string $field
+     * @return mixed
+     */
+    public function getData($field)
+    {
+        if ($this->data === null) {
+            $this->data = new \ArticleData($this->type, $this->number, $this->getLanguageId());
+        }
+
+        if (is_array($this->data)) {
+            return array_key_exists($field, $this->data) ? $this->data[$field] : null;
+        } else {
+            return $this->data->getFieldValue($field);
+        }
+    }
+
+    /**
+     * Test if article is published
+     *
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->workflowStatus === self::STATUS_PUBLISHED;
+    }
+
+    /**
+     * Add topic
+     *
+     * @param ArticleTopic $topic
+     * @return void
+     */
+    public function addTopic(TopicTree $topic)
+    {
+        if (!$this->topics->contains($topic)) {
+            $this->topics->add($topic);
+        }
+    }
+
+    /**
+     * Get topic names
+     *
+     * @return array
+     */
+    public function getTopicNames()
+    {
+        $names = array();
+        foreach ($this->topics as $topic) {
+            $names[] = $topic->getName($this->getLanguage());
+        }
+
+        return array_filter($names);
+    }
+
+    /**
+     * Set keywords
+     *
+     * @param string $keywords
+     * @return void
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = (string) $keywords;
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return string
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
     }
 }

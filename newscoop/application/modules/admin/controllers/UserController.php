@@ -5,7 +5,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Newscoop\Entity\User;
+use Newscoop\Entity\User,
+    Newscoop\Annotations\Acl;
 
 /**
  * User controller
@@ -93,7 +94,7 @@ class Admin_UserController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
 
         $q = $this->_getParam('q', null);
-        $this->view->users = $this->_helper->service('user.search')->find($q);
+        $this->view->users = $this->_helper->service('user.find')->find($q);
     }
 
     public function createAction()

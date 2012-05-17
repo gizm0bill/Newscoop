@@ -14,36 +14,34 @@ namespace Newscoop\Entity;
 class Topic
 {
     /**
-     * @Id
-     * @Column(type="integer", name="fk_topic_id")
-     * @var int
-     * @todo add reference to topic
+     * @Id @ManyToOne(targetEntity="Newscoop\Entity\TopicTree", inversedBy="names")
+     * @JoinColumn(name="fk_topic_id", referencedColumnName="id")
+     * @var Newscoop\Entity\TopicTree
      */
-    private $id;
+    private $topic;
 
     /**
-     * @Id
-     * @Column(type="integer", name="fk_language_id")
-     * @var int
-     * @todo add reference to language
+     * @Id @ManyToOne(targetEntity="Newscoop\Entity\Language")
+     * @JoinColumn(name="fk_language_id", referencedColumnName="Id")
+     * @var Newscoop\Entity\Language
      */
     private $language;
 
     /**
-     * @Column(type="string", length="255")
+     * @Column(type="string", length=255)
      * @var string
      */
     private $name;
 
     /**
-     * @param int $id
-     * @param int $language
-     * @param int $name
+     * @param Newscoop\Entity\TopicTree $topic
+     * @param Newscoop\Entity\Language $language
+     * @param string $name
      */
-    public function __construct($id, $language, $name)
+    public function __construct(TopicTree $topic, Language $language, $name)
     {
-        $this->id = (int) $id;
-        $this->language = (int) $language;
+        $this->topic = $topic;
+        $this->language = $language;
         $this->name = (string) $name;
     }
 
@@ -54,7 +52,7 @@ class Topic
      */
     public function getTopicId()
     {
-        return $this->id;
+        return $this->topic->getId();
     }
 
     /**
@@ -64,7 +62,7 @@ class Topic
      */
     public function getLanguageId()
     {
-        return $this->language;
+        return $this->language->getId();
     }
 
     /**

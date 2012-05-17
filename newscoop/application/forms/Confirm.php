@@ -11,26 +11,30 @@ class Application_Form_Confirm extends Zend_Form
 {
     public function init()
     {
+        $this->setAttrib('enctype', 'multipart/form-data');
+
         $this->addElement('text', 'first_name', array(
             'label' => 'First Name*:',
             'required' => true,
             'filters' => array('stringTrim'),
         ));
-        $this->getElement('first_name')->setOrder(1);
 
         $this->addElement('text', 'last_name', array(
             'label' => 'Last Name*:',
             'required' => true,
             'filters' => array('stringTrim'),
         ));
-        $this->getElement('last_name')->setOrder(2);
 
         $this->addElement('text', 'username', array(
             'label' => 'Username*:',
             'required' => true,
             'filters' => array('stringTrim'),
         ));
-        $this->getElement('username')->setOrder(3);
+
+        $this->addElement('file', 'image', array(
+            'label' => 'Profile image',
+            'maxfilesize' => $this->getMaxFileSize(),
+        ));
 
         $this->addElement('password', 'password', array(
             'label' => 'Password*:',
@@ -40,9 +44,7 @@ class Application_Form_Confirm extends Zend_Form
                 array('stringLength', false, array(6, 80)),
             ),
         ));
-        $this->getElement('password')->setOrder(4);
 
-        $form = $this;
         $this->addElement('password', 'password_confirm', array(
             'label' => 'Password Confirmation*:',
             'required' => true,
@@ -54,12 +56,30 @@ class Application_Form_Confirm extends Zend_Form
             ),
             'errorMessages' => array("Password confirmation does not match your password."),
         ));
-        $this->getElement('password_confirm')->setOrder(5);
+
+        $this->addElement('checkbox', 'terms_of_use', array(
+            'label' => 'Accepting terms of use',
+            'required' => true,
+            'validators' => array(
+                array('greaterThan', true, array('min' => 0)),
+            ),
+            'errorMessages' => array("You must accept the terms of use."),
+        ));
 
         $this->addElement('submit', 'submit', array(
             'label' => 'Login',
             'ignore' => true,
         ));
-        $this->getElement('submit')->setOrder(7);
+    }
+
+    /**
+     * Get max file size
+     *
+     * @return int
+     */
+    private function getMaxFileSize()
+    {
+        $maxFileSize = SystemPref::Get("MaxProfileImageFileSize") ?: ini_get('upload_max_filesize');
+        return camp_convert_bytes($maxFileSize);
     }
 }

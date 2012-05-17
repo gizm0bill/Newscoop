@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityRepository,
 /**
  * User repository
  */
-class UserRepository extends EntityRepository
+class UserRepository extends EntityRepository implements \Newscoop\Search\RepositoryInterface
 {
     /** @var array */
     private $setters = array(
@@ -178,6 +178,20 @@ class UserRepository extends EntityRepository
         $qb->setFirstResult($offset);
         $qb->setMaxResults($limit);
         return $qb->getQuery()->getResult();
+    }
+
+    public function findVerifiedUsers($countOnly, $offset, $limit)
+    {
+        if ($countOnly) {
+            $qb = $this->getEntityManager()->createQuery('SELECT COUNT(u.id) FROM Newscoop\Entity\User u JOIN u.attributes a WHERE a.attribute = \'is_verified\' AND a.value = 1');
+            return $qb->getSingleScalarResult();
+        }
+
+        $qb = $this->getEntityManager()->createQuery('SELECT u FROM Newscoop\Entity\User u JOIN u.attributes a WHERE a.attribute = \'is_verified\' AND a.value = 1');
+        $qb->setFirstResult($offset);
+        $qb->setMaxResults($limit);
+
+        return $qb->getResult();
     }
 
     /**
@@ -494,5 +508,47 @@ class UserRepository extends EntityRepository
             $user->addAttribute($attribute->getName(), null);
             $this->getEntityManager()->remove($attribute);
         }
+    }
+
+    /**
+     * Find users for indexing
+     *
+     * @return array
+     */
+    public function getBatch()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.indexed IS NULL OR u.indexed < u.updated')
+            ->getQuery()
+            ->setMaxResults(50)
+            ->getResult();
+    }
+
+    /**
+     * Set indexed now
+     *
+     * @param array $users
+     * @return void
+     */
+    public function setIndexedNow(array $users)
+    {
+        if (empty($users)) {
+            return;
+        }
+
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\User u SET u.indexed = CURRENT_TIMESTAMP() WHERE u.id IN (:users)')
+            ->setParameter('users', array_map(function($user) { return $user->getId(); }, $users))
+            ->execute();
+    }
+
+    /**
+     * Set indexed null
+     *
+     * @return void
+     */
+    public function setIndexedNull()
+    {
+        $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\User u SET u.indexed = NULL')
+            ->execute();
     }
 }

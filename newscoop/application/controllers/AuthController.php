@@ -16,6 +16,15 @@ class AuthController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         $this->auth = Zend_Auth::getInstance();
+        
+        $this->getHelper('contextSwitch')->addActionContext('password-restore-ajax', 'json')->initContext();
+    }
+
+    public function preDispatch()
+    {
+        if ($this->_getParam('provider') !== 'Facebook' && $this->getRequest()->getActionName() === 'social') {
+            $this->_forward('social-error');
+        }
     }
 
     public function indexAction()
@@ -63,44 +72,66 @@ class AuthController extends Zend_Controller_Action
 
     public function socialAction()
     {
-        // hack to import all GLOBAL_HYBRID_ into global namespace
-        foreach (token_get_all(file_get_contents(APPLICATION_PATH . '/../hybridauth/hybridauth.php')) as $token) {
-            if ($token[0] == T_VARIABLE) {
-                $var = substr($token[1], 1);
-                if (strstr($var, 'GLOBAL_HYBRID_AUTH_') !== FALSE) {
-                    global $$var;
-                }
-            }
+        if ($this->auth->hasIdentity()) {
+            $this->_helper->redirector('index', 'index');
+            return;
         }
 
-        require_once APPLICATION_PATH . '/../hybridauth/hybridauth.php';
-
-        $hauth = new Hybrid_Auth();
-        if ($hauth->hasError()) {
-            var_dump($hauth->getErrorMessage());
-            exit;
+        try {
+            $userData = $this->getUserData();
+        } catch (\Exception $e) {
+            var_dump($e->getMessage(), $e->getTraceAsString());
+            $this->_forward('social-error');
+            return;
         }
 
-        if (!$hauth->hasSession()) {
-            $adapter = $hauth->setup($this->_getParam('provider'), array(
-                'hauth_return_to' => 'http://dev.tageswoche.ch/auth/social/provider/' . $this->_getParam('provider'),
-            ));
-            $adapter->login();
-        } else {
-            $adapter = $hauth->wakeup();
-            $userData = $adapter->user();
-
-            $adapter = $this->_helper->service('auth.adapter.social');
-            $adapter->setProvider($userData->providerId)->setProviderUserId($userData->providerUID);
-            $result = $this->auth->authenticate($adapter);
-
-            if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
-                $this->_helper->redirector('index', 'dashboard');
-            }
-
+        $adapter = $this->_helper->service('auth.adapter.social');
+        $adapter->setProvider($this->_getParam('provider'))->setProviderUserId($userData->identifier);
+        $result = $this->auth->authenticate($adapter);
+        if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
+            $this->_helper->redirector('index', 'dashboard');
+        } else { // allow user to create account
             $this->_forward('social', 'register', 'default', array(
                 'userData' => $userData,
             ));
+        }
+    }
+
+    /**
+     * Get userdata for given provider
+     *
+     * @return object
+     */
+    private function getUserData()
+    {
+        require_once 'Hybrid/Auth.php';
+        $hauth = new Hybrid_Auth(APPLICATION_PATH . '/../hybridauth/config.php');
+        $adapter = $hauth->authenticate($this->_getParam('provider'));
+        return $adapter->getUserProfile();
+    }
+
+    public function mergeAction()
+    {
+        try {
+            $form = new Application_Form_Login();
+            $userData = $this->getUserData();
+        } catch (\Exception $e) {
+            $this->_forward('social-error');
+            return;
+        }
+
+        if ($this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost())) {
+            $values = $form->getValues();
+            $adapter = $this->_helper->service('auth.adapter');
+            $adapter->setEmail($values['email'])->setPassword($values['password']);
+            $result = $this->auth->authenticate($adapter);
+
+            if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
+                $this->_helper->service('auth.adapter.social')->addIdentity($this->_helper->service('user')->getCurrentUser(), $this->_getParam('provider'), $userData->identifier);
+                $this->_helper->redirector('index', 'dashboard');
+            }
+        } else {
+            $this->_forward('social');
         }
     }
 
@@ -128,6 +159,25 @@ class AuthController extends Zend_Controller_Action
 
     public function passwordRestoreAfterAction()
     {
+    }
+    
+    public function passwordRestoreAjaxAction()
+    {
+        $request = $this->getRequest();
+        $parameters = $request->getParams();
+        
+        if ($request->isPost()) {
+            $user = $this->_helper->service('user')->findOneBy(array(
+                'email' => $parameters['email'],
+            ));
+
+            if (!empty($user) && $user->isActive()) {
+                $this->view->response = "Wir haben Ihnen eine E-Mail zum Wiederherstellen Ihres Passworts geschickt.";
+                $this->_helper->service('email')->sendPasswordRestoreToken($user);
+            } else if (empty($user)) {
+                $this->view->response = "Diese E-Mail-Adresse ist bei uns nicht registriert. Ist es die richtige?";
+            }
+        }
     }
 
     public function passwordRestoreFinishAction()
@@ -171,5 +221,9 @@ class AuthController extends Zend_Controller_Action
         }
 
         $this->view->form = $form;
+    }
+
+    public function socialErrorAction()
+    {
     }
 }

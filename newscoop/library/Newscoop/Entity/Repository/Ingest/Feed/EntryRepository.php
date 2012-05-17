@@ -29,7 +29,7 @@ class EntryRepository extends EntityRepository
 
         $now = new \DateTime();
         $updated = array_filter($embargoed, function($entry) use ($now) {
-            $liftEmbargo = new \DateTime($entry['embargoed']);
+            $liftEmbargo = $entry['embargoed'];
             return $now->getTimestamp() >= $liftEmbargo->getTimestamp();
         });
 

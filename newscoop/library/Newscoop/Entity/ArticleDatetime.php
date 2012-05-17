@@ -57,7 +57,6 @@ class ArticleDatetime extends Entity
 
     /**
      * @Column( type="integer", name="article_id" )
-     * @JoinColumn(name="article_id", referencedColumnName="id")
      * @var int
      */
     private $articleId;
@@ -75,7 +74,7 @@ class ArticleDatetime extends Entity
     protected $fieldName;
 
     /**
-     * @Column( type="string", name="event_comment" )
+     * @Column( type="string", name="event_comment", nullable=True)
      * @var string
      */
     protected $eventComment;
