@@ -1,5 +1,9 @@
 {{ include file="_tpl/_html-head.tpl" }}
 
+<script>
+parent.$.fancybox.resize();
+</script>
+
 <div id="email-popup-box" class="popup-box">
         	
     <h3>Empfehlung versandt</h3>
