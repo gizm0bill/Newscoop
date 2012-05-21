@@ -16,14 +16,14 @@ use Guzzle\Http\Client,
 class BlogFacade
 {
     const BLOG_PATH = '/resources/LiveDesk/Blog/{id}';
-    const POSTS_PATH = '/resources/LiveDesk/Blog/{id}/BlogPost/Published';
-    const POSTS_UPDATE_PATH = '/resources/LiveDesk/Blog/{id}/BlogPost/Published'; //?ModifiedAfter={lastmod}';
+    const POSTS_PATH = '/resources/LiveDesk/Blog/{id}/Post/Published';
+    const POSTS_UPDATE_PATH = '/resources/LiveDesk/Blog/{id}/Post/Published?cid.start={cid}';
 
     /**
      * @var array
      */
     private $postsHeaders = array(
-        'X-Filter' => 'Id, Content, PublishedOn, UpdatedOn, Creator.Name',
+        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, Creator.Name',
     );
 
     /**
@@ -74,19 +74,19 @@ class BlogFacade
     }
 
     /**
-     * Find posts changed after last modified
+     * Find posts changed after last change id
      *
-     * @param int $id
-     * @param DateTime $lastModified
+     * @param int $blogId
+     * @param int $cid
      * @return array
      */
-    public function findPostsAfter(\DateTime $lastModified, $id)
+    public function findPostsAfter($blogId, $cid)
     {
         try {
             $this->setClientId($id);
             $response = $this->client->get(array(
                 self::POSTS_UPDATE_PATH, array(
-                    'lastmod' => $lastModified->format(\DateTime::W3C),
+                    'cid' => $cid,
                 ),
             ), $this->postsHeaders)->send();
             return $this->getPosts($response);
@@ -121,9 +121,7 @@ class BlogFacade
      */
     private function handleException(\Exception $e)
     {
-        if (APPLICATION_ENV === 'development') {
-            echo 'Error:', ' ' , $e->getMessage();
-        }
+        echo 'Error:', ' ' , $e->getMessage();
     }
 
     /**
@@ -134,7 +132,7 @@ class BlogFacade
      */
     private function getPosts(Response $response)
     {
-        return (array) json_decode($response->getBody(TRUE))->BlogPostList;
+        return (array) json_decode($response->getBody(TRUE))->PostList;
     }
 
     /**
