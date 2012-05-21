@@ -15,6 +15,8 @@ function smarty_function_ticker($params, $smarty)
     if (!empty($params['section']) && $params['section']->number) {
         $filters[] = sprintf('section:%s', $params['section']->url_name);
         $types = array_diff($types, array('tweet'));
+    } else { // filter en news
+        $filters[] = '-section:swissinfo';
     }
 
     $filters[] = sprintf('type:(%s)', implode(' OR ', $types));

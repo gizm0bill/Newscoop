@@ -41,6 +41,7 @@ class SearchController extends AbstractSolrController
         $fq = implode(' AND ', array_filter(array(
             $this->buildSolrTypeParam(),
             $this->buildSolrDateParam(),
+            '-section:swissinfo', // filter en news
         )));
 
         return array_merge(parent::buildSolrParams(), array(
