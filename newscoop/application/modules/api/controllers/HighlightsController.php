@@ -81,6 +81,12 @@ class Api_HighlightsController extends Zend_Controller_Action
                         'thread' => $article->getId(),
                     ));
 
+                    $recommended = Zend_Registry::get('container')->getService('comment')->countBy(array(
+                        'language' => $article->getLanguageId(),
+                        'thread' => $article->getId(),
+                        'recommended' => 1,
+                    ));
+
                     try {
                         $dateline = $articleData->getFieldValue('dateline');
                     } catch (\InvalidPropertyException $e) {
@@ -123,6 +129,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                         'image_url' => $imageUrl,
                         'website_url' => $this->_helper->service('article.link')->getLink($article),
                         'comment_count' => $comments,
+                        'recommended_comment_count' => $recommended,
                         'comment_url' => $this->url . '/api/comments/list?article_id=' . $article->getNumber() . '&version=' . self::API_VERSION,
                         'topics' => $topics,
                         'rank' => $rank++,
