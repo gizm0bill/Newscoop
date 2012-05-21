@@ -414,16 +414,17 @@ var TickerFilterView = FilterView.extend({
  */
 var SourceFilterView = TickerFilterView.extend({
     blacklist: {
-        basel: { twitter: true },
-        schweiz: { twitter: true },
-        international: { twitter: true },
-        sport: { twitter: true },
-        kultur: { twitter: true },
-        leben: { twitter: true },
+        basel: { twitter: true, en: true },
+        schweiz: { twitter: true, en: true },
+        international: { twitter: true, en: true },
+        sport: { twitter: true, en: true },
+        kultur: { twitter: true, en: true },
+        leben: { twitter: true, en: true },
         blog: {
             twitter: true,
             agentur: true,
-            link: true
+            link: true,
+            en: true
         }
     },
 
@@ -453,6 +454,15 @@ var SectionFilterView = TickerFilterView.extend({
             blog: true
         },
         link: {
+            blog: true
+        },
+        en: {
+            basel: true,
+            schweiz: true,
+            international: true,
+            sport: true,
+            kultur: true,
+            leben: true,
             blog: true
         }
     },
