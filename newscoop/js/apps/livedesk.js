@@ -6,7 +6,7 @@ var Item = Backbone.Model.extend({
 
     getPublished: function() {
         var date = new Date(this.get('PublishedOn'));
-        return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.getHours() + ':' + date.getMinutes();
+        return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) ;
     }
 });
 
@@ -21,14 +21,14 @@ var ItemCollection = Backbone.Collection.extend({
      */
     sync: function(method, collection, options) {
         $.getJSON(collection.url, {
-            'lastmod': collection.getLastModified()
+            'cid': collection.getMaxCid()
         }, function(data, textStatus, jqXHR) {
             if (data) {
                 for (var i = data.length - 1; i >= 0; i--) {
                     var model = collection.get(data[i].Id);
-                    if (model) {
+                    if (model) { // update existing
                         model.set(data[i]);
-                    } else {
+                    } else { // add new
                         collection.add(data[i]);
                     }
                 }
@@ -39,22 +39,12 @@ var ItemCollection = Backbone.Collection.extend({
     },
 
     /**
-     * Get last modified date for sync call
+     * Get last change id
      *
-     * last modified is max of publishedOn + updatedOn of all the items
-     *
-     * @return {string}
+     * @return {int}
      */
-    getLastModified: function() {
-        var values = this.map(function(item) {
-            var date = new Date(item.has('UpdatedOn') ? item.get('UpdatedOn') : item.get('PublishedOn'));
-            return date.getTime();
-        });
-
-        var maxTime = _.max(values);
-        var maxDate = new Date();
-        maxDate.setTime(maxTime);
-        return maxDate.toUTCString();
+    getMaxCid: function() {
+        return _.max(this.pluck('CId'));
     },
 
     /**
@@ -64,7 +54,7 @@ var ItemCollection = Backbone.Collection.extend({
      */
     comparator: function(item) {
         var date = new Date(item.get('PublishedOn'));
-        return - date.getTime();
+        return 1 - date.getTime(); // desc
     }
 });
 
@@ -85,8 +75,10 @@ var ItemView = Backbone.View.extend({
     },
 
     update: function() {
-        this.render();
-        $(this.el).addClass('updated');
+        var view = this;
+        $(this.el).fadeTo(500, '0.1', function() {
+            $(view.render().el).fadeTo(500, '1');
+        });
     }
 });
 
@@ -162,6 +154,8 @@ var LivedeskView = Backbone.View.extend({
 
     /**
      * Update view after fetching new items
+     *
+     * called by collection.sync
      *
      * @param {object} collection
      */
