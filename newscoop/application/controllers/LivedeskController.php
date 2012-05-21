@@ -25,28 +25,16 @@ class LivedeskController extends Zend_Controller_Action
 
     public function updateAction()
     {
-        $id = $this->_getParam('id');
-        $lastModified = $this->_getParam('lastmod');
-
-        if (!is_numeric($id)) {
+        if (!is_numeric($this->_getParam('id'))) {
             throw new InvalidArgumentException("Parameter 'id' is not a valid identifier.");
         }
 
-        if (!date_create($lastModified)) {
-            throw new InvalidArgumentException("Parameter 'lastmod' is not a valid datetime.");
+        if (!is_numeric($this->_getParam('cid'))) {
+            throw new InvalidArgumentException("Parameter 'cid' is not a valid identifier.");
         }
 
         try {
-            $lastModified = new \DateTime($lastModified);
-            $posts = $this->_helper->service('livedesk.blog')->findPostsAfter($lastModified, $id);
-            $posts = array(array(
-                'Content' => 'New post ' . sha1(uniqid()),
-                'PublishedOn' => date_create()->format(DateTime::W3C),
-                'Id' => mt_rand(0, 21),
-                'Creator' => array(
-                    'Name' => 'Petr',
-                ),
-            ));
+            $posts = $this->_helper->service('livedesk.blog')->findPostsAfter($this->_getParam('id'), $this->_getParam('cid'));
             if (empty($posts)) {
                 $this->getResponse()->setHttpResponseCode(204);
                 $this->getResponse()->clearBody();
