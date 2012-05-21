@@ -89,6 +89,10 @@ var DocumentListView = Backbone.View.extend({
             $(this.el).find('#spellcheck').detach();
         }
 
+        if (this.collection.query) {
+            $('head > title').text(this.collection.query + ' | Tageswoche');
+        }
+
         return this;
     },
 
