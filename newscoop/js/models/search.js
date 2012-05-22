@@ -119,6 +119,31 @@ var Document = Backbone.Model.extend({
     getEventTitle: function() {
         var title = this.escape('title');
         return title.replace(/ \([-0-9]+\)$/, '');
+    },
+
+    /**
+     * Get publication id
+     *
+     * @return {string}
+     */
+    getPublicationId: function() {
+        if (this.get('type') === 'blog') {
+            return '5';
+        } else if (this.get('type') === 'event') {
+            return '4';
+        } else {
+            return '1';
+        }
+    },
+
+    /**
+     * Get article number
+     *
+     * @return {int}
+     */
+    getArticleNumber: function()
+    {
+        return this.get('id').split('-')[1];
     }
 });
 
