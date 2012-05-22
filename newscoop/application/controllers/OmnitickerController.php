@@ -19,6 +19,7 @@ class OmnitickerController extends AbstractSolrController
         'twitter' => 'tweet',
         'agentur' => 'newswire',
         'link' => 'link',
+        'en' => array('newswire'),
     );
 
     public function init()
@@ -41,6 +42,7 @@ class OmnitickerController extends AbstractSolrController
                 $this->buildSolrSectionParam(),
                 $this->buildSolrSourceParam(),
                 $this->buildSolrDateParam(),
+                $this->_getParam('source') === 'en' ? 'section:swissinfo' : null,
             ))),
             'sort' => 'published desc',
             'spellcheck' => 'false',
