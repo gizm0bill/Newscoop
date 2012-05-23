@@ -9,6 +9,7 @@ BEGIN
 	DECLARE author INT;
 	DECLARE posts INT DEFAULT 0;
 	DECLARE comments INT DEFAULT 0;
+	DECLARE total_points INT DEFAULT 0;
 
    	SELECT author_id INTO author FROM `liveuser_users` WHERE Id = user;
 	IF author > 0 THEN
@@ -16,7 +17,9 @@ BEGIN
     END IF;
     
     SELECT COUNT(cc.id) INTO comments FROM comment_commenter cc INNER JOIN comment c ON cc.id = c.fk_comment_commenter_id WHERE cc.fk_user_id = user;
-    UPDATE `liveuser_users` SET `points` = comments + posts WHERE `Id` = user; 
+    
+    SET total_points = comments + posts;
+    UPDATE `liveuser_users` SET `points` = total_points WHERE `Id` = user;
 END;
 $
 
