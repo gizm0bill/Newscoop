@@ -142,22 +142,23 @@ class Api_CommentsController extends Zend_Controller_Action
                         $commentRepository->save($comment, $values);
                         $commentRepository->flush();
                         
-                        $this->view->status = 201;
+                        header('', true, 201);
                     }
                     else {
-                        $this->view->status = 500;
+                        header('', true, 500);
                     }
                 }
                 else {
-                    $this->view->status = 500;
+                    header('', true, 500);
                 }
             }
             else {
-                $this->view->status = 401;
+                header('', true, 401);
             }
         }
         else {
-            $this->view->status = 401;
+            header('', true, 401);
         }
+        die;
     }
 }
