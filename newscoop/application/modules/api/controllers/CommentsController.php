@@ -7,8 +7,13 @@
 
 /**
  */
+
+require_once($GLOBALS['g_campsiteDir'].'/include/get_ip.php');
+
 class Api_CommentsController extends Zend_Controller_Action
 {
+    const LANGUAGE = 1;
+    
     /** @var Zend_Controller_Request_Http */
     private $request;
 
@@ -92,5 +97,67 @@ class Api_CommentsController extends Zend_Controller_Action
         }
 
         $this->_helper->json($this->response);
+    }
+    
+    /**
+     */
+    public function composeAction()
+    {
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+
+        $response = array();
+        
+        $parameters = $this->getRequest()->getPost();
+        if (isset($parameters['username']) && isset($parameters['password'])) {
+            $user = $this->_helper->service('user')->findOneBy(array('username' => $parameters['username']));
+            if ($user->checkPassword($parameters['password'])) {
+                if (isset($parameters['article_id']) && isset($parameters['message'])) {
+                    $acceptanceRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\Comment\Acceptance');
+                    $userIp = getIp();
+                    
+                    $article = new Article(self::LANGUAGE, $parameters['article_id']);
+                    
+                    if (!$acceptanceRepository->checkParamsBanned($user->getName(), $user->getEmail(), $userIp, $article->getPublicationId())) {
+                        $commentRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\Comment');
+                        $comment = new Comment();
+                        
+                        $subject = '';
+                        if (isset($parameters['subject'])) {
+                            $subject = $parameters['subject'];
+                        }
+                        
+                        $values = array(
+                            'user' => $user->getId(),
+                            'name' => '',
+                            'subject' => $subject,
+                            'message' => $parameters['message'],
+                            'language' => self::LANGUAGE,
+                            'thread' => $parameters['article_id'],
+                            'ip' => $_SERVER['REMOTE_ADDR'],
+                            'status' => 'approved',
+                            'time_created' => new DateTime(),
+                            'recommended' => '0'
+                        );
+                        
+                        $commentRepository->save($comment, $values);
+                        $commentRepository->flush();
+                        
+                        $this->view->status = 201;
+                    }
+                    else {
+                        $this->view->status = 500;
+                    }
+                }
+                else {
+                    $this->view->status = 500;
+                }
+            }
+            else {
+                $this->view->status = 401;
+            }
+        }
+        else {
+            $this->view->status = 401;
+        }
     }
 }
