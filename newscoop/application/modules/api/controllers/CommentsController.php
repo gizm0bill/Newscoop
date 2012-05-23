@@ -20,9 +20,12 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function init()
     {
+        global $Campsite;
+
         $this->_helper->layout->disableLayout();
         $this->request = $this->getRequest();
         $this->service = $this->_helper->service('comment');
+        $this->url = $Campsite['WEBSITE_URL'];
     }
 
     /**
@@ -65,9 +68,20 @@ class Api_CommentsController extends Zend_Controller_Action
                 $last_modified = $comment->getTimeUpdated()->format('Y-m-d H:i:s');
             }
 
+            $profile_image = $comment->getCommenter()->getUser()->getImage();
+            if (!empty($profile_image)) {
+                $profile_image = $this->view->url(array(
+                    'src' => $this->getHelper('service')->getService('image')->getSrc('images/' . $profile_image, 125, 125, 'fit'),
+                ), 'image', false, false);
+                $profile_image = $this->url . $profile_image;
+            } else {
+                $profile_image = null;
+            }
+
             $this->response[] = array(
                 'author_name' => $comment->getCommenterName(),
                 'author_id' => $comment->getCommenter()->getLoginName(),
+                'author_image_url' => $profile_image,
                 'subject' => $comment->getSubject(),
                 'message'=> $comment->getMessage(),
                 'recommended' => $comment->getRecommended(),
