@@ -96,6 +96,29 @@ class LinkService
         $link = implode('/', $link) . (in_array($article->getType(), $this->sectionTypes) ? '/' : '');
         return strpos($link, 'http') === 0 ? $link : 'http://' . $link;
     }
+    
+    /**
+     * Get canonical link
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return string
+     */
+    public function getLinkCanonical(\Newscoop\Entity\Article $article)
+    {
+        $link = array(
+            trim($article->getPublication()->getAliasName(), '/'),
+            $article->getLanguage()->getCode(),
+            $this->getIssueShortName($article),
+            $this->getSectionShortName($article),
+        );
+
+        if (!in_array($article->getType(), $this->sectionTypes)) {
+            $link[] = $article->getNumber();
+        }
+
+        $link = implode('/', $link) . (in_array($article->getType(), $this->sectionTypes) ? '/' : '');
+        return strpos($link, 'http') === 0 ? $link : 'http://' . $link;
+    }
 
     /**
      * Get issue short name
