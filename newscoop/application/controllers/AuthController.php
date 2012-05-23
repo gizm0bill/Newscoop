@@ -89,7 +89,10 @@ class AuthController extends Zend_Controller_Action
         $result = $this->auth->authenticate($adapter);
         if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
             try {
-                $this->_helper->redirector->gotoUrl($this->getRequest()->getServer('HTTP_REFERER'));
+                $next = $this->getRequest()->getServer('HTTP_REFERER');
+                $next .= strpos($next, '?') !== FALSE ? '&' : '?';
+                $next .= sprintf('_t=%s', substr(sha1(uniqid()), 0, 3));
+                $this->_helper->redirector->gotoUrl($next);
             } catch (\Exception $e) {
                 $this->_helper->redirector('index', 'dashboard');
             }
