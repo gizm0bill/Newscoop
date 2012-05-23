@@ -103,7 +103,7 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function composeAction()
     {
-        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+        //$this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
 
         $response = array();
         
