@@ -93,4 +93,17 @@ class Api_CommentsController extends Zend_Controller_Action
 
         $this->_helper->json($this->response);
     }
+    
+    /**
+     */
+    public function composeAction()
+    {
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+
+        $response = array();
+        
+        $parameters = $this->getRequest()->getPost();
+        var_dump($parameters);
+        die;
+    }
 }
