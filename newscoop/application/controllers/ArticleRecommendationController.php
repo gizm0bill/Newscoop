@@ -39,7 +39,7 @@ class ArticleRecommendationController extends Zend_Controller_Action
             
             $articles = $this->_helper->service('article')->findBy(array('number' => $parameters['article_number']));
             $article = $articles[0];
-            $link = $this->_helper->service('link')->getLink($article);
+            $link = $this->_helper->service('link')->getLinkCanonical($article);
             
             $subject = 'Lesetipp: '.$article->getName();
             $body = '';
