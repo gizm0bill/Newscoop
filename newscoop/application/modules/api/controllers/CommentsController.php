@@ -103,7 +103,7 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function composeAction()
     {
-        //$this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
 
         $response = array();
         
@@ -159,6 +159,6 @@ class Api_CommentsController extends Zend_Controller_Action
         else {
             header('', true, 401);
         }
-        die;
+        $this->_helper->json($response);
     }
 }
