@@ -9,10 +9,18 @@
 function smarty_function_ticker($params, $smarty)
 {
     $client = \Zend_Registry::get('container')->getService('solr.client.select');
+    $sections = array( // whitelist
+        'basel',
+        'schweiz',
+        'international',
+        'sport',
+        'kultur',
+        'leben',
+    );
 
     $filters = array();
     $types = array('tweet', 'newswire');
-    if (!empty($params['section']) && $params['section']->number) {
+    if (!empty($params['section']) && $params['section']->number && in_array($params['section']->url_name, $sections)) {
         $filters[] = sprintf('section:%s', $params['section']->url_name);
         $types = array_diff($types, array('tweet'));
     }
