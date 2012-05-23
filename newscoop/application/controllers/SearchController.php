@@ -21,16 +21,6 @@ class SearchController extends AbstractSolrController
         }
     }
 
-    public function indexAction()
-    {
-        if (!$this->_getParam('q', false)) {
-            $this->render('blank');
-            return;
-        }
-
-        parent::indexAction();
-    }
-
     /**
      * Build solr params array
      *
@@ -61,7 +51,7 @@ class SearchController extends AbstractSolrController
      */
     private function buildSolrQuery()
     {
-        $q = trim($this->_getParam('q'));
+        $q = trim($this->_getParam('q', sha1(__FILE__))); // search for nonsense to show empty search result page
         if ($this->_helper->service('webcoder')->isWebcode($q)) {
             return sprintf('webcode:\%s', $q);
         }
