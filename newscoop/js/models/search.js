@@ -26,7 +26,12 @@ var Document = Backbone.Model.extend({
      * @return {string}
      */
     relDate: function(property) {
-        var published = this.parseUtcDate(this.get(property)).getTime();
+        var published = this.parseUtcDate(this.get(property));
+        if (!published) {
+            return '';
+        }
+
+        published = published.getTime();
         var now = (new Date()).getTime();
         var diff = Math.ceil(Math.abs(now - published) / 1000);
 
@@ -56,6 +61,10 @@ var Document = Backbone.Model.extend({
      */
     parseUtcDate: function(datestring) {
         var utc = this.date.exec(datestring);
+        if (!utc) {
+            return null;
+        }
+
         var date = new Date();
         date.setUTCFullYear(utc[1]);
         date.setUTCMonth(utc[2] - 1);
