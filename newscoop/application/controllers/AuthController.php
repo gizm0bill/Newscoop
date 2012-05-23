@@ -80,7 +80,6 @@ class AuthController extends Zend_Controller_Action
         try {
             $userData = $this->getUserData();
         } catch (\Exception $e) {
-            var_dump($e->getMessage(), $e->getTraceAsString());
             $this->_forward('social-error');
             return;
         }
@@ -89,7 +88,14 @@ class AuthController extends Zend_Controller_Action
         $adapter->setProvider($this->_getParam('provider'))->setProviderUserId($userData->identifier);
         $result = $this->auth->authenticate($adapter);
         if ($result->getCode() == Zend_Auth_Result::SUCCESS) {
-            $this->_helper->redirector('index', 'dashboard');
+            try {
+                $next = $this->getRequest()->getServer('HTTP_REFERER');
+                $next .= strpos($next, '?') !== FALSE ? '&' : '?';
+                $next .= sprintf('_t=%s', substr(sha1(uniqid()), 0, 3));
+                $this->_helper->redirector->gotoUrl($next);
+            } catch (\Exception $e) {
+                $this->_helper->redirector('index', 'dashboard');
+            }
         } else { // allow user to create account
             $this->_forward('social', 'register', 'default', array(
                 'userData' => $userData,

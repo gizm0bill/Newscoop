@@ -133,9 +133,9 @@ class Api_HighlightsController extends Zend_Controller_Action
                         'comment_url' => $this->url . '/api/comments/list?article_id=' . $article->getNumber() . '&version=' . self::API_VERSION,
                         'topics' => $topics,
                         'rank' => $rank++,
-                        'section_id' => (int) $article->getSectionId(),
+                        'section_id' => (int) $sectionId,
                         'section_name' => $playlist->getName(),
-                        'section_url' => $this->url . '/api/sections/item?section_id=' . $article->getSectionId() . '&version=' . self::API_VERSION,
+                        'section_url' => $this->url . '/api/articles/list?section_id=' . $sectionId . '&version=' . self::API_VERSION,
                         'section_rank' => $section_rank,
                     );
                 }
