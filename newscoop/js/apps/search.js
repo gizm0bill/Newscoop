@@ -488,17 +488,19 @@ var SortView = Backbone.View.extend({
     },
 
     render: function() {
-        if (this.collection.sortf) {
-            $(this.el).find('a').addClass('desc');
+        if (this.collection.sortf == 'latest') {
+            $(this.el).find('a').removeClass('desc').addClass('asc');
+        } else if (this.collection.sortf == 'oldest') {
+            $(this.el).find('a').removeClass('asc').addClass('desc');
         } else {
-            $(this.el).find('a').removeClass('desc');
+            $(this.el).find('a').removeClass('desc').removeClass('asc');
         }
 
         $(this.el).css('cursor', 'pointer');
     },
 
     sort: function() {
-        this.collection.sortf = this.collection.sortf ? null : 'latest';
+        this.collection.sortf = this.collection.sortf == 'latest' ? 'oldest' : (this.collection.sortf == 'oldest' ? null : 'latest');
         this.collection.start = null;
         router.navigate(this.collection.nav(), {trigger: true});
     }

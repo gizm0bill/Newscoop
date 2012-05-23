@@ -37,7 +37,7 @@ class SearchController extends AbstractSolrController
         return array_merge(parent::buildSolrParams(), array(
             'q' => $this->buildSolrQuery(),
             'fq' => empty($fq) ? '' : "{!tag=t}$fq",
-            'sort' => $this->_getParam('sort') === 'latest' ? 'published desc' : 'score desc',
+            'sort' => $this->_getParam('sort') === 'latest' ? 'published desc' : ($this->_getParam('sort') === 'oldest' ? 'published asc' : 'score desc'),
             'facet' => 'true',
             'facet.field' => '{!ex=t}type',
             'spellcheck' => 'true',
