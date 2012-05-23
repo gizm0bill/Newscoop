@@ -44,6 +44,14 @@ $articleObj = new Article($f_language_selected, $f_article_number);
 if (!$articleObj->exists()) {
     camp_html_display_error(getGS('No such article.'));
     exit;
+} else { // set issue/section by article if not set by param
+    if (empty($f_issue_number)) {
+         $f_issue_number = $articleObj->getIssueNumber();
+    }
+
+    if (empty($f_section_number)) {
+        $f_section_number = $articleObj->getSectionNumber();
+    }
 }
 
 // detect if blogger can edit
