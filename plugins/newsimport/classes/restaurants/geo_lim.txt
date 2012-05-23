@@ -1,0 +1,8 @@
+Swiss + some surrounding
+
+south: 45.5
+north: 48
+
+west: 5.5
+east: 11
+
