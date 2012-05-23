@@ -345,6 +345,7 @@ var PaginationView = Backbone.View.extend({
 
         this.collection.start = start;
         router.navigate(this.collection.nav(), {trigger: true});
+        $(window).scrollTop($('.top-filter').offset().top);
     }
 });
 
