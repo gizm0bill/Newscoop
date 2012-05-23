@@ -36,6 +36,7 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
 
         $this->m_customProperties['name'] = 'getDisplayName';
         $this->m_customProperties['created'] = 'getCreated';
+        $this->m_customProperties['created_sec'] = 'getCreatedWithSec';
         $this->m_customProperties['country'] = 'getCountry';
         $this->m_customProperties['subscription'] = 'getSubscription';
         $this->m_customProperties['logged_in'] = 'isLoggedIn';
@@ -114,6 +115,12 @@ final class MetaUser extends MetaDbObject implements ArrayAccess
     {
         $date = $this->m_dbObject->getCreated();
         return $date->format('d.m.Y');
+    }
+
+    protected function getCreatedWithSec()
+    {
+        $date = $this->m_dbObject->getCreated();
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**
