@@ -8,11 +8,13 @@
 /**
  */
 
+use Newscoop\Entity\Comment;
+
 require_once($GLOBALS['g_campsiteDir'].'/include/get_ip.php');
 
 class Api_CommentsController extends Zend_Controller_Action
 {
-    const LANGUAGE = 1;
+    const LANGUAGE = 5;
     
     /** @var Zend_Controller_Request_Http */
     private $request;
@@ -105,9 +107,18 @@ class Api_CommentsController extends Zend_Controller_Action
     {
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
 
-        $response = array();
+        //$response = array();
         
         $parameters = $this->getRequest()->getPost();
+        
+        /*
+        $parameters = array();
+        $parameters['username'] = 'admin';
+        $parameters['password'] = 'admin';
+        $parameters['article_id'] = 71;
+        $parameters['message'] = 'zxczxczxc';
+        */
+        
         if (isset($parameters['username']) && isset($parameters['password'])) {
             $user = $this->_helper->service('user')->findOneBy(array('username' => $parameters['username']));
             if ($user->checkPassword($parameters['password'])) {
@@ -142,23 +153,29 @@ class Api_CommentsController extends Zend_Controller_Action
                         $commentRepository->save($comment, $values);
                         $commentRepository->flush();
                         
+                        //echo('comment posted');
                         header('', true, 201);
                     }
                     else {
+                        //echo('not allowed to comment');
                         header('', true, 500);
                     }
                 }
                 else {
+                    //echo('no article and message');
                     header('', true, 500);
                 }
             }
             else {
+                //echo('username password wrong');
                 header('', true, 401);
             }
         }
         else {
+            //echo('no username password');
             header('', true, 401);
         }
-        $this->_helper->json($response);
+        
+        //$this->_helper->json($response);
     }
 }
