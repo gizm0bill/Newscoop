@@ -127,7 +127,11 @@ class TemplateCacheHandler_DB extends TemplateCacheHandler
                     $queryStr .= '(' . implode(',', array_keys($campsiteVector));
                     $queryStr .=  ',template,expired,content) VALUES (';
                     foreach ($campsiteVector as $key => $value) {
-                        $queryStr .= !isset($value) ? 'NULL,' : $value . ',';
+                        if ($key == 'params') {
+                            $queryStr .= !isset($value) ? 'NULL,' : "'" . addslashes($value) . "'" . ',';
+                        } else {
+                            $queryStr .= !isset($value) ? 'NULL,' : $value . ',';
+                        }
                     }
                     $queryStr .= "'$tpl_file',$exp_time,'" . addslashes($cache_content) . "')";
                     $g_ado_db->Execute($queryStr);
