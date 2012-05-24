@@ -17,7 +17,7 @@ class BlogFacade
 {
     const BLOG_PATH = '/resources/LiveDesk/Blog/{id}';
     const POSTS_PATH = '/resources/LiveDesk/Blog/{id}/Post/Published';
-    const POSTS_UPDATE_PATH = '/resources/LiveDesk/Blog/{id}/Post/Published?cid.start={cid}';
+    const POSTS_UPDATE_PATH = '/resources/LiveDesk/Blog/{id}/Post/Published?startEx.cId={cid}';
 
     /**
      * @var array
