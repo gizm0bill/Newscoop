@@ -4,9 +4,23 @@
 var Item = Backbone.Model.extend({
     idAttribute: 'Id',
 
+    /**
+     * Get published time
+     *
+     * @return {string}
+     */
     getPublished: function() {
         var date = new Date(this.get('PublishedOn'));
-        return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) ;
+        return date.toDateString() + ' ' + date.toLocaleTimeString();
+    },
+
+    /**
+     * Get css class based on type
+     *
+     * @return {string}
+     */
+    getClass: function() {
+        return 'quote tw';
     }
 });
 
@@ -70,7 +84,7 @@ var ItemView = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).html(this.template({item: this.model}));
+        $(this.el).html(this.template({item: this.model})).addClass(this.model.getClass());
         return this;
     },
 
@@ -93,7 +107,7 @@ var ListView = Backbone.View.extend({
     },
 
     render: function() {
-        var list = $(this.el).empty();
+        var list = $(this.el).empty().addClass('liveblog-post-list');
         this.collection.each(function(item) {
             var view = new ItemView({model: item});
             list.append(view.render().el);
