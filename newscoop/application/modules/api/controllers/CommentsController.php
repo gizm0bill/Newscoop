@@ -105,7 +105,7 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function composeAction()
     {
-        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext('json');
 
         $response = array();
         
@@ -175,8 +175,5 @@ class Api_CommentsController extends Zend_Controller_Action
             //echo('no username password');
             $this->getResponse()->setHttpResponseCode(401);
         }
-        
-        $this->_helper->json($response);
-        die;
     }
 }
