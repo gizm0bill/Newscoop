@@ -107,7 +107,7 @@ class Api_CommentsController extends Zend_Controller_Action
     {
         $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
 
-        //$response = array();
+        $response = array();
         
         $parameters = $this->getRequest()->getPost();
         
@@ -154,29 +154,28 @@ class Api_CommentsController extends Zend_Controller_Action
                         $commentRepository->flush();
                         
                         //echo('comment posted');
-                        header('', true, 201);
+                        $this->getResponse()->setHttpResponseCode(201);
                     }
                     else {
                         //echo('not allowed to comment');
-                        header('', true, 500);
+                        $this->getResponse()->setHttpResponseCode(500);
                     }
                 }
                 else {
                     //echo('no article and message');
-                    header('', true, 500);
+                    $this->getResponse()->setHttpResponseCode(500);
                 }
             }
             else {
                 //echo('username password wrong');
-                header('', true, 401);
+                $this->getResponse()->setHttpResponseCode(401);
             }
         }
         else {
             //echo('no username password');
-            header('', true, 401);
+            $this->getResponse()->setHttpResponseCode(401);
         }
         
-        //$this->_helper->json($response);
-        die;
+        $this->_helper->json($response);
     }
 }
