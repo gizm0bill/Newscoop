@@ -5,8 +5,13 @@
 {{block content}}
 <section>
     <script type="text/template" id="item-template">
-    <strong><%= item.getPublished() %></strong>
-    <p><%= item.get('Content')  %><br /><em>by <%= item.get('Creator').Name %></em></p>
+    <div class="result-content">
+        <p class="result-text"><%= item.get('Content')  %></p>
+        <p class="attributes"><i class="source-icon"></i> by <%= item.get('Creator').Name %>
+            <time><%= item.getPublished() %></time>
+            <a href="#" class="share"><i class="icon-share-alt"></i> Share</a>
+        </p>
+    </div>
     </script>
 
     {{ liveblog id=1 }}
