@@ -11,6 +11,8 @@ use Newscoop\Entity\Article;
  */
 class Api_ArticlesController extends Zend_Controller_Action
 {
+    const API_VERSION = 1;
+
     const LANGUAGE = 5;
 
     const LIST_URI_PATH = 'api/articles/list';
@@ -43,10 +45,21 @@ class Api_ArticlesController extends Zend_Controller_Action
 
         $this->_helper->layout->disableLayout();
         $this->request = $this->getRequest();
-        $this->language = $this->_helper->entity->getRepository('Newscoop\Entity\Language')
-            ->findOneBy(array('id' => self::LANGUAGE));
+        $this->language = $this->_helper->entity->getRepository('Newscoop\Entity\Language')->findOneBy(array('id' => self::LANGUAGE));
         $this->articleService = $this->_helper->service('article');
         $this->url = $Campsite['WEBSITE_URL'];
+        $this->params = $this->request->getParams();
+
+        if (empty($this->params['client'])) {
+            print Zend_Json::encode(array());
+            exit;
+        }
+
+        $this->initClient($this->params['client']);
+        if (is_null($this->client['type'])) {
+            print Zend_Json::encode(array());
+            exit;
+        }
     }
 
     /**
@@ -68,17 +81,6 @@ class Api_ArticlesController extends Zend_Controller_Action
 
         $criteria = array();
         $params = $this->request->getParams();
-
-        if (empty($params['client'])) {
-            print Zend_Json::encode(array());
-            exit;
-        }
-
-        $this->initClient($params['client']);
-        if (is_null($this->client['type'])) {
-            print Zend_Json::encode(array());
-            exit;
-        }
 
         if (!empty($params['section_id'])) {
             $playlist = $this->_helper->entity->getRepository('Newscoop\Entity\Playlist')
@@ -136,7 +138,7 @@ class Api_ArticlesController extends Zend_Controller_Action
 
             $response = array(
                 'article_id' => $article->getId(),
-                'url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId(),
+                'url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId() . '&version=' . self::API_VERSION,
                 'title' => $article->getTitle(),
                 'dateline' => $articleData->getFieldValue($datelineField),
                 'short_name' => $articleData->getFieldValue('short_name'),
@@ -146,7 +148,7 @@ class Api_ArticlesController extends Zend_Controller_Action
                 'topics' => $this->getTopics($article),
                 'comment_count' => $this->getCommentsCount($article),
                 'recommended_comment_count' => $this->getCommentsCount($article, true),
-                'comment_url' => $this->url . '/api/comments/list?article_id' . $article->getId(),
+                'comment_url' => $this->url . '/api/comments/list?article_id' . $article->getId() . '&version=' . self::API_VERSION,
                 'rank' => $rank++,
             );
 
@@ -185,8 +187,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             // @todo process frontside template
         }
 
-        $image = $this->getImage($article);
-        $imageUrl = !empty($image) ? 'http://tw-reloaded.lab.sourcefabric.org/images/cache/' . $image->src : null;
+        $image = $this->getImageUrl($article, self::IMAGE_STANDARD_RENDITION, $this->client['image_width'], $this->client['image_height']);
 
         $comments = Zend_Registry::get('container')->getService('comment')->countBy(array(
             'language' => $this->language->getId(),
@@ -208,7 +209,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             'last_modified' => $article->getDate(),
             'teaser' => $articleData->getFieldValue($teaserField),
             'body' => $articleData->getFieldValue($bodyField),
-            'image_url' => $imageUrl,
+            'image_url' => $image,
             'comment_count' => $comments,
         );
 
