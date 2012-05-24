@@ -294,7 +294,7 @@ class Api_ArticlesController extends Zend_Controller_Action
         }
 
         $this->client = array(
-            'client' => $client,
+            'name' => $client,
             'type' => $type,
             'image_width' => self::IMAGE_STANDARD_WIDTH,
             'image_height' => self::IMAGE_STANDARD_HEIGHT,
@@ -308,7 +308,7 @@ class Api_ArticlesController extends Zend_Controller_Action
 
     private function isClientRetina()
     {
-        return $this->client == 'ipad_retina' || $this->client == 'iphone_retina';
+        return $this->client['name'] == 'ipad_retina' || $this->client['name'] == 'iphone_retina';
     }
 }
 
