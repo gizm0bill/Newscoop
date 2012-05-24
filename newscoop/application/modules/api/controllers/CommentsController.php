@@ -177,5 +177,6 @@ class Api_CommentsController extends Zend_Controller_Action
         }
         
         //$this->_helper->json($response);
+        die;
     }
 }
