@@ -83,7 +83,7 @@ class BlogFacade
     public function findPostsAfter($blogId, $cid)
     {
         try {
-            $this->setClientId($id);
+            $this->setClientId($blogId);
             $response = $this->client->get(array(
                 self::POSTS_UPDATE_PATH, array(
                     'cid' => $cid,
