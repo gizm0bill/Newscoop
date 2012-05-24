@@ -20,10 +20,7 @@ class Api_ArticlesController extends Zend_Controller_Action
 
     const LIST_LIMIT = 15;
 
-    const IMAGE_TOP_RENDITION = 'topfront';
     const IMAGE_STANDARD_RENDITION = 'rubrikenseite';
-    const IMAGE_TOP_WIDTH = 320;
-    const IMAGE_TOP_HEIGHT = 140;
     const IMAGE_STANDARD_WIDTH = 105;
     const IMAGE_STANDARD_HEIGHT = 70;
     const IMAGE_RETINA_FACTOR = 2;
@@ -110,14 +107,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             $article = $this->articleService->find($this->language, $articleNumber);
             if (empty($article)) continue;
 
-            // gets the article image in the proper size
-            if (isset($params['section_id']) && $params['section_id'] == 6 && $rank == 1) {
-                $width = $this->isClientRetina() ? self::IMAGE_TOP_WIDTH * self::IMAGE_RETINA_FACTOR : self::IMAGE_TOP_WIDTH;
-                $height = $this->isClientRetina() ? self::IMAGE_TOP_HEIGHT * self::IMAGE_RETINA_FACTOR : self::IMAGE_TOP_HEIGHT;
-                $image = $this->getImageUrl($article, self::IMAGE_TOP_RENDITION, $width, $height);
-            } else {
-                $image = $this->getImageUrl($article, self::IMAGE_STANDARD_RENDITION, $this->client['image_width'], $this->client['image_height']);
-            }
+            $image = $this->getImageUrl($article, self::IMAGE_STANDARD_RENDITION, $this->client['image_width'], $this->client['image_height']);
 
             // gets article custom data
             $articleData = new ArticleData($article->getType(), $article->getId(), self::LANGUAGE);
@@ -138,17 +128,17 @@ class Api_ArticlesController extends Zend_Controller_Action
 
             $response = array(
                 'article_id' => $article->getId(),
-                'url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId() . '&version=' . self::API_VERSION,
+                'url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
                 'title' => $article->getTitle(),
                 'dateline' => $articleData->getFieldValue($datelineField),
                 'short_name' => $articleData->getFieldValue('short_name'),
-                'teaser' => $articleData->getFieldValue($teaserField),
+                'teaser' => preg_replace('/(<p>|<p [^>]*>|<\\/p>)/', '', $articleData->getFieldValue($teaserField)),
                 'image_url' => $image,
                 'website_url' => $this->_helper->service('article.link')->getLink($article),
                 'topics' => $this->getTopics($article),
                 'comment_count' => $this->getCommentsCount($article),
                 'recommended_comment_count' => $this->getCommentsCount($article, true),
-                'comment_url' => $this->url . '/api/comments/list?article_id' . $article->getId() . '&version=' . self::API_VERSION,
+                'comment_url' => $this->url . '/api/comments/list?article_id' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
                 'rank' => $rank++,
             );
 
@@ -312,4 +302,3 @@ class Api_ArticlesController extends Zend_Controller_Action
         return $this->client['name'] == 'ipad_retina' || $this->client['name'] == 'iphone_retina';
     }
 }
-

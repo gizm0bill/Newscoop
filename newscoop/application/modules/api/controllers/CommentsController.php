@@ -91,7 +91,7 @@ class Api_CommentsController extends Zend_Controller_Action
                 'author_image_url' => $profile_image,
                 'subject' => $comment->getSubject(),
                 'message'=> $comment->getMessage(),
-                'recommended' => $comment->getRecommended(),
+                'recommended' => $comment->getRecommended() ? true : false,
                 'created_time' => $created_time,
                 'last_modified' => $last_modified,
                 'rank' => $rank++,
