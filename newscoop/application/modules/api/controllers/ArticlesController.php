@@ -217,7 +217,7 @@ class Api_ArticlesController extends Zend_Controller_Action
         }
 
         $imageUrl = $this->view->url(array(
-            'src' => $this->getHelper('service')->getService('image')->getSrc(basename($image->src), $width, $height, 'fit'),
+            'src' => $this->getHelper('service')->getService('image')->getSrc(basename($image->src), $width, $height, 'crop'),
             ),
             'image', false, false);
 
