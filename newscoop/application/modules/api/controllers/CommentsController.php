@@ -8,11 +8,13 @@
 /**
  */
 
+use Newscoop\Entity\Comment;
+
 require_once($GLOBALS['g_campsiteDir'].'/include/get_ip.php');
 
 class Api_CommentsController extends Zend_Controller_Action
 {
-    const LANGUAGE = 1;
+    const LANGUAGE = 5;
     
     /** @var Zend_Controller_Request_Http */
     private $request;
@@ -89,7 +91,7 @@ class Api_CommentsController extends Zend_Controller_Action
                 'author_image_url' => $profile_image,
                 'subject' => $comment->getSubject(),
                 'message'=> $comment->getMessage(),
-                'recommended' => $comment->getRecommended(),
+                'recommended' => $comment->getRecommended() ? true : false,
                 'created_time' => $created_time,
                 'last_modified' => $last_modified,
                 'rank' => $rank++,
@@ -103,11 +105,18 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function composeAction()
     {
-        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext();
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext('json');
 
-        $response = array();
-        
         $parameters = $this->getRequest()->getPost();
+        
+        /*
+        $parameters = array();
+        $parameters['username'] = 'admin';
+        $parameters['password'] = 'admin';
+        $parameters['article_id'] = 71;
+        $parameters['message'] = 'zxczxczxc';
+        */
+        
         if (isset($parameters['username']) && isset($parameters['password'])) {
             $user = $this->_helper->service('user')->findOneBy(array('username' => $parameters['username']));
             if ($user->checkPassword($parameters['password'])) {
@@ -142,22 +151,29 @@ class Api_CommentsController extends Zend_Controller_Action
                         $commentRepository->save($comment, $values);
                         $commentRepository->flush();
                         
-                        $this->view->status = 201;
+                        //echo('comment posted');
+                        $this->getResponse()->setHttpResponseCode(201);
                     }
                     else {
-                        $this->view->status = 500;
+                        //echo('not allowed to comment');
+                        $this->getResponse()->setHttpResponseCode(500);
                     }
                 }
                 else {
-                    $this->view->status = 500;
+                    //echo('no article and message');
+                    $this->getResponse()->setHttpResponseCode(500);
                 }
             }
             else {
-                $this->view->status = 401;
+                //echo('username password wrong');
+                $this->getResponse()->setHttpResponseCode(401);
             }
         }
         else {
-            $this->view->status = 401;
+            //echo('no username password');
+            $this->getResponse()->setHttpResponseCode(401);
         }
+        
+        $this->_helper->json(array());
     }
 }
