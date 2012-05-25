@@ -20,7 +20,14 @@ var Item = Backbone.Model.extend({
      * @return {string}
      */
     getClass: function() {
-        return 'quote tw';
+        switch (this.get('Type').Key) {
+            case 'wrapup':
+                return 'wrapup open';
+                break;
+
+            default:
+                return 'quote tw';
+        }
     }
 });
 
@@ -77,14 +84,14 @@ var ItemCollection = Backbone.Collection.extend({
  */
 var ItemView = Backbone.View.extend({
     tagName: 'li',
-    template: _.template($('#item-template').html()),
 
     initialize: function() {
         this.model.bind('change', this.update, this);
     },
 
     render: function() {
-        $(this.el).html(this.template({item: this.model})).addClass(this.model.getClass());
+        var template = _.template($('#item-' + this.model.getClass().replace(' ', '-') + '-template').html());
+        $(this.el).html(template({item: this.model})).addClass(this.model.getClass());
         return this;
     },
 

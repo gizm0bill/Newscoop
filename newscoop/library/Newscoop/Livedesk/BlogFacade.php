@@ -23,7 +23,7 @@ class BlogFacade
      * @var array
      */
     private $postsHeaders = array(
-        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, Creator.Name',
+        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, AuthorName, Type.Key',
     );
 
     /**

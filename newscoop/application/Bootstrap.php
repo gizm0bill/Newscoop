@@ -254,7 +254,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('webcoder', 'Newscoop\Webcode\Mapper');
 
         $container->register('livedesk.client', 'Guzzle\Http\Client')
-            ->addArgument('http://localhost:8080/');
+            ->addArgument('http://liveblog.lab.sourcefabric.org/');
 
         $container->register('livedesk.blog', 'Newscoop\Livedesk\BlogFacade')
             ->addArgument(new sfServiceReference('livedesk.client'));
