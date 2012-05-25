@@ -48,13 +48,13 @@ class Api_ArticlesController extends Zend_Controller_Action
         $this->params = $this->request->getParams();
 
         if (empty($this->params['client'])) {
-            print Zend_Json::encode(array());
+            $this->_helper->json($this->response);
             exit;
         }
 
         $this->initClient($this->params['client']);
         if (is_null($this->client['type'])) {
-            print Zend_Json::encode(array());
+            $this->_helper->json($this->response);
             exit;
         }
     }
@@ -83,7 +83,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             $playlist = $this->_helper->entity->getRepository('Newscoop\Entity\Playlist')
                 ->find($params['section_id']);
             if (empty($playlist)) {
-                print Zend_Json::encode(array());
+                $this->_helper->json($this->response);
                 exit;
             }
 
@@ -129,7 +129,6 @@ class Api_ArticlesController extends Zend_Controller_Action
             $response = array(
                 'article_id' => $article->getId(),
                 'url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
-                'title' => $article->getTitle(),
                 'dateline' => $articleData->getFieldValue($datelineField),
                 'short_name' => $articleData->getFieldValue('short_name'),
                 'teaser' => preg_replace('/(<p>|<p [^>]*>|<\\/p>)/', '', $articleData->getFieldValue($teaserField)),
@@ -149,7 +148,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             $this->response[] = $response;
         }
 
-        print Zend_Json::encode($this->response);
+        $this->_helper->json($this->response);
     }
 
     /**

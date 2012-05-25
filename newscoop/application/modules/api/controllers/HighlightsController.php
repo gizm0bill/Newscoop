@@ -79,7 +79,7 @@ class Api_HighlightsController extends Zend_Controller_Action
         if (isset($params['section_id'])) {
             $sectionIds = array((int) $params['section_id']);
         } else {
-            $sectionIds = array(6, 7, 8, 9, 10); // @todo config
+            $sectionIds = array(6, 7, 8, 9, 10, 11, 25); // @todo config
         }
 
         $section_rank = 1;

@@ -72,6 +72,10 @@ class Api_SectionsController extends Zend_Controller_Action
                 'url' => $this->url . '/api/articles/list?section_id=9&client=' . $this->client['name'] . '&version=' . self::API_VERSION),
             4 => array('name' => 'Sport',
                 'url' => $this->url . '/api/articles/list?section_id=10&client=' . $this->client['name'] . '&version=' . self::API_VERSION),
+            5 => array('name' => 'Kultur',
+                'url' => $this->url . '/api/articles/list?section_id=11&client=' . $this->client['name'] . '&version=' . self::API_VERSION),
+            6 => array('name' => 'Leben',
+                'url' => $this->url . '/api/articles/list?section_id=25&client=' . $this->client['name'] . '&version=' . self::API_VERSION),
         );
 
         print Zend_Json::encode($sections);
