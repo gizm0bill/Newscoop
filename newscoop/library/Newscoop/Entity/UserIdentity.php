@@ -28,7 +28,7 @@ class UserIdentity
     private $provider_user_id;
 
     /**
-     * @ManyToOne(targetEntity="Newscoop\Entity\User", fetch="EAGER")
+     * @ManyToOne(targetEntity="Newscoop\Entity\User", fetch="EAGER", inversedBy="identities")
      * @JoinColumn(referencedColumnName="Id")
      * @var Newscoop\Entity\User
      */
