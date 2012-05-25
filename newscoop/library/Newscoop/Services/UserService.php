@@ -447,4 +447,24 @@ class UserService
         return isset($this->config['characterGroup'][$character]) ?
             explode(' ', $this->config['characterGroup'][$character]) : array($character);
     }
+
+    /**
+     * Get newscoop login count
+     *
+     * @return int
+     */
+    public function getNewscoopLoginCount()
+    {
+        return $this->repository->getNewscoopLoginCount();
+    }
+
+    /**
+     * Get facebook login count
+     *
+     * @return int
+     */
+    public function getFacebookLoginCount()
+    {
+        return $this->repository->getExternalLoginCount();
+    }
 }

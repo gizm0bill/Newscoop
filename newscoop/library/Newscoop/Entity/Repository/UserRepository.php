@@ -216,6 +216,10 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Reposi
      */
     private function getEditorIds(array $editorRoles)
     {
+        if (empty($editorRoles)) {
+            return array();
+        }
+
         $expr = $this->getEntityManager()->getExpressionBuilder();
         $query = $this->createQueryBuilder('u')
             ->select('DISTINCT(u.id)')
@@ -301,8 +305,13 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Reposi
      * @param int $offset
      * @return array
      */
-    public function findEditors(array $editorRoles, $limit, $offset)
+    public function findEditors(array $editorRoles, $limit = 25, $offset = 0)
     {
+        $editorIds = $this->getEditorIds($editorRoles);
+        if (empty($editorIds)) {
+            return array();
+        }
+
         $expr = $this->getEntityManager()->getExpressionBuilder();
         $query = $this->createPublicUserQueryBuilder()
             ->andWhere($expr->in('u.id', $this->getEditorIds($editorRoles)))
@@ -550,5 +559,35 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Reposi
     {
         $this->getEntityManager()->createQuery('UPDATE Newscoop\Entity\User u SET u.indexed = NULL')
             ->execute();
+    }
+
+    /**
+     * Get newscoop login count
+     *
+     * @return int
+     */
+    public function getNewscoopLoginCount()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->leftJoin('u.identities', 'ui')
+            ->where('ui.user IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Get external login count
+     *
+     * @return int
+     */
+    public function getExternalLoginCount()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->leftJoin('u.identities', 'ui')
+            ->where('ui.user IS NOT NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }
