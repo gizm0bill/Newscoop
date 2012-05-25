@@ -39,7 +39,11 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-        $this->_forward('list');
+        if ($this->request->isPost()) {
+            $this->_forward('compose');
+        } else {
+            $this->_forward('list');
+        }
     }
 
     /**
