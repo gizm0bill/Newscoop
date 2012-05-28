@@ -22,11 +22,13 @@ var Item = Backbone.Model.extend({
     getClass: function() {
         switch (this.get('Type').Key) {
             case 'wrapup':
-                return 'wrapup open';
-                break;
+                return 'wrapup';
+
+            case 'quote':
+                return 'quotation';
 
             default:
-                return 'quote tw';
+                return 'tw';
         }
     }
 });
@@ -94,8 +96,23 @@ var ItemView = Backbone.View.extend({
     },
 
     render: function() {
-        var template = _.template($('#item-' + this.model.getClass().replace(' ', '-') + '-template').html());
+        try {
+            var template = _.template($('#item-' + this.model.getClass() + '-template').html());
+        } catch (err) {
+            console.log("No template for " + this.model.getClass + " type.");
+            return;
+        }
+
         $(this.el).html(template({item: this.model})).addClass(this.model.getClass());
+
+        if (this.model.getClass() == 'wrapup') {
+            $(this.el).addClass('open');
+        }
+
+        if ('imageLink' in this.model.get('Creator')) {
+            $(this.el).addClass('quote');
+        }
+
         return this;
     },
 

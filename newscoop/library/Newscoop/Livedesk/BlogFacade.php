@@ -23,7 +23,7 @@ class BlogFacade
      * @var array
      */
     private $postsHeaders = array(
-        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, AuthorName, Type.Key',
+        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, AuthorName, Type.Key, Creator.*',
     );
 
     /**
@@ -132,7 +132,15 @@ class BlogFacade
      */
     private function getPosts(Response $response)
     {
-        return (array) json_decode($response->getBody(TRUE))->PostList;
+        return array_map(function($post) {
+            if (!empty($post->Creator->EMail)) {
+                $post->Creator->imageLink = sprintf('http://gravatar.com/avatar/%s?s=32',
+                    md5(strtolower(trim($post->Creator->EMail)))
+                );
+            }
+
+            return $post;
+        }, (array) json_decode($response->getBody(TRUE))->PostList);
     }
 
     /**
