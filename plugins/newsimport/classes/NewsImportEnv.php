@@ -267,6 +267,7 @@ class NewsImportEnv
 
         $request_count_events_1 = 500;
         $request_count_movies_1 = 50;
+        $request_count_restaurants_1 = 50;
         //$request_count_events_1 = 1;
         //$request_count_movies_1 = 1;
         $request_offsets_events_1 = array(0);
@@ -277,9 +278,14 @@ class NewsImportEnv
         for ($ind = 1; $ind <= $request_count_movies_1; $ind++) {
             $request_offsets_movies_1[] = $ind * $one_limit;
         }
+        $request_offsets_restaurants_1 = array(0);
+        for ($ind = 1; $ind <= $request_count_restaurants_1; $ind++) {
+            $request_offsets_restaurants_1[] = $ind * $one_limit;
+        }
         $request_offsets = array(
             'events_1' => array('count' => $request_count_events_1, 'values' => $request_offsets_events_1),
             'movies_1' => array('count' => $request_count_movies_1, 'values' => $request_offsets_movies_1),
+            'restaurants_1' => array('count' => $request_count_restaurants_1, 'values' => $request_offsets_restaurants_1),
         );
 
         foreach ($request_offsets as $one_feed => $one_feed_offsets_info) {
