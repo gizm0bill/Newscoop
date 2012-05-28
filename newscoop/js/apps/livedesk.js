@@ -85,6 +85,10 @@ var ItemCollection = Backbone.Collection.extend({
 var ItemView = Backbone.View.extend({
     tagName: 'li',
 
+    events: {
+        'click .big-toggle': 'toggleWrap'
+    },
+
     initialize: function() {
         this.model.bind('change', this.update, this);
     },
@@ -100,6 +104,18 @@ var ItemView = Backbone.View.extend({
         $(this.el).fadeTo(500, '0.1', function() {
             $(view.render().el).fadeTo(500, '1');
         });
+    },
+
+    toggleWrap: function(e) {
+        e.preventDefault();
+        var item = $(e.target).closest('li');
+        if (item.hasClass('open')) {
+            item.removeClass('open').addClass('closed');
+            item.nextUntil('.wrapup').hide();
+        } else {
+            item.removeClass('closed').addClass('open');
+            item.nextUntil('.wrapup').show();
+        }
     }
 });
 
@@ -160,8 +176,7 @@ var LivedeskView = Backbone.View.extend({
         $(this.el).html(this.list.render().el);
         this.timer = _.delay(this.fetch, this.wait, this);
 
-        $('<p id="last-updated"></p>').text('updated on ' + (new Date()).toLocaleTimeString()).prependTo($(this.el));
-        return this;
+        $('<p id="last-updated" class="update-time"></p>').text('updated on ' + (new Date()).toLocaleTimeString()).prependTo($(this.el)); return this;
     },
 
     /**
