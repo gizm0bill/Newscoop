@@ -108,7 +108,10 @@ var ItemView = Backbone.View.extend({
 
     toggleWrap: function(e) {
         e.preventDefault();
-        var item = $(e.target).closest('li');
+        this._toggleWrap($(e.target).closest('li').first());
+    },
+
+    _toggleWrap: function(item) {
         if (item.hasClass('open')) {
             item.removeClass('open').addClass('closed');
             item.nextUntil('.wrapup').hide();
@@ -125,18 +128,29 @@ var ItemView = Backbone.View.extend({
 var ListView = Backbone.View.extend({
     tagName: 'ol',
 
-    initialize: function() {
-        this.collection.bind('reset', this.render, this);
-    },
-
     render: function() {
         var list = $(this.el).empty().addClass('liveblog-post-list');
+        var views = [];
         this.collection.each(function(item) {
             var view = new ItemView({model: item});
             list.append(view.render().el);
+            views.push(view);
         });
 
+        this.closeAllButFirstWrapup(views);
+
         return this;
+    },
+
+    closeAllButFirstWrapup: function(views) {
+        var first = true;
+        for (var i = 0; i < views.length; i++) {
+            if ($(views[i].el).hasClass('wrapup') && !first) {
+                views[i]._toggleWrap($(views[i].el));
+            } else if ($(views[i].el).hasClass('wrapup')) {
+                first = false;
+            }
+        }
     }
 });
 
