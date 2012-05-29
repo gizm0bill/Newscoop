@@ -265,12 +265,19 @@ class RenditionService
             $thumbnail = $rendition->getRendition()->getThumbnail($rendition->getImage(), $this->imageService);
         }
 
+        $originalRendition = new Rendition($rendition->getImage()->getWidth(), $rendition->getImage()->getHeight());
+
         return array(
             'src' => $thumbnail->src,
             'width' => $thumbnail->width,
             'height' => $thumbnail->height,
             'caption' => $rendition->getImage()->getCaption(),
             'photographer' => $rendition->getImage()->getPhotographer(),
+            'original' => (object) array(
+                'width' => $rendition->getImage()->getWidth(),
+                'height' => $rendition->getImage()->getHeight(),
+                'src' => $originalRendition->getThumbnail($rendition->getImage(), $this->imageService)->src,
+            ),
         );
     }
 

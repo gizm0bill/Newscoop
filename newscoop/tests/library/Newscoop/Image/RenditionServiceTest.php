@@ -235,6 +235,11 @@ class RenditionServiceTest extends \TestCase
             'height' => 75,
             'caption' => 'imgalt',
             'photographer' => 'john doe',
+            'original' => (object) array(
+                'width' => $image->getWidth(),
+                'height' => $image->getHeight(),
+                'src' => $this->imageService->getSrc($image->getPath(), $image->getWidth(), $image->getHeight(), 'fit'),
+            ),
         ), $this->service->getArticleRenditionImage(self::ARTICLE_NUMBER, 'thumbnail', 100, 75));
     }
 }

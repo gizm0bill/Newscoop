@@ -38,5 +38,6 @@ function smarty_block_image(array $params, $content, Smarty_Internal_Template $s
     }
 
     $image['src'] = Zend_Registry::get('view')->url(array('src' => $image['src']), 'image', true, false);
+    $image['original']->src = Zend_Registry::get('view')->url(array('src' => $image['original']->src), 'image', true, false);
     $smarty->assign('image', (object) $image);
 }
