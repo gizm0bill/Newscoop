@@ -23,6 +23,8 @@ II)
 
 */
 
+    $m_rests_loaders = new RestaurantsLoader();
+
     private function take_day_range()
     {
         $last_max_id = RestaurantsLoader::take_last_max_id();
@@ -30,7 +32,7 @@ II)
         return array(
             'start_id' => $last_max_id + 1,
             'count' => 50,
-            'sleep' => 10,
+            'sleep' => 1,
         );
     }
 
@@ -42,9 +44,9 @@ II)
 
     public function take_rests_info_basic()
     {
-        $data_old = RestaurantsLoader::read_all_zips_list(); // without those with prune flag set on
+        $data_old = $m_rests_loaders::read_all_zips_list(); // without those with prune flag set on
 
-        $data_new = RestaurantsLoader::take_all_zips_list();
+        $data_new = $m_rests_loaders::take_all_zips_list();
 
         foreach ($data_new as $rest_uid => $rest_basic) {
             $this->update_single_info($rest_uid, $rest_basic, 'basic');

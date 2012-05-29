@@ -47,6 +47,14 @@ $event_data_limits = array(
             'next' => 0, // no checking for days adv
         ),
     ),
+    'restaurants_1' => array(
+        'categories' => array(
+        ),
+        'dates' => array(
+            'past' => 31, // removing 1 day old
+            'next' => 93, // putting in for 3 months
+        ),
+    ),
 );
 
 ?>

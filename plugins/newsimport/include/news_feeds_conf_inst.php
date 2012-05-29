@@ -124,6 +124,45 @@ $event_data_sources = array(
             'poi_desc_len' => 100,
         ),
     ),
+
+
+    'restaurants_1' => array(
+        'admin_user_id' => 1,
+        'provider_id' => 5,
+        'provider_name' => 'Lunchgate.ch',
+        'event_type' => 'restaurant',
+        'article_type' => 'restaurant',
+        'images_local' => true,
+        'publication_id' => 0, // 2
+        'issue_number' => 0, // 13,
+        'section_number' => 0, // 30,
+        'language_id' => 5, // 1,
+        'multi_dates' => true,
+        'source_dirs' => array(
+        ),
+        'categories' => array(
+            'turkish_cuisine' => array('Turkish', 'Türkisch',),
+            // ...
+            'classical_ambiance' => array('Classical', 'Klassisch');
+            // ...
+            'other' => 'x',
+        ),
+        'status' => array(
+            'public' => true,
+            'comments' => false,
+            'publish' => true,
+            'publish_date_by_event_date' => false,
+        ),
+        'geo' => array(
+            'map_provider' => 'mapquest', // googlev3, mapquest, osm
+            'map_zoom' => 15,
+            'map_width' => 600,
+            'map_height' => 400,
+            'poi_marker_name' => 'marker-gold.png',
+            'poi_desc_len' => 100,
+        ),
+    ),
+
 );
 
 ?>
