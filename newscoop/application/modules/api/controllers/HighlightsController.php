@@ -95,7 +95,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                     $articleData = new ArticleData($article->getType(), $article->getId(), $article->getLanguageId());
 
                     // gets the article image in the proper size
-                    if (isset($params['section_id']) && $params['section_id'] == 6 && $rank == 1) {
+                    if ($sectionId == 6 && $rank == 1) {
                         $width = $this->isClientRetina() ? self::IMAGE_TOP_WIDTH * self::IMAGE_RETINA_FACTOR : self::IMAGE_TOP_WIDTH;
                         $height = $this->isClientRetina() ? self::IMAGE_TOP_HEIGHT * self::IMAGE_RETINA_FACTOR : self::IMAGE_TOP_HEIGHT;
                         $image = $this->getImageUrl($article, self::IMAGE_TOP_RENDITION, $width, $height);
