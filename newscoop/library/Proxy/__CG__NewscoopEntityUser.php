@@ -351,7 +351,7 @@ class User extends \Newscoop\Entity\User implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'email', 'username', 'password', 'first_name', 'last_name', 'created', 'updated', 'status', 'is_admin', 'is_public', 'points', 'image', 'subscriber', 'indexed', 'role', 'groups', 'attributes', 'commenters', 'author');
+        return array('__isInitialized__', 'id', 'email', 'username', 'password', 'first_name', 'last_name', 'created', 'updated', 'status', 'is_admin', 'is_public', 'points', 'image', 'subscriber', 'indexed', 'role', 'groups', 'attributes', 'commenters', 'author', 'identities');
     }
 
     public function __clone()
