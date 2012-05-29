@@ -231,7 +231,7 @@ var LivedeskView = Backbone.View.extend({
 
         var newPostsCount = collection.length - collection.view.length;
         if (newPostsCount > 0) {
-            $(collection.view.el).prepend('<a href="#" id="update-livedesk">New items: ' + newPostsCount + '</a>');
+            $(collection.view.el).prepend('<a href="#" id="update-livedesk" class="grey-button full-button" style="margin-bottom: 16px">New items: ' + newPostsCount + '</a>');
         }
 
         $('#last-updated').fadeOut(function() {
