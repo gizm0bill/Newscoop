@@ -86,13 +86,13 @@ var ItemCollection = Backbone.Collection.extend({
                     var model = collection.get(data[i].Id);
                     if (model) { // update existing
                         model.set(data[i]);
+
+                        // remove deleted posts
+                        if (model.has('DeletedOn') && model.get('DeletedOn').length) {
+                            collection.remove(model);
+                        }
                     } else { // add new
                         collection.add(data[i]);
-                    }
-
-                    // remove deleted posts
-                    if (model.has('DeletedOn') && model.get('DeletedOn').length) {
-                        collection.remove(model);
                     }
                 }
             }
