@@ -23,7 +23,7 @@ class BlogFacade
      * @var array
      */
     private $postsHeaders = array(
-        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, AuthorName, Type.Key, Creator.*',
+        'X-Filter' => 'Id, CId, Content, PublishedOn, UpdatedOn, DeletedOn, AuthorName, Type.Key, AuthorPerson.EMail',
     );
 
     /**
@@ -133,9 +133,9 @@ class BlogFacade
     private function getPosts(Response $response)
     {
         return array_map(function($post) {
-            if (!empty($post->Creator->EMail)) {
-                $post->Creator->imageLink = sprintf('http://gravatar.com/avatar/%s?s=32',
-                    md5(strtolower(trim($post->Creator->EMail)))
+            if (!empty($post->AuthorPerson->EMail)) {
+                $post->AuthorPerson->imageLink = sprintf('http://gravatar.com/avatar/%s?s=32',
+                    md5(strtolower(trim($post->AuthorPerson->EMail)))
                 );
             }
 

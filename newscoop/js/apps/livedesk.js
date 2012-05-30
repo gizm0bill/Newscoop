@@ -30,9 +30,15 @@ var Item = Backbone.Model.extend({
         switch (this.get('Type').Key) {
             case 'wrapup':
                 return 'wrapup';
+                break;
 
             case 'quote':
                 return 'quotation';
+                break;
+
+            case 'advertisement':
+                return 'advertisement';
+                break;
 
             default:
                 if (this.isService()) {
@@ -80,6 +86,9 @@ var ItemCollection = Backbone.Collection.extend({
                     var model = collection.get(data[i].Id);
                     if (model) { // update existing
                         model.set(data[i]);
+                        if (model.has('DeletedOn') && model.get('DeletedOn').length) {
+                            collection.remove(model);
+                        }
                     } else { // add new
                         collection.add(data[i]);
                     }
@@ -122,6 +131,7 @@ var ItemView = Backbone.View.extend({
 
     initialize: function() {
         this.model.bind('change', this.update, this);
+        this.model.bind('remove', this.remove, this);
     },
 
     render: function() {
@@ -138,7 +148,7 @@ var ItemView = Backbone.View.extend({
             $(this.el).addClass('open');
         }
 
-        if ('imageLink' in this.model.get('Creator')) {
+        if (this.model.has('AuthorPerson') && 'imageLink' in this.model.get('AuthorPerson')) {
             $(this.el).addClass('quote');
         }
 
