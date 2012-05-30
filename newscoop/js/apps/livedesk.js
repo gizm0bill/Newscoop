@@ -156,6 +156,9 @@ var ItemView = Backbone.View.extend({
 
         if (this.model.isService()) {
             $(this.el).addClass(this.model.get('AuthorName')).removeClass('quote');
+            if (this.model.get('AuthorName') == 'flickr') {
+                $(this.el).find('img').attr('src', $(this.el).find('a').attr('href'));
+            }
         }
 
         if (this.model.isQuote()) {
