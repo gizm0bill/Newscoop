@@ -36,11 +36,16 @@ class RenditionViewHelper extends \Zend_View_Helper_Abstract
      */
     public function rendition(Rendition $rendition, $width, $height, ArticleRendition $articleRendition = null)
     {
-        if ($articleRendition !== null) {
-            $preview = $articleRendition->getRendition()->getPreview($width, $height);
-            $preview->setCoords($articleRendition->getImageSpecs());
-            $thumbnail = $rendition->fits($articleRendition->getImage()) ? $this->imageService->getThumbnail($preview, $articleRendition->getImage()) : null;
-        } else {
+        try {
+            if ($articleRendition !== null) {
+                $preview = $articleRendition->getRendition()->getPreview($width, $height);
+                $preview->setCoords($articleRendition->getImageSpecs());
+                $thumbnail = $rendition->fits($articleRendition->getImage()) ? $this->imageService->getThumbnail($preview, $articleRendition->getImage()) : null;
+            } else {
+                $preview = $rendition->getPreview($width, $height);
+                $thumbnail = null;
+            }
+        } catch (\Exception $e) {
             $preview = $rendition->getPreview($width, $height);
             $thumbnail = null;
         }

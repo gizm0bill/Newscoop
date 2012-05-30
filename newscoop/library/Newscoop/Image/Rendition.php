@@ -292,8 +292,12 @@ class Rendition
      * @param ImageInterface $image
      * @return bool
      */
-    public function fits(ImageInterface $image)
+    public function fits(ImageInterface $image = null)
     {
+        if (is_null($image)) {
+            throw new \InvalidArgumentException("No image to fit.");
+        }
+
         return $this->specs === 'fit' || ($image->getWidth() >= $this->width && $image->getHeight() >= $this->height);
     }
 
