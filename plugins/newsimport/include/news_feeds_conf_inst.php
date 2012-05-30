@@ -139,6 +139,12 @@ $event_data_sources = array(
         'language_id' => 5, // 1,
         'multi_dates' => true,
         'source_dirs' => array(
+            'use' => 'ftp/newsimport/restaurants/current/',
+            'old' => 'ftp/newsimport/restaurants/processed/',
+        ),
+        'topic_types' => array(
+            'restaurant_cuisine',
+            'restaurant_ambiance',
         ),
         'categories' => array(
             'turkish_cuisine' => array('Turkish', 'Türkisch',),

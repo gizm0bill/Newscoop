@@ -1451,6 +1451,7 @@ class NewsImport
         }
         plugin_newsimport_create_event_type();
         plugin_newsimport_make_dirs();
+        plugin_newsimport_set_event_topics();
 
         global $Campsite;
         if (empty($Campsite)) {
@@ -1549,8 +1550,15 @@ class NewsImport
             $Campsite['OMIT_LOGGING'] = true;
 
             $categories = array();
-            if (isset($p_catTopics[$one_source['event_type']])) {
-                $categories = self::ReadEventCategories($one_source, $p_catTopics[$one_source['event_type']]);
+            if ((!isset($one_source['topic_types'])) || (empty($one_source['topic_types']))) {
+                if (isset($p_catTopics[$one_source['event_type']])) {
+                    $categories = self::ReadEventCategories($one_source, $p_catTopics[$one_source['event_type']]);
+                }
+            }
+            else {
+                foreach ($one_source['topic_types'] as $one_topic_type) {
+                    $categories[$one_topic_type] = self::ReadEventCategories($one_source, $p_catTopics[$one_topic_type]);
+                }
             }
 
             $parser_obj = null;
@@ -1561,6 +1569,9 @@ class NewsImport
             }
             if ('movie' == $one_source['event_type']) {
                 $parser_obj = new KinoData_Parser($one_source);
+            }
+            if ('restaurant' == $one_source['event_type']) {
+                $parser_obj = new RestaurantData_Parser($one_source);
             }
             if (!$parser_obj) {
                 continue;

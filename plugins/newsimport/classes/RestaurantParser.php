@@ -23,6 +23,7 @@ II)
 
 */
 
+/*
     $m_rests_loaders = new RestaurantsLoader();
 
     private function take_day_range()
@@ -94,16 +95,7 @@ II)
 
         return $rests_data();
     }
-
-
-
-
-
-
-
-
-
-
+*/
 
 
     /**
@@ -200,7 +192,7 @@ II)
 	 */
     public function prepare($p_categories, $p_limits, $p_cancels, $p_env, $p_regionObj, $p_regionTopics)
     {
-
+/*
         // we need that conf info
         if ((!isset($this->m_dirs['source'])) || (!isset($this->m_dirs['source']['programs']))) {
             return false;
@@ -208,8 +200,8 @@ II)
         if ((!isset($this->m_dirs['source']['movies'])) || (!isset($this->m_dirs['source']['genres'])) || (!isset($this->m_dirs['source']['timestamps']))) {
             return false;
         }
-
-        foreach (array($this->m_dirs['use'], $this->m_dirs['new'], $this->m_dirs['old']) as $one_dir) {
+*/
+        foreach (array($this->m_dirs['use'], /*$this->m_dirs['new'],*/ $this->m_dirs['old']) as $one_dir) {
             if (!is_dir($one_dir)) {
                 try {
                     $created = mkdir($one_dir, $this->m_dirmode, true);
@@ -223,240 +215,49 @@ II)
             }
         }
 
-        $parser = new KinoData_Parser_SimpleXML($p_regionObj, $p_regionTopics);
-
-        $movies_dir = $this->m_dirs['old'];
+        $rests_dir = $this->m_dirs['old'];
         if ( isset($p_env['cache_dir']) && (!empty($p_env['cache_dir'])) ) {
-            $movies_dir = $p_env['cache_dir'];
+            $rests_dir = $p_env['cache_dir'];
         }
-        $sqlite_names = array(
-            'movies' => $movies_dir . 'movies_info.sqlite',
-            'trailers' => $movies_dir . 'trailers_info.sqlite',
-        );
-
-        // first copy and use movies files, if any
-        // this is an addition wrt the general event import
 
         $cur_time = date('YmdHis');
 
-        $to_copy_files_movies = array();
-        $to_copy_files_genres = array();
-        $to_copy_files_timestamps = array();
+        // first take and process/store restaurants data,
+        // this is an addition wrt the general event import
 
-        $movies_infos_files = array();
-        $movies_genres_files = array();
-        $movies_links_files = array();
+        $taker_conf = array(
+            'auxiliary_db' => $rests_dir . 'restaurants_auxiliary.sqlite',
+            'simple_db' => $rests_dir . 'restaurants_simple.sqlite',
+            'single_db' => $rests_dir . 'restaurants_single.sqlite',
+            'auxiliary_table' => 'settings',
+            'simple_table' => 'rests_simple',
+            'single_table' => 'rests_single',
+            'req_sleep' => 1, // this should be taken from a conf
+        );
 
-        // if available_movies_main
-        $ready_file_movies = $this->m_dirs['new'] . $this->m_dirs['ready']['movies'];
-        $ready_file_genres = $this->m_dirs['new'] . $this->m_dirs['ready']['genres'];
-        $ready_file_timestamps = $this->m_dirs['new'] . $this->m_dirs['ready']['timestamps'];
+        $rests_dir = dirname(__FILE__) .DIRECTORY_SEPARATOR. 'restaurants';
+        require_once($rests_dir .DIRECTORY_SEPARATOR. 'take_rests.php');
 
-        if (file_exists($ready_file_movies)) {
+        $rest_taker = new RestaurantsLoader($taker_conf);
 
-            // copy_movies_main;
-            foreach ($this->m_dirs['source']['movies'] as $one_file_glob) {
-                $one_path_glob = $this->m_dirs['new'] . $one_file_glob;
-                $one_file_set = glob($one_path_glob);
-                if (false === $one_file_set) {
-                    continue;
-                }
-                foreach ($one_file_set as $movie_file_path) {
-                    if (!is_file($movie_file_path)) {
-                        continue;
-                    }
-                    if (!array_key_exists($movie_file_path, $to_copy_files_movies)) {
-                        $to_copy_files_movies[$movie_file_path] = $this->m_dirs['use'] . $cur_time . '-' . basename($movie_file_path);
-                    }
-                }
-            }
-            foreach ($to_copy_files_movies as $one_file_src => $one_file_dest) {
-                try {
-                    rename($one_file_src, $one_file_dest);
-                    $movies_infos_files[] = $one_file_dest;
-                }
-                catch (Exception $exc) {}
-            }
+        $rest_taker->update_simple_list();
+        $rest_taker->process_single_rests();
 
-            // if available_movies_genres
-            $genres_ready = false;
-            if (file_exists($ready_file_genres)) {
-                $genres_ready = true;
+        $rests_data = $rest_taker->load_single_by_status('new');
 
-                // copy_movies_genres;
-                foreach ($this->m_dirs['source']['genres'] as $one_file_glob) {
-                    $one_path_glob = $this->m_dirs['new'] . $one_file_glob;
-                    $one_file_set = glob($one_path_glob);
-                    if (false === $one_file_set) {
-                        continue;
-                    }
-                    foreach ($one_file_set as $genre_file_path) {
-                        if (!is_file($genre_file_path)) {
-                            continue;
-                        }
-                        if (!array_key_exists($genre_file_path, $to_copy_files_genres)) {
-                            $to_copy_files_genres[$genre_file_path] = $this->m_dirs['use'] . $cur_time . '-' . basename($genre_file_path);
-                        }
-                    }
-                }
-                foreach ($to_copy_files_genres as $one_file_src => $one_file_dest) {
-                    try {
-                        rename($one_file_src, $one_file_dest);
-                        $movies_genres_files[] = $one_file_dest;
-                    }
-                    catch (Exception $exc) {}
-                }
+        // to put prepared things into a file
+        $rests_json = json_encode($rests_data);
 
-            }
-            // if available_movies_timestamps
-            $timestamps_ready = false;
-            if (file_exists($ready_file_genres)) {
-                $timestamps_ready = true;
+        $storage_file_name = $this->m_dirs['use'] . $cur_time . '-' . 'lunchgate_dose.data';
+        file_put_contents($storage_file_name, $rests_json);
 
-                //copy_movies_timestamps;
-                foreach ($this->m_dirs['source']['timestamps'] as $one_file_glob) {
-                    $one_path_glob = $this->m_dirs['new'] . $one_file_glob;
-                    $one_file_set = glob($one_path_glob);
-                    if (false === $one_file_set) {
-                        continue;
-                    }
-                    foreach ($one_file_set as $timestamp_file_path) {
-                        if (!is_file($timestamp_file_path)) {
-                            continue;
-                        }
-                        if (!array_key_exists($timestamp_file_path, $to_copy_files_timestamps)) {
-                            $to_copy_files_timestamps[$timestamp_file_path] = $this->m_dirs['use'] . $cur_time . '-' . basename($timestamp_file_path);
-                        }
-                    }
-                }
-                foreach ($to_copy_files_timestamps as $one_file_src => $one_file_dest) {
-                    try {
-                        rename($one_file_src, $one_file_dest);
-                        $movies_links_files[] = $one_file_dest;
-                    }
-                    catch (Exception $exc) {}
-                }
-            }
+        $parser = new RestaurantData_Parser_Simple($p_regionObj, $p_regionTopics);
+        $rests_data = $parser->prepareRestaurantsEvents(array($storage_file_name), $this->m_provider, $p_categories, $p_limits['past'], $p_limits['next'], null);
 
-            $movies_ready_files = array();
-            $movies_ready_files[] = $ready_file_movies;
-            if (!in_array($ready_file_genres, $movies_ready_files)) {
-                $movies_ready_files[] = $ready_file_genres;
-            }
-            if (!in_array($ready_file_timestamps, $movies_ready_files)) {
-                $movies_ready_files[] = $ready_file_timestamps;
-            }
-            foreach ($movies_ready_files as $one_ready_file) {
-                try {
-                    unlink($one_ready_file); // i.e. ci_done.txt
-                }
-                catch (Exception $exc) {}
-            }
+        // store the processed $rests_data
 
-            // process_movies_files;
-            $parser->updateMoviesInfo($sqlite_names, $movies_infos_files, $movies_genres_files, $movies_links_files);
+        return true;
 
-        }
-
-
-        $to_copy_files_programs = array();
-        $programs_infos_files = array();
-
-        $ready_file_programs = $this->m_dirs['new'] . $this->m_dirs['ready']['programs'];
-        if (file_exists($ready_file_programs)) {
-            // copy_programs_main;
-            foreach ($this->m_dirs['source']['programs'] as $one_file_glob) {
-                $one_path_glob = $this->m_dirs['new'] . $one_file_glob;
-                $one_file_set = glob($one_path_glob);
-                if (false === $one_file_set) {
-                    continue;
-                }
-                foreach ($one_file_set as $program_file_path) {
-                    if (!is_file($program_file_path)) {
-                        continue;
-                    }
-                    if (!array_key_exists($program_file_path, $to_copy_files_programs)) {
-                        $to_copy_files_programs[$program_file_path] = $this->m_dirs['use'] . $cur_time . '-' . basename($program_file_path);
-                    }
-                }
-            }
-            foreach ($to_copy_files_programs as $one_file_src => $one_file_dest) {
-                try {
-                    rename($one_file_src, $one_file_dest);
-                    $programs_infos_files[] = $one_file_dest;
-                }
-                catch (Exception $exc) {}
-            }
-
-            try {
-                unlink($ready_file_programs); // i.e. wvag_cine_done.txt
-            }
-            catch (Exception $exc) {}
-
-            $events_last = $this->load(true);
-            $parser->setLastEvents($events_last);
-
-            $lim_span_past = null;
-            $lim_span_next = null;
-            if ((!empty($p_limits)) && (array_key_exists('dates', $p_limits))) {
-                $date_limits = $p_limits['dates'];
-                if (is_array($date_limits) && isset($date_limits['past'])) {
-                    $lim_span_past = 0 + $date_limits['past'];
-                }
-                if (is_array($date_limits) && isset($date_limits['next'])) {
-                    $lim_span_next = 0 + $date_limits['next'];
-                }
-            }
-
-            $cat_limits = null;
-            if ((!empty($p_limits)) && (array_key_exists('categories', $p_limits))) {
-                $cat_limits = $p_limits['categories'];
-            }
-
-            $event_load = $parser->prepareKinosEvents($programs_infos_files, $sqlite_names['movies'], $this->m_provider, $p_categories, $lim_span_past, $lim_span_next, $cat_limits);
-
-            if (!empty($event_load)) {
-                $event_all = $event_load['events_all'];
-                unset($event_load['events_all']);
-                $event_dif = $event_load['events_dif'];
-                unset($event_load['events_dif']);
-
-                $event_all_json = json_encode($event_all);
-                $event_all_json_path = 'compress.zlib://' . $this->m_dirs['use'] . $cur_time . '-' . $this->m_saved_parts['all'] . '.json.gz';
-
-                $event_dif_json = json_encode($event_dif);
-                $event_dif_json_path = 'compress.zlib://' . $this->m_dirs['use'] . $cur_time . '-' . $this->m_saved_parts['dif'] . '.json.gz';
-
-                try {
-                    $event_all_json_file = fopen($event_all_json_path, 'w');
-                    fwrite($event_all_json_file, $event_all_json);
-                    fclose($event_all_json_file);
-                }
-                catch (Exception $exc) {
-                }
-
-                try {
-                    $event_dif_json_file = fopen($event_dif_json_path, 'w');
-                    fwrite($event_dif_json_file, $event_dif_json);
-                    fclose($event_dif_json_file);
-                }
-                catch (Exception $exc) {
-                }
-
-            }
-
-        }
-
-        $files_found = glob($this->m_dirs['use'] . '*-' . $this->m_saved_parts['dif'] . '.json.gz');
-        if (!empty($files_found)) {
-            foreach ($files_found as $one_file) {
-                if (is_file($one_file)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
 
     } // fn prepare
 
@@ -572,9 +373,9 @@ II)
 } // class RestaurantData_Parser
 
 /**
- * RestaurantData Parser that makes use of the SimpleXML PHP extension.
+ * RestaurantData Parser.
  */
-class RestaurantData_Parser_SimpleXML {
+class RestaurantData_Parser_Simple {
 
     /**
      * Storage of loaded events of last data dosis
@@ -586,13 +387,13 @@ class RestaurantData_Parser_SimpleXML {
      * Name of table where the movies info are stored
      * @var string
      */
-    var $m_table_name = 'movies';
+    //var $m_table_name = 'movies';
 
     /**
      * Specification string of poster images
      * @var string
      */
-    var $m_poster_spec = 'artw';
+    //var $m_poster_spec = 'artw';
 
     var $m_region_info = array();
     var $m_region_topics = array();
@@ -709,821 +510,52 @@ class RestaurantData_Parser_SimpleXML {
 
     } // fn setSourceFiles
 
-    public function parseChartsData($p_moviesChartsFiles) {
-        $movies_charts_files = array();
-
-        $files_to_unlink = array();
-
-        if (!empty($p_moviesChartsFiles)) {
-            $this->setSourceFiles($p_moviesChartsFiles, $movies_charts_files, $files_to_unlink);
-        }
-
-        $movies_ranks = array();
-
-        $kanton_links = array(
-            'Basel' => 'kanton-basel',
-            'Bern' => 'kanton-bern',
-            'Dietlikon' => 'kanton-zuerich', // Deutschschweiz?
-            'Genève' => 'kanton-genf',
-            'Lugano' => 'kanton-tessin',
-            'Luzern' => 'kanton-luzern',
-            'St. Gallen' => 'kanton-st-gallen',
-            'Winterthur' => 'kanton-zuerich', // ?
-            'Zug' => 'kanton-zug',
-            'Zürich' => 'kanton-zuerich',
-        );
-
-
-        foreach($movies_charts_files as $one_chrt_file) {
-            $one_chrt_xml = simplexml_load_string(FileLoad::LoadFix($one_chrt_file));
-            foreach ($one_chrt_xml->kino as $one_kino) {
-                $one_theater_town = trim('' . $one_kino->theatertown);
-                if (empty($one_theater_town)) {
-                    continue;
-                }
-                if (!array_key_exists($one_theater_town, $kanton_links)) {
-                    continue;
-                }
-
-                $one_theater_charts = trim('' . $one_kino->theatercharts);
-                if (empty($one_theater_charts)) {
-                    continue;
-                }
-
-                $one_chrt_info = array();
-
-                $cur_chart = explode("\n", $one_theater_charts);
-                if (1 >= count($cur_chart)) {
-                    continue;
-                }
-                array_shift($cur_chart);
-
-                $cur_rank_list = array();
-
-                foreach ($cur_chart as $one_rank_line) {
-                    $one_rank_data = explode("\t", trim($one_rank_line));
-                    if (5 != count($one_rank_data)) {
-                        continue;
-                    }
-
-                    $cur_rank = trim($one_rank_data[0]);
-                    $cur_name = trim($one_rank_data[1]);
-                    $cur_last = trim($one_rank_data[2]);
-                    $cur_key = trim($one_rank_data[3]);
-                    $cur_etwas = trim($one_rank_data[4]);
-
-                    $cur_rank_list[$cur_rank] = array('name' => $cur_name, 'last' => $cur_last, 'key' => $cur_key);
-
-                }
-
-
-            }
-
-        }
-    }
-
-
-
     /**
-     * Parses info on movies
+     * Parses RestaurantData data
      *
-     * @param array $p_moviesInfosFiles
-     * @param array $p_moviesGenresFiles
-     * @param array $p_moviesLinksFiles
+     * @param array $p_restaurantsInfosFiles file name of the restaurant file
      * @return array
      */
-    public function parseMoviesInfo($p_moviesInfosFiles, $p_moviesGenresFiles, $p_moviesLinksFiles)
+    public function parseRestaurantsInfo($p_restaurantsInfosFiles)
     {
 
-        $movies_infos_files = array();
-        $movies_genres_files = array();
-        $movies_links_files = array();
-
+        $restaurants_infos_files = array();
         $files_to_unlink = array();
 
-        if (!empty($p_moviesInfosFiles)) {
-            $this->setSourceFiles($p_moviesInfosFiles, $movies_infos_files, $files_to_unlink);
-        }
-        if (!empty($p_moviesGenresFiles)) {
-            $this->setSourceFiles($p_moviesGenresFiles, $movies_genres_files, $files_to_unlink);
-        }
-        if (!empty($p_moviesLinksFiles)) {
-            $this->setSourceFiles($p_moviesLinksFiles, $movies_links_files, $files_to_unlink);
+        $restaurants_places = array();
+
+        if (!empty($p_restaurantsInfosFiles)) {
+            $this->setSourceFiles($p_restaurantsInfosFiles, $restaurants_infos_files, $files_to_unlink);
         }
 
-        $movies_genres = array();
-        $movies_infos = array();
+        foreach ($restaurants_infos_files as $one_rest_file) {
 
-        // movies general info
-        $mov_infos_parts = array(
-            'key' => 'movkey', 'imdb' => 'movimb', 'suisa' => 'movsui', 'country' => 'movcou',
-            'title' => 'movtit', 'lead' => 'movlea', 'link' => 'movlnk', 'trailer' => 'movtra',
-            'distributor' => 'disnam', 'distributor_link' => 'dislnk',
-        );
 
-        $mov_infos_people = array(
-            'director' => 'movdir', 'producer' => 'movpro', 'cast' => 'movcas', 'script' => 'movscr', 'camera' => 'movcam',
-            'cutter' => 'movcut', 'sound' => 'movsnd', 'score' => 'movsco', 'production_design' => 'movpde',
-            'costume_design' => 'movcde', 'visual_effects' => 'movvfx',
-        );
+            $one_rest_data = FileLoad::LoadFixJson($one_rest_file);
 
-        $mov_infos_times = array('release_ch_d' => 'movred', 'release_ch_f' => 'movref', 'release_ch_i' => 'movrei',);
+            foreach ($one_rest_data as $one_rest) {
 
-        $mov_infos_numbers = array('flag' => 'movspc', 'year' => 'movyea', 'duration' => 'movdur',  'oscars' => 'movosc',);
-
-        foreach($movies_infos_files as $one_mov_file) {
-            //$one_mov_xml = simplexml_load_file($one_mov_file);
-            $one_mov_xml = simplexml_load_string(FileLoad::LoadFix($one_mov_file));
-            foreach ($one_mov_xml->movie as $one_movie) {
-                $one_mov_key = trim('' . $one_movie->movkey);
-                if (empty($one_mov_key)) {
-                    continue;
-                }
-                $one_mov_info = array();
-                if (isset($movies_infos[$one_mov_key])) {
-                    $one_mov_info = $movies_infos[$one_mov_key];
-                }
-
-                $one_mov_desc = trim('' . $one_movie->movsyd);
-                if (empty($one_mov_desc)) {
-                    $one_mov_desc = trim('' . $one_movie->movcgd);
-                }
-                //if (empty($one_mov_desc)) {
-                //    $one_mov_desc = trim('' . $one_movie->movlea);
-                //}
-                if ((!isset($one_mov_info['desc'])) || (empty($one_mov_info['desc']))) {
-                    $one_mov_info['desc'] = $one_mov_desc;
-                }
-
-                //specific text parts
-                foreach ($mov_infos_parts as $one_mov_infos_key => $one_mov_infos_spec) {
-                    $one_mov_infos_value = trim('' . $one_movie->$one_mov_infos_spec);
-                    if ((!isset($one_mov_info[$one_mov_infos_key])) || (empty($one_mov_info[$one_mov_infos_key])) || (!empty($one_mov_infos_value))) {
-                        $one_mov_info[$one_mov_infos_key] = '' . $one_mov_infos_value;
-                    }
-                }
-
-                //specific people parts
-                foreach ($mov_infos_people as $one_mov_infos_key => $one_mov_infos_spec) {
-                    $one_mov_infos_value = trim('' . $one_movie->$one_mov_infos_spec);
-                    if ((!isset($one_mov_info[$one_mov_infos_key])) || (empty($one_mov_info[$one_mov_infos_key])) || (!empty($one_mov_infos_value))) {
-                        $one_mov_info_people = array();
-                        foreach (explode("\n", '' . $one_mov_infos_value) as $one_mov_info_people_line) {
-                            $one_mov_info_people_line = trim($one_mov_info_people_line);
-                            if (empty($one_mov_info_people_line)) {continue;}
-                            $one_mov_info_people[] = $one_mov_info_people_line;
-                        }
-
-                        $one_mov_info[$one_mov_infos_key] = implode(',', $one_mov_info_people);
-
-                    }
-                }
-
-                //specific date-time parts
-                foreach ($mov_infos_times as $one_mov_infos_key => $one_mov_infos_spec) {
-                    $one_mov_infos_value = trim('' . $one_movie->$one_mov_infos_spec);
-                    if ((!isset($one_mov_info[$one_mov_infos_key])) || (empty($one_mov_info[$one_mov_infos_key])) || (!empty($one_mov_infos_value))) {
-                        if ( (!empty($one_mov_infos_value)) && (is_numeric($one_mov_infos_value)) ) {
-                            $one_mov_infos_value = gmdate('Y-m-d', $one_mov_infos_value);
-                        }
-                        $one_mov_info[$one_mov_infos_key] = $one_mov_infos_value;
-                    }
-                }
-
-                //specific numeric parts
-                foreach ($mov_infos_numbers as $one_mov_infos_key => $one_mov_infos_spec) {
-                    $one_mov_infos_value = trim('' . $one_movie->$one_mov_infos_spec);
-                    if ((!isset($one_mov_info[$one_mov_infos_key])) || (empty($one_mov_info[$one_mov_infos_key])) || (!empty($one_mov_infos_value))) {
-                        $one_mov_info[$one_mov_infos_key] = 0 + $one_mov_infos_value;
-                    }
-                }
-
-                $movies_infos[$one_mov_key] = $one_mov_info;
-
-            }
-        }
-
-
-        // movies genres info
-        foreach($movies_genres_files as $one_gen_file) {
-            //$one_gen_xml = simplexml_load_file($one_gen_file);
-            $one_gen_xml = simplexml_load_string(FileLoad::LoadFix($one_gen_file));
-            foreach ($one_gen_xml->genre as $one_genre) {
-                $one_gen_id = trim('' . $one_genre->genid);
-                if (empty($one_gen_id)) {
-                    continue;
-                }
-                $one_gen_info = array();
-                if (isset($movies_genres[$one_gen_id])) {
-                    $one_gen_info = $movies_genres[$one_gen_id];
-                }
-
-                $one_gen_de = trim('' . $one_genre->gennad);
-                if (!empty($one_gen_de)) {
-                    $one_gen_info['de'] = $one_gen_de;
-                }
-                $one_gen_en = trim('' . $one_genre->gennae);
-                if (!empty($one_gen_en)) {
-                    $one_gen_info['en'] = $one_gen_en;
-                }
-
-                $movies_genres[$one_gen_id] = $one_gen_info;
-            }
-
-            foreach ($one_gen_xml->movie as $one_movie) {
-                $one_mov_key = trim('' . $one_movie->movkey);
-                if (empty($one_mov_key)) {
-                    continue;
-                }
-                $one_mov_info = array();
-                if (isset($movies_infos[$one_mov_key])) {
-                    $one_mov_info = $movies_infos[$one_mov_key];
-                }
-
-                $one_mov_genres = array();
-                foreach ($one_movie->movgen->genreid as $one_mov_gen) {
-                    $one_mov_gen_id = trim('' . $one_mov_gen);
-                    if (isset($movies_genres[$one_mov_gen_id])) {
-                        $one_genres_names = $movies_genres[$one_mov_gen_id];
-                        if ((isset($one_genres_names['de'])) && (!empty($one_genres_names['de']))) {
-                            $one_mov_genres[$one_mov_gen_id] = $one_genres_names['de'];
-                        }
-                        elseif ((isset($one_genres_names['en'])) && (!empty($one_genres_names['en']))) {
-                            $one_mov_genres[$one_mov_gen_id] = $one_genres_names['en'];
-                        }
-                    }
-                }
-
-                if (!empty($one_mov_genres)) {
-                    $one_mov_info['genres'] = $one_mov_genres;
-                    $movies_infos[$one_mov_key] = $one_mov_info;
-                }
-
-            }
-        }
-
-        // movies links info
-        foreach($movies_links_files as $one_lnk_file) {
-            //$one_lnk_xml = simplexml_load_file($one_lnk_file);
-            $one_lnk_xml = simplexml_load_string(FileLoad::LoadFix($one_lnk_file));
-            foreach ($one_lnk_xml->movie as $one_movie) {
-                $one_mov_key = trim('' . $one_movie->m_movkey);
-                if (empty($one_mov_key)) {
-                    continue;
-                }
-                $one_mov_info = array();
-                if (isset($movies_infos[$one_mov_key])) {
-                    $one_mov_info = $movies_infos[$one_mov_key];
-                }
-                $one_mov_url = trim('' . $one_movie->m_movurl);
-                if (!empty($one_mov_url)) {
-                    $one_mov_info['link_url'] = $one_mov_url;
-                    $movies_infos[$one_mov_key] = $one_mov_info;
-                }
-            }
-
-            foreach ($one_lnk_xml->image as $one_lnk_image) {
-                $one_mov_key = trim('' . $one_lnk_image->i_movkey);
-                if (empty($one_mov_key)) {
-                    continue;
-                }
-                $one_mov_info = array();
-                if (isset($movies_infos[$one_mov_key])) {
-                    $one_mov_info = $movies_infos[$one_mov_key];
-                }
-                $one_mov_info_images = array();
-                if (isset($one_mov_info['link_images'])) {
-                    $one_mov_info_images = $one_mov_info['link_images'];
-                }
-
-                $one_img_id = trim('' . $one_lnk_image->i_imgid);
-                if (empty($one_img_id)) {
-                    continue;
-                }
-
-                $one_img_type = trim('' . $one_lnk_image->i_imgcatkey);
-                $one_img_url = trim('' . $one_lnk_image->i_imgurl);
-                $one_img_w = trim('' . $one_lnk_image->i_imgsizsxm);
-                $one_img_h = trim('' . $one_lnk_image->i_imgsizsym);
-
-                if (!empty($one_img_url)) {
-                    $one_mov_info_images[$one_img_id] = array('url' => $one_img_url, 'width' => $one_img_w, 'height' => $one_img_h, 'type' => $one_img_type);
-                    $one_mov_info['link_images'] = $one_mov_info_images;
-                    $movies_infos[$one_mov_key] = $one_mov_info;
-                }
-            }
-
-            foreach ($one_lnk_xml->trailer as $one_lnk_trailer) {
-                $one_mov_key = trim('' . $one_lnk_trailer->t_movkey);
-                if (empty($one_mov_key)) {
-                    continue;
-                }
-                $one_mov_info = array();
-                if (isset($movies_infos[$one_mov_key])) {
-                    $one_mov_info = $movies_infos[$one_mov_key];
-                }
-                $one_trl_w = trim('' . $one_lnk_trailer->t_movtrw);
-                $one_trl_h = trim('' . $one_lnk_trailer->t_movtrh);
-                $one_trl_codec = trim('' . $one_lnk_trailer->t_movtrc);
-                $one_trl_url = trim('' . $one_lnk_trailer->t_traurl);
-                $one_trl_time = 0 + trim('' . $one_lnk_trailer->t_movtrd);
-                if (!empty($one_trl_url)) {
-                    $one_mov_info['link_trailer'] = array('url' => $one_trl_url, 'width' => $one_trl_w, 'height' => $one_trl_h, 'codec' => $one_trl_codec, 'time' => $one_trl_time);
-                    $movies_infos[$one_mov_key] = $one_mov_info;
-                }
-            }
-        }
-
-
-        // unlink tmp (zip extracted) files
-        foreach ($files_to_unlink as $one_temp_name) {
-            try {
-                unlink($one_temp_name);
-            }
-            catch (Exception $exc) {
-                continue;
-            }
-        }
-
-        // return parsed info on movies
-        return $movies_infos;
-
-    } // fn parseMoviesInfo
-
-
-    /**
-     * 
-     */
-    private function updateTrailersInfo($p_trailersDatabase, &$p_moviesInfo)
-    {
-        if (!file_exists($p_trailersDatabase)) {
-            $pre_db_file = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'trailers_info.sqlite';
-            if (file_exists($pre_db_file)) {
-                copy($pre_db_file, $p_trailersDatabase);
-            }
-        }
-
-        $sqlite_name = $p_trailersDatabase;
-        $table_name = 'trailers';
-
-        $to_update = array();
-        $to_insert = array();
-
-        $cre_req = 'CREATE TABLE IF NOT EXISTS ' . $table_name . ' (
-            movie_key TEXT PRIMARY KEY,
-            vimeo_id TEXT DEFAULT "",
-            source_timestamp INTEGER DEFAULT 0,
-            source_url TEXT DEFAULT "",
-            local_name TEXT DEFAULT "",
-            video_codec TEXT DEFAULT "",
-            video_width INTEGER DEFAULT 0,
-            video_height INTEGER DEFAULT 0,
-            state TEXT DEFAULT "",
-            error_count INTEGER DEFAULT 0
-        )';
-        //    video_info TEXT DEFAULT "{}",
-
-        $vimeo_ids = array();
-        $vimeo_updates = array();
-
-    /**
-    Ini phase:
-
-    * take trailer links with timestamps from provided info files; in a data list
-    * search for the movie_keys in videos table:
-        * if not there: put it in, state as "to_download"
-        * if is there: look at timestamps
-            * if the new timestamp is newer, update the link, set state as "to_download"
-            * if the new timestamp equals or older, leave it
-    */
-        //$sel_req = 'SELECT source_timestamp FROM ' . $table_name . ' WHERE movie_key = :movie_key';
-        $sel_req = 'SELECT movie_key, source_timestamp, vimeo_id, state FROM ' . $table_name . '';
-        $upd_req = 'UPDATE ' . $table_name . ' SET source_url = :source_url, source_timestamp = :source_timestamp, state = "to_download", error_count = 0, ';
-        $upd_req .= 'video_codec = :video_codec, video_width = :video_width, video_height = :video_height WHERE movie_key = :movie_key';
-        $ins_req = 'INSERT INTO ' . $table_name . ' (movie_key, source_timestamp, source_url, state, video_codec, video_width, video_height) VALUES ';
-        $ins_req .= '(:movie_key, :source_timestamp, :source_url, "to_download", :video_codec, :video_width, :video_height)';
-        $fin_req = 'UPDATE ' . $table_name . ' SET state = "at_use" WHERE movie_key = :movie_key';
-
-        @$db = new PDO ('sqlite:' . $sqlite_name);
-        $stmt = $db->prepare($cre_req);
-        $res = $stmt->execute();
-        if (!$res) {
-            return false;
-        }
-
-        $timestamps_old = array();
-        $stmt = $db->prepare($sel_req);
-        $res = $stmt->execute();
-        if ($res) {
-            while (true) {
-                $res = $stmt->fetch(PDO::FETCH_ASSOC);
-                if (!$res) {
-                    break;
-                }
-                $movie_key_old = $res['movie_key'];
-                $source_timestamp_old = $res['source_timestamp'];
-                $state_old = $res['state'];
-                $timestamps_old[$movie_key_old] = $source_timestamp_old;
-
-                // taking the vimeo_ids whenever already available
-                $one_vimeo_id = '' . $res['vimeo_id'];
-                if (!empty($one_vimeo_id)) {
-                    $vimeo_ids[$movie_key_old] = $one_vimeo_id;
-                }
-                if ('to_use' == $state_old) {
-                    $vimeo_updates[$movie_key_old] = true;
-                }
-            }
-        }
-
-        foreach ($p_moviesInfo as $mov_key => $mov_info) {
-            $mov_trailer = null;
-            if (isset($mov_info['link_trailer'])) {
-                $mov_trailer = $mov_info['link_trailer'];
-            }
-            if (empty($mov_trailer)) {
-                continue;
-            }
-            $source_timestamp_new = $mov_trailer['time'];
-
-            if (!isset($timestamps_old[$mov_key])) {
-                // no trailer info saved yet, insert it
-                $to_insert[$mov_key] = $mov_trailer;
-                continue;
-            }
-
-            $source_timestamp_old = $res['source_timestamp'];
-            if ($source_timestamp_old >= $source_timestamp_new) {
-                continue;
-            }
-
-            $to_update[$mov_key] = $mov_trailer;
-        }
-
-        $db->beginTransaction();
-
-        $stmt = $db->prepare($ins_req);
-        foreach ($to_insert as $mov_key => $mov_trailer) {
-            //$video_info = json_encode($mov_trailer);
-
-            $source_timestamp = (isset($mov_trailer['time'])) ? $mov_trailer['time'] : 0;
-            $source_url = (isset($mov_trailer['url'])) ? $mov_trailer['url'] : '';
-
-            $video_codec = (isset($mov_trailer['codec'])) ? $mov_trailer['codec'] : '';
-            $video_width = (isset($mov_trailer['width'])) ? $mov_trailer['width'] : 0;
-            $video_height = (isset($mov_trailer['height'])) ? $mov_trailer['height'] : 0;
-
-            $stmt->bindParam(':movie_key', $mov_key, PDO::PARAM_STR);
-            $stmt->bindParam(':source_timestamp', $source_timestamp, PDO::PARAM_INT);
-            $stmt->bindParam(':source_url', $source_url, PDO::PARAM_STR);
-            $stmt->bindParam(':video_codec', $video_codec, PDO::PARAM_STR);
-            $stmt->bindParam(':video_width', $video_width, PDO::PARAM_INT);
-            $stmt->bindParam(':video_height', $video_height, PDO::PARAM_INT);
-
-            $res = $stmt->execute();
-            if (!$res) {
-                return false;
-            }
-        }
-
-        $stmt = $db->prepare($upd_req);
-        foreach ($to_update as $mov_key => $mov_trailer) {
-            //$video_info = json_encode($mov_trailer);
-
-            $source_timestamp = (isset($mov_trailer['time'])) ? $mov_trailer['time'] : 0;
-            $source_url = (isset($mov_trailer['url'])) ? $mov_trailer['url'] : '';
-
-            $video_codec = (isset($mov_trailer['codec'])) ? $mov_trailer['codec'] : '';
-            $video_width = (isset($mov_trailer['width'])) ? $mov_trailer['width'] : 0;
-            $video_height = (isset($mov_trailer['height'])) ? $mov_trailer['height'] : 0;
-
-            $stmt->bindParam(':movie_key', $mov_key, PDO::PARAM_STR);
-            $stmt->bindParam(':source_timestamp', $source_timestamp, PDO::PARAM_INT);
-            $stmt->bindParam(':source_url', $source_url, PDO::PARAM_STR);
-            $stmt->bindParam(':video_codec', $video_codec, PDO::PARAM_STR);
-            $stmt->bindParam(':video_width', $video_width, PDO::PARAM_INT);
-            $stmt->bindParam(':video_height', $video_height, PDO::PARAM_INT);
-
-            $res = $stmt->execute();
-            if (!$res) {
-                return false;
-            }
-        }
-
-        $db->commit();
-
-    /**
-    Fin phase:
-
-    * search the videos table, take all available trailers
-    * take the vimeo ids and put them into movies articles
-    */
-
-        foreach ($vimeo_ids as $movie_key => $one_vimeo_id) {
-            if (isset($p_moviesInfo[$movie_key])) {
-                //$mov_trailer = (isset($p_moviesInfo[$movie_key]['link_trailer'])) ? $p_moviesInfo[$movie_key]['link_trailer'] : null;
-                //if (empty($mov_trailer)) {
-                //    continue; // we do not use the possible vimeo-saved trailer, since telling "no trailer" may mean the trailer was cancelled
-                //}
-                $p_moviesInfo[$movie_key]['trailer_vimeo_id'] = $one_vimeo_id;
-            }
-            else {
-                $p_moviesInfo[$movie_key] = array('trailer_vimeo_id' => $one_vimeo_id,);
-            }
-        }
-
-        $db->beginTransaction();
-        $stmt = $db->prepare($fin_req);
-        foreach ($vimeo_updates as $mov_key => $one_aux) {
-
-            $stmt->bindParam(':movie_key', $mov_key, PDO::PARAM_STR);
-            $res = $stmt->execute();
-            if (!$res) {
-                //return false;
-            }
-
-        }
-        $db->commit();
-
-        return true;
-    }
-
-
-    /**
-     * Puts new info on movies into the sqlite db
-     *
-     * @param array $p_moviesDatabase
-     * @param array $p_moviesInfosFiles
-     * @param array $p_moviesGenresFiles
-     * @param array $p_moviesLinksFiles
-     * @return bool
-     */
-    public function updateMoviesInfo($p_moviesDatabases, $p_moviesInfosFiles, $p_moviesGenresFiles, $p_moviesLinksFiles)
-    {
-        $movies_info = $this->parseMoviesInfo($p_moviesInfosFiles, $p_moviesGenresFiles, $p_moviesLinksFiles);
-
-        $this->updateTrailersInfo($p_moviesDatabases['trailers'], $movies_info);
-
-        $sqlite_name = $p_moviesDatabases['movies'];
-        $table_name = $this->m_table_name;
-
-        ksort($movies_info);
-
-        $cre_req = 'CREATE TABLE IF NOT EXISTS ' . $table_name . ' (movie_key TEXT PRIMARY KEY, movie_info TEXT)';
-        $ins_req = 'INSERT OR REPLACE INTO ' . $table_name . ' (movie_key, movie_info) VALUES (:movie_key, :movie_info)';
-
-        @$db = new PDO ('sqlite:' . $sqlite_name);
-        $stmt = $db->prepare($cre_req);
-        $res = $stmt->execute();
-        if (!$res) {
-            return false;
-        }
-
-        $movies_to_preload = array();
-        foreach ($movies_info as $mov_key => $mov_info) {
-            $movies_to_preload[$mov_key] = true;
-        }
-        $movies_preloaded = $this->loadMoviesByKeys($movies_to_preload, $p_moviesDatabases['movies']);
-        foreach ($movies_preloaded as $mov_key => $one_movie_data_pre) {
-            if (isset($movies_info[$mov_key])) {
-                $mov_info = $movies_info[$mov_key];
-                foreach ($one_movie_data_pre as $mov_pre_key => $mov_pre_value) {
-                    $mov_new_value = (isset($mov_info[$mov_pre_key])) ? $mov_info[$mov_pre_key] : '';
-                    if ( (empty($mov_new_value)) && (!empty($mov_pre_value)) ) {
-                        $mov_info[$mov_pre_key] = $mov_pre_value;
-                    }
-                }
-                $movies_info[$mov_key] = $mov_info;
-            }
-        }
-
-        $db->beginTransaction();
-        $stmt = $db->prepare($ins_req);
-        foreach ($movies_info as $mov_key => $mov_info) {
-            //$mov_key = '';
-            //if (isset($mov_info['key'])) {
-            //    $mov_key = $mov_info['key'];
-            //}
-            $mov_info = json_encode($mov_info);
-
-            //$stmt->bindParam(':movie_id', $mov_id, PDO::PARAM_INT);
-            $stmt->bindParam(':movie_key', $mov_key, PDO::PARAM_STR);
-            $stmt->bindParam(':movie_info', $mov_info, PDO::PARAM_STR);
-
-            $res = $stmt->execute();
-            if (!$res) {
-                return false;
-            }
-        }
-        $db->commit();
-
-        return true;
-    } // fn updateMoviesInfo
-
-
-    /**
-     * Parses KinoData data (by KinoData_Parser_SimpleXML)
-     *
-     * @param array $p_kinosInfosFiles file name of the kino file
-     * @return array
-     */
-    public function parseKinosInfo($p_kinosInfosFiles)
-    {
-
-        $kinos_infos_files = array();
-        $files_to_unlink = array();
-
-        $movies_screens = array();
-
-        if (!empty($p_kinosInfosFiles)) {
-            $this->setSourceFiles($p_kinosInfosFiles, $kinos_infos_files, $files_to_unlink);
-        }
-
-        $other_desc_parts = array('weewee', 'weelea', 'weetxs');
-        foreach ($kinos_infos_files as $one_kino_file) {
-            //$one_kino_xml = simplexml_load_file($one_kino_file);
-            $one_kino_xml = simplexml_load_string(FileLoad::LoadFix($one_kino_file));
-            $export_start_date = '0000-00-01';
-            $export_start_date_time = explode('-', trim('' . $one_kino_xml->export->date_min));
-            $export_start_date_info = explode('.', $export_start_date_time[0]);
-            if (3 == count($export_start_date_info)) {
-                $exp_year = '0000';
-                $exp_month = '00';
-                $exp_day = '00';
-                if (4 == strlen($export_start_date_info[2])) {
-                    $exp_year = $export_start_date_info[2];
-                }
-                if (2 == strlen($export_start_date_info[1])) {
-                    $exp_month = $export_start_date_info[1];
-                }
-                if (2 == strlen($export_start_date_info[0])) {
-                    $exp_day = $export_start_date_info[0];
-                }
-                $export_start_date = $exp_year . '-' . $exp_month . '-' . $exp_day;
-            }
-
-            foreach ($one_kino_xml->kino as $one_kino) {
-                $one_kino_id = trim('' . $one_kino->theaterid);
-                //if (empty($one_kino_id)) {
+                $one_rest_uid = trim('' . $one_rest['uid'];
+                //if (empty($one_rest_uid)) {
                 //    continue;
                 //}
-                $one_kino_name = trim('' . $one_kino->theatername);
-                $one_kino_town = trim('' . $one_kino->theatertown);
-                $one_kino_zip = trim('' . $one_kino->theaterzip);
-                $one_kino_street = trim('' . $one_kino->theateradress);
-                $one_kino_latitude = trim('' . $one_kino->theaterlat);
-                $one_kino_longitude = trim('' . $one_kino->theaterlong);
-                $one_kino_phone = trim('' . $one_kino->theaterphone);
-                $k_telcost = trim('' . $one_kino->theatertelcostde);
-                if (empty($k_telcost)) {
-                    $k_telcost = trim('' . $one_kino->theatertelcost);
-                }
-                if (!empty($k_telcost)) {
-                    $one_kino_phone .= ' ' . $k_telcost;
-                }
-                $one_kino_url = trim('' . $one_kino->theaterurl);
+                $one_rest_url_name = trim('' . $one_rest['url_name'];
+                $one_rest_zip = trim('' . $one_rest['zip'];
+                $one_rest_profile = trim('' . $one_rest['profile'];
 
-                foreach ($one_kino->movie as $one_movie) {
-                    $one_movie_id = trim('' . $one_movie->filmid);
-                    if (empty($one_movie_id)) {
-                        continue;
-                    }
-                    $one_movie_key = trim('' . $one_movie->filmkey); // connector to the movies data, but can be empty!
-                    $one_movie_title = trim('' . $one_movie->filmtitle);
-                    if ('' == $one_movie_key) {
-                        $one_movie_key = 'tw_' . str_replace(array(' '. '_', '-', '"', '\'', '\\', '/'), '', iconv('UTF-8', 'ASCII//TRANSLIT', strtolower($one_movie_title)));
-                    }
-
-                    $one_movie_desc = trim('' . $one_movie->filmcig_d);
-                    $one_movie_desc_mini = trim('' . $one_movie->filmminitext);
-                    if (strlen($one_movie_desc_mini) > strlen($one_movie_desc)) {
-                        $one_movie_desc = $one_movie_desc_mini;
-                    }
-                    $one_movie_other = array();
-                    foreach ($other_desc_parts as $one_desc_part) {
-                        $one_movie_oth_one = trim('' . $one_movie->$one_desc_part);
-                        if (!empty($one_movie_oth_one)) {
-                            $one_movie_other[] = $one_movie_oth_one;
-                        }
-                    }
-
-                    $one_movie_rating_wv = trim('' . $one_movie->film20rate_d);
-                    $one_movie_age = trim('' . $one_movie->movcatnam);
-                    $one_movie_age_orig = $one_movie_age;
-                    $one_movie_age_matches = array();
-                    if (preg_match('/^([^\s]+)[\s]*J$/i', $one_movie_age, $one_movie_age_matches)) {
-                        $one_movie_age = $one_movie_age_matches[1];
-                    }
-
-                    $one_movie_dates = trim('' . $one_movie->prolis);
-                    if (empty($one_movie_dates)) {
-                        continue;
-                    }
-                    $one_movie_dates_arr = explode(';', $one_movie_dates);
-                    $one_movie_dates_cnt = count($one_movie_dates_arr) - 1;
-
-                    $one_screen_dates = array();
-                    foreach ($one_movie_dates_arr as $one_movie_screen) {
-                        $one_movie_screen_arr = explode(':', $one_movie_screen);
-                        if (2 > count($one_movie_screen_arr)) {
-                            continue;
-                        }
-                        $one_movie_screen_info = array();
-                        if (4 <= count($one_movie_screen_arr)) {
-                            $one_movie_screen_info['flag'] = $one_movie_screen_arr[3];
-                        }
-                        if (3 <= count($one_movie_screen_arr)) {
-                            $one_movie_screen_info['lang'] = $one_movie_screen_arr[2];
-                        }
-                        $one_movie_screen_info['time'] = $one_movie_screen_arr[1];
-
-                        $one_movie_screen_date = $one_movie_screen_arr[0];
-                        $one_movie_screen_date_arr = explode('.', $one_movie_screen_date);
-                        if (3 != count($one_movie_screen_date_arr)) {
-                            continue;
-                        }
-                        $one_screen_date_use = $one_movie_screen_date_arr[2] . '-' . $one_movie_screen_date_arr[1] . '-' . $one_movie_screen_date_arr[0];
-                        if (isset($one_screen_dates[$one_screen_date_use])) {
-                            $one_screen_dates[$one_screen_date_use][] = $one_movie_screen_info;
-                        }
-                        else {
-                            $one_screen_dates[$one_screen_date_use] = array($one_movie_screen_info);
-                        }
-                    }
-
-                    $movies_screens[] = array(
-                        'start_date' => $export_start_date,
-
-                        'kino_id' => $one_kino_id,
-                        'kino_name' => $one_kino_name,
-                        'kino_town' => $one_kino_town,
-                        'kino_zip' => $one_kino_zip,
-                        'kino_street' => $one_kino_street,
-                        'kino_latitude' => $one_kino_latitude,
-                        'kino_longitude' => $one_kino_longitude,
-                        'kino_phone' => $one_kino_phone,
-                        'kino_url' => $one_kino_url,
-
-                        'movie_id' => $one_movie_id,
-                        'movie_key' => $one_movie_key,
-                        'title' => $one_movie_title,
-                        'desc' => $one_movie_desc,
-                        'other' => $one_movie_other,
-                        'dates' => $one_screen_dates,
-
-                        'rating_wv' => $one_movie_rating_wv,
-                        'allowed_age' => $one_movie_age,
-                        'allowed_age_orig' => $one_movie_age_orig,
-                    );
-                }
+                $restaurants_places[] = array(
+                    'rest_uid' => $one_rest_uid,
+                    'rest_url_name' => $one_url_name,
+                    'rest_zip' => $one_rest_zip,
+                    'rest_profile' => $one_rest_profile,
+                );
 
             }
         }
 
 
-        return $movies_screens;
-    } // fn parseKinosInfo
-
-    /**
-     * Takes info of movies by movie keys
-     *
-     * @param array $p_moviesKeys
-     * @param string $p_sqliteName
-     * @return array
-     */
-    private function loadMoviesByKeys($p_moviesKeys, $p_sqliteName)
-    {
-        $movies_infos = array();
-
-        $table_name = $this->m_table_name;
-        $mov_req = 'SELECT movie_info FROM ' . $table_name . ' WHERE movie_key = :movie_key LIMIT 1';
-
-        @$db = new PDO ('sqlite:' . $p_sqliteName);
-        $stmt = $db->prepare($mov_req);
-
-        foreach ($p_moviesKeys as $mov_key => $mov_aux) {
-            $mov_info = null;
-            $stmt->bindParam(':movie_key', $mov_key, PDO::PARAM_STR);
-            $res = $stmt->execute();
-            if (!$res) {
-                continue;
-            }
-            $res = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (empty($res)) {
-                continue;
-            }
-            $mov_info = $res['movie_info'];
-            try {
-                $mov_info = json_decode($mov_info, true);
-            }
-            catch (Exception $exc) {
-                $mov_info = null;
-            }
-            $movies_infos[$mov_key] = $mov_info;
-        }
-
-        return $movies_infos;
-    } // fn loadMoviesByKeys
+        return $restaurants_places;
+    } // fn parseRestaurantsInfo
 
     private function formatDateText($p_dateTimes)
     {
@@ -1548,10 +580,9 @@ class RestaurantData_Parser_SimpleXML {
 
 
     /**
-     * Puts together info on movie events
+     * Puts together info on restaurant events
      *
-     * @param array $p_kinosInfosFiles
-     * @param string $p_moviesDatabase
+     * @param array $p_restaurantsInfosFiles
      * @param int $p_providerId
      * @param array $p_categories
      * @param mixed $p_daysPast
@@ -1559,10 +590,10 @@ class RestaurantData_Parser_SimpleXML {
      * @param mixed $p_catLimits
      * @return array
      */
-    public function prepareKinosEvents($p_kinosInfosFiles, $p_moviesDatabase, $p_providerId, $p_categories, $p_daysPast = null, $p_daysNext = null, $p_catLimits = null)
+    public function prepareRestaurantsEvents($p_restaurantsInfosFiles, $p_providerId, $p_categories, $p_daysPast = null, $p_daysNext = null, $p_catLimits = null)
     {
         $provider_id = $p_providerId;
-        $kino_country = 'ch';
+        $rest_country = 'ch';
 
         $limit_date_start = null;
         $limit_date_end = null;
@@ -1575,25 +606,42 @@ class RestaurantData_Parser_SimpleXML {
             $limit_date_end = date('Y-m-d', ($cur_time + ($p_daysNext * 24 * 60 * 60)));
         }
 
-        $movies_screens = $this->parseKinosInfo($p_kinosInfosFiles);
+        $restaurants_places = $this->parseRestaurantsInfo($p_restaurantsInfosFiles);
 
-        $movies_keys = array();
-
-        foreach ($movies_screens as $one_screen) {
-            if (isset($one_screen['movie_key']) && (!empty($kino_country))) {
-                $movies_keys[$one_screen['movie_key']] = true;
-            }
-        }
-
-        $movies_infos = $this->loadMoviesByKeys($movies_keys, $p_moviesDatabase);
-
-        $screen_events_all = array();
-        $screen_events_dif = array();
+        $rests_events_all = array();
+        $rests_events_dif = array();
 
         //$set_date = '';
         //$set_date_times = array();
 
-        foreach ($movies_screens as $one_screen) {
+        foreach ($restaurants_places as $one_rest) {
+            // taking basic info from profile
+            // creating image links into panorama images
+            // finding region, cuisine, ambiance topics
+            // putting in datetimes on open days (minus holiday/closed days)
+
+            $one_event = array();
+
+            $one_event[] = '';
+
+            $one_profile = $one_rest['profile'];
+
+            $one_event['provider_id'] = $provider_id;
+            $one_event['event_id'] = '' . $one_rest['url_name'] . '-' . $one_screen['uid'];
+
+            $one_event['tour_id'] = $one_rest['uid'];
+            $one_event['location_id'] = $one_rest['uid'];
+
+            $one_event['headline'] = $one_profile['real_name'];
+            $one_event['organizer'] = $one_profile['real_name'];
+            $one_event['keywords'] = $one_rest['url_name'];
+
+            $one_event['country'] = $rest_country;
+            $one_event['zipcode'] = $one_rest['zip'];
+            $one_event['town'] = $one_profile['city'];
+            $one_event['street'] = $one_profile['address'];
+
+/*
             // TODO: put it as a (full) week start of date/time screen listing (lists per days)
             $set_date = $one_screen['start_date'];
             $set_date_obj = new DateTime($set_date);
@@ -1602,13 +650,14 @@ class RestaurantData_Parser_SimpleXML {
                 $set_date_obj->add(new DateInterval('P1D'));
                 $set_date_times[$set_date_obj->format('Y-m-d')] = array();
             }
+*/
 
             // region info
             $e_region = '';
             $e_subregion = '';
 
             $topics_regions = array();
-            $loc_regions = $this->m_region_info->ZipRegions($one_screen['kino_zip'], $kino_country);
+            $loc_regions = $this->m_region_info->ZipRegions($one_rest['zip'], $rest_country);
             foreach ($loc_regions as $region_name) {
                 if (isset($this->m_region_topics[$region_name])) {
                     $cur_reg_top = $this->m_region_topics[$region_name];
@@ -1619,118 +668,132 @@ class RestaurantData_Parser_SimpleXML {
 
             $event_topics = array();
 
-            $c_other = null;
+            $category_conns = array(
+                'typology' => 'restaurant_cuisine',
+                'ambiance' => 'restaurant_ambiance',
+            );
 
-            $one_movie = null;
-
-            if (isset($one_screen['movie_key']) && (!empty($one_screen['movie_key']))) {
-                $one_mov_key = $one_screen['movie_key'];
-                if (isset($movies_infos[$one_mov_key]) && (!empty($movies_infos[$one_mov_key]))) {
-                    $one_movie = $movies_infos[$one_mov_key];
-                }
-            }
-
-            $x_genres = array();
-            if (isset($one_movie['genres']) && (!empty($one_movie['genres']))) {
-                $x_genres = $one_movie['genres'];
-            }
-
-            $e_rated = false;
-
-            $c_other = null;
-            foreach ($p_categories as $one_category) {
-                if (!is_array($one_category)) {
+            foreach ($category_conns as $cur_cat_type_name => $cur_cat_defs_name) {
+                if (!isset($p_categories[$cur_cat_defs_name])) {
                     continue;
                 }
 
-                $one_cat_key = $one_category['key'];
+                $c_other = null;
+                $topic_found = false;
 
-                if (array_key_exists('other', $one_category)) {
-                    $c_other = $one_category['other'];
-                    continue;
-                }
+                foreach ($p_categories[$cur_cat_defs_name] as $one_category) {
+                    if (!is_array($one_category)) {
+                        continue;
+                    }
 
-                foreach ($x_genres as $x_catnam) {
-                    $x_catnam = strtolower(trim($x_catnam));
-                    if ((array_key_exists('match_xml', $one_category)) && (array_key_exists('match_topic', $one_category))) {
-                        $one_cat_match_xml = $one_category['match_xml'];
-                        $one_cat_match_topic = $one_category['match_topic'];
-                        if ((!is_array($one_cat_match_xml)) || (!is_array($one_cat_match_topic))) {
-                            continue;
-                        }
-                        if (in_array($x_catnam, $one_cat_match_xml)) {
-                            $event_topics[] = $one_cat_match_topic;
+                    $one_cat_key = $one_category['key'];
 
-                            if ('adult' == $one_cat_key) {
-                                $e_rated = true;
+                    if (array_key_exists('other', $one_category)) {
+                        $c_other = $one_category['other'];
+                        continue;
+                    }
+
+                    $topic_search = array();
+                    foreach ($one_profile[$cur_cat_type_name] as $x_catnam) {
+                        $x_catnam = strtolower(trim($x_catnam));
+                        if ((array_key_exists('match_xml', $one_category)) && (array_key_exists('match_topic', $one_category))) {
+                            $one_cat_match_xml = $one_category['match_xml'];
+                            $one_cat_match_topic = $one_category['match_topic'];
+                            if ((!is_array($one_cat_match_xml)) || (!is_array($one_cat_match_topic))) {
+                                continue;
                             }
-
-                            continue;
+                            if (in_array($x_catnam, $one_cat_match_xml)) {
+                                $event_topics[] = $one_cat_match_topic;
+                                $topic_found = true;
+                                continue;
+                            }
                         }
+
+                    }
+
+                }
+
+                if (!$topic_found) {
+                    if (!empty($c_other)) {
+                        $event_topics[] = $c_other;
                     }
                 }
 
-            }
-
-            if (empty($event_topics)) {
-                if (!empty($c_other)) {
-                    $event_topics[] = $c_other;
-                }
             }
 
             foreach ($topics_regions as $one_regtopic) {
                 $event_topics[] = $one_regtopic;
             }
 
-            $one_mov_genre = '';
-            $one_mov_desc = '';
-            $one_mov_images = array();
+            $one_event['topics'] = $event_topics;
 
-            $one_mov_trailers = array();
-            $trailer_official = '';
-            $trailer_official_vimeo = '';
-            $trailer_official_info = array();
 
-            if (!empty($one_movie)) {
-                if (isset($one_movie['genres'])) {
-                    $one_mov_genre = implode(',', $one_movie['genres']);
-                }
-                if (isset($one_movie['desc'])) {
-                    $one_mov_desc = $one_movie['desc'];
-                }
-                if ( isset($one_movie['link_images']) && (!empty($one_movie['link_images'])) ) {
-                    foreach($one_movie['link_images'] as $one_img_info) {
-                        if (isset($one_img_info['url'])) {
-                            $one_link_url = $one_img_info['url'];
-                            $one_link_label = '';
-                            $one_link_image = array('url' => $one_link_url, 'label' => $one_link_label);
-                            if (isset($one_img_info['type']) && ($this->m_poster_spec == $one_img_info['type'])) {
-                                array_unshift($one_mov_images, $one_link_image);
-                            }
-                            else {
-                                $one_mov_images[] = $one_link_image;
-                            }
-                        }
-                    }
-                }
+            //$one_rest_genre = '';
+            //$one_rest_desc = '';
+            $one_rest_images = array();
 
-                if ( isset($one_movie['link_trailer']) && (!empty($one_movie['link_trailer'])) ) {
-                    if ( isset($one_movie['link_trailer']['url']) && (!empty($one_movie['link_trailer']['url'])) ) {
-                        $one_mov_trailers[] = $one_movie['link_trailer']['url'];
-                        $trailer_official = $one_movie['link_trailer']['url'];
-                        $trailer_official_info = $one_movie['link_trailer'];
-                    }
-                }
-                if ( isset($one_movie['trailer']) && (!empty($one_movie['trailer'])) ) {
-                    $one_mov_trailers[] = $one_movie['trailer'];
-                }
+            foreach ($one_profile['panos'] as $one_panorama_info) {
+                $one_pano_id = $one_panorama_info['id'];
+                $one_pano_type = $one_panorama_info['type'];
+                $one_pano_name = $one_panorama_info['name'];
 
-                if ( isset($one_movie['trailer_vimeo_id']) && (!empty($one_movie['trailer_vimeo_id'])) ) {
-                    $trailer_official_vimeo = $one_movie['trailer_vimeo_id'];
-                }
+                $one_pano_url = 'http://pano.lunchgate.ch/'. $one_pano_id . '/400x400.jpg';
+
+                $one_rest_images[] = array(
+                    'url' => $one_pano_url,
+                    'label' => $one_pano_name,
+                );
 
             }
 
+            $one_event['images'] = $one_rest_images;
+
+            $one_event['datetimes'] = array();
+
+            $day_holiday_start = null;
+            $day_holiday_end = null;
+            $day_holidays = $one_profile['hours']['holiday'];
+            if (!empty($day_holidays)) {
+                $day_holidays = explode('\u2013', $day_holidays); // put from d.m.y into y-d-m
+            }
+
+            $week_days = array( // upto 2 intervals (generally array), closed:'geschlossen'; put from d.m.y into y-d-m
+                $one_profile['hours']['day1'], // monday
+                $one_profile['hours']['day2'], // tuesday
+                $one_profile['hours']['day3'],
+                $one_profile['hours']['day4'],
+                $one_profile['hours']['day5'],
+                $one_profile['hours']['day6'],
+                $one_profile['hours']['day7'],
+            );
+
+            $date_obj = new DateTime();
+            $date_obj->subtract(new DateInterval('P1D'));
+            for ($d_ind = 0; $d_ind < 90; $d_ind++) {
+                $date_obj->add(new DateInterval('P1D'));
+                $date_str = $date_obj->format('Y-m-d');
+
+                if ($day_holiday_start && $day_holiday_end) {
+                    if (($date_str >= $day_holiday_start) && ($date_str <= $day_holiday_end)) {
+                        continue;
+                    }
+                }
+
+                $week_position = $date_obj->week_day;
+                if (empty($week_days[$week_position])) {
+                    continue;
+                }
+
+                foreach ($week_days[$week_position]) {
+                    // take time on/off; restrict to 00:00-24:00, put into comments otherwise longer (e.g. after midnight)
+                    // create date-time def
+                }
+
+
+            }
+
+
+/*
             $one_use_desc = $one_mov_desc;
             if (empty($one_use_desc)) {
                 $one_use_desc = $one_screen['desc'];
@@ -1761,7 +824,7 @@ class RestaurantData_Parser_SimpleXML {
             //$one_event['date'] = $one_date_max; // for the newer (but not used) way of dealing with old data
             $one_event['date_time_data'] = $set_date_times;
             $one_event['date_time_text'] = $this->formatDateText($set_date_times);
-
+*/
 
 /*
 yyyy-mm-dd
@@ -1776,6 +839,7 @@ hh.mm:langs:flags
 ....
 */
             {
+/*
                 $one_event['provider_id'] = $provider_id;
                 $one_event['event_id'] = '' . $one_screen['kino_id'] . '-' . $one_screen['movie_id'];
 
@@ -1841,32 +905,30 @@ hh.mm:langs:flags
                     $one_event['geo']['longitude'] = $one_screen['kino_longitude'];
                     $one_event['geo']['latitude'] = $one_screen['kino_latitude'];
                 }
+*/
 
-                $one_event['images'] = $one_mov_images;
-
-                $one_event['topics'] = $event_topics;
 
                 //$one_event['uses_multidates'] = true;
                 //$screening_datetimes = null;
                 //$one_event['datetimes'] = $screening_datetimes;
 
-                $screen_events_all[$one_event['event_id']] = $one_event;
+                $rests_events_all[$one_event['event_id']] = $one_event;
 
-                if (!empty($this->m_last_events)) {
-                    if (isset($this->m_last_events[$one_event['event_id']])) {
-                        if ($this->m_last_events[$one_event['event_id']] == json_encode($one_event)) {
-                            //continue;
-                        }
-                    }
-                }
+                //if (!empty($this->m_last_events)) {
+                //    if (isset($this->m_last_events[$one_event['event_id']])) {
+                //        if ($this->m_last_events[$one_event['event_id']] == json_encode($one_event)) {
+                //            //continue;
+                //        }
+                //    }
+                //}
 
-                $screen_events_dif[$one_event['event_id']] = $one_event;
+                $rests_events_dif[$one_event['event_id']] = $one_event;
             }
 
         }
 
-        return array('events_all' => $screen_events_all, 'events_dif' => $screen_events_dif);
-    } // fn prepareKinosEvents
+        return array('events_all' => $rests_events_all, 'events_dif' => $rests_events_dif);
+    } // fn prepareRestaurantsEvents
 
     /**
      * Creates (html) link on given (partial) link and label
@@ -1899,239 +961,7 @@ hh.mm:langs:flags
         return $link;
     } // fn makeLink
 
-    private function getMinAge($p_minAge) {
 
-        $age_categories = array(
-
-            '00' => array(
-                'name_de' => '3-6 Jahre', 
-                'name_fr' => '3-6 ans', 
-                'name_it' => '3-6 anni', 
-                'keys' => array(
-                    //be
-                    '6/4 J',
-                    '7/4 J',
-                    '7/5 J',
-                    '8/5 J',
-                    //zh
-                    'SB',
-                    //bs
-                    '6/3',
-                    '7/4',
-                    '8/5',
-                    '4 J',
-                    '5 J',
-                    //romandie
-                    '0/4',
-                    '0/5',
-                    '0/6',
-                    '0/7',
-                    '0/8',
-                    '0/9',
-                    '0/10',
-                    '0/11',
-                    '0/12',
-                    '4/6',
-                    '5/5',
-                    '5/7',
-                    '5 anni',
-                ),
-            ),
-
-            '06' => array(
-                'name_de' => 'ab 6 Jahren', 
-                'name_fr' => 'à partir de 6 ans', 
-                'name_it' => 'da 6 anni', 
-                'keys' => array(
-                    //be
-                    '6/6 J',
-                    '8/6 J',
-                    '10/6 J',
-                    //zh
-                    'K/6',
-                    'K/8',
-                    'K/10',
-                    '6/8 J',
-                    '6/10 J',
-                    //bs
-                    '9/6',
-                    '6 J',
-                    //romandie
-                    '6/6',
-                    '6/8',
-                    '6/10',
-                    '6 anni',
-                ),
-            ),
-
-            '08' => array(
-                'name_de' => 'ab 8 Jahren', 
-                'name_fr' => 'à partir de 8 ans', 
-                'name_it' => 'da 8 anni', 
-                'keys' => array(
-                    //be
-                    '9/7 J',
-                    '10/8 J',
-                    '11/8 J',
-                    //zh
-                    //bs
-                    '10/7',
-                    '7 J',
-                    '11/8',
-                    '8 J',
-                    //romandie
-                    '7/7',
-                    '7/8',
-                    '7/9',
-                    '7/10',
-                    '7/11',
-                    '7/12',
-                    '7/13',
-                    '7/14',
-                    '7/16',
-                    '8/8',
-                    '8/10',
-                    '8 anni',
-                ),
-            ),
-
-            '10' => array(
-                'name_de' => 'ab 10 Jahren', 
-                'name_fr' => 'à partir de 10 ans', 
-                'name_it' => 'da 10 anni', 
-                'keys' => array(
-                    //be
-                    '12/10 J',
-                    '13/10 J',
-                    //zh
-                    //bs
-                    '12/9',
-                    '12/9 J',
-                    '9 J',
-                    '13/10',
-                    '10 J',
-                    //romandie
-                    '9/9',
-                    '10/10',
-                    '10/12',
-                    '10/14',
-                    '10/16',
-                    '10 anni',
-                ),
-            ),
-
-            '12' => array(
-                'name_de' => 'ab 12 Jahren', 
-                'name_fr' => 'à partir de 12 ans', 
-                'name_it' => 'da 12 anni', 
-                'keys' => array(
-                    //be
-                    '12/12 J',
-                    '14/12 J',
-                    //zh
-                    'J/12',
-                    'J/14',
-                    '12/14 J',
-                    //bs
-                    '14/11',
-                    '11 J',
-                    '15/12',
-                    '15/12 J',
-                    '12 J',
-                    //romandie
-                    '11/11',
-                    '12/12',
-                    '12/14',
-                    '12/15',
-                    '12/16',
-                    '12/18',
-                    '12 anni',
-                ),
-            ),
-
-            '14' => array(
-                'name_de' => 'ab 14 Jahren', 
-                'name_fr' => 'à partir de 14 ans', 
-                'name_it' => 'da 14 anni', 
-                'keys' => array(
-                    //be
-                    '14/14 J',
-                    '16/14 J',
-                    //zh
-                    //bs
-                    '16/13',
-                    '16/13 J',
-                    '13 J',
-                    '14 J',
-                    //romandie
-                    '14/14',
-                    '14/16',
-                    '14/18',
-                    '14 anni',
-                ),
-            ),
-
-            '16' => array(
-                'name_de' => 'ab 16 Jahren', 
-                'name_fr' => 'à partir de 16 ans', 
-                'name_it' => 'da 16 anni', 
-                'keys' => array(
-                    //be
-                    '16/16 J',
-                    '18/16 J',
-                    //zh
-                    'E',
-                    //bs
-                    '15 J',
-                    '16 J',
-                    //romandie
-                    '16/16',
-                    '16/18',
-                    '16 anni',
-                ),
-            ),
-
-            '18' => array(
-                'name_de' => 'ab 18 Jahren', 
-                'name_fr' => 'à partir de 18 ans', 
-                'name_it' => 'da 18 anni', 
-                'keys' => array(
-                    //be
-                    '18/18 J',
-                    //zh
-                    '18 J',
-                    //bs
-                    '17 J',
-                    '18 J',
-                    //romandie
-                    '18/18',
-                    '18 anni',
-                ),
-            ),
-
-            '99' => array(
-                'name_de' => 'unbekannt',
-                'name_fr' => 'inconnu',
-                'name_it' => 'sconosciuto',
-                'keys' => array(
-                    '',
-                ),
-            ),
-
-        );
-
-        $cat_spec = '99';
-        foreach ($age_categories as $cat_idx => $cat_info) {
-            if (in_array($p_minAge, $cat_info['keys'])) {
-                $cat_spec = $cat_idx;
-            }
-        }
-
-        return $cat_spec;
-    }
-
-
-
-} // class RestaurantData_Parser_SimpleXML
+} // class RestaurantData_Parser_Simple
 
 

@@ -80,6 +80,8 @@ $newsimport_default_cat_names['regions'] = array(
     'zuerich' => array(1 => 'Zurich Canton', 5 => 'Kanton Zürich',),
 );
 
+//$newsimport_default_cat_names['restaurant'] = arrray('multiple' => true, 'names' => array('restaurant_cuisine', 'restaurant_ambiance'));
+
 $newsimport_default_cat_names['restaurant_cuisine'] = array(
     // do not change keys; num ids are for topic names by language
     'restaurant_cuisine' => array(1 => 'Restaurant Cuisine', 5 => 'Restaurant Küche',), // the root of restaurant cuisine topics

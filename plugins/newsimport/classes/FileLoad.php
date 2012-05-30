@@ -7,6 +7,33 @@ class FileLoad
 {
 
 /*
+ * Loads JSON files with fixing ecnoding errors
+ */
+    public static function LoadFixJson($p_fileName)
+    {
+        $content = '';
+
+        try {
+            $content = file_get_contents($p_fileName);
+        }
+        catch (Exception $exc) {
+            return null;
+        }
+
+        $content = iconv('UTF-8','UTF-8//IGNORE', $content);
+
+        try {
+            $content = json_decode($content, true);
+        }
+        catch (Exception $exc) {
+            return null;
+        }
+
+        return $content;
+
+    }
+
+/*
  * Loads XML files with fixing ecnoding errors
  */
     public static function LoadFix($p_fileName)

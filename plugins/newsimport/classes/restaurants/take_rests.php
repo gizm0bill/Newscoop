@@ -15,7 +15,7 @@
 
 class RestaurantsLoader {
 
-    var $m_region_info = null;
+    //var $m_region_info = null;
 
     var $m_sleep_on_request = 0;
 
@@ -42,7 +42,7 @@ class RestaurantsLoader {
         $class_dir = dirname(dirname(__FILE__));
         require_once($class_dir .DIRECTORY_SEPARATOR. 'RegionInfo.php');
 
-        $this->m_region_info = new RegionInfo();
+        //$this->m_region_info = new RegionInfo();
 
         if (isset($p_conf['req_sleep'])) {
             $m_sleep_on_request = $p_conf['req_sleep'];
