@@ -258,11 +258,15 @@ class RenditionService
             return false;
         }
 
-        if ($width !== null && $height !== null) {
-            $preview = $rendition->getRendition()->getPreview($width, $height);
-            $thumbnail = $preview->getThumbnail($rendition->getImage(), $this->imageService);
-        } else {
-            $thumbnail = $rendition->getRendition()->getThumbnail($rendition->getImage(), $this->imageService);
+        try {
+            if ($width !== null && $height !== null) {
+                $preview = $rendition->getRendition()->getPreview($width, $height);
+                $thumbnail = $preview->getThumbnail($rendition->getImage(), $this->imageService);
+            } else {
+                $thumbnail = $rendition->getRendition()->getThumbnail($rendition->getImage(), $this->imageService);
+            }
+        } catch (\Exception $e) {
+            return null;
         }
 
         $originalRendition = new Rendition($rendition->getImage()->getWidth(), $rendition->getImage()->getHeight());

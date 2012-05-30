@@ -30,8 +30,12 @@ function smarty_block_image(array $params, $content, Smarty_Internal_Template $s
 
     $width = array_key_exists('width', $params) ? (int) $params['width'] : null;
     $height = array_key_exists('height', $params) ? (int) $params['height'] : null;
-    $image = Zend_Registry::get('container')->getService('image.rendition')->getArticleRenditionImage($article->number, $params['rendition'], $width, $height);
-    if (!$image) {
+    try {
+        $image = Zend_Registry::get('container')->getService('image.rendition')->getArticleRenditionImage($article->number, $params['rendition'], $width, $height);
+        if (!$image) {
+            throw new \Exception("No image");
+        }
+    } catch (Exception $e) {
         $smarty->assign('image', false);
         $repeat = false;
         return;
