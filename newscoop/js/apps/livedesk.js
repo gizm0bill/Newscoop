@@ -3,6 +3,13 @@
  */
 var Item = Backbone.Model.extend({
     idAttribute: 'Id',
+    services: {
+        'flickr': true,
+        'google': true,
+        'twitter': true,
+        'facebook': true,
+        'youtube': true
+    },
 
     /**
      * Get published time
@@ -28,8 +35,30 @@ var Item = Backbone.Model.extend({
                 return 'quotation';
 
             default:
+                if (this.isService()) {
+                    return 'service';
+                }
+
                 return 'tw';
         }
+    },
+
+    /**
+     * Test if post is from service
+     *
+     * @return {bool}
+     */
+    isService: function() {
+        return this.get('AuthorName') in this.services;
+    },
+
+    /**
+     * Test if post is quote
+     *
+     * @return {bool}
+     */
+    isQuote: function() {
+        return this.getClass() == 'quotation';
     }
 });
 
@@ -99,8 +128,8 @@ var ItemView = Backbone.View.extend({
         try {
             var template = _.template($('#item-' + this.model.getClass() + '-template').html());
         } catch (err) {
-            console.log("No template for " + this.model.getClass + " type.");
-            return;
+            console.log("No template for " + this.model.getClass() + " type.");
+            return this;
         }
 
         $(this.el).html(template({item: this.model})).addClass(this.model.getClass());
@@ -111,6 +140,14 @@ var ItemView = Backbone.View.extend({
 
         if ('imageLink' in this.model.get('Creator')) {
             $(this.el).addClass('quote');
+        }
+
+        if (this.model.isService()) {
+            $(this.el).addClass(this.model.get('AuthorName')).removeClass('quote');
+        }
+
+        if (this.model.isQuote()) {
+            $(this.el).removeClass('quote');
         }
 
         return this;
