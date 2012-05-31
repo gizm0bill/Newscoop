@@ -91,7 +91,7 @@ var ItemCollection = Backbone.Collection.extend({
                         if (model.has('DeletedOn') && model.get('DeletedOn').length) {
                             collection.remove(model);
                         }
-                    } else { // add new
+                    } else if (!('DeletedOn' in data[i])) { // add new
                         collection.add(data[i]);
                     }
                 }
