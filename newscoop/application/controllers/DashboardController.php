@@ -87,7 +87,9 @@ class DashboardController extends Zend_Controller_Action
             $this->view->subscriptionService = false;
             restore_error_handler();
         }
-        
+
+        $this->view->userSubscriptions = array();
+        $this->view->userSubscriptionKey = '';
         if ($this->view->subscriptionService == true) {
             $this->view->subscriber = $this->user->getSubscriber();
             if (!$this->view->subscriber) {
