@@ -115,6 +115,8 @@ class BlogService
     {
         $article = new \Article($section->getLanguageId());
         $article->create($this->config['article_type'], $title, $section->getPublicationId(), $section->getIssueNumber(), $section->getSectionNumber());
+        $publication = new \Publication($section->getPublicationId());
+        $article->setCommentsEnabled($publication->commentsArticleDefaultEnabled());
         return $article;
     }
 
