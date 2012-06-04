@@ -236,33 +236,32 @@ class UserRepository extends EntityRepository implements \Newscoop\Search\Reposi
      * Return Users if any of their searched attributes contain the searched term.
      *
      * @param string $search
-     *
-     * @param array $attributes
-     *
+     * @param bool $countOnly
+     * @param int $offset
+     * @param int $limit
      * @return array Newscoop\Entity\User
      */
-    public function searchUsers($search, $countOnly, $offset, $limit, $attributes = array("first_name", "last_name", "username"))
+    public function searchUsers($search, $countOnly, $offset, $limit)
     {
-        $keywords = explode(" ", $search);
-
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('u')
             ->from('Newscoop\Entity\User', 'u');
 
-        $outerAnd = $qb->expr()->andx();
+        $qb->where("u.username LIKE :q")
+            ->andWhere('u.status = :status')
+            ->andWhere('u.is_public = :public');
 
-        for($i=0; $i < count($keywords); $i++) {
-            $innerOr = $qb->expr()->orx();
-            for ($j=0; $j < count($attributes); $j++) {
-                $innerOr->add($qb->expr()->like("u.{$attributes[$j]}", "'$keywords[$i]'"));
-            }
-            $outerAnd->add($innerOr);
+        $qb->setParameters(array(
+            'q' => trim($search),
+            'status' => User::STATUS_ACTIVE,
+            'public' => TRUE,
+        ));
+
+        if ($countOnly) {
+            return $qb->select('COUNT(u)')
+                ->getQuery()
+                ->getSingleScalarResult();
         }
-
-        $outerAnd->add($qb->expr()->eq("u.status", User::STATUS_ACTIVE));
-        $outerAnd->add($qb->expr()->eq("u.is_public", true));
-
-        $qb->where($outerAnd);
 
         $qb->orderBy('u.last_name', 'ASC');
         $qb->addOrderBy('u.first_name', 'ASC');

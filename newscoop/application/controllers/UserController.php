@@ -73,10 +73,12 @@ class UserController extends Zend_Controller_Action
     public function searchAction()
     {
         $query = $this->_getParam('q');
-        $users = $this->service->findUsersBySearch($query);
+        $count = $this->service->findUsersBySearch($query, true);
+        $users = $this->service->findUsersBySearch($query, false, $this->page, self::LIMIT);
+
         $this->setViewUsers($users);
-        $this->setViewPaginator(0, self::LIMIT);
-	$this->view->current = $this->_getParam('action');
+        $this->setViewPaginator($count, self::LIMIT);
+	    $this->view->current = $this->_getParam('action');
         $this->render('index');
     }
 

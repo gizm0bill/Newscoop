@@ -390,13 +390,7 @@ class UserService
     public function findUsersBySearch($search, $countOnly=false, $page=1, $limit=25)
     {
         $offset = ($page-1) * $limit;
-
         $result = $this->repository->searchUsers($search, $countOnly, $offset, $limit);
-
-        if ($countOnly) {
-            return $result[1];
-        }
-
         return $result;
     }
 
