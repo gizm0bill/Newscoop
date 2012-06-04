@@ -137,7 +137,7 @@ class Api_ArticlesController extends Zend_Controller_Action
                 'topics' => $this->getTopics($article),
                 'comment_count' => $this->getCommentsCount($article),
                 'recommended_comment_count' => $this->getCommentsCount($article, true),
-                'comment_url' => $this->url . '/api/comments/list?article_id' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
+                'comment_url' => $this->url . '/api/comments/list?article_id=' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
                 'rank' => $rank++,
             );
 
