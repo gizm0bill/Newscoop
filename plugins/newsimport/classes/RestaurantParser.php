@@ -535,13 +535,13 @@ class RestaurantData_Parser_Simple {
 
             foreach ($one_rest_data as $one_rest) {
 
-                $one_rest_uid = trim('' . $one_rest['uid'];
+                $one_rest_uid = trim('' . $one_rest['uid']);
                 //if (empty($one_rest_uid)) {
                 //    continue;
                 //}
-                $one_rest_url_name = trim('' . $one_rest['url_name'];
-                $one_rest_zip = trim('' . $one_rest['zip'];
-                $one_rest_profile = trim('' . $one_rest['profile'];
+                $one_rest_url_name = trim('' . $one_rest['url_name']);
+                $one_rest_zip = trim('' . $one_rest['zip']);
+                $one_rest_profile = trim('' . $one_rest['profile']);
 
                 $restaurants_places[] = array(
                     'rest_uid' => $one_rest_uid,
@@ -754,21 +754,27 @@ class RestaurantData_Parser_Simple {
             $day_holiday_end = null;
             $day_holidays = $one_profile['hours']['holiday'];
             if (!empty($day_holidays)) {
-                $day_holidays = explode('\u2013', $day_holidays); // put from d.m.y into y-d-m
+                //$day_holidays = explode('\u2013', $day_holidays); // put from d.m.y into y-d-m
+                $day_holidays = takeDays($day_holidays);
             }
 
-            $week_days = array( // upto 2 intervals (generally array), closed:'geschlossen'; put from d.m.y into y-d-m
-                $one_profile['hours']['day1'], // monday
-                $one_profile['hours']['day2'], // tuesday
-                $one_profile['hours']['day3'],
-                $one_profile['hours']['day4'],
-                $one_profile['hours']['day5'],
-                $one_profile['hours']['day6'],
-                $one_profile['hours']['day7'],
-            );
+            $week_days = array(); // upto 2 intervals (generally array), closed:'geschlossen'; put from d.m.y into y-d-m
+            foreach (array('day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7') as $one_day_spec) {
+                $cur_open = array();
+                if (isset($one_profile['hours'][$one_day_spec])) {
+                    $cur_open = $this->takeHours($one_profile['hours'][$one_day_spec]);
+                }
+                $week_days[] = $cur_open;
+            }
 
             $date_obj = new DateTime();
             $date_obj->subtract(new DateInterval('P1D'));
+            foreach (array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12) as $one_week) {
+                foreach (array(0, 1, 2, 3, 4, 5, 6) as $one_week_day) {
+                    ;
+                }
+            }
+
             for ($d_ind = 0; $d_ind < 90; $d_ind++) {
                 $date_obj->add(new DateInterval('P1D'));
                 $date_str = $date_obj->format('Y-m-d');
@@ -784,7 +790,7 @@ class RestaurantData_Parser_Simple {
                     continue;
                 }
 
-                foreach ($week_days[$week_position]) {
+                foreach ($week_days[$week_position] as $one_day) {
                     // take time on/off; restrict to 00:00-24:00, put into comments otherwise longer (e.g. after midnight)
                     // create date-time def
                 }
@@ -960,6 +966,66 @@ hh.mm:langs:flags
 
         return $link;
     } // fn makeLink
+
+    private function takeHours($p_day)
+    {
+        $open_hours = array();
+
+        $not_open = array();
+        if (!isset($p_day['open1'])) {
+            return $not_open;
+        }
+
+        $open_hours_1 = strtolower(trim($p_day['open1']));
+        if ('geschlossen' == $open_hours_1) {
+            return $not_open;
+        }
+
+        $use_intervals = array($open_hours_arr_1);
+        foreach (array('open2', 'open3', 'open4') as $one_more_open) {
+            if (isset($p_day[$one_more_open])) {
+                $open_hours_more = strtolower(trim($p_day[$one_more_open]));
+                if ('geschlossen' == $open_hours_more) {
+                    $use_intervals[] = $open_hours_more;
+                }
+            }
+        }
+
+        foreach ($use_intervals as $cur_open_hours) {
+
+            $cur_open_hours_arr = explode('\u2013', $cur_open_hours);
+            $cur_open = array();
+
+            if (2 == count($cur_open_hours_arr)) {
+                $cur_open_start = explode(':', $cur_open_hours_arr[0]);
+                $cur_open_end = explode(':', $cur_open_hours_arr[1]);
+
+                if (2 == count($cur_open_start)) {
+                    $cur_open_start_hour = ltrim($cur_open_start[0], '0');
+                    $cur_open_start_min = ltrim($cur_open_start[1], '0');
+                    if (is_numeric($cur_open_start_hour) && is_numeric($cur_open_start_min)) {
+                        $cur_open['start'] = array('hour' => $cur_open_start_hour, 'min' => $cur_open_start_min);
+                    }
+                }
+
+                if (2 == count($cur_open_end)) {
+                    $cur_open_end_hour = ltrim($cur_open_end[0], '0');
+                    $cur_open_end_min = ltrim($cur_open_end[1], '0');
+                    if (is_numeric($cur_open_end_hour) && is_numeric($cur_open_end_min)) {
+                        $cur_open['end'] = array('hour' => $cur_open_end_hour, 'min' => $cur_open_end_min);
+                    }
+                }
+
+                if (isset($cur_open['start']) && isset($cur_open['end'])) {
+                    $open_hours[] = $cur_open;
+                }
+
+            }
+
+        }
+
+        return $open_hours;
+    } // takeHours
 
 
 } // class RestaurantData_Parser_Simple

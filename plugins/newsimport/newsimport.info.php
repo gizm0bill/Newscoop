@@ -443,7 +443,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             if ($evt_type_name == $rst_type_name) {
                 $art_fields_use = $art_fields;
                 foreach ($rst_fields as $one_field_name => $one_field_params) {
-                    $art_fields_use = [$one_field_name] = $one_field_params;
+                    $art_fields_use[$one_field_name] = $one_field_params;
                 }
             }
 
