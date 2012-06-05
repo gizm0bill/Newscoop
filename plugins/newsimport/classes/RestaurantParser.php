@@ -622,19 +622,19 @@ class RestaurantData_Parser_Simple {
 
             $one_event = array();
 
-            $one_event[] = '';
+            $one_event['without_canceled'] = true;
 
             $one_profile = $one_rest['profile'];
 
             $one_event['provider_id'] = $provider_id;
-            $one_event['event_id'] = '' . $one_rest['url_name'] . '-' . $one_screen['uid'];
+            $one_event['event_id'] = '' . $one_rest['url_name'];
+            $one_event['keywords'] = $one_rest['url_name'];
 
             $one_event['tour_id'] = $one_rest['uid'];
             $one_event['location_id'] = $one_rest['uid'];
 
             $one_event['headline'] = $one_profile['real_name'];
             $one_event['organizer'] = $one_profile['real_name'];
-            $one_event['keywords'] = $one_rest['url_name'];
 
             $one_event['country'] = $rest_country;
             $one_event['zipcode'] = $one_rest['zip'];
@@ -655,6 +655,8 @@ class RestaurantData_Parser_Simple {
             // region info
             $e_region = '';
             $e_subregion = '';
+            $one_event['region'] = $e_region;
+            $one_event['subregion'] = $e_subregion;
 
             $topics_regions = array();
             $loc_regions = $this->m_region_info->ZipRegions($one_rest['zip'], $rest_country);
@@ -748,6 +750,9 @@ class RestaurantData_Parser_Simple {
 
             $one_event['images'] = $one_rest_images;
 
+            $one_event['time'] = '';
+            $one_event['date'] = date('Y-m-d');
+
             $one_event['datetimes'] = array();
 
             $day_holiday_start = null;
@@ -756,6 +761,12 @@ class RestaurantData_Parser_Simple {
             if (!empty($day_holidays)) {
                 //$day_holidays = explode('\u2013', $day_holidays); // put from d.m.y into y-d-m
                 $day_holidays = takeDays($day_holidays);
+                if (isset($day_holidays['start'])) {
+                    $day_holiday_start = $day_holidays['start']['date'];
+                }
+                if (isset($day_holidays['end'])) {
+                    $day_holiday_end = $day_holidays['end']['date'];
+                }
             }
 
             $week_days = array(); // upto 2 intervals (generally array), closed:'geschlossen'; put from d.m.y into y-d-m
@@ -767,16 +778,17 @@ class RestaurantData_Parser_Simple {
                 $week_days[] = $cur_open;
             }
 
-            $date_obj = new DateTime();
-            $date_obj->subtract(new DateInterval('P1D'));
-            foreach (array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12) as $one_week) {
-                foreach (array(0, 1, 2, 3, 4, 5, 6) as $one_week_day) {
-                    ;
-                }
-            }
+            $date_obj = new DateTime('now');
+            $day_period_obj = new DateInterval('P1D');
+            $date_obj->sub($day_period_obj);
+            $week_day_rank = ($date_obj->format('w') + 6) % 7;
 
-            for ($d_ind = 0; $d_ind < 90; $d_ind++) {
-                $date_obj->add(new DateInterval('P1D'));
+            $limit_forward = 93;
+
+            for ($d_ind = 0; $d_ind <= $limit_forward; $d_ind++) {
+                $date_obj->add($day_period_obj);
+                $week_day_rank = ($week_day_rank + 1) % 7;
+
                 $date_str = $date_obj->format('Y-m-d');
 
                 if ($day_holiday_start && $day_holiday_end) {
@@ -785,151 +797,92 @@ class RestaurantData_Parser_Simple {
                     }
                 }
 
-                $week_position = $date_obj->week_day;
-                if (empty($week_days[$week_position])) {
+                if (empty($week_days[$week_day_rank])) {
                     continue;
                 }
 
-                foreach ($week_days[$week_position] as $one_day) {
+                foreach ($week_days[$week_day_rank] as $one_day) {
+                    $cur_start = $one_day['start'];
+                    $cur_end = $one_day['end'];
+                    if ('24:00' >= $cur_start['str']) {
+                        continue;
+                    }
+
+                    $cur_spec = array(
+                        'date' => $date_str,
+                        'time' => $cur_start['str'],
+                        'desc' => $cur_start['str'] . "\n" . $cur_end['str'],
+                    );
+                    if (($cur_start['str'] <= $cur_end['str']) && ($cur_end['str'] < '24:00')) {
+                        $cur_spec['end_time'] = $cur_end['str'];
+                    }
+
                     // take time on/off; restrict to 00:00-24:00, put into comments otherwise longer (e.g. after midnight)
                     // create date-time def
+                    $one_event['datetimes'][] = $cur_spec;
                 }
 
 
             }
 
-
-/*
-            $one_use_desc = $one_mov_desc;
-            if (empty($one_use_desc)) {
-                $one_use_desc = $one_screen['desc'];
+            $week_days_names = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
+            $week_date_time_desc = array();
+            foreach ($week_days as $one_week_day_rank => $one_week_day_info) {
+                $week_date_time_desc[] = $week_days_names[$one_week_day_rank];
+                if (empty($one_week_day_info)) {
+                    continue;
+                }
+                foreach ($one_week_day_info as $one_week_day) {
+                    $week_date_time_desc[] = $one_week_day['start']['str'] . '-' . $one_week_day['end']['str'];
+                }
+            }
+            if ($day_holiday_start && $day_holiday_end) {
+                $week_date_time_desc[] = 'holiday';
+                $week_date_time_desc[] = $day_holiday_start;
+                $week_date_time_desc[] = $day_holiday_end;
             }
 
-            $one_event = array();
+            $one_event['date_time_text'] = implode("\n<br />\n", $week_date_time_desc);
 
-            $one_event['date'] = $set_date; // for the older (and probably safer) way of dealing with old data
-            //$one_date_max = '0000-00-01';
-            $one_date_max = $set_date;
+            $one_event['web'] = $this->makeLink(trim('' . $one_profile['homepage']), null);
+            $one_event['email'] = trim('' . $one_profile['email']);
+            $one_event['phone'] = trim('' . $one_profile['phone']);
 
-            foreach ($one_screen['dates'] as $one_date => $one_times) {
-                if ($one_date_max < $one_date) {
-                    $one_date_max = $one_date;
-                }
+            $one_event['prices'] = ''; // ? to try to extract from menus ?
 
-                if (!isset($set_date_times[$one_date])) {
-                    $set_date_times[$one_date] = array(); // this shall not occur
-                }
+            $one_event['description'] = $one_profile['premium'];
+            $one_event['other'] = $one_profile['seo_text'];
 
-                foreach ($one_times as $one_screen_info) {
-                    $set_date_times[$one_date][] = $one_screen_info;
-                }
-                //$one_event_screen[$one_date] = $one_times; // flag, lang, time
+            $one_event['genre'] = ''; // ? to put some cuisine or ambience info ?
+            $one_event['languages'] = '';
+            $one_event['minimal_age'] = '';
+            $one_event['minimal_age_category'] = '';
+
+            //$one_event['rating_wv'] = '';
+
+            $one_event['canceled'] = false;
+            $one_event['rated'] = false;
+
+            $one_event['geo'] = array();
+            if ( (!empty($one_profile['lat'])) && (!empty($one_profile['lon'])) ) {
+                $one_event['geo']['longitude'] = $one_profile['lon'];
+                $one_event['geo']['latitude'] = $one_profile['lat'];
             }
-            ksort($set_date_times);
-
-            //$one_event['date'] = $one_date_max; // for the newer (but not used) way of dealing with old data
-            $one_event['date_time_data'] = $set_date_times;
-            $one_event['date_time_text'] = $this->formatDateText($set_date_times);
-*/
-
-/*
-yyyy-mm-dd
-hh.mm:langs:flags
-hh.mm:langs:flags
-....
-yyyy-mm-dd
-....
-yyyy-mm-dd
-hh.mm:langs:flags
-hh.mm:langs:flags
-....
-*/
-            {
-/*
-                $one_event['provider_id'] = $provider_id;
-                $one_event['event_id'] = '' . $one_screen['kino_id'] . '-' . $one_screen['movie_id'];
-
-                $one_event['tour_id'] = $one_screen['movie_id'];
-                $one_event['location_id'] = $one_screen['kino_id'];
-
-                $one_event['movie_key'] = (isset($one_screen['movie_key']) && (!empty($one_screen['movie_key']))) ? $one_screen['movie_key'] : '';
-                $one_event['movie_info'] = $one_movie;
-
-                $one_event['headline'] = $one_screen['title'];
-                $one_event['organizer'] = $one_screen['kino_name'];
-                $one_event['keywords'] = $one_screen['kino_name'];
-
-                $one_event['country'] = $kino_country;
-                $one_event['zipcode'] = $one_screen['kino_zip'];
-                $one_event['town'] = $one_screen['kino_town'];
-                $one_event['street'] = $one_screen['kino_street'];
-
-                $one_event['region'] = $e_region;
-                $one_event['subregion'] = $e_subregion;
-
-                if ($limit_date_start) {
-                    if ($one_date < $limit_date_start) {
-                        continue;
-                    }
-                }
-                if ($limit_date_end) {
-                    if ($one_date > $limit_date_end) {
-                        continue;
-                    }
-                }
-
-                $one_event['time'] = '';
-
-                $one_event['web'] = $this->makeLink($one_screen['kino_url'], null);
-                $one_event['email'] = '';
-                $one_event['phone'] = $one_screen['kino_phone'];
-
-                $one_event['description'] = str_replace("\n", "\n<br />\n", $one_use_desc);
-                $one_event['other'] = $one_screen['other'];
-
-                $one_event['movie_trailers'] = array();
-                foreach ($one_mov_trailers as $cur_trailer) {
-                    $one_event['movie_trailers'][] = $this->makeLink($cur_trailer, 'Trailer', true, true);
-                }
-                $one_event['movie_trailer'] = $trailer_official;
-                $one_event['movie_trailer_vimeo'] = $trailer_official_vimeo;
-                $one_event['movie_trailer_info'] = $trailer_official_info;
-
-                $one_event['genre'] = $one_mov_genre;
-                $one_event['languages'] = '';
-                $one_event['prices'] = '';
-                $one_event['minimal_age'] = $one_screen['allowed_age'];
-                $one_event['minimal_age_category'] = $this->getMinAge($one_screen['allowed_age_orig']);
-
-                $one_event['rating_wv'] = $one_screen['rating_wv'];
-
-                $one_event['canceled'] = false;
-                $one_event['rated'] = $e_rated;
-
-                $one_event['geo'] = array();
-                if ( (!empty($one_screen['kino_latitude'])) && (!empty($one_screen['kino_longitude'])) ) {
-                    $one_event['geo']['longitude'] = $one_screen['kino_longitude'];
-                    $one_event['geo']['latitude'] = $one_screen['kino_latitude'];
-                }
-*/
 
 
-                //$one_event['uses_multidates'] = true;
-                //$screening_datetimes = null;
-                //$one_event['datetimes'] = $screening_datetimes;
+            $one_event['uses_multidates'] = true;
 
-                $rests_events_all[$one_event['event_id']] = $one_event;
+            $rests_events_all[$one_event['event_id']] = $one_event;
 
-                //if (!empty($this->m_last_events)) {
-                //    if (isset($this->m_last_events[$one_event['event_id']])) {
-                //        if ($this->m_last_events[$one_event['event_id']] == json_encode($one_event)) {
-                //            //continue;
-                //        }
-                //    }
-                //}
+            //if (!empty($this->m_last_events)) {
+            //    if (isset($this->m_last_events[$one_event['event_id']])) {
+            //        if ($this->m_last_events[$one_event['event_id']] == json_encode($one_event)) {
+            //            //continue;
+            //        }
+            //    }
+            //}
 
-                $rests_events_dif[$one_event['event_id']] = $one_event;
-            }
+            $rests_events_dif[$one_event['event_id']] = $one_event;
 
         }
 
@@ -966,6 +919,50 @@ hh.mm:langs:flags
 
         return $link;
     } // fn makeLink
+
+    private function takeDays($p_interval)
+    {
+        $date_bounds = array();
+        $no_dates = array();
+
+        if (empty($p_interval)) {
+           return $no_dates;
+        }
+
+        $day_arr = explode('\u2013', trim($p_interval));
+        if (2 == count($day_arr)) {
+            $day_start_arr = explode('.', $day_arr[0]);
+            $day_end_arr = explode('.', $day_arr[1]);
+
+            foreach (array('start' => $day_start_arr, 'end' => $day_end_arr) as $date_key => $date_spec) {
+                if (3 == count($date_spec)) {
+                    $year_str = ltrim($date_spec[2], '0');
+                    $month_str = ltrim($date_spec[1], '0');
+                    $day_str = ltrim($date_spec[0], '0');
+                    $date_str = str_pad($year_str, 4, '0', STR_PAD_LEFT) . '-' . str_pad($month_str, 2, '0', STR_PAD_LEFT) . '-' . str_pad($day_str, 2, '0', STR_PAD_LEFT);
+
+                    if ((is_numeric($year_info)) && (is_numeric($month_info)) && (is_numeric($day_info))) {
+                        $date_info = array(
+                            'year' => $year_str,
+                            'month' => $month_str,
+                            'day' => $day_str,
+                            'date' => $date_str,
+                        );
+                        $date_bounds[$date_key] = $date_info;
+                    }
+
+                }
+            }
+
+        }
+
+        if ((!isset($date_bounds['start'])) || (!isset($date_bounds['end']))) {
+            return $no_dates;
+        }
+
+        return $date_bounds;
+    }
+
 
     private function takeHours($p_day)
     {
@@ -1004,7 +1001,8 @@ hh.mm:langs:flags
                     $cur_open_start_hour = ltrim($cur_open_start[0], '0');
                     $cur_open_start_min = ltrim($cur_open_start[1], '0');
                     if (is_numeric($cur_open_start_hour) && is_numeric($cur_open_start_min)) {
-                        $cur_open['start'] = array('hour' => $cur_open_start_hour, 'min' => $cur_open_start_min);
+                        $cur_start_str = str_pad($cur_open_start_hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($cur_open_start_min, 2, '0', STR_PAD_LEFT);
+                        $cur_open['start'] = array('hour' => $cur_open_start_hour, 'min' => $cur_open_start_min, 'str' => $cur_start_str);
                     }
                 }
 
@@ -1012,7 +1010,8 @@ hh.mm:langs:flags
                     $cur_open_end_hour = ltrim($cur_open_end[0], '0');
                     $cur_open_end_min = ltrim($cur_open_end[1], '0');
                     if (is_numeric($cur_open_end_hour) && is_numeric($cur_open_end_min)) {
-                        $cur_open['end'] = array('hour' => $cur_open_end_hour, 'min' => $cur_open_end_min);
+                        $cur_end_str = str_pad($cur_open_start_hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($cur_open_start_min, 2, '0', STR_PAD_LEFT);
+                        $cur_open['end'] = array('hour' => $cur_open_end_hour, 'min' => $cur_open_end_min, 'str' => $cur_end_str);
                     }
                 }
 
