@@ -88,10 +88,13 @@ class Api_ArticlesController extends Zend_Controller_Action
                 'title' => $article->getTitle(),
                 'dateline' => $articleData->getFieldValue('dateline'),
                 'short_name' => $articleData->getFieldValue('short_name'),
-                'teaser' => $articleData->getFieldValue('teaser'),
-                'image_url' => $imageUrl,
-                'publish_date' => $article->getPublishDate(),
-                'comment_count' => $comments,
+                'teaser' => preg_replace('/(<p>|<p [^>]*>|<\\/p>)/', '', $articleData->getFieldValue($teaserField)),
+                'image_url' => $image,
+                'website_url' => $this->_helper->service('article.link')->getLink($article),
+                'topics' => $this->getTopics($article),
+                'comment_count' => $this->getCommentsCount($article),
+                'recommended_comment_count' => $this->getCommentsCount($article, true),
+                'comment_url' => $this->url . '/api/comments/list?article_id=' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
                 'rank' => $rank++,
             );
         }
