@@ -257,6 +257,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('livedesk.blog', 'Newscoop\Livedesk\BlogFacade')
             ->addArgument(new sfServiceReference('livedesk.client'));
 
+        $container->register('agenda', 'Newscoop\Services\AgendaService');
+
         Zend_Registry::set('container', $container);
         return $container;
     }
