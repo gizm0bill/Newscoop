@@ -160,6 +160,57 @@ class AgendaService
         return $events;
     }
 
+    public function getRegionList($p_params)
+    {
+        if (isset($p_params['country']) && ('ch' != $p_params['country'])) {
+            return array();
+        }
 
+        return array(
+            'region-basel' => array('topic' => 'Region Basel', 'label' => 'Region Basel'),
+            'kanton-basel-stadt' => array('topic' => 'Kanton Basel-Stadt', 'label' => 'Basel-Stadt'),
+            'kanton-basel-landschaft' => array('topic' => 'Kanton Basel-Landschaft', 'label' => 'Basel-Landschaft'),
+            'kanton-aargau' => array('topic' => 'Kanton Aargau', 'label' => 'Aargau'),
+            'kanton-appenzell-ausserrhoden' => array('topic' => 'Kanton Appenzell Ausserrhoden', 'label' => 'Appenzell Ausserrhoden'),
+            'kanton-appenzell-innerrhoden' => array('topic' => 'Kanton Appenzell Innerrhoden', 'label' => 'Appenzell Innerrhoden'),
+            'kanton-bern' => array('topic' => 'Kanton Bern', 'label' => 'Bern'),
+            'kanton-freiburg' => array('topic' => 'Kanton Freiburg', 'label' => 'Freiburg'),
+            'kanton-genf' => array('topic' => 'Kanton Genf', 'label' => 'Genf'),
+            'kanton-glarus' => array('topic' => 'Kanton Glarus', 'label' => 'Glarus'),
+            'kanton-graubuenden' => array('topic' => 'Kanton Graubünden', 'label' => 'Graubünden'),
+            'kanton-jura' => array('topic' => 'Kanton Jura', 'label' => 'Jura'),
+            'kanton-luzern' => array('topic' => 'Kanton Luzern', 'label' => 'Luzern'),
+            'kanton-neuenburg' => array('topic' => 'Kanton Neuenburg', 'label' => 'Neuenburg'),
+            'kanton-nidwalden' => array('topic' => 'Kanton Nidwalden', 'label' => 'Nidwalden'),
+            'kanton-obwalden' => array('topic' => 'Kanton Obwalden', 'label' => 'Obwalden'),
+            'kanton-schaffhausen' => array('topic' => 'Kanton Schaffhausen', 'label' => 'Schaffhausen'),
+            'kanton-schwyz' => array('topic' => 'Kanton Schwyz', 'label' => 'Schwyz'),
+            'kanton-solothurn' => array('topic' => 'Kanton Solothurn', 'label' => 'Solothurn'),
+            'kanton-st-gallen' => array('topic' => 'Kanton St. Gallen', 'label' => 'St. Gallen'),
+            'kanton-tessin' => array('topic' => 'Kanton Tessin', 'label' => 'Tessin'),
+            'kanton-thurgau' => array('topic' => 'Kanton Thurgau', 'label' => 'Thurgau'),
+            'kanton-uri' => array('topic' => 'Kanton Uri', 'label' => 'Uri'),
+            'kanton-waadt' => array('topic' => 'Kanton Waadt', 'label' => 'Waadt'),
+            'kanton-wallis' => array('topic' => 'Kanton Wallis', 'label' => 'Wallis'),
+            'kanton-zug' => array('topic' => 'Kanton Zug', 'label' => 'Zug'),
+            'kanton-zuerich' => array('topic' => 'Kanton Zürich', 'label' => 'Zürich'),
+        );
+    }
+
+    public function getEventTypeList($p_params)
+    {
+        if (isset($p_params['country']) && ('ch' != $p_params['country'])) {
+            return array();
+        }
+
+        return array(
+            'theater' => array('topic' =>  'Theater Veranstaltung', 'label' => 'Theater'),
+            'musik' => array('topic' =>  'Musik Veranstaltung', 'label' => 'Konzerte'),
+            'party' => array('topic' =>  'Party Veranstaltung', 'label' => 'Partys'),
+            'ausstellung' => array('topic' =>  'Ausstellung Veranstaltung', 'label' => 'Ausstellungen'),
+            'andere' => array('topic' =>  'Andere Veranstaltung', 'label' => 'Diverse'),
+        );
+
+    }
 
 }

@@ -5,6 +5,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
+require_once($GLOBALS['g_campsiteDir'].'/classes/ArticleTopic.php');
+
 /**
  */
 class Api_EventsController extends Zend_Controller_Action
@@ -66,19 +68,35 @@ class Api_EventsController extends Zend_Controller_Action
         $event_list = $this->_innerListProcess();
 //        echo count($event_list);
 
+        $event_types_reversed = array();
+        foreach ($this->service->getEventTypeList(array('country' => 'ch')) as $type_key => $type_info) {
+            $event_types_reversed[$type_info['topic']] = $type_key;
+        }
+
         $event_list_data = array();
         foreach ($event_list as $one_event) {
+            $one_event_types = array();
             $one_data = $one_event->getArticleData();
+            $one_event_topics = \ArticleTopic::GetArticleTopics($one_event->getArticleNumber());
+            foreach ($one_event_topics as $one_topic) {
+                $one_topic_name = $one_topic->getName(self::LANGUAGE);
+                if (array_key_exists($one_topic_name, $event_types_reversed)) {
+                    $one_event_types[] = $event_types_reversed[$one_topic_name];
+                }
+            }
+            if (empty($one_event_types)) {
+                $one_event_types = null;
+            }
 
             $event_list_data[] = array(
                 'title' => $one_data->getProperty('Fheadline'),
                 'description' => $one_data->getProperty('Fdescription'),
-                'genres' => array(),
+                'genres' => $one_event_types,
                 'street' => $one_data->getProperty('Fstreet'),
                 'town' => $one_data->getProperty('Ftown'),
                 'country' => ('ch' == strtolower($one_data->getProperty('Fcountry'))) ? 'Schweiz' : $one_data->getProperty('Fcountry'),
                 'zipcode' => $one_data->getProperty('Fzipcode'),
-                'date_time' => '',
+                'date_time' => null,
                 'web' => $one_data->getProperty('Fweb'),
                 'email' => $one_data->getProperty('Femail'),
             );
@@ -87,16 +105,44 @@ class Api_EventsController extends Zend_Controller_Action
         $cur_date = date('Y-m-d');
         $cur_date_time = date('Y-m-d H:i:s');
 
+        $output_regions = array();
+        $output_region_rank = -1;
+        foreach ($this->service->getRegionList(array('country' => 'ch')) as $region_key => $region_info) {
+            $output_region_rank += 1;
+            $output_regions[] = array(
+                'region_id' => $region_key,
+                'region_name' => $region_info['label'],
+                'rank' => $output_region_rank,
+            );
+        }
+
+        $output_types = array();
+        $output_type_rank = -1;
+        foreach ($this->service->getEventTypeList(array('country' => 'ch')) as $type_key => $type_info) {
+            $output_type_rank += 1;
+            $output_types[] = array(
+                'genre_id' => $type_key,
+                'genre_name' => $type_info['label'],
+                'rank' => $output_type_rank,
+            );
+        }
+
         $output_data = array(
             'date' => $cur_date,
             'regions_last_modified' => $cur_date_time,
-            'regions' => array(),
+            'regions' => $output_regions,
             'genres_last_modified' => $cur_date_time,
-            'genres' => array(),
+            'genres' => $output_types,
             'events' => $event_list_data,
         );
 
-        echo json_encode($output_data);
+        //$output_json = json_encode($output_data);
+        $output_json = Zend_Json::encode($output_data);
+
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Length: ' . strlen($output_json));
+
+        echo $output_json;
 
         exit(0);
 
@@ -121,90 +167,12 @@ class Api_EventsController extends Zend_Controller_Action
         }
 
         $req_region = null;
-        switch ($param_region) {
-            case 'region-basel':
-                $req_region = 'Region Basel';
+        $region_list = $this->service->getRegionList(array('country' => 'ch'));
+        foreach ($region_list as $region_key => $region_info) {
+            if ($region_key == $param_region) {
+                $req_region = $region_info['topic'];
                 break;
-            case 'kanton-basel-stadt':
-                $req_region = 'Kanton Basel-Stadt';
-                break;
-            case 'kanton-basel-landschaft':
-                $req_region = 'Kanton Basel-Landschaft';
-                break;
-            case 'kanton-aargau':
-                $req_region = 'Kanton Aargau';
-                break;
-            case 'kanton-appenzell-ausserrhoden':
-                $req_region = 'Kanton Appenzell Ausserrhoden';
-                break;
-            case 'kanton-appenzell-innerrhoden':
-                $req_region = 'Kanton Appenzell Innerrhoden';
-                break;
-            case 'kanton-bern':
-                $req_region = 'Kanton Bern';
-                break;
-            case 'kanton-freiburg':
-                $req_region = 'Kanton Freiburg';
-                break;
-            case 'kanton-genf':
-                $req_region = 'Kanton Genf';
-                break;
-            case 'kanton-glarus':
-                $req_region = 'Kanton Glarus';
-                break;
-            case 'kanton-graubuenden':
-                $req_region = 'Kanton Graubünden';
-                break;
-            case 'kanton-jura':
-                $req_region = 'Kanton Jura';
-                break;
-            case 'kanton-luzern':
-                $req_region = 'Kanton Luzern';
-                break;
-            case 'kanton-neuenburg':
-                $req_region = 'Kanton Neuenburg';
-                break;
-            case 'kanton-nidwalden':
-                $req_region = 'Kanton Nidwalden';
-                break;
-            case 'kanton-obwalden':
-                $req_region = 'Kanton Obwalden';
-                break;
-            case 'kanton-schaffhausen':
-                $req_region = 'Kanton Schaffhausen';
-                break;
-            case 'kanton-schwyz':
-                $req_region = 'Kanton Schwyz';
-                break;
-            case 'kanton-solothurn':
-                $req_region = 'Kanton Solothurn';
-                break;
-            case 'kanton-st-gallen':
-                $req_region = 'Kanton St. Gallen';
-                break;
-            case 'kanton-tessin':
-                $req_region = 'Kanton Tessin';
-                break;
-            case 'kanton-thurgau':
-                $req_region = 'Kanton Thurgau';
-                break;
-            case 'kanton-uri':
-                $req_region = 'Kanton Uri';
-                break;
-            case 'kanton-waadt':
-                $req_region = 'Kanton Waadt';
-                break;
-            case 'kanton-wallis':
-                $req_region = 'Kanton Wallis';
-                break;
-            case 'kanton-zug':
-                $req_region = 'Kanton Zug';
-                break;
-            case 'kanton-zuerich':
-                $req_region = 'Kanton Zürich';
-                break;
-            default:
-                break;
+            }
         }
         if (!$req_region) {
             return $empty_res;
@@ -212,30 +180,12 @@ class Api_EventsController extends Zend_Controller_Action
 
         $req_type = 'Veranstaltung';
         if (!empty($param_type)) {
-            switch ($param_type) {
-                case 'ausstellung':
-                    $req_type = 'Ausstellung Veranstaltung';
+            $type_list = $this->service->getEventTypeList(array('country' => 'ch'));
+            foreach ($type_list as $type_key => $type_info) {
+                if ($type_key == $type_type) {
+                    $req_type = $type_info['topic'];
                     break;
-                case 'theater':
-                    $req_type = 'Theater Veranstaltung';
-                    break;
-                case 'konzert':
-                    $req_type = 'Konzert Veranstaltung';
-                    break;
-                case 'musik':
-                    $req_type = 'Musik Veranstaltung';
-                    break;
-                case 'party':
-                    $req_type = 'Party Veranstaltung';
-                    break;
-                case 'zirkus':
-                    $req_type = 'Zirkus Veranstaltung';
-                    break;
-                case 'andere':
-                    $req_type = 'Andere Veranstaltung';
-                    break;
-                default:
-                    break;
+                }
             }
         }
 
