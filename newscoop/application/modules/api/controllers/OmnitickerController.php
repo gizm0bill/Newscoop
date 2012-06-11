@@ -98,7 +98,7 @@ class Api_OmnitickerController extends OmnitickerController
     protected function buildSolrDateParam()
     {
         if (!$this->_getParam('start_date')) {
-            $this->sendError("'start_date' param not set");
+            return;
         }
 
         try {
@@ -152,7 +152,7 @@ class Api_OmnitickerController extends OmnitickerController
     private function getExpires()
     {
         $now = new DateTime();
-        $start = new DateTime($this->_getParam('start_date'));
+        $start = new DateTime($this->_getParam('start_date') ?: 'now');
         $expires = new DateInterval($start->format('Y-m-d') === $now->format('Y-m-d') || $start->getTimestamp() > $now->getTimestamp() ? 'PT5M' : 'P300D');
         return $now->add($expires)->format(DateTime::RFC1123);
     }
