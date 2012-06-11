@@ -42,6 +42,13 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     private $em;
 
     /**
+     * @var array
+     */
+    private $switches = array(
+        'print',
+    );
+
+    /**
      * @param Newscoop\Webcode\Mapper $webcoder
      * @param Newscoop\Image\RenditionService $renditionService
      * @param Newscoop\Article\LinkService $linkService
@@ -75,16 +82,9 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      */
     public function isIndexable($article)
     {
-        try {
-            $print = $article->getData('print');
-        } catch (\Exception $e) {
-            $print = false;
-        }
-
         return $article->isPublished()
             && in_array($article->getType(), $this->config['type'])
-            && $article->getSectionNumber() > 0
-            && empty($print);
+            && $article->getSectionNumber() > 0;
     }
 
     /**
@@ -112,6 +112,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'section_name' => in_array($article->getType(), $this->config['blogs']) ? 'Blog' : $article->getSectionName(),
             'keyword' => explode(',', $article->getKeywords()),
             'topic' => $article->getTopicNames(),
+            'switches' => $this->getArticleSwitches($article),
         );
 
         switch ($article->getType()) {
@@ -185,5 +186,27 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'articleId' => $article->getNumber(),
             'fieldName' => 'schedule',
         ));
+    }
+
+    /**
+     * Get article switches
+     *
+     * @param Newscoop\Entity\Article $article
+     * @return array
+     */
+    private function getArticleSwitches($article)
+    {
+        $switches = array();
+        foreach ($this->switches as $switch) {
+            try {
+                if ($article->getData($switch)) {
+                    $switches[] = $switch;
+                }
+            } catch (\Exception $e) {
+                // @noop
+            }
+        }
+
+        return $switches;
     }
 }

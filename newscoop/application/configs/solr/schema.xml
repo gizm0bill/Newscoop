@@ -212,6 +212,7 @@
    <field name="section_name" type="string" indexed="false" stored="true" />
    <field name="topic" type="text_ws" indexed="true" stored="false" multiValued="true" />
    <field name="keyword" type="text_ws" indexed="true" stored="false" multiValued="true" />
+   <field name="switches" type="string" indexed="true" stored="false" multiValued="true" />
 
    <!-- event -->
    <field name="event_organizer" type="string" indexed="false" stored="true" />
