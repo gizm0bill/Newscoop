@@ -109,7 +109,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface, \Newscoop\Sear
         $indexed = $this->getIndexedTweets();
         $this->twitterClient->setParameterGet(array_filter(array(
             'id' => $this->config['id'],
-            'since_id' => empty($indexed) ? '' : $indexed[count($indexed) - 1],
+            'since_id' => empty($indexed) ? '' : array_pop($indexed), // must remove last as since id won't return it
         )));
 
         $response = $this->twitterClient->request();
