@@ -12,11 +12,7 @@ require_once($GLOBALS['g_campsiteDir'].'/classes/TopicName.php');
 require_once($GLOBALS['g_campsiteDir'].'/template_engine/classes/Operator.php');
 require_once($GLOBALS['g_campsiteDir'].'/template_engine/classes/ComparisonOperation.php');
 
-/*
-use Doctrine\ORM\EntityManager,
-    Newscoop\Entity\Section,
-    Newscoop\Entity\Publication;
-*/
+use Doctrine\ORM\EntityManager;
 
 /**
  * Agenda service
@@ -151,6 +147,8 @@ class AgendaService
         $ev_skipCache = false;
         $ev_returnObjs = true;
 
+//var_dump($ev_parameters);
+//exit(0);
         $events = \Article::GetList($ev_parameters, $ev_order, $ev_start, $ev_limit, &$ev_count, $ev_skipCache, $ev_returnObjs);
 
         if (empty($events)) {
@@ -204,13 +202,108 @@ class AgendaService
         }
 
         return array(
-            'theater' => array('topic' =>  'Theater Veranstaltung', 'label' => 'Theater'),
-            'musik' => array('topic' =>  'Musik Veranstaltung', 'label' => 'Konzerte'),
-            'party' => array('topic' =>  'Party Veranstaltung', 'label' => 'Partys'),
-            'ausstellung' => array('topic' =>  'Ausstellung Veranstaltung', 'label' => 'Ausstellungen'),
-            'andere' => array('topic' =>  'Andere Veranstaltung', 'label' => 'Diverse'),
+            'theater' => array('topic' =>  'Theater Veranstaltung', 'label' => 'Theater', 'outer' => 'theater'),
+            'musik' => array('topic' =>  'Musik Veranstaltung', 'label' => 'Konzerte', 'outer' => 'concert'),
+            'party' => array('topic' =>  'Party Veranstaltung', 'label' => 'Partys', 'outer' => 'party'),
+            'ausstellung' => array('topic' =>  'Ausstellung Veranstaltung', 'label' => 'Ausstellungen', 'outer' => 'exhibit'),
+            'andere' => array('topic' =>  'Andere Veranstaltung', 'label' => 'Diverse', 'outer' => 'misc'),
         );
 
     }
+
+    public function getRequestDate($p_date)
+    {
+        $no_date = null;
+
+        if (preg_match('/^[\d]{4}-[\d]{2}-[\d]{2}$/', $p_date)) {
+            return $p_date;
+        }
+
+        if (!preg_match('/^[\d]{4}-[\d]{1,2}-[\d]{1,2}$/', $p_date)) {
+            return $no_date;
+        }
+
+        $date_parts = explode('-', $p_date);
+        if (3 != count($date_parts)) {
+            return $no_date;
+        }
+
+        $date_res = $date_parts[0] . '-' . str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '-' . str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
+        return $date_res;
+    }
+
+    public function getRequestEventType($p_type)
+    {
+        $req_type = null; // 'Veranstaltung';
+
+        if (!empty($p_type)) {
+            $type_list = $this->getEventTypeList(array('country' => 'ch'));
+            foreach ($type_list as $type_key => $type_info) {
+                if ($type_info['outer'] == $p_type) {
+                    $req_type = $type_info['topic'];
+                    break;
+                }
+            }
+        }
+
+        return $req_type;
+    }
+
+    public function getEventDateInfo($p_article, $p_date)
+    {
+        $no_info = array('found' => false);
+
+        if (!preg_match('/^[\d]{4}-[\d]{2}-[\d]{2}$/', $p_date)) {
+            return $no_info;
+        }
+
+        $cancel_types = array('voided');
+        $regular_types = array('schedule');
+
+        $em = \Zend_Registry::get('container')->getService('em');
+        $repo = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+        //$res = $repo->findBy(array('articleId'=>$p_article->getArticleNumber(), 'startDate'=>$p_date));
+        $res = $repo->findBy(array('articleId'=>$p_article->getArticleNumber()));
+
+        if (empty($res)) {
+            return $no_info;
+        }
+
+        //$found_date = '';
+        $found_time = null;
+        $found_canceled = false;
+
+        foreach ($res as $one_date_entry) {
+            $date_part = date_format($one_date_entry->getStartDate(), 'Y-m-d');
+            if ($date_part != $p_date) {
+                continue;
+            }
+
+//var_dump($one_date_entry->getStartTime());
+//exit(0);
+
+            $time_part = date_format($one_date_entry->getStartTime(), 'H:i:s');
+
+            if (in_array($one_date_entry->getFieldName(), $cancel_types)) {
+                $found_canceled = true;
+            }
+
+            if (in_array($one_date_entry->getFieldName(), $regular_types)) {
+                $found_time = $time_part;
+            }
+        }
+
+        if (null === $found_time) {
+            return $no_info;
+        }
+
+        return array(
+            'found' => true,
+            'date' => $p_date,
+            'time' => $found_time,
+            'canceled' => $found_canceled,
+        );
+    }
+
 
 }
