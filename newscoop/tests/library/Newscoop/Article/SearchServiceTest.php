@@ -109,6 +109,7 @@ class SearchServiceTest extends \TestCase
             'link' => 'article-link',
             'section' => 'sport',
             'section_name' => 'Sport',
+            'section_id' => self::SECTION,
             'keyword' => array('key', 'words'),
             'topic' => array('test'),
         ), $this->service->getDocument($article));

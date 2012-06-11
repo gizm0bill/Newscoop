@@ -110,6 +110,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
             'link' => $this->linkService->getLink($article),
             'section' => in_array($article->getType(), $this->config['blogs']) ? 'blog' : $this->linkService->getSectionShortName($article),
             'section_name' => in_array($article->getType(), $this->config['blogs']) ? 'Blog' : $article->getSectionName(),
+            'section_id' => $article->getSectionNumber(),
             'keyword' => explode(',', $article->getKeywords()),
             'topic' => $article->getTopicNames(),
             'switches' => $this->getArticleSwitches($article),
