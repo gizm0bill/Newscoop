@@ -18,7 +18,7 @@ function smarty_function_ticker($params, $smarty)
         'leben',
     );
 
-    $filters = array();
+    $filters = array('-switches:print');
     $types = array('tweet', 'newswire');
     if (!empty($params['section']) && $params['section']->number && in_array($params['section']->url_name, $sections)) {
         $filters[] = sprintf('section:%s', $params['section']->url_name);
