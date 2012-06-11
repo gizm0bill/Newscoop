@@ -43,6 +43,7 @@ class OmnitickerController extends AbstractSolrController
                 $this->buildSolrSourceParam(),
                 $this->buildSolrDateParam(),
                 $this->_getParam('source') === 'en' ? 'section:swissinfo' : null,
+                '-switches:print',
             ))),
             'sort' => 'published desc',
             'spellcheck' => 'false',
@@ -66,7 +67,7 @@ class OmnitickerController extends AbstractSolrController
             }
         }
 
-        return sprintf('type:(%s)', implode(' OR ', $sources));
+        return sprintf('type:(%s)', implode(' OR ', array_unique($sources)));
     }
 
     /**
