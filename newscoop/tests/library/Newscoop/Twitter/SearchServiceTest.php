@@ -135,15 +135,12 @@ class SearchServiceTest extends \TestCase
         $this->assertEquals(array(
             array('id_str' => '3'),
             array('id_str' => '2'),
-            array('id_str' => '1'),
         ), $tweets);
 
         $this->assertTrue($this->service->isIndexable($tweets[0]));
         $this->assertTrue($this->service->isIndexable($tweets[1]));
-        $this->assertFalse($this->service->isIndexable($tweets[2]));
 
         $this->assertFalse($this->service->isIndexed($tweets[0]));
         $this->assertFalse($this->service->isIndexed($tweets[1]));
-        $this->assertTrue($this->service->isIndexed($tweets[2]));
     }
 }
