@@ -113,7 +113,6 @@ class Api_FeedbackController extends Zend_Controller_Action
     public function sendMail($values)
     {
         $toEmail = 'dienstpult@tageswoche.ch';
-        $toEmail = 'ozan.ozbek@sourcefabric.org';
         
         $userRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\User');
         $user = $userRepository->find($values['user']);
