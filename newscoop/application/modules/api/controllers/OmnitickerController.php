@@ -12,10 +12,16 @@ require_once __DIR__ . '/../../../controllers/OmnitickerController.php';
 class Api_OmnitickerController extends OmnitickerController
 {
     const ROWS = 200;
+    const ROWS_CURRENT = 30;
 
+    const TYPE_ARTICLE = 'article';
     const TYPE_TWITTER = 'tweet';
-    const TYPE_LINK = 'link';
     const TYPE_NEWSWIRE = 'newswire';
+    const TYPE_LINK = 'link';
+
+    const EN_SECTION_ID = 90;
+    const EN_SECTION_NAME = 'Swissinfo';
+    const EN_SECTION_TYPE = 'english_news';
 
     /** @var array */
     private $literalTypes = array(self::TYPE_TWITTER, self::TYPE_LINK, self::TYPE_NEWSWIRE);
@@ -75,7 +81,25 @@ class Api_OmnitickerController extends OmnitickerController
      */
     private function formatType(array $doc)
     {
-        return in_array($doc['type'], $this->literalTypes) ? $doc['type'] : 'article';
+        if ($this->isEnglishNews($doc)) {
+            return self::EN_SECTION_TYPE;
+        } else if (in_array($doc['type'], $this->literalTypes)) {
+            return $doc['type'];
+        }
+
+        return self::TYPE_ARTICLE;
+    }
+
+    /**
+     * Test if is english news
+     *
+     * @param array $doc
+     * @return bool
+     */
+    private function isEnglishNews(array $doc)
+    {
+        return (!empty($doc['section_id']) && $doc['section_id'] == self::EN_SECTION_ID)
+            || $doc['section_name'] === self::EN_SECTION_NAME;
     }
 
     /**
@@ -95,6 +119,11 @@ class Api_OmnitickerController extends OmnitickerController
         return null;
     }
 
+    /**
+     * Build date range query
+     *
+     * @return string
+     */
     protected function buildSolrDateParam()
     {
         if (!$this->_getParam('start_date')) {
@@ -121,10 +150,15 @@ class Api_OmnitickerController extends OmnitickerController
             $endDate->format('Y-m-d\TH:i:s\Z'));
     }
 
+    /**
+     * Build solr params
+     *
+     * @return array
+     */
     protected function buildSolrParams()
     {
         $params = parent::buildSolrParams();
-        $params['rows'] = self::ROWS;
+        $params['rows'] = $this->_getParam('start_date') ? self::ROWS_CURRENT : self::ROWS;
         return $params;
     }
 
