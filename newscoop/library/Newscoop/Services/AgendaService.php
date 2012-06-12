@@ -36,9 +36,9 @@ class AgendaService
         if (!isset($p_params['event_region'])) {
             return $empty_list;
         }
-        if (!isset($p_params['event_type'])) {
-            return $empty_list;
-        }
+        //if (!isset($p_params['event_type'])) {
+        //    return $empty_list;
+        //}
 
         if (!isset($p_params['publication'])) {
             return $empty_list;
@@ -69,15 +69,22 @@ class AgendaService
         $region_topic_id = $region_topic->getTopicId();
         $use_topics[] = $region_topic_id;
 
-        $type_topic = new \TopicName($p_params['event_type'], $p_params['language']);
-        $type_topic_id = $type_topic->getTopicId();
-        $use_topics[] = $type_topic_id;
+        if (isset($p_params['event_type'])) {
+            $type_topic = new \TopicName($p_params['event_type'], $p_params['language']);
+            $type_topic_id = $type_topic->getTopicId();
+            $use_topics[] = $type_topic_id;
+        }
 
         $ev_parameters = array();
 
         if (true) {
+            $multidate_field = 'schedule';
+            if (isset($p_params['multidate'])) {
+                $multidate_field = $p_params['multidate'];
+            }
+
             $leftOperand = 'complex_date';
-            $rightOperand = array('schedule' => 'start_date: ' . $use_date . ', end_date: ' . $use_date);
+            $rightOperand = array($multidate_field => 'start_date: ' . $use_date . ', end_date: ' . $use_date);
             $operator = new \Operator('is', 'string');
             $constraint = new \ComparisonOperation($leftOperand, $operator, $rightOperand);
             $ev_parameters[] = $constraint;
@@ -138,8 +145,9 @@ class AgendaService
         }
 
         $ev_order = array();
-        // for movies: $ev_order = array(array('field' => 'byname', 'dir' => 'asc'));
-
+        if (isset($p_params['order'])) {
+            $ev_order = $p_params['order'];
+        }
 
         $ev_start = 0;
         $ev_limit = 0;
@@ -147,8 +155,6 @@ class AgendaService
         $ev_skipCache = false;
         $ev_returnObjs = true;
 
-//var_dump($ev_parameters);
-//exit(0);
         $events = \Article::GetList($ev_parameters, $ev_order, $ev_start, $ev_limit, &$ev_count, $ev_skipCache, $ev_returnObjs);
 
         if (empty($events)) {
@@ -202,11 +208,47 @@ class AgendaService
         }
 
         return array(
-            'theater' => array('topic' =>  'Theater Veranstaltung', 'label' => 'Theater', 'outer' => 'theater'),
-            'musik' => array('topic' =>  'Musik Veranstaltung', 'label' => 'Konzerte', 'outer' => 'concert'),
-            'party' => array('topic' =>  'Party Veranstaltung', 'label' => 'Partys', 'outer' => 'party'),
-            'ausstellung' => array('topic' =>  'Ausstellung Veranstaltung', 'label' => 'Ausstellungen', 'outer' => 'exhibit'),
-            'andere' => array('topic' =>  'Andere Veranstaltung', 'label' => 'Diverse', 'outer' => 'misc'),
+            'theater' => array('topic' => 'Theater Veranstaltung', 'label' => 'Theater', 'outer' => 'theater'),
+            'musik' => array('topic' => 'Musik Veranstaltung', 'label' => 'Konzerte', 'outer' => 'concert'),
+            'party' => array('topic' => 'Party Veranstaltung', 'label' => 'Partys', 'outer' => 'party'),
+            'ausstellung' => array('topic' => 'Ausstellung Veranstaltung', 'label' => 'Ausstellungen', 'outer' => 'exhibit'),
+            'andere' => array('topic' => 'Andere Veranstaltung', 'label' => 'Diverse', 'outer' => 'misc'),
+        );
+
+    }
+
+    public function getMovieTypeList($p_params)
+    {
+        if (isset($p_params['country']) && ('ch' != $p_params['country'])) {
+            return array();
+        }
+
+        return array(
+            'adventure' => array('topic' => 'Abenteuer Film', 'label' => 'Abenteuer', 'outer' => 'abenteuer'),
+            'action' => array('topic' => 'Action Film', 'label' => 'Action', 'outer' => 'action'),
+            'adult' => array('topic' => 'Adult Film', 'label' => 'Adult', 'outer' => 'adult'),
+            'animation' => array('topic' => 'Animation Film', 'label' => 'Animation', 'outer' => 'animation'),
+            'biografie' => array('topic' => 'Biografie Film', 'label' => 'Biografie', 'outer' => 'biografie'),
+            'crime' => array('topic' => 'Crime Film', 'label' => 'Crime', 'outer' => 'crime'),
+            'dokumentation' => array('topic' => 'Dokumentation Film', 'label' => 'Dokumentation', 'outer' => 'dokumentation'),
+            'drama' => array('topic' => 'Drama Film', 'label' => 'Drama', 'outer' => 'drama'),
+            'familienfilm' => array('topic' => 'Familienfilm Film', 'label' => 'Familienfilm', 'outer' => 'familienfilm'),
+            'fantasy' => array('topic' => 'Fantasy Film', 'label' => 'Fantasy', 'outer' => 'fantasy'),
+            'film-noir' => array('topic' => 'Film-Noir Film', 'label' => 'Film-Noir', 'outer' => 'film-noir'),
+            'historischer' => array('topic' => 'Historischer Film', 'label' => 'Historisch', 'outer' => 'historisch'),
+            'horror' => array('topic' =>  'Horror Film', 'label' => 'Horror', 'outer' => 'horror'),
+            'komoedie' => array('topic' => 'Komödie Film', 'label' => 'Komödie', 'outer' => 'komoedie'),
+            'kriegsfilm' => array('topic' => 'Kriegsfilm Film', 'label' => 'Kriegsfilm', 'outer' => 'kriegsfilm'),
+            'kurzfilm' => array('topic' => 'Kurzfilm Film', 'label' => 'Kurzfilm', 'outer' => 'kurzfilm'),
+            'musical' => array('topic' => 'Musical Film', 'label' => 'Musical', 'outer' => 'musical'),
+            'musikfilm' => array('topic' => 'Musikfilm Film', 'label' => 'Musikfilm', 'outer' => 'musikfilm'),
+            'mystery' => array('topic' => 'Mystery Film', 'label' => 'Mystery', 'outer' => 'mystery'),
+            'romanze' => array('topic' => 'Romanze Film', 'label' => 'Romanze', 'outer' => 'romanze'),
+            'sci-fi' => array('topic' => 'Sci-Fi Film', 'label' => 'Sci-Fi', 'outer' => 'sci-fi'),
+            'sport' => array('topic' => 'Sport Film', 'label' => 'Sport', 'outer' => 'sport'),
+            'thriller' => array('topic' => 'Thriller Film', 'label' => 'Thriller', 'outer' => 'thriller'),
+            'western' => array('topic' => 'Western Film', 'label' => 'Western', 'outer' => 'western'),
+            'andere' => array('topic' => 'Anderer Film', 'label' => 'Andere', 'outer' => 'andere'),
         );
 
     }
@@ -249,6 +291,59 @@ class AgendaService
         return $req_type;
     }
 
+
+    public function getMovieDateInfo($p_article, $p_date)
+    {
+        $no_info = array();
+
+        if (!preg_match('/^[\d]{4}-[\d]{2}-[\d]{2}$/', $p_date)) {
+            return $no_info;
+        }
+
+        $regular_types = array('movie_screening');
+
+        $em = \Zend_Registry::get('container')->getService('em');
+        $repo = $em->getRepository('Newscoop\Entity\ArticleDatetime');
+        $res = $repo->findBy(array('articleId'=>$p_article->getArticleNumber()));
+
+        if (empty($res)) {
+            return $no_info;
+        }
+
+        $found_screens = array();
+
+        foreach ($res as $one_date_entry) {
+            $date_part = date_format($one_date_entry->getStartDate(), 'Y-m-d');
+            if ($date_part != $p_date) {
+                continue;
+            }
+
+            if (!in_array($one_date_entry->getFieldName(), $regular_types)) {
+                continue;
+            }
+
+            $time_part = date_format($one_date_entry->getStartTime(), 'H:i');
+            $lang_part = null;
+
+            foreach(explode("\n", $one_date_entry->getEventComment()) as $one_comment_line) {
+                $one_comment_line_parts = explode(':', trim('' . $one_comment_line));
+                if ((2 == count($one_comment_line_parts)) && ('lang' == $one_comment_line_parts[0])) {
+                    $lang_part = $one_comment_line_parts[1];
+                    break;
+                }
+            }
+
+            $found_screens[] = array(
+                'date' => $date_part,
+                'time' => $time_part,
+                'lang' => $lang_part,
+            );
+
+        }
+
+        return $found_screens;
+    }
+
     public function getEventDateInfo($p_article, $p_date)
     {
         $no_info = array('found' => false);
@@ -262,14 +357,12 @@ class AgendaService
 
         $em = \Zend_Registry::get('container')->getService('em');
         $repo = $em->getRepository('Newscoop\Entity\ArticleDatetime');
-        //$res = $repo->findBy(array('articleId'=>$p_article->getArticleNumber(), 'startDate'=>$p_date));
         $res = $repo->findBy(array('articleId'=>$p_article->getArticleNumber()));
 
         if (empty($res)) {
             return $no_info;
         }
 
-        //$found_date = '';
         $found_time = null;
         $found_canceled = false;
 
@@ -278,9 +371,6 @@ class AgendaService
             if ($date_part != $p_date) {
                 continue;
             }
-
-//var_dump($one_date_entry->getStartTime());
-//exit(0);
 
             $time_part = date_format($one_date_entry->getStartTime(), 'H:i:s');
 
@@ -304,6 +394,5 @@ class AgendaService
             'canceled' => $found_canceled,
         );
     }
-
 
 }

@@ -1194,6 +1194,7 @@ class KinoData_Parser_SimpleXML {
                 //if (empty($one_kino_id)) {
                 //    continue;
                 //}
+                $one_kino_key = trim('' . $one_kino->theaterkey);
                 $one_kino_name = trim('' . $one_kino->theatername);
                 $one_kino_town = trim('' . $one_kino->theatertown);
                 $one_kino_zip = trim('' . $one_kino->theaterzip);
@@ -1218,7 +1219,7 @@ class KinoData_Parser_SimpleXML {
                     $one_movie_key = trim('' . $one_movie->filmkey); // connector to the movies data, but can be empty!
                     $one_movie_title = trim('' . $one_movie->filmtitle);
                     if ('' == $one_movie_key) {
-                        $one_movie_key = 'tw_' . str_replace(array(' '. '_', '-', '"', '\'', '\\', '/'), '', iconv('UTF-8', 'ASCII//TRANSLIT', strtolower($one_movie_title)));
+                        $one_movie_key = 'tw_' . str_replace(array(' ', '_', '-', '"', '\'', '\\', '/'), '', iconv('UTF-8', 'ASCII//TRANSLIT', strtolower($one_movie_title)));
                     }
 
                     $one_movie_desc = trim('' . $one_movie->filmcig_d);
@@ -1282,6 +1283,7 @@ class KinoData_Parser_SimpleXML {
                         'start_date' => $export_start_date,
 
                         'kino_id' => $one_kino_id,
+                        'kino_key' => $one_kino_key,
                         'kino_name' => $one_kino_name,
                         'kino_town' => $one_kino_town,
                         'kino_zip' => $one_kino_zip,
@@ -1610,6 +1612,7 @@ hh.mm:langs:flags
                 $one_event['location_id'] = $one_screen['kino_id'];
 
                 $one_event['movie_key'] = (isset($one_screen['movie_key']) && (!empty($one_screen['movie_key']))) ? $one_screen['movie_key'] : '';
+                $one_event['movie_cinema_key'] = $one_screen['kino_key'];
                 $one_event['movie_info'] = $one_movie;
 
                 $one_event['headline'] = $one_screen['title'];

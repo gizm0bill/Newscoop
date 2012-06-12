@@ -96,25 +96,10 @@ class Api_EventsController extends Zend_Controller_Action
         $event_list = $this->_innerListProcess();
 //        echo count($event_list);
 
-        //$event_types_reversed = array();
-        //foreach ($this->m_service->getEventTypeList(array('country' => 'ch')) as $type_key => $type_info) {
-        //    $event_types_reversed[$type_info['topic']] = $type_info['outer']; // $type_key;
-        //}
-
         $event_list_data = array();
         foreach ($event_list as $one_event) {
             $one_event_types = array();
             $one_data = $one_event->getArticleData();
-            //$one_event_topics = \ArticleTopic::GetArticleTopics($one_event->getArticleNumber());
-            //foreach ($one_event_topics as $one_topic) {
-            //    $one_topic_name = $one_topic->getName(self::LANGUAGE);
-            //    if (array_key_exists($one_topic_name, $event_types_reversed)) {
-            //        $one_event_types[] = $event_types_reversed[$one_topic_name];
-            //    }
-            //}
-            //if (empty($one_event_types)) {
-            //    $one_event_types = null;
-            //}
 
             $one_date_time = null;
             $one_canceled = false;
@@ -137,7 +122,6 @@ class Api_EventsController extends Zend_Controller_Action
                 'title' => $one_data->getProperty('Fheadline'),
                 'description' => $one_data->getProperty('Fdescription'),
                 'organizer' => $one_data->getProperty('Forganizer'),
-                //'genres' => $one_event_types,
                 'street' => $one_data->getProperty('Fstreet'),
                 'town' => $one_data->getProperty('Ftown'),
                 'country' => ('ch' == strtolower($one_data->getProperty('Fcountry'))) ? 'Schweiz' : $one_data->getProperty('Fcountry'),
@@ -163,23 +147,14 @@ class Api_EventsController extends Zend_Controller_Action
             );
         }
 
-        //$output_types = array();
-        //$output_type_rank = -1;
-        //foreach ($this->m_service->getEventTypeList(array('country' => 'ch')) as $type_key => $type_info) {
-        //    $output_type_rank += 1;
-        //    $output_types[] = array(
-        //        'genre_id' => $type_key,
-        //        'genre_name' => $type_info['label'],
-        //        'rank' => $output_type_rank,
-        //    );
-        //}
+        if (empty($event_list_data)) {
+            $event_list_data = null;
+        }
 
         $output_data = array(
             'date' => $cur_date,
             'regions_last_modified' => $cur_date_time,
             'regions' => $output_regions,
-            //'genres_last_modified' => $cur_date_time,
-            //'genres' => $output_types,
             'events' => $event_list_data,
         );
 
@@ -206,13 +181,11 @@ class Api_EventsController extends Zend_Controller_Action
         $param_region = $this->_request->getParam('region');
         $param_type = $this->_request->getParam('genre'); // $this->_request->getParam('type'); // not required ?
         if (empty($param_date) || empty($param_region) || empty($param_type)) {
-//echo '001';
             return $empty_res;
         }
 
         $this->req_date = $this->m_service->getRequestDate($param_date);
         if (!$this->req_date) {
-//echo '002';
             return $empty_res;
         }
 
@@ -225,13 +198,11 @@ class Api_EventsController extends Zend_Controller_Action
             }
         }
         if (!$req_region) {
-//echo '003';
             return $empty_res;
         }
 
         $req_type = $this->m_service->getRequestEventType($param_type);
         if (!$req_type) {
-//echo '004';
             return $empty_res;
         }
 
