@@ -147,6 +147,10 @@ class Api_EventsController extends Zend_Controller_Action
             );
         }
 
+        if (empty($event_list_data)) {
+            $event_list_data = null;
+        }
+
         $output_data = array(
             'date' => $cur_date,
             'regions_last_modified' => $cur_date_time,

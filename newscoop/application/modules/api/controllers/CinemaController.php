@@ -288,6 +288,13 @@ class Api_CinemaController extends Zend_Controller_Action
             );
         }
 
+        if (empty($movie_locations_data)) {
+            $movie_locations_data = null;
+        }
+        if (empty($movie_list_data)) {
+            $movie_list_data = null;
+        }
+
         $output_data = array(
             'date' => $cur_date,
             'regions_last_modified' => $cur_date_time,
