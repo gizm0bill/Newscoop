@@ -641,6 +641,8 @@ class NewsImport
 
                 $cur_voided_dates = array();
                 $cur_postponed_dates = array();
+                $cur_withdrawn_dates = array();
+
                 //$cur_voided_dates = $article_data->getFieldValue('voided');
                 foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
@@ -652,6 +654,11 @@ class NewsImport
                     $cur_postponed_dates[] = date_format($one_postpone_entry->getStartDate(), 'Y-m-d');
                     //$em->remove($one_postpone_entry);
                     $md_removals[] = $one_postpone_entry->getId();
+                }
+                foreach ($repository->findBy(array('articleId' => $article->getArticleNumber(), 'fieldName' => 'withdrawn')) as $one_withdraw_entry) {
+                    $cur_withdrawn_dates[] = date_format($one_withdraw_entry->getStartDate(), 'Y-m-d');
+                    //$em->remove($one_withdraw_entry);
+                    $md_removals[] = $one_withdraw_entry->getId();
                 }
 
                 foreach ($md_removals as $one_md) {
@@ -673,13 +680,18 @@ class NewsImport
 
                     $old_voided = false;
                     $old_postponed = false;
+                    $old_withdrawn = false;
                     //if (false !== stristr($cur_voided_dates, $old_date_str)) {
                     if (in_array($old_date_str, $cur_voided_dates)) {
                         $old_voided = true;
                     }
+                    if (in_array($old_date_str, $cur_withdrawn_dates)) {
+                        $old_withdrawn = true;
+                    }
                     // old info on future is set as canceled here; if we've just got that info at new data, it is overwritten then
                     if ($old_date_str >= $today_date_str) {
-                        $old_voided = true;
+                        //$old_voided = true;
+                        $old_withdrawn = true;
                     }
 
                     if (in_array($old_date_str, $cur_postponed_dates)) {
@@ -690,6 +702,7 @@ class NewsImport
                         'row_id' => $one_date_entry->getId(),
                         'voided' => $old_voided,
                         'postponed' => $old_postponed,
+                        'withdrawn' => $old_withdrawn,
                         'prices' => '',
                         'date' => $old_date_str,
                         'time' => date_format($one_date_entry->getStartTime(), 'H.i'),
@@ -714,6 +727,7 @@ class NewsImport
                 $multi_time_line_sep = "\n<br />\n";
                 $voided_info = array();
                 $postponed_info = array();
+                $withdrawn_info = array();
                 //$voided_line_sep = "\n<br />\n";
 
                 foreach ($new_event_dates as $one_date) {
@@ -730,6 +744,7 @@ class NewsImport
                         'row_id' => 0,
                         'voided' => $new_voided,
                         'postponed' => $new_postponed,
+                        'withdrawn' => false,
                         'prices' => $one_date['prices'],
                         'date' => $one_date['date'],
                         'time' => $one_date['time'],
@@ -787,6 +802,9 @@ class NewsImport
                     if ($one_date['postponed']) {
                         $postponed_info[] = $one_date['date'];
                     }
+                    if ($one_date['withdrawn']) {
+                        $withdrawn_info[] = $one_date['date'];
+                    }
 
                 }
 
@@ -820,6 +838,16 @@ class NewsImport
                         )
                     );
                     $repository->add($postpone_datetime, $article->getArticleNumber(), 'postponed', false, false);
+                }
+                foreach ($withdrawn_info as $one_withdrawn_date) {
+                    $withdraw_datetime = new ArticleDatetime(
+                        array(
+                            'start_date' => $one_withdrawn_date,
+                            'end_date' => $one_withdrawn_date,
+                            'recurring' => false,
+                        )
+                    );
+                    $repository->add($withdraw_datetime, $article->getArticleNumber(), 'withdrawn', false, false);
                 }
             }
 
@@ -1273,6 +1301,8 @@ class NewsImport
 
                 $cur_voided_dates = array();
                 $cur_postponed_dates = array();
+                $cur_withdrawn_dates = array();
+
                 //$cur_voided_dates = $event_data_rem->getFieldValue('voided');
                 foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'voided')) as $one_void_entry) {
                     //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
@@ -1286,9 +1316,16 @@ class NewsImport
                     //$em->remove($one_postpone_entry);
                     $md_removals[] = $one_postpone_entry->getId();
                 }
+                foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'withdrawn')) as $one_withdraw_entry) {
+                    //$cur_voided_dates[] = date_format(date_create($one_void_entry->getStartDate()), 'Y-m-d');
+                    $cur_withdrawn_dates[] = date_format($one_withdraw_entry->getStartDate(), 'Y-m-d');
+                    //$em->remove($one_postpone_entry);
+                    $md_removals[] = $one_withdraw_entry->getId();
+                }
 
                 $new_voided_dates = array();
                 $new_postponed_dates = array();
+                $new_withdrawn_dates = array();
 
                 foreach ($repository->findBy(array('articleId' => $event_art_rem->getArticleNumber(), 'fieldName' => 'schedule')) as $one_date_entry) {
                     //$one_date_str = date_format(date_create($one_date_entry->getStartDate()), 'Y-m-d');
@@ -1307,6 +1344,9 @@ class NewsImport
                     if (in_array($one_date_str, $cur_postponed_dates)) {
                         $new_postponed_dates[] = $one_date_str;
                     }
+                    if (in_array($one_date_str, $cur_withdrawn_dates)) {
+                        $new_withdrawn_dates[] = $one_date_str;
+                    }
 
                     $all_event_dates[] = $one_date_str;
                 }
@@ -1318,8 +1358,8 @@ class NewsImport
                 if (($event_data_rem->getFieldValue('date')) < $voided_limit_date) {
                     foreach ($all_event_dates as $one_date_str) {
                         if ($current_date <= $one_date_str) {
-                            if (!in_array($one_date_str, $new_voided_dates)) {
-                                $new_voided_dates[] = $one_date_str;
+                            if (!in_array($one_date_str, $new_withdrawn_dates)) {
+                                $new_withdrawn_dates[] = $one_date_str;
                             }
                         }
                     }
@@ -1350,6 +1390,16 @@ class NewsImport
                         )
                     );
                     $repository->add($postpone_datetime, $event_art_rem->getArticleNumber(), 'postponed', false, false);
+                }
+                foreach ($new_withdrawn_dates as $one_withdrawn_date) {
+                    $withdraw_datetime = new ArticleDatetime(
+                        array(
+                            'start_date' => $one_withdrawn_date,
+                            'end_date' => $one_withdrawn_date,
+                            'recurring' => false,
+                        )
+                    );
+                    $repository->add($withdraw_datetime, $event_art_rem->getArticleNumber(), 'withdrawn', false, false);
                 }
 
                 if (0 == count($all_event_dates)) {
