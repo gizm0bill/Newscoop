@@ -97,7 +97,7 @@ class Api_FeedbackController extends Zend_Controller_Action
                         $feedbackRepository->save($feedback, $values);
                         $feedbackRepository->flush();
                         
-                        //$this->sendMail($values);
+                        $this->sendMail($values);
 
                         $this->getResponse()->setHttpResponseCode(200);
                         die;
