@@ -163,10 +163,16 @@ class Api_CinemaController extends Zend_Controller_Action
                 }
 
                 $one_min_age = '' . $one_data->getProperty('Fminimal_age_category');
-                if ('99' == $one_min_age) {
+                if ((!$one_min_age) || ('99' == $one_min_age)) {
                     $one_min_age = '16';
                 }
-                $one_min_age = 'ab ' . $one_min_age . ' Jahre';
+                $one_min_age = ltrim($one_min_age, '0');
+                if ('' == $one_min_age) {
+                    $one_min_age = '3-6 Jahre';
+                }
+                else {
+                    $one_min_age = 'ab ' . $one_min_age . ' Jahren';
+                }
 
                 $one_movie_trailer = $one_data->getProperty('Fmovie_trailer_vimeo');
                 if (!$one_movie_trailer) {
