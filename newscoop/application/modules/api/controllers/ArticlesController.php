@@ -6,6 +6,10 @@
  */
 
 use Newscoop\Entity\Article;
+use Newscoop\Webcode\Manager;
+
+require_once($GLOBALS['g_campsiteDir'].'/classes/ArticleTopic.php');
+require_once($GLOBALS['g_campsiteDir'].'/classes/ArticleAttachment.php');
 
 /**
  */
@@ -171,11 +175,53 @@ class Api_ArticlesController extends Zend_Controller_Action
 
         $articleData = new ArticleData($article->getType(), $article->getId(), self::LANGUAGE);
         if ($this->request->getParam('side') == 'back') {
-            // @todo process backside template
+            $data = $this->getBackside($article, $articleData);
+            $template = 'article-backside.phtml';
         } else {
-            // @todo process frontside template
+            $data = $this->getFrontside($article, $articleData);
+            $template = 'article.phtml';
         }
 
+        $smarty = CampTemplate::singleton();
+        $smarty->setTemplateDir('/var/www/tw-reloaded/application/modules/api/views');
+        $smarty->assign('data', $data);
+        $smarty->display('scripts/articles/' . $template);
+    }
+
+    private function getBackside(Article $article, \ArticleData $adata)
+    {
+        $webcode = Manager::getWebcoder('')->encode($article->getId());
+        $topics = ArticleTopic::GetArticleTopics($article->getId());
+        $attachments = ArticleAttachment::GetAttachmentsByArticleNumber($article->getId(), self::LANGUAGE);
+        try {
+            $history = $adata->getFieldValue('history');
+        } catch (\InvalidPropertyException $e) {
+            $history = '';
+        }
+
+        try {
+            $sources = $adata->getFieldValue('sources');
+        } catch (\InvalidPropertyException $e) {
+            $sources = '';
+        }
+
+        $data = array(
+            'title' => $article->getTitle(),
+            'publish_date' => $article->getPublishDate(),
+            'last_update' => $article->getDate(),
+            'topics' => $topics,
+            'history' => $history,
+            'attachments' => $attachments,
+            'sources' => $sources,
+            'base_url' => $this->url,
+            'webcode' => $webcode,
+        );
+
+        return $data;
+    }
+
+    private function getFrontside(Article $article, \ArticleData $adata)
+    {
         $image = $this->getImageUrl($article, self::IMAGE_STANDARD_RENDITION, $this->client['image_width'], $this->client['image_height']);
 
         $comments = Zend_Registry::get('container')->getService('comment')->countBy(array(
@@ -190,22 +236,19 @@ class Api_ArticlesController extends Zend_Controller_Action
             $bodyField = 'DataContent';
         }
 
-        $this->response = array(
+        $data = array(
             'article_id' => $article->getId(),
             'title' => $article->getTitle(),
-            'dateline' => $articleData->getFieldValue('dateline'),
+            'dateline' => $adata->getFieldValue('dateline'),
             'publish_date' => $article->getPublishDate(),
             'last_modified' => $article->getDate(),
-            'teaser' => $articleData->getFieldValue($teaserField),
-            'body' => $articleData->getFieldValue($bodyField),
+            'teaser' => $adata->getFieldValue($teaserField),
+            'body' => $adata->getFieldValue($bodyField),
             'image_url' => $image,
             'comment_count' => $comments,
         );
 
-        $smarty = CampTemplate::singleton();
-        $smarty->setTemplateDir('/var/www/tw-reloaded/application/modules/api/views');
-        $smarty->assign('data', $this->response);
-        $smarty->display('scripts/articles/article.phtml');
+        return $data;
     }
 
     private function getImageUrl(Article $article, $rendition, $width, $height)
