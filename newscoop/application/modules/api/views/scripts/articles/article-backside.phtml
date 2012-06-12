@@ -1,0 +1,92 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Tages Woche</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/themes/publication_1/theme_2/_css/tw2011/main.css">
+    <link rel="stylesheet" href="/themes/publication_1/theme_2/_css/tw2011/skin.css">
+</head>
+<body>
+    <div>
+        <div class="content-box article-single clearfix">
+            <section>
+                <article class="article-main-back">
+                    <header>
+                        <p>Informationen zum Artikel</p>
+                    </header>
+
+                    <p class="time">{{ $data.publish_date|date_format:"%d.%m.%y, %H:%M" }} Uhr</p>
+                    <h2>{{ $data.title|replace:'  ':'<br />' }}</h2>
+
+                    <ul class="article-info">
+                        {{ foreach $data.topics as $topic }}
+                        {{ if $topic@first }}
+                        <li>
+                            <h5>Themen</h5>
+                            <p>
+                        {{ /if }}
+                                <a href="">{{ $topic->getName(5) }}</a>{{ if !$topic@last }},{{ /if }}
+                        {{ if $topic@last }}
+                                <span class="desktop-hide"><br /><a href="#theme-abonnieren-content"
+                                class="theme-subscribe theme-abonnieren-trigger follow-topics-link">Themen abonnieren</a></span>
+                            </p>
+                        </li>
+                        {{ /if }}
+                        {{ /foreach }}
+
+                        <li>
+                            <h5>veröffentlicht</h5>
+                            <p>{{ $data.publish_date|date_format:"%d.%m.%y - %H:%M" }}</p>
+                        </li>
+                        <li>
+                            <h5>zuletzt geändert</h5>
+                            <p>{{ $data.last_update|date_format:"%d.%m.%y - %H:%M" }}</p>
+                        </li>
+
+                        {{ if $data.history != "" }}
+                        <li>
+                            <h5>Artikelgeschichte</h5>
+                            <p>{{ $data.history }}</p>
+                        </li>
+                        {{ /if }}
+
+                        {{ foreach $data.attachments as $attachment }}
+                        {{ if $attachment@first }}
+                        <li>
+                            <h5>Downloads</h5>
+                        {{ /if }}
+                        <p><a href="{{ $attachment->getAttachmentUrl() }}">{{ $attachment->getDescription(5) }}</a> ({{ $attachment->getExtension()|upper }}, {{ $attachment->getSizeInBytes()|camp_filesize_format:"kb":0|lower }})</p>
+                        {{ if $attachment@last }}
+                        </li>
+                        {{ /if }}
+                        {{ /foreach }}
+
+                        {{ if $data.sources != "" }}
+                        <li>
+                            <h5>Quellen</h5>
+                            <p>{{ $data.sources }}</p>
+                        </li>
+                        {{ /if }}
+
+                        <li>
+                            <h5>Artikel-Webcode</h5>
+                            <p><a href="{{ $data.base_url }}/{{ $data.webcode }}">tageswoche.ch/{{ $data.webcode }}</a></p>
+                        </li>
+                    </ul>
+                </article>
+            </section>
+        </div>
+    </div>
+</body>
+</html>
