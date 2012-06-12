@@ -134,7 +134,7 @@ class Api_CinemaController extends Zend_Controller_Action
 
             $one_location_id = null;
             try {
-                $one_location_id = $one_data->getProperty('Fmovie_cinema_id');
+                $one_location_id = $one_data->getProperty('Fmovie_cinema_key');
             }
             catch (\InvalidPropertyException $exc) {
                 $one_location_id = null;
