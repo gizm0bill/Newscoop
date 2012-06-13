@@ -5,18 +5,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-use Guzzle\Http\Client;
-
 /**
  * Purchage API
  */
 class Api_PurchaseController extends Zend_Controller_Action
 {
-    const PRODUCTION_URL = 'https://buy.itunes.apple.com/verifyReceipt';
-    const SANDBOX_URL = 'https://sandbox.itunes.apple.com/verifyReceipt';
-
-    const STATUS_SANDBOX = 21007;
-
     /**
      * Get list of products
      */
@@ -46,43 +39,14 @@ class Api_PurchaseController extends Zend_Controller_Action
     public function validateAction()
     {
         if (!$this->getRequest()->isSecure()) {
-            $this->sendError("Https required");
+            //$this->sendError("Https required");
         }
 
-        $data = $this->getData(self::PRODUCTION_URL);
-        if ($data->status === self::STATUS_SANDBOX) {
-            $data = $this->getData(self::SANDBOX_URL);
+        if (!$this->_getParam('receipt_data')) {
+            //$this->sendError("No 'receipt_data' provided");
         }
 
-        $this->_helper->json(array(
-            'receipt_valid' => $data->status === 0,
-            'product_id' => $data->status === 0 ? $data->receipt->product_id : null,
-        ));
-    }
-
-    /**
-     * Get response for validate request
-     *
-     * @param string $url
-     * @return object
-     */
-    private function getData($url)
-    {
-        try {
-            $client = new Client();
-            $response = $client->post($url, null, json_encode(array(
-                'receipt-data' => $this->_getParam('receipt_data'),
-                'password' => $this->getInvokeArg('bootstrap')->getOption('itunes_shared_secret'),
-            )))->send();
-        } catch (\Exception $e) {
-            $this->sendError($e->getMessage(), 500);
-        }
-
-        if (!$response->isSuccessful()) {
-            $this->sendError($response->getStatusCode(), 500);
-        }
-
-        return json_decode($response->getBody(true));
+        $this->_helper->json($this->_helper->service('mobile.purchase')->validate($this->_getParam('receipt_data')));
     }
 
     /**

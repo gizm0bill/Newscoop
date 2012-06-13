@@ -259,6 +259,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $container->register('agenda', 'Newscoop\Services\AgendaService');
 
+        $container->register('http.client_factory', 'Newscoop\Http\ClientFactory');
+        $container->register('mobile.purchase', 'Tageswoche\Mobile\PurchaseFacade')
+            ->addArgument(new sfServiceReference('http.client_factory'))
+            ->addArgument('%config%');
+
         Zend_Registry::set('container', $container);
         return $container;
     }
