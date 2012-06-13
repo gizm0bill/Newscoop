@@ -499,6 +499,8 @@ class NewsImport
             }
 
             $article_data = $article->getArticleData();
+            $old_description = $article_data->getProperty('Fdescription');
+            $new_description = $one_event['description'];
 
             $article_data->setProperty('Fprovider_id', $one_event['provider_id']);
             $article_data->setProperty('Fevent_id', $one_event['event_id']);
@@ -698,6 +700,10 @@ class NewsImport
                         $old_postponed = true;
                     }
 
+                    $use_description = $one_date_entry->getEventComment();
+                    if (empty($use_description)) {
+                        $use_description = $old_description;
+                    }
                     $old_info = array(
                         'row_id' => $one_date_entry->getId(),
                         'voided' => $old_voided,
@@ -706,6 +712,7 @@ class NewsImport
                         'prices' => '',
                         'date' => $old_date_str,
                         'time' => date_format($one_date_entry->getStartTime(), 'H.i'),
+                        'about' => $use_description,
                     );
                     $all_event_dates[$old_date_str] = $old_info;
                 }
@@ -748,6 +755,7 @@ class NewsImport
                         'prices' => $one_date['prices'],
                         'date' => $one_date['date'],
                         'time' => $one_date['time'],
+                        'about' => ((isset($one_date['about'])) ? $one_date['about'] : ''),
                     );
                     if (array_key_exists($one_date['date'], $all_event_dates)) {
                         $new_info['row_id'] = $all_event_dates[$one_date['date']]['row_id'];
@@ -777,13 +785,18 @@ class NewsImport
                             'end_date' => $one_date['date'],
                             'start_time' => $one_date['time'],
                             'recurring' => false,
+                            //'comment' => $one_date['about'],
                         )
                     );
+                    $other_info = array();
+                    if ($one_date['about'] != $new_description) {
+                        $other_info['eventComment'] = $one_date['about'];
+                    }
                     if (empty($one_date['row_id'])) {
-                        $repository->add($use_datetime, $article->getArticleNumber(), 'schedule', false, false);
+                        $repository->add($use_datetime, $article->getArticleNumber(), 'schedule', false, false, $other_info);
                     }
                     else {
-                        $repository->update($one_date['row_id'], $use_datetime, $article->getArticleNumber(), 'schedule', false);
+                        $repository->update($one_date['row_id'], $use_datetime, $article->getArticleNumber(), 'schedule', false, $other_info);
                     }
 
                     if (!empty($one_date['prices'])) {

@@ -352,7 +352,7 @@ class AgendaService
             return $no_info;
         }
 
-        $cancel_types = array('voided');
+        $cancel_types = array('voided', 'withdrawn');
         $regular_types = array('schedule');
 
         $em = \Zend_Registry::get('container')->getService('em');
@@ -364,6 +364,7 @@ class AgendaService
         }
 
         $found_time = null;
+        $found_about = null;
         $found_canceled = false;
 
         foreach ($res as $one_date_entry) {
@@ -380,6 +381,7 @@ class AgendaService
 
             if (in_array($one_date_entry->getFieldName(), $regular_types)) {
                 $found_time = $time_part;
+                $found_about = $one_date_entry->getEventComment();
             }
         }
 
@@ -392,6 +394,7 @@ class AgendaService
             'date' => $p_date,
             'time' => $found_time,
             'canceled' => $found_canceled,
+            'about' => $found_about,
         );
     }
 

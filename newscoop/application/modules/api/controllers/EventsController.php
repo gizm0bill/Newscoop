@@ -103,10 +103,15 @@ class Api_EventsController extends Zend_Controller_Action
 
             $one_date_time = null;
             $one_canceled = false;
+            $one_description = '';
             $one_date_info = $this->m_service->getEventDateInfo($one_event, $this->req_date);
             if ($one_date_info['found']) {
                 $one_date_time = $one_date_info['date'] . ' ' . $one_date_info['time'];
                 $one_canceled = $one_date_info['canceled'];
+                $one_description = $one_date_info['about'];
+            }
+            if (empty($one_description)) {
+                $one_description = $one_data->getProperty('Fdescription');
             }
 
             $one_web = $one_data->getProperty('Fweb');
@@ -120,7 +125,7 @@ class Api_EventsController extends Zend_Controller_Action
 
             $event_list_data[] = array(
                 'title' => $one_data->getProperty('Fheadline'),
-                'description' => $one_data->getProperty('Fdescription'),
+                'description' => $one_description,
                 'organizer' => $one_data->getProperty('Forganizer'),
                 'street' => $one_data->getProperty('Fstreet'),
                 'town' => $one_data->getProperty('Ftown'),
