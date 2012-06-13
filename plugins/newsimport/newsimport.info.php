@@ -290,7 +290,7 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             'tour_id' => array('type' => 'text', 'params' => array(), 'hidden' => true, 'retype' => array('numeric' => 'text')), // for grouping of repeated events, e.g. an exhibition available for more days
             'location_id' => array('type' => 'text', 'params' => array(), 'hidden' => true, 'retype' => array('numeric' => 'text')), // should be unique per place/provider
             // main event info - free form
-            'headline' => array('type' => 'text', 'params' => array(), 'hidden' => false), // even/tour_name (or movie name)
+            'headline' => array('type' => 'text', 'params' => array(), 'hidden' => false), // event/tour_name (or movie name)
             'organizer' => array('type' => 'text', 'params' => array(), 'hidden' => false), // either tour_organizer (if filled) or location_name (or cinema name)
             // address - free form
             'country' => array('type' => 'text', 'params' => array(), 'hidden' => false), // ch (i.e. Swiss country code)
@@ -334,8 +334,9 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
         $evt_fields = array(
             'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
             'multi_time' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), // event_times per day
-            'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone
+            'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are canceled
             'postponed' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are postponed
+            'withdrawn' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone completely
         );
 
         $scr_fields = array(
