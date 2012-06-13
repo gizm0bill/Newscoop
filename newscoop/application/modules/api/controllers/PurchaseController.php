@@ -10,6 +10,8 @@
  */
 class Api_PurchaseController extends Zend_Controller_Action
 {
+    const ERROR_SSL = 'Secure connection required';
+
     /**
      * Get list of products
      */
@@ -39,14 +41,15 @@ class Api_PurchaseController extends Zend_Controller_Action
     public function validateAction()
     {
         if (!$this->getRequest()->isSecure()) {
-            //$this->sendError("Https required");
+            //$this->sendError(self::ERROR_SSL);
         }
 
-        if (!$this->_getParam('receipt_data')) {
+        $receipt = $this->_getParam('receipt_data');
+        if (empty($receipt)) {
             //$this->sendError("No 'receipt_data' provided");
         }
 
-        $this->_helper->json($this->_helper->service('mobile.purchase')->validate($this->_getParam('receipt_data')));
+        $this->_helper->json($this->_helper->service('mobile.purchase')->validate($receipt));
     }
 
     /**
@@ -54,9 +57,43 @@ class Api_PurchaseController extends Zend_Controller_Action
      */
     public function freeupgradeAction()
     {
-        $this->_helper->json(array(
-            'status' => 'ok',
-        ));
+        if (!$this->getRequest()->isSecure()) {
+            //$this->sendError(self::ERROR_SSL);
+        }
+
+        $username = $this->_getParam('username');
+        $password = $this->_getParam('password');
+        if (empty($username) || empty($password)) {
+            $this->_helper->json(array('status' => 'invalid_credentials'));
+        }
+
+        $user = $this->_helper->service('auth.adapter')->findByCredentials($username, $password);
+        if (empty($user)) {
+            $this->_helper->json(array('status' => 'invalid_credentials'));
+        }
+
+        $subscriber = $user->getSubscriber() ?: $this->_getParam('customer_id');
+        if (empty($subscriber)) {
+            $this->_helper->json(array('status' => 'invalid_customer_id'));
+        }
+
+        // @todo validate $subscriber
+
+        $device = $this->_getParam('device_id');
+        if (empty($device)) {
+            $this->sendError('Param device_id not set');
+        }
+
+        $issue = $this->_helper->service('mobile.issue')->getCurrentIssueId();
+        if (empty($issue)) {
+            $this->sendError('No issue available for upgrading', 500);
+        }
+
+        if ($this->_helper->service('mobile.free_upgrade')->addDevice($device, $user, $issue)) {
+            $this->_helper->json(array('status' => 'ok'));
+        }
+
+        $this->_helper->json(array('status' => 'max_devices_reached'));
     }
 
     /**
