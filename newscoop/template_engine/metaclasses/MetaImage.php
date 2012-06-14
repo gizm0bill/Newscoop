@@ -28,6 +28,7 @@ final class MetaImage extends MetaDbObject {
         $this->m_properties['date'] = 'Date';
         $this->m_properties['last_update'] = 'LastModified';
         $this->m_properties['caption'] = 'Caption';
+        $this->m_properties['photographer_url'] = 'photographer_url';
 
         $this->m_customProperties['year'] = 'getYear';
         $this->m_customProperties['mon'] = 'getMonth';
@@ -46,6 +47,7 @@ final class MetaImage extends MetaDbObject {
         $this->m_customProperties['filerpath'] = 'getImageRelativePath';
         $this->m_customProperties['is_local'] = 'isLocal';
         $this->m_customProperties['type'] = 'getType';
+        $this->m_customProperties['photographer_url'] = 'getPhotographerUrl';
     } // fn __construct
 
 
@@ -166,7 +168,6 @@ final class MetaImage extends MetaDbObject {
     protected function getArticleIndex() {
         return CampTemplate::singleton()->context()->article->image_index;
     }
-
 } // class MetaSection
 
 ?>

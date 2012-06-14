@@ -133,7 +133,7 @@ echo $breadcrumbs;
 	<TD align="left">
 	<INPUT TYPE="TEXT" NAME="f_image_description" id="f_image_description" VALUE="<?php echo htmlspecialchars($imageObj->getDescription()); ?>" SIZE="32" class="input_text">
     <?php
-        if ($iptcDescription) {
+        if (!empty($iptcDescription)) {
             ?>
             <small><a style="float:right;" href="javascript:void(0);" onClick="document.getElementById('f_image_description').value='<?php echo($iptcDescription); ?>';">IPTC</a></small>
             <?php
@@ -146,7 +146,7 @@ echo $breadcrumbs;
 	<TD align="left">
 	<INPUT TYPE="TEXT" NAME="f_image_photographer" id="f_image_photographer" VALUE="<?php echo htmlspecialchars($imageObj->getPhotographer());?>" SIZE="32" class="input_text">
     <?php
-        if ($iptcPhotographer) {
+        if (!empty($iptcPhotographer)) {
             ?>
             <small><a style="float:right;" href="javascript:void(0);" onClick="document.getElementById('f_image_photographer').value='<?php echo($iptcPhotographer); ?>';">IPTC</a></small>
             <?php
@@ -154,12 +154,16 @@ echo $breadcrumbs;
     ?>
 	</TD>
 </TR>
+<tr>
+    <td><?php putGS('Photographer URL'); ?>:</td>
+    <td><input type="text" name="f_photographer_url" class="input_text" value="<?php echo $this->view->escape($imageObj->getPhotographerUrl()); ?>" size="32" title="<?php echo $this->view->escape(getGS('Add website url starting with http://')); ?>" /></td>
+</tr>
 <TR>
 	<TD ALIGN="RIGHT" ><?php  putGS("Place"); ?>:</TD>
 	<TD align="left">
 	<INPUT TYPE="TEXT" NAME="f_image_place" id="f_image_place" VALUE="<?php echo htmlspecialchars($imageObj->getPlace()); ?>" SIZE="32" class="input_text">
     <?php
-        if ($iptcPlace) {
+        if (!empty($iptcPlace)) {
             ?>
             <small><a style="float:right;" href="javascript:void(0);" onClick="document.getElementById('f_image_place').value='<?php echo($iptcPlace); ?>';">IPTC</a></small>
             <?php
@@ -172,12 +176,12 @@ echo $breadcrumbs;
 	<TD align="left">
 	<input type="text" id="f_image_date" name="f_image_date" value="<?php echo htmlspecialchars($imageObj->getDate()); ?>" size="11" maxlength="10" class="input_text date" />
     <?php
-        if ($exifDate) {
+        if (!empty($exifDate)) {
             ?>
             <small><a style="float:right;" href="javascript:void(0);" onClick="document.getElementById('f_image_date').value='<?php echo($exifDate); ?>';">&nbsp;EXIF</a></small>
             <?php
         }
-        if ($iptcDate) {
+        if (!empty($iptcDate)) {
             ?>
             <small><a style="float:right;" href="javascript:void(0);" onClick="document.getElementById('f_image_date').value='<?php echo($iptcDate); ?>';">IPTC</a></small>
             <?php
@@ -186,7 +190,7 @@ echo $breadcrumbs;
 	</TD>
 </TR>
 <?php
-    if ($iptcDescription || $iptcPhotographer || $iptcPlace || $iptcDate) {
+    if (!empty($iptcDescription) || !empty($iptcPhotographer) || !empty($iptcPlace) || !empty($iptcDate)) {
         ?>
         
         <TR>

@@ -27,6 +27,7 @@ foreach ($_POST['image'] as $id => $values) {
         'Photographer' => $values['f_photographer'],
         'Place' => $values['f_place'],
         'Date' => $values['f_date'],
+        'photographer_url' => $values['photographer_url'],
     );
     $imageObj->update($updateArray);
 }

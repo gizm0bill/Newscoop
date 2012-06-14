@@ -110,6 +110,12 @@ if ($f_publication_id > 0) {
 		} ?>
 	</TD>
 </TR>
+<tr>
+    <td><?php echo getGS('Photographer URL'); ?>:</td>
+    <td><?php if ($g_user->hasPermission('ChangeImage')) { ?>
+        <input type="text" name="f_photographer_url" value="<?php echo htmlspecialchars($imageObj->getPhotographerUrl()); ?>" class="input_text" size="32" />
+    <?php } ?></td>
+</tr>
 <TR>
 	<TD ALIGN="RIGHT" ><?php  putGS('Place'); ?>:</TD>
 	<TD>
