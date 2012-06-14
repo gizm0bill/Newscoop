@@ -135,6 +135,12 @@ camp_html_display_msgs();
                 </dd>
 		    </dl>
 		    <dl>
+		        <dt><?php  putGS("Photographer URL"); ?>:</dt>
+                <dd>
+                    <input type="text" name="image[<?php echo $image['id']; ?>][f_photographer_url]" value="<?php echo htmlspecialchars($image['photographer_url']);?>" size="32" class="input_text copy">
+                </dd>
+		    </dl>
+		    <dl>
 		        <dt><?php  putGS("Place"); ?>:</dt>
                 <dd>
                     <input type="text" name="image[<?php echo $image['id']; ?>][f_place]" value="<?php echo htmlspecialchars($image['place']); ?>" size="32" class="input_text copy">
