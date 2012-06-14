@@ -205,6 +205,15 @@ class Api_ArticlesController extends Zend_Controller_Action
             $sources = '';
         }
 
+        $authors = array();
+        $aauthors = ArticleAuthor::GetAuthorsByArticle($article->getId(), self::LANGUAGE);
+        foreach ($aauthors as $author) {
+            $user = Zend_Registry::get('container')->getService('user')->findByAuthor($author->getId());
+            $authors[] = array('user' => $user, 'author' => $author);
+        }
+
+        //$comments = Zend_Registry::get('container')->getService('comment')->findUserComments($params, $order, $p_limit, $p_start)
+
         $data = array(
             'title' => $article->getTitle(),
             'publish_date' => $article->getPublishDate(),
@@ -215,6 +224,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             'sources' => $sources,
             'base_url' => $this->url,
             'webcode' => $webcode,
+            'authors' => $authors,
         );
 
         return $data;
