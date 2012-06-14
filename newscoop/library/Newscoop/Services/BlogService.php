@@ -115,6 +115,8 @@ class BlogService
     {
         $article = new \Article($section->getLanguageId());
         $article->create($this->config['article_type'], $title, $section->getPublicationId(), $section->getIssueNumber(), $section->getSectionNumber());
+        $publication = new \Publication($section->getPublicationId());
+        $article->setCommentsEnabled($publication->commentsArticleDefaultEnabled());
         return $article;
     }
 
@@ -176,10 +178,23 @@ class BlogService
      */
     private function isRequestedArticleEditable(\Zend_Controller_Request_Abstract $request, User $user)
     {
+        $article = new \Article($request->getParam('f_language_selected'), $request->getParam('f_article_number'));
+        return $this->isUsersArticle($article, $user);
+    }
+
+    /**
+     * Test if given article is from users blog
+     *
+     * @param Article $article
+     * @param Newscoop\Entity\User $user
+     * @return bool
+     */
+    public function isUsersArticle(\Article $article, User $user)
+    {
         $section = $this->getSection($user);
-        return $section->getSectionNumber() == $request->getParam('f_section_number')
-            && $section->getPublicationId() == $request->getParam('f_publication_id')
-            && $section->getIssueNumber() == $request->getParam('f_issue_number')
-            && $section->getLanguageId() == $request->getParam('f_language_id');
+        return $section->getSectionNumber() == $article->getSectionNumber()
+            && $section->getPublicationId() == $article->getPublicationId()
+            && $section->getIssueNumber() == $article->getIssueNumber()
+            && $section->getLanguageId() == $article->getLanguageId();
     }
 }

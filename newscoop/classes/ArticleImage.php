@@ -136,6 +136,8 @@ class ArticleImage extends DatabaseObject {
      */
     public function delete()
     {
+        global $g_ado_db;
+
         if (!$this->exists()) {
             return false;
         }
@@ -147,6 +149,8 @@ class ArticleImage extends DatabaseObject {
         $image_id = $this->getImageId();
         $article_number = $this->getArticleNumber();
         $result = parent::delete();
+        $queryStr = "DELETE FROM ArticleRendition WHERE image_id=$image_id";
+		$g_ado_db->Execute($queryStr);
         return $result;
     }
 
@@ -312,7 +316,11 @@ class ArticleImage extends DatabaseObject {
 			foreach ($rows as $row) {
 				ArticleImage::RemoveImageTagsFromArticleText($row['NrArticle'], $row['Number']);
 			}
+
 			$queryStr = "DELETE FROM ArticleImages WHERE IdImage=$p_imageId";
+			$g_ado_db->Execute($queryStr);
+
+            $queryStr = "DELETE FROM ArticleRendition WHERE image_id=$p_imageId";
 			$g_ado_db->Execute($queryStr);
 		}
 	} // fn OnImageDelete

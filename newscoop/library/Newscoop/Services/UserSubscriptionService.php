@@ -7,7 +7,8 @@
 
 namespace Newscoop\Services;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManager,
+    Newscoop\Entity\User;
 
 /**
  * User service
@@ -137,5 +138,16 @@ class UserSubscriptionService
     private function getRepository()
     {
         return $this->em->getRepository('Newscoop\Entity\UserSubscription');
+    }
+
+    /**
+     * Get active subscription
+     *
+     * @param Newscoop\Entity\User $user
+     * @return array
+     */
+    public function getActiveSubscription(User $user)
+    {
+        return null;
     }
 }

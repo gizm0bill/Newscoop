@@ -11,9 +11,20 @@ namespace Newscoop\Twitter;
  */
 class SearchServiceTest extends \TestCase
 {
+    const TWITTER_ID = 'tw1';
+
     public function setUp()
     {
-        $this->service = new SearchService();
+        $this->solrClient = $this->getMockBuilder('Zend_Http_Client')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->twitterClient = $this->getMockBuilder('Zend_Http_Client')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->service = new SearchService($this->twitterClient, $this->solrClient, array('id' => self::TWITTER_ID));
+
         $this->tweet = json_decode(file_get_contents(__DIR__ . '/tweet.json'), true);
     }
 
@@ -21,6 +32,7 @@ class SearchServiceTest extends \TestCase
     {
         $this->assertInstanceOf('Newscoop\Twitter\SearchService', $this->service);
         $this->assertInstanceOf('Newscoop\Search\ServiceInterface', $this->service);
+        $this->assertInstanceOf('Newscoop\Search\RepositoryInterface', $this->service);
     }
 
     public function testGetDocumentId()
@@ -50,5 +62,85 @@ class SearchServiceTest extends \TestCase
     public function testIsIndexable()
     {
         $this->assertTrue($this->service->isIndexable($this->tweet));
+    }
+
+    public function testGetBatch()
+    {
+        $solrResponse = $this->getMockBuilder('Zend_Http_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $twitterResponse = $this->getMockBuilder('Zend_Http_Response')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->solrClient->expects($this->once())
+            ->method('setParameterGet')
+            ->with($this->equalTo(array(
+                'wt' => 'json',
+                'q' => '*:*',
+                'fq' => 'type:tweet',
+                'fl' => 'tweet_id',
+                'sort' => 'published desc',
+                'rows' => '20',
+            )))->will($this->returnValue($this->solrClient));
+
+        $this->solrClient->expects($this->once())
+            ->method('request')
+            ->will($this->returnValue($solrResponse));
+
+        $solrResponse->expects($this->once())
+            ->method('isSuccessful')
+            ->will($this->returnValue(true));
+
+        $solrResponse->expects($this->once())
+            ->method('getBody')
+            ->will($this->returnValue(json_encode(array(
+                'response' => array(
+                    'numFound' => 2,
+                    'docs' => array(
+                        array(
+                            'tweet_id' => '2',
+                        ),
+                        array(
+                            'tweet_id' => '1',
+                        ),
+                    ),
+                ),
+            ))));
+
+        $this->twitterClient->expects($this->once())
+            ->method('setParameterGet')
+            ->with($this->equalTo(array(
+                'id' => self::TWITTER_ID,
+                'since_id' => '1',
+            )));
+
+        $this->twitterClient->expects($this->once())
+            ->method('request')
+            ->will($this->returnValue($twitterResponse));
+
+        $twitterResponse->expects($this->once())
+            ->method('isSuccessful')
+            ->will($this->returnValue(true));
+
+        $twitterResponse->expects($this->once())
+            ->method('getBody')
+            ->will($this->returnValue(json_encode(array(
+                array('id_str' => '3'),
+                array('id_str' => '2'),
+            ))));
+
+        $tweets = $this->service->getBatch();
+        $this->assertEquals(array(
+            array('id_str' => '3'),
+            array('id_str' => '2'),
+        ), $tweets);
+
+        $this->assertTrue($this->service->isIndexable($tweets[0]));
+        $this->assertTrue($this->service->isIndexable($tweets[1]));
+
+        $this->assertFalse($this->service->isIndexed($tweets[0]));
+        $this->assertFalse($this->service->isIndexed($tweets[1]));
     }
 }

@@ -1063,6 +1063,7 @@ class EventData_Parser_SimpleXML {
                     'prices' => $event_info['prices'],
                     'canceled' => $event_info['canceled'],
                     'postponed' => $event_info['postponed'],
+                    'about' => $event_info['description'],
                 );
 
 /*

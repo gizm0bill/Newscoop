@@ -390,13 +390,7 @@ class UserService
     public function findUsersBySearch($search, $countOnly=false, $page=1, $limit=25)
     {
         $offset = ($page-1) * $limit;
-
         $result = $this->repository->searchUsers($search, $countOnly, $offset, $limit);
-
-        if ($countOnly) {
-            return $result[1];
-        }
-
         return $result;
     }
 
@@ -446,5 +440,25 @@ class UserService
         $character = strtolower($character);
         return isset($this->config['characterGroup'][$character]) ?
             explode(' ', $this->config['characterGroup'][$character]) : array($character);
+    }
+
+    /**
+     * Get newscoop login count
+     *
+     * @return int
+     */
+    public function getNewscoopLoginCount()
+    {
+        return $this->repository->getNewscoopLoginCount();
+    }
+
+    /**
+     * Get facebook login count
+     *
+     * @return int
+     */
+    public function getFacebookLoginCount()
+    {
+        return $this->repository->getExternalLoginCount();
     }
 }

@@ -335,8 +335,9 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
         $evt_fields = array(
             'schedule' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false),
             'multi_time' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), // event_times per day
-            'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone
+            'voided' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are canceled
             'postponed' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are postponed
+            'withdrawn' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // what dates are gone completely
         );
 
         $scr_fields = array(
@@ -346,6 +347,8 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             // 'date_time_tree' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => true), // puts several date, time, flags, into a single field
             'movie_imdb' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'movie_suisa' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+
+            'movie_cinema_key' => array('type' => 'text', 'params' => array(), 'hidden' => false), // unique simple textual cinema name (i.e. ascii string ID)
 
             'movie_rating_wv' => array('type' => 'numeric', 'params' => array('precision' => 0), 'hidden' => false), // movie rating by Werbeverlagsrating
 

@@ -53,6 +53,9 @@ class Admin_UserController extends Zend_Controller_Action
         $this->view->activeCount = $this->_helper->service('user')->countBy(array('status' => User::STATUS_ACTIVE));
         $this->view->pendingCount = $this->_helper->service('user')->countBy(array('status' => User::STATUS_INACTIVE));
         $this->view->inactiveCount = $this->_helper->service('user')->countBy(array('status' => User::STATUS_DELETED));
+
+        $this->view->newscoopLoginCount = $this->_helper->service('user')->getNewscoopLoginCount();
+        $this->view->facebookLoginCount = $this->_helper->service('user')->getFacebookLoginCount();
     }
 
     public function listAction()

@@ -7,8 +7,15 @@
 
 /**
  */
+
+use Newscoop\Entity\Comment;
+
+require_once($GLOBALS['g_campsiteDir'].'/include/get_ip.php');
+
 class Api_CommentsController extends Zend_Controller_Action
 {
+    const LANGUAGE = 5;
+    
     /** @var Zend_Controller_Request_Http */
     private $request;
 
@@ -20,16 +27,23 @@ class Api_CommentsController extends Zend_Controller_Action
      */
     public function init()
     {
+        global $Campsite;
+
         $this->_helper->layout->disableLayout();
         $this->request = $this->getRequest();
         $this->service = $this->_helper->service('comment');
+        $this->url = $Campsite['WEBSITE_URL'];
     }
 
     /**
      */
     public function indexAction()
     {
-        $this->_forward('list');
+        if ($this->request->isPost()) {
+            $this->_forward('compose');
+        } else {
+            $this->_forward('list');
+        }
     }
 
     /**
@@ -65,12 +79,23 @@ class Api_CommentsController extends Zend_Controller_Action
                 $last_modified = $comment->getTimeUpdated()->format('Y-m-d H:i:s');
             }
 
+            $profile_image = $comment->getCommenter()->getUser()->getImage();
+            if (!empty($profile_image)) {
+                $profile_image = $this->view->url(array(
+                    'src' => $this->getHelper('service')->getService('image')->getSrc('images/' . $profile_image, 125, 125, 'fit'),
+                ), 'image', false, false);
+                $profile_image = $this->url . $profile_image;
+            } else {
+                $profile_image = null;
+            }
+
             $this->response[] = array(
                 'author_name' => $comment->getCommenterName(),
                 'author_id' => $comment->getCommenter()->getLoginName(),
+                'author_image_url' => $profile_image,
                 'subject' => $comment->getSubject(),
                 'message'=> $comment->getMessage(),
-                'recommended' => $comment->getRecommended(),
+                'recommended' => $comment->getRecommended() ? true : false,
                 'created_time' => $created_time,
                 'last_modified' => $last_modified,
                 'rank' => $rank++,
@@ -78,5 +103,81 @@ class Api_CommentsController extends Zend_Controller_Action
         }
 
         $this->_helper->json($this->response);
+    }
+    
+    /**
+     */
+    public function composeAction()
+    {
+        $this->getHelper('contextSwitch')->addActionContext('list', 'json')->initContext('json');
+
+        $parameters = $this->getRequest()->getPost();
+        
+        /*
+        $parameters = array();
+        $parameters['username'] = 'admin';
+        $parameters['password'] = 'admin';
+        $parameters['article_id'] = 71;
+        $parameters['message'] = 'zxczxczxc';
+        */
+        
+        if (isset($parameters['username']) && isset($parameters['password'])) {
+            $user = $this->_helper->service('user')->findOneBy(array('username' => $parameters['username']));
+            if ($user->checkPassword($parameters['password'])) {
+                if (isset($parameters['article_id']) && isset($parameters['message'])) {
+                    $acceptanceRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\Comment\Acceptance');
+                    $userIp = getIp();
+                    
+                    $article = new Article(self::LANGUAGE, $parameters['article_id']);
+                    
+                    if (!$acceptanceRepository->checkParamsBanned($user->getName(), $user->getEmail(), $userIp, $article->getPublicationId())) {
+                        $commentRepository = $this->getHelper('entity')->getRepository('Newscoop\Entity\Comment');
+                        $comment = new Comment();
+                        
+                        $subject = '';
+                        if (isset($parameters['subject'])) {
+                            $subject = $parameters['subject'];
+                        }
+                        
+                        $values = array(
+                            'user' => $user->getId(),
+                            'name' => '',
+                            'subject' => $subject,
+                            'message' => $parameters['message'],
+                            'language' => self::LANGUAGE,
+                            'thread' => $parameters['article_id'],
+                            'ip' => $_SERVER['REMOTE_ADDR'],
+                            'status' => 'approved',
+                            'time_created' => new DateTime(),
+                            'recommended' => '0'
+                        );
+                        
+                        $commentRepository->save($comment, $values);
+                        $commentRepository->flush();
+                        
+                        //echo('comment posted');
+                        $this->getResponse()->setHttpResponseCode(201);
+                    }
+                    else {
+                        //echo('not allowed to comment');
+                        $this->getResponse()->setHttpResponseCode(500);
+                    }
+                }
+                else {
+                    //echo('no article and message');
+                    $this->getResponse()->setHttpResponseCode(500);
+                }
+            }
+            else {
+                //echo('username password wrong');
+                $this->getResponse()->setHttpResponseCode(401);
+            }
+        }
+        else {
+            //echo('no username password');
+            $this->getResponse()->setHttpResponseCode(401);
+        }
+        
+        $this->_helper->json(array());
     }
 }

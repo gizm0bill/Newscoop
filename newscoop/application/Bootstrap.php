@@ -218,15 +218,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('user.search', 'Newscoop\User\SearchService')
             ->addArgument(new sfServiceReference('image'));
 
-        $container->register('twitter.search', 'Newscoop\Twitter\SearchService');
-
-        $container->register('twitter.client', 'Zend_Http_Client')
-            ->addArgument('https://api.twitter.com/1/favorites.json');
-
-        $container->register('tweet.repository', 'Newscoop\Twitter\TweetRepository')
+        $container->register('twitter.search', 'Newscoop\Twitter\SearchService')
             ->addArgument(new sfServiceReference('twitter.client'))
             ->addArgument(new sfServiceReference('solr.client.select'))
             ->addArgument('%twitter%');
+
+        $container->register('twitter.client', 'Zend_Http_Client')
+            ->addArgument('https://api.twitter.com/1/favorites.json');
 
         $container->register('search_indexer_article', 'Newscoop\Search\Indexer')
             ->addArgument(new sfServiceReference('search.index'))
@@ -246,12 +244,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $container->register('search_indexer_twitter', 'Newscoop\Search\Indexer')
             ->addArgument(new sfServiceReference('search.index'))
             ->addArgument(new sfServiceReference('twitter.search'))
-            ->addArgument(new sfServiceReference('tweet.repository'));
+            ->addArgument(new sfServiceReference('twitter.search'));
         
         $container->register('link', 'Newscoop\Article\LinkService')
             ->addArgument(new sfServiceReference('em'));
 
         $container->register('webcoder', 'Newscoop\Webcode\Mapper');
+
+        $container->register('livedesk.client', 'Guzzle\Http\Client')
+            ->addArgument('http://liveblog.lab.sourcefabric.org/');
+
+        $container->register('livedesk.blog', 'Newscoop\Livedesk\BlogFacade')
+            ->addArgument(new sfServiceReference('livedesk.client'));
+
+        $container->register('agenda', 'Newscoop\Services\AgendaService');
+
+        $container->register('http.client_factory', 'Newscoop\Http\ClientFactory');
+
+        $container->register('mobile.purchase', 'Tageswoche\Mobile\PurchaseFacade')
+            ->addArgument(new sfServiceReference('http.client_factory'))
+            ->addArgument('%config%');
+
+        $container->register('mobile.issue', 'Tageswoche\Mobile\IssueFacade');
+
+        $container->register('mobile.free_upgrade', 'Tageswoche\Mobile\FreeUpgradeFacade')
+            ->addArgument(new sfServiceReference('em'));
 
         Zend_Registry::set('container', $container);
         return $container;

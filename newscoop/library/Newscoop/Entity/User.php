@@ -156,6 +156,12 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\DocumentInterfa
     private $indexed;
 
     /**
+     * @OneToMany(targetEntity="Newscoop\Entity\UserIdentity", mappedBy="user", cascade={"DELETE"})
+     * @var Doctrine\Common\Collections\Collection
+     */
+    private $identities;
+
+    /**
      * @param string $email
      */
     public function __construct($email = null)
@@ -169,6 +175,7 @@ class User implements \Zend_Acl_Role_Interface, \Newscoop\Search\DocumentInterfa
         $this->is_public = false;
         $this->setPassword($this->generateRandomString(6)); // make sure password is not empty
         $this->points = 0;
+        $this->identities = new ArrayCollection();
     }
 
     /**

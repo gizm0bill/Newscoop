@@ -71,6 +71,11 @@ class ComparisonOperation
 	 */
 	public function getRightOperand()
 	{
+
+        if (!is_string($this->m_rightOperand)) {
+            return $this->m_rightOperand;
+        }
+
 	    // some values have to be computed
 	    switch (strtolower($this->m_rightOperand)) {
 	        

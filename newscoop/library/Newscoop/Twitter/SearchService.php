@@ -10,8 +10,42 @@ namespace Newscoop\Twitter;
 /**
  * Search Service
  */
-class SearchService implements \Newscoop\Search\ServiceInterface
+class SearchService implements \Newscoop\Search\ServiceInterface, \Newscoop\Search\RepositoryInterface
 {
+    /**
+     * @var Zend_Http_Client
+     */
+    private $twitterClient;
+
+    /**
+     * @var Zend_Http_Client
+     */
+    private $solrClient;
+
+    /**
+     * @var array
+     */
+    private $config = array(
+        'id' => '',
+    );
+
+    /**
+     * @var array
+     */
+    private $deleted = array();
+
+    /**
+     * @var Zend_Http_Client $twitterClient
+     * @var Zend_Http_Client $solrClient
+     * @var array $config
+     */
+    public function __construct(\Zend_Http_Client $twitterClient, \Zend_Http_Client $solrClient, array $config)
+    {
+        $this->twitterClient = $twitterClient;
+        $this->solrClient = $solrClient;
+        $this->config = array_merge($this->config, $config);
+    }
+
     /**
      * Test if tweet is indexed
      *
@@ -20,7 +54,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      */
     public function isIndexed($tweet)
     {
-        return false;
+        return in_array($tweet['id_str'], $this->deleted);
     }
 
     /**
@@ -31,7 +65,7 @@ class SearchService implements \Newscoop\Search\ServiceInterface
      */
     public function isIndexable($tweet)
     {
-        return true;
+        return !in_array($tweet['id_str'], $this->deleted);
     }
 
     /**
@@ -63,5 +97,88 @@ class SearchService implements \Newscoop\Search\ServiceInterface
     public function getDocumentId($tweet)
     {
         return sprintf('tweet-%d', $tweet['id_str']);
+    }
+
+    /**
+     * Get tweets to be indexed
+     *
+     * @return array
+     */
+    public function getBatch()
+    {
+        $indexed = $this->getIndexedTweets();
+        $this->twitterClient->setParameterGet(array_filter(array(
+            'id' => $this->config['id'],
+            'since_id' => empty($indexed) ? '' : array_pop($indexed), // must remove last as since id won't return it
+        )));
+
+        $response = $this->twitterClient->request();
+        if (!$response->isSuccessful()) {
+            return array();
+        }
+
+        $batch = json_decode($response->getBody(), true);
+        $this->deleted = array_diff($indexed, array_map(function($tweet) {
+            return $tweet['id_str'];
+        }, $batch));
+
+        foreach ($this->deleted as $id) {
+            $batch[] = array('id_str' => $id);
+        }
+
+        return $batch;
+    }
+
+    /**
+     * Get indexed tweets
+     *
+     * @param int $rows
+     * @return array
+     */
+    private function getIndexedTweets($rows = 20)
+    {
+        $this->solrClient->setParameterGet(array(
+            'wt' => 'json',
+            'q' => '*:*',
+            'fq' => 'type:tweet',
+            'fl' => 'tweet_id',
+            'sort' => 'published desc',
+            'rows' => (int) $rows,
+        ));
+
+        $response = $this->solrClient->request();
+        if (!$response->isSuccessful()) {
+            return;
+        }
+
+        $responseArray = json_decode($response->getBody(), true);
+        return array_map(function($doc) {
+            return $doc['tweet_id'];
+        }, $responseArray['response']['docs']);
+    }
+
+    /**
+     * Set indexed now
+     *
+     * nop for twitter 
+     *
+     * @param array $tweets
+     * @return void
+     */
+    public function setIndexedNow(array $tweets)
+    {
+        return;
+    }
+
+    /**
+     * Set indexed null
+     *
+     * nop for twitter
+     *
+     * @return void
+     */
+    public function setIndexedNull()
+    {
+        return;
     }
 }
