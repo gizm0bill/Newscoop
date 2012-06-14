@@ -82,6 +82,7 @@ $newsimport_default_cat_names['regions'] = array(
 
 //$newsimport_default_cat_names['restaurant'] = arrray('multiple' => true, 'names' => array('restaurant_cuisine', 'restaurant_ambiance'));
 
+/*
 $newsimport_default_cat_names['restaurant_cuisine'] = array(
     // do not change keys; num ids are for topic names by language
     'restaurant_cuisine' => array(1 => 'Restaurant Cuisine', 5 => 'Restaurant Küche',), // the root of restaurant cuisine topics
@@ -148,7 +149,76 @@ $newsimport_default_cat_names['restaurant_cuisine'] = array(
     'snacks_cuisine' => array(1 => 'Snacks Cuisine', 5 => 'Snacks Küche',), // id 71
     'lebanese_cuisine' => array(1 => 'Lebanese Cuisine', 5 => 'Libanesisch Küche',), // id 72
 );
+*/
 
+$newsimport_default_cat_names['restaurant_cuisine'] = array(
+    // do not change keys; num ids are for topic names by language
+    'restaurant_cuisine' => array(1 => 'Restaurant: Cuisine', 5 => 'Restaurant: Küche',), // the root of restaurant cuisine topics
+    'arabic_cuisine' => array(1 => 'Cuisine: Arabic', 5 => 'Küche: Arabisch',), // id 2
+    'american_cuisine' => array(1 => 'Cuisine: American', 5 => 'Küche: Amerikanisch',), // id 3
+    'italien_cuisine' => array(1 => 'Cuisine: Italien', 5 => 'Küche: Italienisch',), // id 4
+    'spanish_cuisine' => array(1 => 'Cuisine: Spanish', 5 => 'Küche: Spanisch',), // id 5
+    'turkish_cuisine' => array(1 => 'Cuisine: Turkish', 5 => 'Küche: Türkisch',), // id 6
+    'asiatic_cuisine' => array(1 => 'Cuisine: Asiatic', 5 => 'Küche: Asiatisch',), // id 7
+    'chinese_cuisine' => array(1 => 'Cuisine: Chinese', 5 => 'Küche: Chinesisch',), // id 8
+    'fish_cuisine' => array(1 => 'Cuisine: Fish', 5 => 'Küche: Fisch',), // id 10
+    'french_cuisine' => array(1 => 'Cuisine: French', 5 => 'Küche: Französisch',), // id 11
+    'gourmet_cuisine' => array(1 => 'Cuisine: Gourmet', 5 => 'Küche: Gourmet',), // id 12
+    'greek_cuisine' => array(1 => 'Cuisine: Greek', 5 => 'Küche: Griechisch',), // id 13
+    'grills_cuisine' => array(1 => 'Cuisine: Grills', 5 => 'Küche: Grilladen',), // id 14
+    'style_cuisine' => array(1 => 'Cuisine: Style', 5 => 'Küche: Gut bürgerlich',), // id 15
+    'hamburger_cuisine' => array(1 => 'Cuisine: Hamburger', 5 => 'Küche: Hamburger',), // id 16
+    'indian_cuisine' => array(1 => 'Cuisine: Indian', 5 => 'Küche: Indisch',), // id 17
+    'indonesian_cuisine' => array(1 => 'Cuisine: Indonesian', 5 => 'Küche: Indonesisch',), // id 18
+    'international_cuisine' => array(1 => 'Cuisine: International', 5 => 'Küche: International',), // id 19
+    'japanese_cuisine' => array(1 => 'Cuisine: Japanese', 5 => 'Küche: Japanisch',), // id 21
+    'creole_caribbean_cuisine' => array(1 => 'Cuisine: Creole (Caribbean)', 5 => 'Küche: Kreolisch (Karibik)',), // id 23
+    'korean_cuisine' => array(1 => 'Cuisine: Korean', 5 => 'Küche: Koreanisch',), // id 24
+    'malay_cuisine' => array(1 => 'Cuisine: Malay', 5 => 'Küche: Malayisch',), // id 25
+    'mediterranean_cuisine' => array(1 => 'Cuisine: Mediterranean', 5 => 'Küche: Mediterran',), // id 26
+    'mexican_cuisine' => array(1 => 'Cuisine: Mexican', 5 => 'Küche: Mexikanisch',), // id 27
+    'mongolian_cuisine' => array(1 => 'Cuisine: Mongolian', 5 => 'Küche: Mongolisch',), // id 28
+    'oriental_cuisine' => array(1 => 'Cuisine: Oriental', 5 => 'Küche: Orientalisch',), // id 29
+    'pizzeria_cuisine' => array(1 => 'Cuisine: Pizzeria', 5 => 'Küche: Pizzeria',), // id 31
+    'sushi_cuisine' => array(1 => 'Cuisine: Sushi', 5 => 'Küche: Sushi',), // id 32
+    'swiss_cuisine' => array(1 => 'Cuisine: Swiss', 5 => 'Küche: Schweizerisch',), // id 34
+    'thai_cuisine' => array(1 => 'Cuisine: Thai', 5 => 'Küche: Thailändisch',), // id 35
+    'vietnamese_cuisine' => array(1 => 'Cuisine: Vietnamese', 5 => 'Küche: Vietnamesisch',), // id 37
+    'astrian_cuisine' => array(1 => 'Cuisine: Astrian', 5 => 'Küche: Österreichisch',), // id 38
+    'exotic_cuisine' => array(1 => 'Cuisine: Exotic', 5 => 'Küche: Exotisch',), // id 40
+    'traditional_cuisine' => array(1 => 'Cuisine: Traditional', 5 => 'Küche: Traditionell',), // id 41
+    'moroccan_cuisine' => array(1 => 'Cuisine: Moroccan', 5 => 'Küche: Marokkanisch',), // id 42
+    'brasserie_cuisine' => array(1 => 'Cuisine: Brasserie', 5 => 'Küche: Brasserie',), // id 43
+    'portuguese_cuisine' => array(1 => 'Cuisine: Portuguese', 5 => 'Küche: Portugiesisch',), // id 44
+    'walser_specialties_cuisine' => array(1 => 'Cuisine: Walser Specialties', 5 => 'Küche: Walliser-Spezialitäten',), // id 45
+    'vegetarian_cuisine' => array(1 => 'Cuisine: Vegetarian', 5 => 'Küche: Vegetarisch',), // id 46
+    'argentine_cuisine' => array(1 => 'Cuisine: Argentine', 5 => 'Küche: Argentinisch',), // id 47
+    'gratin_cuisine' => array(1 => 'Cuisine: Gratin', 5 => 'Küche: Gratin',), // id 48
+    'cold_and_hot_sandwiches_cuisine' => array(1 => 'Cuisine: Cold and Hot Sandwiches', 5 => 'Küche: Cold and Hot Sandwiches',), // id 49
+    'pies_and_biscuits_cuisine' => array(1 => 'Cuisine: Pies and Biscuits', 5 => 'Küche: Kuchen und Gebäck',), // id 51
+    'bistro_cuisine' => array(1 => 'Cuisine: Bistro', 5 => 'Küche: Bistroküche',), // id 52
+    'balkan_cuisine' => array(1 => 'Cuisine: Balkan', 5 => 'Küche: Balkan',), // id 53
+    'seasonal_cuisine' => array(1 => 'Cuisine: Seasonal', 5 => 'Küche: Saisonal',), // id 54
+    'steakhouse_cuisine' => array(1 => 'Cuisine: Steakhouse', 5 => 'Küche: Steakhouse',), // id 55
+    'caribbean_cuisine' => array(1 => 'Cuisine: Caribbean', 5 => 'Küche: Karibisch',), // id 57
+    'steak_cuisine' => array(1 => 'Cuisine: Steak', 5 => 'Küche: Steak',), // id 58
+    'classic_cuisine' => array(1 => 'Cuisine: Classic', 5 => 'Küche: Klassiker',), // id 59
+    'ottoman_cuisine' => array(1 => 'Cuisine: Ottoman', 5 => 'Küche: Osmanisch',), // id 60
+    'modern_cuisine' => array(1 => 'Cuisine: Modern', 5 => 'Küche: Modern',), // id 61
+    'fusion_cuisine' => array(1 => 'Cuisine: Fusion', 5 => 'Küche: Fusion',), // id 62
+    'american_restaurant_cuisine' => array(1 => 'Cuisine: American Restaurant', 5 => 'Küche: American Restaurant',), // id 63
+    'caribbean_bar_cuisine' => array(1 => 'Cuisine: Caribbean Bar', 5 => 'Küche: Caribbean Bar',), // id 64
+    'tex_mex_cuisine' => array(1 => 'Cuisine: Tex-Mex', 5 => 'Küche: Tex-Mex',), // id 65
+    'rustic_cuisine' => array(1 => 'Cuisine: Rustic', 5 => 'Küche: Rustikal',), // id 66
+    'hungarian_cuisine' => array(1 => 'Cuisine: Hungarian', 5 => 'Küche: Ungarisch',), // id 67
+    'fondue_cuisine' => array(1 => 'Cuisine: Fondue', 5 => 'Küche: Fondue',), // id 68
+    'bavarian_cuisine' => array(1 => 'Cuisine: Bavarian', 5 => 'Küche: Bayerisch',), // id 69
+    'regional_cuisine' => array(1 => 'Cuisine: Regional', 5 => 'Küche: Regional',), // id 70
+    'snacks_cuisine' => array(1 => 'Cuisine: Snacks', 5 => 'Küche: Snacks',), // id 71
+    'lebanese_cuisine' => array(1 => 'Cuisine: Lebanese', 5 => 'Küche: Libanesisch',), // id 72
+);
+
+/*
 $newsimport_default_cat_names['restaurant_ambiance'] = array(
     // do not change keys; num ids are for topic names by language
     'restaurant_ambiance' => array(1 => 'Restaurant Ambiance', 5 => 'Restaurant Ambiente',), // the root of restaurant ambiance topics
@@ -165,6 +235,24 @@ $newsimport_default_cat_names['restaurant_ambiance'] = array(
     'rustic_ambiance' => array(1 => 'Rustic Ambiance', 5 => 'Rustikal Ambiente',), // id 12
     'american_restaurant_ambiance' => array(1 => 'American Restaurant Ambiance', 5 => 'American Restaurant Ambiente',), // id 13
     'south_of_the_border_ambiance' => array(1 => 'South of the Border Ambiance', 5 => 'South of the Border Ambiente',), // id 14
+);
+*/
+$newsimport_default_cat_names['restaurant_ambiance'] = array(
+    // do not change keys; num ids are for topic names by language
+    'restaurant_ambiance' => array(1 => 'Restaurant: Ambiance', 5 => 'Restaurant: Ambiente',), // the root of restaurant ambiance topics
+    'business_ambiance' => array(1 => 'Ambiance: Business', 5 => 'Ambiente: Business',), // id 1
+    'elegant_ambiance' => array(1 => 'Ambiance: Elegant', 5 => 'Ambiente: Elegant',), // id 2
+    'festive_ambiance' => array(1 => 'Ambiance: Festive', 5 => 'Ambiente: Festlich',), // id 3
+    'gourmet_ambiance' => array(1 => 'Ambiance: Gourmet', 5 => 'Ambiente: Gourmet',), // id 5
+    'classical_ambiance' => array(1 => 'Ambiance: Classical', 5 => 'Ambiente: Klassisch',), // id 6
+    'modern_ambiance' => array(1 => 'Ambiance: Modern', 5 => 'Ambiente: Modern',), // id 7
+    'romantic_ambiance' => array(1 => 'Ambiance: Romantic', 5 => 'Ambiente: Romantisch',), // id 8
+    'trendy_ambiance' => array(1 => 'Ambiance: Trendy', 5 => 'Ambiente: Trendy',), // id 9
+    'oriental_ambiance' => array(1 => 'Ambiance: Oriental', 5 => 'Ambiente: Orientalisch',), // id 10
+    'local_style_ambiance' => array(1 => 'Ambiance: Local Style', 5 => 'Ambiente: Landestypisch',), // id 11
+    'rustic_ambiance' => array(1 => 'Ambiance: Rustic', 5 => 'Ambiente: Rustikal',), // id 12
+    'american_restaurant_ambiance' => array(1 => 'Ambiance: American Restaurant', 5 => 'Ambiente: American Restaurant',), // id 13
+    'south_of_the_border_ambiance' => array(1 => 'Ambiance: South of the Border', 5 => 'Ambiente: South of the Border',), // id 14
 );
 
 
