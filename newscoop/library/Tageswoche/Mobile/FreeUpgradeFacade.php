@@ -7,7 +7,8 @@
 
 namespace Tageswoche\Mobile;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManager,
+    Newscoop\Entity\User;
 
 /**
  */
@@ -36,7 +37,7 @@ class FreeUpgradeFacade
      * @param string $issue
      * @return bool
      */
-    public function addDevice($device, $user, $issue)
+    public function addDevice($device, User $user, $issue)
     {
         $upgrade = $this->getRepository()->findOneBy(array(
             'user' => $user,
@@ -62,6 +63,22 @@ class FreeUpgradeFacade
         }
 
         return true;
+    }
+
+    /**
+     * Test if free upgrade is consumed by given user
+     *
+     * @param Newscoop\Entity\User $user
+     * @return bool
+     */
+    public function isConsumed(User $user)
+    {
+        return (bool) $this->getRepository()->createQueryBuilder('f')
+            ->select('COUNT(f)')
+            ->where('f.user = :user')
+            ->getQuery()
+            ->setParameter('user', $user)
+            ->getSingleScalarResult();
     }
 
     /**
