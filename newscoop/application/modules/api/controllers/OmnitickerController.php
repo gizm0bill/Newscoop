@@ -43,14 +43,17 @@ class Api_OmnitickerController extends OmnitickerController
      */
     private function formatDoc(array $doc)
     {
+        $published = new DateTime($doc['published']);
+        $published->setTimezone(new DateTimeZone('Europe/Zurich'));
         return array(
             'article_id' => $doc['id'],
             'url' => $this->formatLink($doc),
             'short_title' => $this->formatTitle($doc),
-            'last_modified' => $doc['published'],
+            'last_modified' => date_create($doc['published'])->format('Y-m-d H:i:s'),
             'section_id' => !empty($doc['section_id']) ? $doc['section_id'] : null,
             'section_name' => !empty($doc['section_name']) ? $doc['section_name'] : null,
             'source' => $this->formatType($doc),
+            'published' => $published->format('Y-m-d H:i:s'),
         );
     }
 
@@ -99,7 +102,7 @@ class Api_OmnitickerController extends OmnitickerController
     private function isEnglishNews(array $doc)
     {
         return (!empty($doc['section_id']) && $doc['section_id'] == self::EN_SECTION_ID)
-            || $doc['section_name'] === self::EN_SECTION_NAME;
+            || (!empty($doc['section_name']) && $doc['section_name'] === self::EN_SECTION_NAME);
     }
 
     /**

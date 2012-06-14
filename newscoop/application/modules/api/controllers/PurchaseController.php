@@ -5,13 +5,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
+require_once __DIR__ . '/AbstractController.php';
+
 /**
  * Purchage API
  */
-class Api_PurchaseController extends Zend_Controller_Action
+class Api_PurchaseController extends AbstractController
 {
-    const ERROR_SSL = 'Secure connection required';
-
     /**
      * Get list of products
      */
@@ -40,16 +40,24 @@ class Api_PurchaseController extends Zend_Controller_Action
      */
     public function validateAction()
     {
-        if (!$this->getRequest()->isSecure()) {
-            //$this->sendError(self::ERROR_SSL);
-        }
+        $this->assertIsSecure();
 
         $receipt = $this->_getParam('receipt_data');
         if (empty($receipt)) {
-            //$this->sendError("No 'receipt_data' provided");
+            $this->sendError("No 'receipt_data' provided");
         }
 
-        $this->_helper->json($this->_helper->service('mobile.purchase')->validate($receipt));
+        $data = $this->_helper->service('mobile.purchase')->validate($receipt);
+
+        if ($this->_getParam('username')) {
+            $user = $this->getUser();
+            if ($data['receipt_valid']) {
+                $user->addAttribute(self::DIGITAL_UPGRADE, time());
+                $this->_helper->service('em')->flush($user);
+            }
+        }
+
+        $this->_helper->json($data);
     }
 
     /**
@@ -57,31 +65,20 @@ class Api_PurchaseController extends Zend_Controller_Action
      */
     public function freeupgradeAction()
     {
-        if (!$this->getRequest()->isSecure()) {
-            //$this->sendError(self::ERROR_SSL);
-        }
+        $this->assertIsSecure();
 
-        $username = $this->_getParam('username');
-        $password = $this->_getParam('password');
-        if (empty($username) || empty($password)) {
-            $this->_helper->json(array('status' => 'invalid_credentials'));
-        }
-
-        $user = $this->_helper->service('auth.adapter')->findByCredentials($username, $password);
-        if (empty($user)) {
-            $this->_helper->json(array('status' => 'invalid_credentials'));
-        }
-
+        $user = $this->getUser();
         $subscriber = $user->getSubscriber() ?: $this->_getParam('customer_id');
         if (empty($subscriber)) {
             $this->_helper->json(array('status' => 'invalid_customer_id'));
         }
 
         // @todo validate $subscriber
+        // $this->_helper->service('user')->setSubscriber($user, $subscriber);
 
         $device = $this->_getParam('device_id');
         if (empty($device)) {
-            $this->sendError('Param device_id not set');
+            $this->sendError("No 'device_id' provided");
         }
 
         $issue = $this->_helper->service('mobile.issue')->getCurrentIssueId();
@@ -94,21 +91,5 @@ class Api_PurchaseController extends Zend_Controller_Action
         }
 
         $this->_helper->json(array('status' => 'max_devices_reached'));
-    }
-
-    /**
-     * Send error and exit
-     *
-     * @param string $body
-     * @param int $code
-     * @return void
-     */
-    private function sendError($body = '', $code = 400)
-    {
-        $this->getResponse()->setHttpResponseCode($code);
-        $this->_helper->json(array(
-            'code' => $code,
-            'message' => $body,
-        ));
     }
 }
