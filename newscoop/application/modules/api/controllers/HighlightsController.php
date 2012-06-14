@@ -150,6 +150,7 @@ class Api_HighlightsController extends Zend_Controller_Action
                     $response = array(
                         'article_id' => (int) $article->getNumber(),
                         'url' => $this->url . '/api/articles/item?article_id=' . $article->getNumber() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
+                        'backside_url' => $this->url . '/api/articles/item?article_id=' . $article->getNumber() . '&side=back&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
                         'dateline' => $dateline,
                         'short_name' => empty($short_name) ? $article->getTitle() : $short_name,
                         'teaser' => preg_replace('/(<p>|<p [^>]*>|<\\/p>)/', '', $articleData->getFieldValue($teaserField)),
