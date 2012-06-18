@@ -704,6 +704,11 @@ class NewsImport
                     if (empty($use_description)) {
                         $use_description = $old_description;
                     }
+                    $old_start_time = null;
+                    $old_start_time_obj = $one_date_entry->getStartTime();
+                    if ($old_start_time_obj) {
+                        $old_start_time = date_format($old_start_time_obj, 'H.i');
+                    }
                     $old_info = array(
                         'row_id' => $one_date_entry->getId(),
                         'voided' => $old_voided,
@@ -711,7 +716,7 @@ class NewsImport
                         'withdrawn' => $old_withdrawn,
                         'prices' => '',
                         'date' => $old_date_str,
-                        'time' => date_format($one_date_entry->getStartTime(), 'H.i'),
+                        'time' => $old_start_time,
                         'about' => $use_description,
                     );
                     $all_event_dates[$old_date_str] = $old_info;
