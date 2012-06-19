@@ -223,6 +223,9 @@ class Api_CinemaController extends Zend_Controller_Action
                 if (empty($one_rating)) {
                     $one_rating = null;
                 }
+                else {
+                    $one_rating = 0 + $one_rating;
+                }
 
                 $one_movie_data = array(
                     'suisa' => $one_suisa,
@@ -301,11 +304,13 @@ class Api_CinemaController extends Zend_Controller_Action
             $movie_list_data = null;
         }
 
+        $last_modified_regions = '2012-06-19 18:00:00';
+        $last_modified_genres = '2012-06-19 18:00:00';
         $output_data = array(
             'date' => $cur_date,
-            'regions_last_modified' => $cur_date_time,
+            'regions_last_modified' => $last_modified_regions,
             'regions' => $output_regions,
-            'genres_last_modified' => $cur_date_time,
+            'genres_last_modified' => $last_modified_genres,
             'genres' => $output_types,
             'locations' => $movie_locations_data,
             'films' => $movie_list_data,
