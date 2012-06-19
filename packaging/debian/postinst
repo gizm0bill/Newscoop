@@ -174,7 +174,9 @@ case "$1" in
     . /usr/share/wwwconfig-common/restart.sh
     echo $error >&2
 
-    echo "Please open a browser at http://${SN}/ to complete Newscoop installation."
+    if [ -n "${SN}" ]; then
+     echo "Please open a browser at http://${SN}/ to complete Newscoop installation."
+    fi
 
     db_stop
 
