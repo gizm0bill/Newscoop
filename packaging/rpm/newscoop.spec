@@ -5,7 +5,7 @@
 
 Summary:        The open content management system for professional journalists
 Name:           newscoop
-Version:        4.0.0
+Version:        4.0.1
 Release:        1
 License:        GPLv3
 Packager:       Daniel James <daniel@64studio.com>
@@ -154,6 +154,9 @@ rm -rf /var/lib/newscoop || true
 
 
 %changelog
+* Tue Jun 19 2012 Daniel James <daniel@64studio.com>
+- Update for Newscoop 4.0.1
+
 * Tue May 8 2012 Daniel James <daniel@64studio.com>
 - Put DocumentRoot in /var/lib as /usr may be read-only
 
