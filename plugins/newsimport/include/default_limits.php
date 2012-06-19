@@ -51,7 +51,7 @@ $event_data_limits = array(
         'categories' => array(
         ),
         'dates' => array(
-            'past' => 31, // removing 1 day old
+            'past' => 31, // removing 31 days old
             'next' => 93, // putting in for 3 months
         ),
     ),

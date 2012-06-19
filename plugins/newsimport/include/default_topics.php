@@ -216,6 +216,7 @@ $newsimport_default_cat_names['restaurant_cuisine'] = array(
     'regional_cuisine' => array(1 => 'Cuisine: Regional', 5 => 'Küche: Regional',), // id 70
     'snacks_cuisine' => array(1 => 'Cuisine: Snacks', 5 => 'Küche: Snacks',), // id 71
     'lebanese_cuisine' => array(1 => 'Cuisine: Lebanese', 5 => 'Küche: Libanesisch',), // id 72
+    'other' => array(1 => 'Cuisine: Other', 5 => 'Küche: Andere'),
 );
 
 /*
@@ -253,6 +254,7 @@ $newsimport_default_cat_names['restaurant_ambiance'] = array(
     'rustic_ambiance' => array(1 => 'Ambiance: Rustic', 5 => 'Ambiente: Rustikal',), // id 12
     'american_restaurant_ambiance' => array(1 => 'Ambiance: American Restaurant', 5 => 'Ambiente: American Restaurant',), // id 13
     'south_of_the_border_ambiance' => array(1 => 'Ambiance: South of the Border', 5 => 'Ambiente: South of the Border',), // id 14
+    'other' => array(1 => 'Ambiance: Other', 5 => 'Ambiente: Andere'),
 );
 
 

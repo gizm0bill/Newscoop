@@ -15,6 +15,8 @@
 
 class RestaurantsLoader {
 
+    var $m_one_dose_count = 0; // taking all the rests info every time
+
     //var $m_region_info = null;
 
     var $m_sleep_on_request = 0;
@@ -535,7 +537,7 @@ class RestaurantsLoader {
 
                 $single_res = $this->take_rest_info('getFullProfile', array('url_name' => $one_single_name, 'response' => 'all'), false);
                 if (0 < $this->m_sleep_on_request) {
-                    sleep($this->m_sleep_on_request);
+                    usleep($this->m_sleep_on_request);
                 }
                 if ((!isset($single_res['result'])) || (empty($single_res['result']))) {
                     continue;
@@ -563,7 +565,7 @@ class RestaurantsLoader {
 
             $single_res = $this->take_rest_info('getFullProfile', array('url_name' => $one_single_name, 'response' => 'all'), false);
             if (0 < $this->m_sleep_on_request) {
-                sleep($this->m_sleep_on_request);
+                usleep($this->m_sleep_on_request);
             }
             if ((!isset($single_res['result'])) || (empty($single_res['result']))) {
                 continue;

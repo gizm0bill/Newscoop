@@ -1622,6 +1622,13 @@ class NewsImport
             }
             else {
                 foreach ($one_source['topic_types'] as $one_topic_type) {
+                    $one_source_topic_info = array(
+                        'language_id' => $one_source['language_id'],
+                        'categories' => $one_source['categories'],
+                    );
+                    if (isset($one_source['categories'][$one_topic_type])) {
+                        $one_source_topic_info['categories'] = $one_source['categories'][$one_topic_type];
+                    }
                     $categories[$one_topic_type] = self::ReadEventCategories($one_source, $p_catTopics[$one_topic_type]);
                 }
             }

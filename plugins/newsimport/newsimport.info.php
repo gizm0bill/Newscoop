@@ -398,18 +398,17 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             'rest_gaultmillau' => array('type' => 'numeric', 'params' => array('precision' => 1), 'hidden' => false), //
             'rest_menu_template' => array('type' => 'numeric', 'params' => array('precision' => 0), 'hidden' => false), //
             'rest_socialmedia_status' => array('type' => 'numeric', 'params' => array('precision' => 0), 'hidden' => false), //
-            //'rest_preparation' => array('type' => 'numeric', 'params' => array('precision' => 0), 'hidden' => false), //
             'rest_url_name' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'rest_real_name' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_address' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_zip' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_city' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_phone' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_email' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_homepage' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_country' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_lon' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
-            'rest_lat' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_address' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_zip' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_city' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_phone' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_email' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_homepage' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_country' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_lon' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
+            //'rest_lat' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'rest_fb_url' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'rest_fb_id' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'rest_twitteraccount' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
@@ -421,11 +420,15 @@ if (!defined('PLUGIN_NEWSIMPORT_FUNCTIONS')) {
             'rest_kidscard_issuu' => array('type' => 'text', 'params' => array(), 'hidden' => false), //
             'rest_premium' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
             'rest_seo_text' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
-            'rest_hours' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
+            'rest_preparation' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
+            'rest_products' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
+            'rest_paymentmethods' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
+            'rest_services' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
+            //'rest_hours' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
             'rest_menu' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
             'rest_speciality' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
             'rest_reviews' => array('type' => 'body', 'params' => array('editor_size' => 250, 'is_content' => 0), 'hidden' => false), //
-            'rest_open' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // since a single day ends with midnight, longer open times have to be put into comment
+            // 'rest_open' => array('type' => 'complex_date', 'params' => array(), 'hidden' => false), // since a single day ends with midnight, longer open times have to be put into comment
         );
 
         foreach (array($evt_type_name, $scr_type_name, $rst_type_name) as $art_type_name) {

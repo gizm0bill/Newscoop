@@ -232,7 +232,7 @@ II)
             'auxiliary_table' => 'settings',
             'simple_table' => 'rests_simple',
             'single_table' => 'rests_single',
-            'req_sleep' => 1, // this should be taken from a conf
+            'req_sleep' => 500000, // this should be taken from a conf
         );
 
         $rests_dir = dirname(__FILE__) .DIRECTORY_SEPARATOR. 'restaurants';
@@ -746,6 +746,13 @@ class RestaurantData_Parser_Simple {
                     'label' => $one_pano_name,
                 );
 
+                $one_pano_url = 'http://pano.lunchgate.ch/'. $one_pano_id . '/940x350.jpg';
+
+                $one_rest_images[] = array(
+                    'url' => $one_pano_url,
+                    'label' => $one_pano_name,
+                );
+
             }
 
             $one_event['images'] = $one_rest_images;
@@ -769,15 +776,28 @@ class RestaurantData_Parser_Simple {
                 }
             }
 
+            //$week_days_spec = array('day1' => 'monday', 'day2' => 'tuesday', 'day3' => 'wednesday', 'day4' => 'thursday', 'day5' => 'friday', 'day6' => 'saturday', 'day7' => 'sunday');
+            $week_days_spec = array('day1' => 'day1', 'day2' => 'day2', 'day3' => 'day3', 'day4' => 'day4', 'day5' => 'day5', 'day6' => 'day6', 'day7' => 'day7');
             $week_days = array(); // upto 2 intervals (generally array), closed:'geschlossen'; put from d.m.y into y-d-m
-            foreach (array('day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7') as $one_day_spec) {
+            foreach ($week_days_spec as $one_day_spec => $one_day_name) {
                 $cur_open = array();
                 if (isset($one_profile['hours'][$one_day_spec])) {
                     $cur_open = $this->takeHours($one_profile['hours'][$one_day_spec]);
                 }
                 $week_days[] = $cur_open;
+                //$cur_day_open_hours = '';
+                //if (!empty($cur_open)) {
+                //    $cur_day_open_arr = array();
+                //    foreach ($cur_open as $cur_open_item) {
+                //        $cur_day_open_arr[] = $cur_open_item['start']['str'] . '-' . $cur_open_item['end']['str'];
+                //    }
+                //    $cur_day_open_hours = implode(',', $cur_day_open_arr);
+                //}
+                //$one_event['rest_open_' . $one_day_name] = $cur_day_open_hours;
             }
 
+
+/*
             $date_obj = new DateTime('now');
             $day_period_obj = new DateInterval('P1D');
             $date_obj->sub($day_period_obj);
@@ -824,6 +844,7 @@ class RestaurantData_Parser_Simple {
 
 
             }
+*/
 
             $week_days_names = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
             $week_date_time_desc = array();
@@ -870,7 +891,7 @@ class RestaurantData_Parser_Simple {
             }
 
 
-            $one_event['uses_multidates'] = true;
+            $one_event['uses_multidates'] = false;
 
             $rests_events_all[$one_event['event_id']] = $one_event;
 
