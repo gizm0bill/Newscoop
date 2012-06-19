@@ -133,6 +133,7 @@ class Api_ArticlesController extends Zend_Controller_Action
             $response = array(
                 'article_id' => $article->getId(),
                 'url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId() . '&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
+                'backside_url' => $this->url . '/' . self::ITEM_URI_PATH . '?article_id=' . $article->getId() . '&side=back&client=' . $this->client['name'] . '&version=' . self::API_VERSION,
                 'dateline' => $articleData->getFieldValue($datelineField),
                 'short_name' => $articleData->getFieldValue('short_name'),
                 'teaser' => preg_replace('/(<p>|<p [^>]*>|<\\/p>)/', '', $articleData->getFieldValue($teaserField)),

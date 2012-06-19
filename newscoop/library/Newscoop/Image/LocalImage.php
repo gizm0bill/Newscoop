@@ -61,6 +61,12 @@ class LocalImage implements ImageInterface
      * @var string
      */
     private $photographer;
+
+    /**
+     * @Column(nullable=True, name="photographer_url")
+     * @var string
+     */
+    private $photographerUrl;
     
     /**
      * @Column(nullable=True, name="Place")
@@ -282,5 +288,15 @@ class LocalImage implements ImageInterface
     public function getCaption()
     {
         return $this->getDescription();
+    }
+
+    /**
+     * Get photographer url
+     *
+     * @return string
+     */
+    public function getPhotographerUrl()
+    {
+        return $this->photographerUrl;
     }
 }

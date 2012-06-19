@@ -91,7 +91,6 @@ class Api_CommentsController extends Zend_Controller_Action
 
             $this->response[] = array(
                 'author_name' => $comment->getCommenterName(),
-                'author_id' => $comment->getCommenter()->getLoginName(),
                 'author_image_url' => $profile_image,
                 'subject' => $comment->getSubject(),
                 'message'=> $comment->getMessage(),

@@ -33,7 +33,8 @@ class Image extends DatabaseObject
 		'LastModified',
 		'TimeCreated',
 		'Source',
-		'Status'
+        'Status',
+        'photographer_url',
 	);
 
 	static private $s_defaultOrder = array(array('field'=>'default', 'dir'=>'asc'));
@@ -185,6 +186,15 @@ class Image extends DatabaseObject
 		return $this->m_data['Photographer'];
 	} // fn getPhotographer
 
+    /**
+     * Get photographer url
+     *
+     * @return string
+     */
+    public function getPhotographerUrl()
+    {
+        return (string) $this->m_data['photographer_url'];
+    }
 
 	/**
 	 * @return string
@@ -1270,7 +1280,4 @@ class Image extends DatabaseObject
         }
 
     } // fn ProcessImage
-
-} // class Image
-
-?>
+}

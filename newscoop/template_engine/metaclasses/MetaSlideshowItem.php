@@ -59,6 +59,7 @@ final class MetaSlideshowItem
                 'id' => $item->getImage()->getId(),
                 'caption' => $item->getImage()->getCaption(),
                 'photographer' => $item->getImage()->getPhotographer(),
+                'photographer_url' => $item->getImage()->getPhotographerUrl(),
                 'original' => $item->getImage()->isLocal() ? $Campsite['IMAGE_BASE_URL'] . str_replace('images/', '', $item->getImage()->getPath()) : $item->getImage()->getPath(),
             );
         } else {
