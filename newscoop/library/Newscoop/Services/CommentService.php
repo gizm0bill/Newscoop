@@ -193,4 +193,34 @@ class CommentService
     {
         return $this->em->getRepository('Newscoop\Entity\Comment');
     }
+
+    /**
+     * Get articles comment count
+     * 
+     * @param mixed $ids
+     * @return array
+     */
+    public function getArticlesCommentCount($ids)
+    {
+        $ids = (array) $ids;
+        if (empty($ids)) {
+            return array();
+        }
+
+        $rows = $this->em->getRepository('Newscoop\Entity\Comment')
+            ->createQueryBuilder('c')
+            ->select('COUNT(c), c.article_num')
+            ->where('c.article_num IN (:ids)')
+            ->groupBy('c.article_num')
+            ->getQuery()
+            ->setParameter('ids', $ids)
+            ->getResult();
+
+        $counts = array();
+        foreach ($rows as $row) {
+            $counts[$row['article_num']] = (int) $row[1];
+        }
+
+        return $counts;
+    }
 }

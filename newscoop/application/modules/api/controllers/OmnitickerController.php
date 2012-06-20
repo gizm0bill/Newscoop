@@ -11,10 +11,8 @@ require_once __DIR__ . '/../../../controllers/OmnitickerController.php';
  */
 class Api_OmnitickerController extends OmnitickerController
 {
-    const ROWS = 200;
-    const ROWS_CURRENT = 30;
+    const ROWS = 30;
 
-    const TYPE_ARTICLE = 'article';
     const TYPE_TWITTER = 'tweet';
     const TYPE_NEWSWIRE = 'newswire';
     const TYPE_LINK = 'link';
@@ -24,11 +22,20 @@ class Api_OmnitickerController extends OmnitickerController
     const EN_SECTION_TYPE = 'english_news';
 
     /** @var array */
-    private $literalTypes = array(self::TYPE_TWITTER, self::TYPE_LINK, self::TYPE_NEWSWIRE);
+    private $literalTypes = array(self::TYPE_TWITTER, self::TYPE_LINK, self::TYPE_NEWSWIRE, 'dossier', 'comment', 'event');
+
+    /** @var int */
+    private $rank = 1;
+
+    /** @var array */
+    private $commentCounts = array();
 
     public function indexAction()
     {
         parent::indexAction();
+        $this->commentCounts = $this->_helper->service('comment')->getArticlesCommentCount(array_filter(array_map(function($doc) {
+            return Api_OmnitickerController::getArticleId($doc);
+        }, $this->view->result['response']['docs'])));
         $this->getResponse()->setHeader('Expires', $this->getExpires(), true);
         $this->getResponse()->setHeader('Cache-Control', 'public', true);
         $this->getResponse()->setHeader('Pragma', '', true);
@@ -43,18 +50,82 @@ class Api_OmnitickerController extends OmnitickerController
      */
     private function formatDoc(array $doc)
     {
-        $published = new DateTime($doc['published']);
-        $published->setTimezone(new DateTimeZone('Europe/Zurich'));
+        $id = self::getArticleId($doc);
         return array(
-            'article_id' => $doc['id'],
-            'url' => $this->formatLink($doc),
+            'article_id' => $id,
             'short_title' => $this->formatTitle($doc),
-            'last_modified' => date_create($doc['published'])->format('Y-m-d H:i:s'),
+            'teaser' => $this->formatTeaser($doc),
+            'url' => $this->formatUrl($id),
+            'backside_url' => $this->formatUrl($id, false),
+            'link_url' => $this->formatLinkUrl($doc),
+            'website_url' => !empty($doc['link']) ? $doc['link'] : null,
             'section_id' => !empty($doc['section_id']) ? $doc['section_id'] : null,
             'section_name' => !empty($doc['section_name']) ? $doc['section_name'] : null,
+            'comment_url' => $id ? $this->view->serverUrl($this->view->url(array(
+                'module' => 'api',
+                'controller' => 'comments',
+                'action' => 'list',
+            )) . sprintf('?article_id=%d', $id)) : null,
+            'comment_count' => isset($this->commentCounts[$id]) ? $this->commentCounts[$id] : null,
             'source' => $this->formatType($doc),
-            'published' => $published->format('Y-m-d H:i:s'),
+            'rank' => $this->rank++,
+            'published' => $this->formatPublished($doc),
         );
+    }
+
+    /**
+     * Format doc url
+     *
+     * @param int $articleId
+     * @param bool $isFront
+     * @return string
+     */
+    private function formatUrl($articleId, $isFront = true)
+    {
+        if (empty($articleId)) {
+            return null;
+        }
+
+        return $this->view->serverUrl($this->view->url(array(
+            'module' => 'api',
+            'controller' => 'articles',
+            'action' => 'item',
+        )) . sprintf('?article_id=%d&side=%s', $articleId, $isFront ? 'front' : 'back'));
+    }
+
+    /**
+     * Format link url
+     *
+     * @param array $doc
+     * @return string
+     */
+    private function formatLinkUrl(array $doc)
+    {
+        if (!empty($doc['link_url'])) {
+           return $doc['link_url'];
+        }
+
+        if (!empty($doc['tweet'])) {
+            $matches = array();
+            if (preg_match('#http://t.co/[a-z0-9]+#i', $doc['tweet'], $matches) === 1) {
+                return $matches[0];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Format published datetime
+     *
+     * @param array $doc
+     * @return string
+     */
+    private function formatPublished(array $doc)
+    {
+        $published = new DateTime($doc['published']);
+        $published->setTimezone(new DateTimeZone('Europe/Berlin'));
+        return $published->format('Y-m-d H:i:s');
     }
 
     /**
@@ -67,13 +138,34 @@ class Api_OmnitickerController extends OmnitickerController
     {
         switch ($doc['type']) {
             case self::TYPE_TWITTER:
-                return sprintf('%s: %s', $doc['tweet_user_screen_name'], $doc['tweet']);
+                return $doc['tweet_user_screen_name'];
 
             case self::TYPE_LINK:
-                return sprintf('%s %s', $doc['link_description'], $doc['title']);
+                return $doc['title'];
+
+            default:
+                return !empty($doc['title']) ? $doc['title'] : null;
         }
-        
-        return !empty($doc['title']) ? $doc['title'] : '';
+    }
+
+    /**
+     * Format document teaser
+     *
+     * @param array $doc
+     * @return string
+     */
+    private function formatTeaser(array $doc)
+    {
+        switch ($doc['type']) {
+            case self::TYPE_TWITTER:
+                return $doc['tweet'];
+
+            case self::TYPE_LINK:
+                return $doc['link_description'];
+
+            default:
+                return !empty($doc['lead']) ? $doc['lead'] : null;
+        }
     }
 
     /**
@@ -90,7 +182,15 @@ class Api_OmnitickerController extends OmnitickerController
             return $doc['type'];
         }
 
-        return self::TYPE_ARTICLE;
+        if ($doc['type'] === 'user') {
+            return 'community';
+        }
+
+        if ($doc['type'] === 'blog' && $this->getRequest()->getControllerName() === 'search') {
+            return 'blogpost';
+        }
+
+        return $this->getRequest()->getControllerName() === 'search' ? 'article' : 'tageswoche';
     }
 
     /**
@@ -103,23 +203,6 @@ class Api_OmnitickerController extends OmnitickerController
     {
         return (!empty($doc['section_id']) && $doc['section_id'] == self::EN_SECTION_ID)
             || (!empty($doc['section_name']) && $doc['section_name'] === self::EN_SECTION_NAME);
-    }
-
-    /**
-     * Format document link
-     *
-     * @param array $doc
-     * @return string
-     */
-    private function formatLink(array $doc)
-    {
-        foreach(array('link_url', 'link') as $link) {
-            if (!empty($doc[$link])) {
-                return $doc[$link];
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -160,9 +243,9 @@ class Api_OmnitickerController extends OmnitickerController
      */
     protected function buildSolrParams()
     {
-        $params = parent::buildSolrParams();
-        $params['rows'] = $this->_getParam('start_date') ? self::ROWS_CURRENT : self::ROWS;
-        return $params;
+        return array_merge(parent::buildSolrParams(), array(
+            'rows' => self::ROWS,
+        ));
     }
 
     /**
@@ -172,7 +255,7 @@ class Api_OmnitickerController extends OmnitickerController
      * @param int $code
      * @return void
      */
-    private function sendError($body = '', $code = 400)
+    protected function sendError($body = '', $code = 400)
     {
         $this->getResponse()->setHttpResponseCode($code);
         $this->_helper->json(array(
@@ -192,5 +275,18 @@ class Api_OmnitickerController extends OmnitickerController
         $start = new DateTime($this->_getParam('start_date') ?: 'now');
         $expires = new DateInterval($start->format('Y-m-d') === $now->format('Y-m-d') || $start->getTimestamp() > $now->getTimestamp() ? 'PT5M' : 'P300D');
         return $now->add($expires)->format(DateTime::RFC1123);
+    }
+
+    /**
+     * Get article id
+     *
+     * @param array $doc
+     * @return int
+     *
+     * static to work within closure
+     */
+    public static function getArticleId(array $doc)
+    {
+        return strpos($doc['id'], 'article-') === 0 ? (int) preg_replace('/(^article-)|([0-9]+-$)/', '', $doc['id']) : null;
     }
 }
