@@ -1,4 +1,4 @@
-# not for myself:
+# how-to:
 # http://fedoraproject.org/wiki/PackageMaintainers/CreatingPackageHowTo
 #
 %define manifest %{_builddir}/%{name}-%{version}-%{release}.manifest
@@ -6,7 +6,7 @@
 Summary:        The open content management system for professional journalists
 Name:           newscoop
 Version:        4.0.1
-Release:        1
+Release:        2
 License:        GPLv3
 Packager:       Daniel James <daniel@64studio.com>
 
@@ -56,8 +56,6 @@ cp -a newscoop %{buildroot}/var/lib/
 mkdir -p %{buildroot}/etc/newscoop/4.0/
 cp rpm/newscoop.ini %{buildroot}/etc/newscoop/4.0/
 cp rpm/apache.conf %{buildroot}/etc/newscoop/4.0/
-#cp debian/etc/apache.vhost.tpl %{buildroot}/etc/newscoop/4.0/
-#cp debian/etc/newscoop.cron.tpl %{buildroot}/etc/newscoop/4.0/
 
 cd $RPM_BUILD_ROOT
 rm -f %{manifest}
@@ -92,6 +90,7 @@ dohtaccess="/newscoop"
 if [ ! -d /etc/$webserver/conf.d/ ]; then
 		install -d -m755 /etc/$webserver/conf.d/
 fi
+
 if [ ! -e /etc/$webserver/conf.d/newscoop.conf ]; then
 	ln -s ${includefile} /etc/$webserver/conf.d/newscoop.conf
 fi
@@ -99,6 +98,7 @@ fi
 if [ ! -d /etc/$php/conf.d/ ]; then
 	install -d -m755 /etc/php.d/
 fi
+
 if [ ! -e /etc/php.d/newscoop.ini ]; then
 	ln -s ${phpinifile} /etc/php.d/newscoop.ini
 fi
@@ -132,28 +132,35 @@ chcon -R -t httpd_cache_t /var/lib/newscoop
 
 %postun
 webserver="httpd"
-if [ -L /etc/$webserver/conf.d/newscoop.conf ]; then
-	rm -f /etc/$webserver/conf.d/newscoop.conf || true
-fi
-		
-if [ -L /etc/php.d/newscoop.ini ]; then
-	rm -f /etc/php.d/newscoop.ini || true
-fi
 
-if [ -L /etc/cron.d/newscoop ]; then
+# delete Newscoop files, but only on uninstallation
+if [ "$1" = "0" ]; then
+
+ if [ -L /etc/$webserver/conf.d/newscoop.conf ]; then
+	rm -f /etc/$webserver/conf.d/newscoop.conf || true
+ fi
+		
+ if [ -L /etc/php.d/newscoop.ini ]; then
+	rm -f /etc/php.d/newscoop.ini || true
+ fi
+
+ if [ -L /etc/cron.d/newscoop ]; then
 	rm -f /etc/cron.d/newscoop || true
+ fi
+
+ rm -rf /var/lib/newscoop/ || true
+ rm -rf /etc/newscoop/ || true
+
 fi
-# delete generated templates and user-installed plugins
-rm -rf /var/lib/newscoop || true
-#rm -f /etc/newscoop/4.0/newscoop.cron || true
-#rmdir /etc/newscoop/4.0 || true
-#rmdir /etc/newscoop/ || true
 		
 # restart Apache
 /etc/init.d/httpd restart
 
 
 %changelog
+* Wed Jun 20 2012 Daniel James <daniel@64studio.com>
+- Test for upgrade or uninstall before deleting files
+
 * Tue Jun 19 2012 Daniel James <daniel@64studio.com>
 - Update for Newscoop 4.0.1
 
